@@ -234,6 +234,14 @@
     // Manejo del envío del formulario para guardar/actualizar el perfil
     document.getElementById('profile-form').addEventListener('submit', async (e) => {
       e.preventDefault();
+      // Primero, obtenemos la sesión para tener el userId
+      const { data: { session: userSession } } = await supabaseClient.auth.getSession();
+      if (!userSession) {
+        alert('No se encontró sesión de usuario');
+        return;
+      }
+      const userId = userSession.user.id;
+
       // Recopilar datos del formulario
       const fullName = document.getElementById('fullName').value.trim();
       const email = document.getElementById('emailProfile').value.trim();
@@ -250,7 +258,7 @@
       let profilePicUrl = null;
       if (profilePicInput.files.length > 0) {
         const file = profilePicInput.files[0];
-        // Generar un nombre único para el archivo
+        // Generar un nombre único usando el userId y el timestamp
         const uniqueFileName = `profilePics/${userId}_${Date.now()}_${file.name}`;
         const { data: uploadData, error: uploadError } = await supabaseClient.storage
           .from('profiles')
@@ -271,14 +279,6 @@
           profilePicUrl = publicUrlData.publicUrl;
         }
       }
-
-      // Obtener el ID del usuario de la sesión
-      const { data: { session: userSession } } = await supabaseClient.auth.getSession();
-      if (!userSession) {
-        alert('No se encontró sesión de usuario');
-        return;
-      }
-      const userId = userSession.user.id;
 
       // Actualizar o insertar en la tabla "profiles"
       let { data, error } = await supabaseClient
