@@ -241,6 +241,7 @@
         return;
       }
       const userId = userSession.user.id;
+      console.log('User ID obtenido:', userId);
 
       // Recopilar datos del formulario
       const fullName = document.getElementById('fullName').value.trim();
@@ -263,6 +264,7 @@
         const { data: uploadData, error: uploadError } = await supabaseClient.storage
           .from('profiles')
           .upload(uniqueFileName, file);
+        console.log('Respuesta de upload:', { uploadData, uploadError });
         if (uploadError) {
           console.error('Error al subir imagen:', uploadError.message);
           alert('Error al subir imagen: ' + uploadError.message);
@@ -280,7 +282,7 @@
         }
       }
 
-      // Actualizar o insertar en la tabla "profiles"
+      // Intentar actualizar la fila existente
       let { data, error } = await supabaseClient
         .from('profiles')
         .update({
@@ -296,8 +298,10 @@
         })
         .eq('id', userId);
       console.log('Respuesta de update:', { data, error });
-      if (error) {
-        // Si falla la actualización, intentamos la inserción
+      
+      // Si no se actualizó nada (data es vacío) o hubo error, intentar insertar
+      if (!error && (!data || data.length === 0)) {
+        console.log('No se actualizó ningún registro, intentando insertar...');
         ({ data, error } = await supabaseClient
           .from('profiles')
           .insert({
@@ -314,6 +318,7 @@
           }));
         console.log('Respuesta de insert:', { data, error });
       }
+      
       if (error) {
         console.error('Error al guardar perfil:', error.message);
         alert('Error al guardar perfil: ' + error.message);
