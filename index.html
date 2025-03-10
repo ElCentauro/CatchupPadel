@@ -101,12 +101,14 @@
       margin: 0 auto 2rem auto;
       line-height: 1.6;
     }
-    /* Imagen adicional para darle atractivo (padel.png) */
+    /* Imagen más grande y destacada */
     .hero-image {
       display: block;
-      margin: 20px auto;
-      max-width: 300px;
+      margin: 30px auto;
+      max-width: 600px;
       width: 100%;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
     .hero-buttons {
       display: flex;
@@ -232,6 +234,7 @@
       color: #f1c40f;
       text-decoration: none;
       font-weight: 600;
+      cursor: pointer;
     }
     .toggle-link a:hover {
       text-decoration: underline;
@@ -257,6 +260,9 @@
       }
       .hero p {
         font-size: 1rem;
+      }
+      .hero-image {
+        max-width: 90%;
       }
     }
   </style>
@@ -285,7 +291,7 @@
   <section class="hero">
     <h1>Conecta con jugadores de pádel cerca de ti</h1>
     <p>Organiza partidos, encuentra jugadores de tu nivel y disfruta del mejor deporte en comunidad.</p>
-    <!-- Imagen adicional para hacer la página más atractiva -->
+    <!-- Imagen de pádel más grande -->
     <img src="padel.png" alt="Imagen de pádel" class="hero-image">
     <div class="hero-buttons">
       <button class="hero-button hero-button-primary" onclick="showAuthSection('signup')">¡Regístrate Ahora!</button>
@@ -397,7 +403,6 @@
           messageDiv.textContent = 'Inicio de sesión exitoso. Redirigiendo...';
           messageDiv.style.color = '#27ae60';
           setTimeout(() => {
-            // Redirige a la página interna (home.html)
             window.location.href = "home.html";
           }, 1000);
         }
