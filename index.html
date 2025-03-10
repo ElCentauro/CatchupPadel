@@ -32,7 +32,7 @@
     }
 
     /******************************************
-     * BARRA DE NAVEGACIÓN (solo título + botones)
+     * BARRA DE NAVEGACIÓN (solo marca + botones)
      ******************************************/
     nav {
       display: flex;
@@ -252,7 +252,7 @@
 </head>
 <body>
 
-  <!-- BARRA DE NAVEGACIÓN (solo título principal y botones) -->
+  <!-- BARRA DE NAVEGACIÓN: solo Título y Botones -->
   <nav>
     <span class="logo">Catch Up Padel</span>
     <div class="nav-right">
@@ -263,7 +263,6 @@
 
   <!-- SECCIÓN PRINCIPAL (HERO) -->
   <section class="hero">
-    <!-- Título principal grande -->
     <h1>Catch Up Padel</h1>
     <p>Conecta con jugadores de pádel cerca de ti y disfruta del mejor deporte en comunidad.</p>
     <img src="padel.png" alt="Imagen de pádel" class="hero-image">
@@ -278,7 +277,7 @@
     © 2025 Catch Up Padel. Todos los derechos reservados.
   </footer>
 
-  <!-- SECCIÓN DE AUTENTICACIÓN (OVERLAY) -->
+  <!-- SECCIÓN DE AUTENTICACIÓN (Oculta por defecto) -->
   <div id="auth-section">
     <div class="auth-container">
       <h2 id="form-title">Registro</h2>
@@ -377,6 +376,7 @@
           messageDiv.textContent = 'Inicio de sesión exitoso. Redirigiendo...';
           messageDiv.style.color = '#27ae60';
           setTimeout(() => {
+            // Redirige a tu página interna
             window.location.href = "home.html";
           }, 1000);
         }
