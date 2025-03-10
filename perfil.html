@@ -214,19 +214,19 @@
   <!-- SUPABASE -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <script>
-    // Configuración de Supabase con tus credenciales
+    // Configuración de Supabase con tus credenciales reales
     const SUPABASE_URL = 'https://idlvxinjfbsujpvxncbr.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Cargar el email del usuario desde la sesión
+    // Cargar el correo del usuario desde la sesión
     async function loadProfile() {
       const { data: { session }, error } = await supabaseClient.auth.getSession();
       if (error) {
         console.error('Error al obtener la sesión:', error);
       } else if (session && session.user) {
         document.getElementById('emailProfile').value = session.user.email;
-        // Aquí podrías cargar otros datos si ya existen en la tabla "profiles"
+        // Aquí puedes cargar otros datos del perfil si ya existen en la tabla "profiles"
       }
     }
     loadProfile();
@@ -250,22 +250,22 @@
       let profilePicUrl = null;
       if (profilePicInput.files.length > 0) {
         const file = profilePicInput.files[0];
-        // Generar un nombre único para el archivo usando la marca de tiempo
-        const filePath = `profilePics/${Date.now()}_${file.name}`;
+        // Generar un nombre único para el archivo
+        const uniqueFileName = `profilePics/${userId}_${Date.now()}_${file.name}`;
         const { data: uploadData, error: uploadError } = await supabaseClient.storage
           .from('profiles')
-          .upload(filePath, file, { upsert: true });
+          .upload(uniqueFileName, file);
         if (uploadError) {
           console.error('Error al subir imagen:', uploadError.message);
           alert('Error al subir imagen: ' + uploadError.message);
           return;
         } else {
-          const { data: publicUrlData, error: publicUrlError } = supabaseClient.storage
+          const { data: publicUrlData, error: urlError } = supabaseClient.storage
             .from('profiles')
             .getPublicUrl(uploadData.path);
-          if (publicUrlError) {
-            console.error('Error al obtener URL pública:', publicUrlError.message);
-            alert('Error al obtener URL pública: ' + publicUrlError.message);
+          if (urlError) {
+            console.error('Error al obtener URL pública:', urlError.message);
+            alert('Error al obtener URL pública: ' + urlError.message);
             return;
           }
           profilePicUrl = publicUrlData.publicUrl;
@@ -295,6 +295,7 @@
           profile_pic: profilePicUrl
         })
         .eq('id', userId);
+      console.log('Respuesta de update:', { data, error });
       if (error) {
         // Si falla la actualización, intentamos la inserción
         ({ data, error } = await supabaseClient
@@ -311,6 +312,7 @@
             phone: phone,
             profile_pic: profilePicUrl
           }));
+        console.log('Respuesta de insert:', { data, error });
       }
       if (error) {
         console.error('Error al guardar perfil:', error.message);
@@ -338,7 +340,7 @@
         alert('Error al borrar perfil: ' + error.message);
       } else {
         alert('Perfil borrado exitosamente');
-        // Opcional: redirigir a index.html o cerrar sesión
+        // Opcional: redirigir o cerrar sesión
       }
     }
   </script>
