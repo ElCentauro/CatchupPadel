@@ -47,7 +47,6 @@
       background-color: #ff9500;
       color: #fff;
     }
-    /* Botón especial para cerrar sesión */
     .menu-item.logout {
       border-color: #e74c3c;
       color: #e74c3c;
@@ -57,20 +56,21 @@
       color: #fff;
     }
     
-    /* HERO */
+    /* SECCIÓN PRINCIPAL (HERO) */
     .hero {
-      text-align: center;
       padding: 3rem 1rem;
-      background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)),
+      text-align: center;
+      background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)),
                   url('https://images.unsplash.com/photo-1593341646581-529f6c49c5d1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80');
       background-size: cover;
       background-position: center;
       color: #fff;
     }
     .hero h1 {
-      font-size: 3rem;
+      font-size: 2.5rem;
+      font-weight: 700;
       margin-bottom: 1rem;
-      text-transform: uppercase;
+      color: #fff;
     }
     .hero p {
       font-size: 1.2rem;
@@ -81,11 +81,12 @@
       line-height: 1.6;
     }
     
-    /* CONTENIDO DE LA PÁGINA (Ejemplo) */
+    /* CONTENIDO INTERNO (Ejemplo) */
     .content {
       max-width: 1200px;
       margin: 2rem auto;
       padding: 0 1rem;
+      text-align: center;
     }
     
     /* FOOTER */
@@ -106,7 +107,7 @@
         gap: 0.75rem;
       }
       .hero h1 {
-        font-size: 2.5rem;
+        font-size: 2rem;
       }
       .hero p {
         font-size: 1rem;
@@ -119,7 +120,8 @@
   <!-- MENÚ DE NAVEGACIÓN -->
   <nav>
     <div class="menu-container">
-      <a href="#" class="menu-item">Crear Perfil</a>
+      <!-- Enlace actualizado para abrir perfil.html -->
+      <a href="perfil.html" class="menu-item">Crear Perfil</a>
       <a href="#" class="menu-item">Partidos</a>
       <a href="#" class="menu-item">Canchas</a>
       <a href="#" class="menu-item">Chat</a>
@@ -133,9 +135,9 @@
     <p>Tu espacio para organizar partidos, descubrir canchas y conectar con la comunidad de pádel.</p>
   </section>
 
-  <!-- CONTENIDO ADICIONAL (Puedes editarlo según tus necesidades) -->
+  <!-- CONTENIDO INTERNO (Ejemplo) -->
   <div class="content">
-    <p style="text-align: center;">Aquí va el contenido interno de la aplicación, donde podrás gestionar tu perfil, ver partidos, buscar canchas y chatear.</p>
+    <p>Aquí iría el contenido interno de la aplicación, por ejemplo, información de tus próximos partidos, canchas disponibles, y más.</p>
   </div>
 
   <!-- FOOTER -->
@@ -143,10 +145,10 @@
     © 2025 Catch Up Padel. Todos los derechos reservados.
   </footer>
 
-  <!-- SCRIPT PARA CERRAR SESIÓN CON SUPABASE (Opcional) -->
+  <!-- SCRIPT PARA CERRAR SESIÓN CON SUPABASE -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <script>
-    // Reemplaza con tus credenciales reales
+    // Credenciales de Supabase proporcionadas
     const SUPABASE_URL = 'https://idlvxinjfbsujpvxncbr.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
