@@ -8,7 +8,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
   <style>
-    /* RESET BÁSICO Y ESTILOS GENERALES */
+    /******************************************
+     * RESET BÁSICO Y ESTILOS GENERALES
+     ******************************************/
     * {
       margin: 0;
       padding: 0;
@@ -29,7 +31,9 @@
       font-family: 'Poppins', sans-serif;
     }
 
-    /* BARRA DE NAVEGACIÓN */
+    /******************************************
+     * BARRA DE NAVEGACIÓN
+     ******************************************/
     nav {
       display: flex;
       align-items: center;
@@ -70,7 +74,9 @@
       background-color: #e07e00;
     }
 
-    /* SECCIÓN PRINCIPAL (HERO) */
+    /******************************************
+     * SECCIÓN PRINCIPAL (HERO)
+     ******************************************/
     .hero {
       padding: 3rem 1rem;
       text-align: center;
@@ -85,7 +91,8 @@
       font-weight: 700;
       margin-bottom: 1rem;
       max-width: 800px;
-      margin: 0 auto 1rem auto;
+      margin-left: auto;
+      margin-right: auto;
     }
     .hero p {
       font-size: 1.15rem;
@@ -94,10 +101,18 @@
       margin: 0 auto 2rem auto;
       line-height: 1.6;
     }
+    /* Imagen adicional para darle atractivo (padel.png) */
+    .hero-image {
+      display: block;
+      margin: 20px auto;
+      max-width: 300px;
+      width: 100%;
+    }
     .hero-buttons {
       display: flex;
       justify-content: center;
       gap: 1rem;
+      flex-wrap: wrap;
     }
     .hero-button {
       padding: 0.75rem 1.5rem;
@@ -124,7 +139,9 @@
       color: #fff;
     }
 
-    /* FOOTER */
+    /******************************************
+     * FOOTER
+     ******************************************/
     footer {
       text-align: center;
       padding: 1rem;
@@ -135,10 +152,15 @@
       margin-top: 2rem;
     }
 
-    /* SECCIÓN DE AUTENTICACIÓN (OVERLAY) */
+    /******************************************
+     * SECCIÓN DE AUTENTICACIÓN (OVERLAY)
+     ******************************************/
     #auth-section {
       position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
       display: none; /* Oculto por defecto */
       justify-content: center;
       align-items: center;
@@ -197,7 +219,6 @@
       color: #fff;
       font-size: 16px;
       font-weight: 600;
-      cursor: pointer;
       transition: background 0.3s ease;
     }
     form button:hover {
@@ -211,7 +232,6 @@
       color: #f1c40f;
       text-decoration: none;
       font-weight: 600;
-      cursor: pointer;
     }
     .toggle-link a:hover {
       text-decoration: underline;
@@ -221,6 +241,24 @@
       font-size: 15px;
       min-height: 20px;
     }
+
+    /******************************************
+     * MEDIA QUERIES PARA RESPONSIVE
+     ******************************************/
+    @media (max-width: 768px) {
+      nav {
+        flex-direction: column;
+      }
+      .nav-links {
+        margin-top: 0.5rem;
+      }
+      .hero h1 {
+        font-size: 2rem;
+      }
+      .hero p {
+        font-size: 1rem;
+      }
+    }
   </style>
 </head>
 <body>
@@ -228,7 +266,7 @@
   <!-- BARRA DE NAVEGACIÓN -->
   <nav>
     <div class="nav-left">
-      <a href="#" class="logo">CP</a> <!-- Siglas Catch Up Padel -->
+      <a href="#" class="logo">CP</a>
       <div class="nav-links">
         <a href="#">Inicio</a>
         <a href="#">Perfil</a>
@@ -238,8 +276,7 @@
       </div>
     </div>
     <div class="nav-right">
-      <!-- Botones "Iniciar Sesión" y "Registrarse" -->
-      <button class="nav-button" ondblclick="showAuthSection('login')">Iniciar Sesión</button>
+      <button class="nav-button" onclick="showAuthSection('login')">Iniciar Sesión</button>
       <button class="nav-button" onclick="showAuthSection('signup')">Registrarse</button>
     </div>
   </nav>
@@ -248,18 +285,20 @@
   <section class="hero">
     <h1>Conecta con jugadores de pádel cerca de ti</h1>
     <p>Organiza partidos, encuentra jugadores de tu nivel y disfruta del mejor deporte en comunidad.</p>
+    <!-- Imagen adicional para hacer la página más atractiva -->
+    <img src="padel.png" alt="Imagen de pádel" class="hero-image">
     <div class="hero-buttons">
       <button class="hero-button hero-button-primary" onclick="showAuthSection('signup')">¡Regístrate Ahora!</button>
-      <button class="hero-button hero-button-secondary" ondblclick="showAuthSection('login')">Iniciar Sesión</button>
+      <button class="hero-button hero-button-secondary" onclick="showAuthSection('login')">Iniciar Sesión</button>
     </div>
   </section>
 
-  <!-- FOOTER (Opcional) -->
+  <!-- FOOTER -->
   <footer>
     © 2025 Catch Up Padel. Todos los derechos reservados.
   </footer>
 
-  <!-- SECCIÓN DE AUTENTICACIÓN (Oculta por defecto) -->
+  <!-- SECCIÓN DE AUTENTICACIÓN (OVERLAY) -->
   <div id="auth-section">
     <div class="auth-container">
       <h2 id="form-title">Registro</h2>
@@ -269,8 +308,8 @@
         <button type="submit" id="submit-button">Registrarse</button>
       </form>
       <div class="toggle-link">
-        <span id="toggle-signup">¿Ya tienes cuenta? <a id="signin-link">Inicia sesión</a></span>
-        <span id="toggle-signin" style="display: none;">¿No tienes cuenta? <a id="signup-link">Regístrate</a></span>
+        <span id="toggle-signup">¿Ya tienes cuenta? <a id="signin-link" href="#" onclick="setMode('login')">Inicia sesión</a></span>
+        <span id="toggle-signin" style="display: none;">¿No tienes cuenta? <a id="signup-link" href="#" onclick="setMode('signup')">Regístrate</a></span>
       </div>
       <div class="message" id="message"></div>
     </div>
@@ -279,14 +318,12 @@
   <!-- SUPABASE -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <script>
-    /* CONFIGURACIÓN DE SUPABASE
-       Reemplaza SUPABASE_URL y SUPABASE_ANON_KEY con tu proyecto.
-    */
+    // CONFIGURACIÓN DE SUPABASE: Reemplaza con tus datos
     const SUPABASE_URL = 'https://idlvxinjfbsujpvxncbr.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // FUNCIONES PARA MOSTRAR/OCULTAR SECCIÓN DE AUTENTICACIÓN
+    // Mostrar/ocultar la sección de autenticación
     function showAuthSection(mode) {
       document.getElementById('auth-section').style.display = 'flex';
       setMode(mode);
@@ -295,6 +332,7 @@
       document.getElementById('auth-section').style.display = 'none';
     }
 
+    // Variables para el manejo del formulario
     let mode = 'signup';
     const authForm = document.getElementById('auth-form');
     const formTitle = document.getElementById('form-title');
@@ -302,38 +340,23 @@
     const emailInput = document.getElementById('email');
     const passwordInput = document.getElementById('password');
     const messageDiv = document.getElementById('message');
-    const toggleSignup = document.getElementById('toggle-signup');
-    const toggleSignin = document.getElementById('toggle-signin');
-    const signinLink = document.getElementById('signin-link');
-    const signupLink = document.getElementById('signup-link');
 
-    // Cambiar entre registro y login
     function setMode(newMode) {
       mode = newMode;
       if (mode === 'login') {
         formTitle.textContent = 'Iniciar sesión';
         submitButton.textContent = 'Iniciar sesión';
-        toggleSignup.style.display = 'none';
-        toggleSignin.style.display = 'block';
+        document.getElementById('toggle-signup').style.display = 'none';
+        document.getElementById('toggle-signin').style.display = 'block';
         messageDiv.textContent = '';
       } else {
         formTitle.textContent = 'Registro';
         submitButton.textContent = 'Registrarse';
-        toggleSignin.style.display = 'none';
-        toggleSignup.style.display = 'block';
+        document.getElementById('toggle-signin').style.display = 'none';
+        document.getElementById('toggle-signup').style.display = 'block';
         messageDiv.textContent = '';
       }
     }
-
-    // Al hacer clic en los enlaces de "¿Ya tienes cuenta?" / "¿No tienes cuenta?"
-    signinLink.addEventListener('click', (e) => {
-      e.preventDefault();
-      setMode('login');
-    });
-    signupLink.addEventListener('click', (e) => {
-      e.preventDefault();
-      setMode('signup');
-    });
 
     // Manejo del envío del formulario
     authForm.addEventListener('submit', async (e) => {
