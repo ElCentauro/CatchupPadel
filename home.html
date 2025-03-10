@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Catch Up Padel - Tu Espacio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Fuente moderna -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    /******************************************
+     * RESET BÁSICO Y ESTILOS GENERALES
+     ******************************************/
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f8f8f8;
+      color: #333;
+    }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+    ul, li {
+      list-style: none;
+    }
+    button {
+      cursor: pointer;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    /******************************************
+     * BARRA DE NAVEGACIÓN
+     ******************************************/
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .nav-left, .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .logo {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #2c3e50;
+    }
+    .nav-links a {
+      font-weight: 500;
+      color: #333;
+      transition: color 0.2s ease;
+    }
+    .nav-links a:hover {
+      color: #ff9500; /* Color principal */
+    }
+    /* Botón de la nav (Cerrar Sesión) */
+    .nav-button {
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      border: 1px solid transparent;
+      background-color: #ff9500; /* Color principal */
+      color: #fff;
+      font-weight: 500;
+      transition: background-color 0.3s ease;
+    }
+    .nav-button:hover {
+      background-color: #e07e00;
+    }
+
+    /******************************************
+     * SECCIÓN PRINCIPAL (HERO)
+     ******************************************/
+    .hero {
+      padding: 3rem 1rem;
+      text-align: center;
+      background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)),
+                  url('https://images.unsplash.com/photo-1593341646581-529f6c49c5d1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80');
+      background-size: cover;
+      background-position: center;
+      color: #fff;
+    }
+    .hero h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      max-width: 800px;
+      margin: 0 auto 1rem auto;
+    }
+    .hero p {
+      font-size: 1.15rem;
+      font-weight: 400;
+      max-width: 700px;
+      margin: 0 auto 2rem auto;
+      line-height: 1.6;
+    }
+
+    /******************************************
+     * CONTENIDO INTERNO (EJEMPLO)
+     ******************************************/
+    .content {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    .section-title {
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: #2c3e50;
+      text-align: center;
+    }
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .card {
+      background-color: #fff;
+      border-radius: 0.5rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      overflow: hidden;
+      transition: transform 0.2s ease;
+    }
+    .card:hover {
+      transform: translateY(-2px);
+    }
+    .card-img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+    }
+    .card-body {
+      padding: 1rem;
+    }
+    .card-body h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #2c3e50;
+    }
+    .card-body p {
+      font-size: 0.95rem;
+      color: #555;
+      line-height: 1.4;
+    }
+
+    /******************************************
+     * FOOTER
+     ******************************************/
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: #777;
+      background-color: #fff;
+      border-top: 1px solid #eaeaea;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BARRA DE NAVEGACIÓN -->
+  <nav>
+    <div class="nav-left">
+      <span class="logo">Catch Up Padel</span>
+      <div class="nav-links">
+        <a href="#">Inicio</a>
+        <a href="#">Perfil</a>
+        <a href="#">Partidos</a>
+        <a href="#">Canchas</a>
+        <a href="#">Chat</a>
+      </div>
+    </div>
+    <div class="nav-right">
+      <!-- Botón para "Cerrar Sesión" (opcional) -->
+      <button class="nav-button" onclick="logout()">Cerrar Sesión</button>
+    </div>
+  </nav>
+
+  <!-- SECCIÓN PRINCIPAL (HERO) -->
+  <section class="hero">
+    <h1>Bienvenido a tu espacio en Catch Up Padel</h1>
+    <p>Aquí podrás organizar tus próximos partidos, descubrir nuevas canchas y 
+       conectar con la comunidad de jugadores de pádel.</p>
+  </section>
+
+  <!-- CONTENIDO INTERNO (EJEMPLO) -->
+  <div class="content">
+    <h2 class="section-title">Tus Próximos Partidos</h2>
+    <div class="cards-grid">
+      <!-- Tarjeta de ejemplo -->
+      <div class="card">
+        <img class="card-img" src="https://images.unsplash.com/photo-1579640367226-c045b49f81d6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80" alt="Partido 1">
+        <div class="card-body">
+          <h3>Partido de entrenamiento</h3>
+          <p>Fecha: 25/04/2025 <br/> Hora: 18:00 <br/> Nivel: Intermedio</p>
+        </div>
+      </div>
+      <div class="card">
+        <img class="card-img" src="https://images.unsplash.com/photo-1550676564-43c7184f39b6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80" alt="Partido 2">
+        <div class="card-body">
+          <h3>Desafío amistoso</h3>
+          <p>Fecha: 30/04/2025 <br/> Hora: 20:00 <br/> Nivel: Avanzado</p>
+        </div>
+      </div>
+      <!-- Agrega más tarjetas según tu lógica -->
+    </div>
+  </div>
+
+  <div class="content">
+    <h2 class="section-title">Canchas Cercanas</h2>
+    <div class="cards-grid">
+      <!-- Tarjeta de ejemplo -->
+      <div class="card">
+        <img class="card-img" src="https://images.unsplash.com/photo-1601937010430-25a70a0b78f6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80" alt="Cancha 1">
+        <div class="card-body">
+          <h3>Club Los Álamos</h3>
+          <p>Ubicado en Av. Principal 1234. Canchas nuevas y amplias.</p>
+        </div>
+      </div>
+      <div class="card">
+        <img class="card-img" src="https://images.unsplash.com/photo-1632162966708-7079b4c3c622?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80" alt="Cancha 2">
+        <div class="card-body">
+          <h3>Polideportivo Central</h3>
+          <p>Complejo deportivo con múltiples canchas techadas y servicios.</p>
+        </div>
+      </div>
+      <!-- Más canchas según tu necesidad -->
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    © 2025 Catch Up Padel. Todos los derechos reservados.
+  </footer>
+
+  <!-- SCRIPT PARA CERRAR SESIÓN (Opcional) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script>
+    // Reemplaza con tus datos de Supabase si deseas manejar logout real
+    const SUPABASE_URL = 'https://idlvxinjfbsujpvxncbr.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig';
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    async function logout() {
+      await supabaseClient.auth.signOut();
+      window.location.href = "index.html";
+    }
+  </script>
+</body>
+</html>
