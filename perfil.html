@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Catch Up Padel - Mi Perfil</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Fuente moderna -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    /* RESET Y ESTILOS GLOBALES */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f8f8f8;
+      color: #333;
+      line-height: 1.6;
+    }
+    /* BARRA DE NAVEGACIÓN SIMPLE */
+    header {
+      background-color: #fff;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header .logo {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #2c3e50;
+    }
+    header nav a {
+      font-size: 1rem;
+      color: #ff9500;
+      font-weight: 500;
+      text-transform: uppercase;
+      margin-left: 1rem;
+    }
+    /* CONTAINER DEL FORMULARIO */
+    .container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 1rem;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: #2c3e50;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+    label {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #333;
+    }
+    input[type="text"],
+    input[type="email"],
+    input[type="number"],
+    input[type="tel"],
+    select {
+      padding: 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1rem;
+      width: 100%;
+    }
+    input[disabled] {
+      background-color: #f0f0f0;
+    }
+    input[type="file"] {
+      padding: 0.5rem 0;
+    }
+    .radio-group {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+    .radio-group label {
+      font-weight: 400;
+      margin-right: 1rem;
+    }
+    /* Grupo de teléfono con prefijo */
+    .phone-group {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    .phone-prefix {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background-color: #f0f0f0;
+      font-size: 1rem;
+    }
+    button {
+      padding: 0.75rem;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #fff;
+      cursor: pointer;
+    }
+    .btn-save {
+      background-color: #27ae60;
+    }
+    .btn-save:hover {
+      background-color: #219150;
+    }
+    .btn-delete {
+      background-color: #e74c3c;
+      margin-top: 1rem;
+    }
+    .btn-delete:hover {
+      background-color: #c0392b;
+    }
+    /* Responsive */
+    @media (max-width: 600px) {
+      header {
+        flex-direction: column;
+        text-align: center;
+      }
+      .container {
+        margin: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">Catch Up Padel</div>
+    <nav>
+      <a href="home.html">Volver a Home</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <h1>Mi Perfil</h1>
+    <form id="profile-form">
+      <div class="form-group">
+        <label for="fullName">Nombre y Apellido</label>
+        <input type="text" id="fullName" name="fullName" placeholder="Ingresa tu nombre y apellido" required>
+      </div>
+      <div class="form-group">
+        <label for="emailProfile">Correo Electrónico</label>
+        <input type="email" id="emailProfile" name="emailProfile" disabled value="">
+      </div>
+      <div class="form-group">
+        <label for="age">Edad</label>
+        <input type="number" id="age" name="age" placeholder="Ingresa tu edad" required>
+      </div>
+      <div class="form-group">
+        <label>Sexo</label>
+        <div class="radio-group">
+          <label><input type="radio" name="gender" value="femenino" required> Femenino</label>
+          <label><input type="radio" name="gender" value="masculino" required> Masculino</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="gameLevel">Nivel de juego</label>
+        <select id="gameLevel" name="gameLevel" required>
+          <option value="">Selecciona tu nivel</option>
+          <option value="principiante">Principiante</option>
+          <option value="intermedio">Intermedio</option>
+          <option value="avanzado">Avanzado</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="locality">Localidad</label>
+        <input type="text" id="locality" name="locality" placeholder="Ingresa tu localidad" required>
+      </div>
+      <div class="form-group">
+        <label for="province">Provincia</label>
+        <input type="text" id="province" name="province" placeholder="Ingresa tu provincia" required>
+      </div>
+      <div class="form-group">
+        <label for="country">País</label>
+        <input type="text" id="country" name="country" placeholder="Ingresa tu país" required>
+      </div>
+      <div class="form-group">
+        <label for="phone">Número de Teléfono</label>
+        <div class="phone-group">
+          <div class="phone-prefix">🇦🇷 +54</div>
+          <input type="tel" id="phone" name="phone" placeholder="Ej. 9XXXXXXXX" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="profilePic">Foto de Perfil</label>
+        <input type="file" id="profilePic" name="profilePic" accept="image/*">
+      </div>
+      <button type="submit" class="btn-save">Guardar Cambios</button>
+      <button type="button" class="btn-delete" onclick="deleteProfile()">Borrar Perfil</button>
+    </form>
+  </div>
+
+  <!-- SUPABASE -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script>
+    // Reemplaza con tus credenciales reales de Supabase
+    const SUPABASE_URL = ''https://idlvxinjfbsujpvxncbr.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig';
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // Cargar el email del usuario de la sesión
+    async function loadProfile() {
+      const { data: { session }, error } = await supabaseClient.auth.getSession();
+      if (error) {
+        console.error('Error al obtener sesión:', error);
+      } else if (session && session.user) {
+        document.getElementById('emailProfile').value = session.user.email;
+        // Aquí podrías cargar otros datos si ya existen en la tabla "profiles"
+      }
+    }
+    loadProfile();
+
+    // Manejo del envío del formulario para guardar/actualizar el perfil
+    document.getElementById('profile-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      // Recopilar datos del formulario
+      const fullName = document.getElementById('fullName').value.trim();
+      const email = document.getElementById('emailProfile').value.trim();
+      const age = document.getElementById('age').value.trim();
+      const gender = document.querySelector('input[name="gender"]:checked')?.value;
+      const gameLevel = document.getElementById('gameLevel').value;
+      const locality = document.getElementById('locality').value.trim();
+      const province = document.getElementById('province').value.trim();
+      const country = document.getElementById('country').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const profilePicInput = document.getElementById('profilePic');
+      
+      // Subida de imagen (si se seleccionó)
+      let profilePicUrl = null;
+      if (profilePicInput.files.length > 0) {
+        const file = profilePicInput.files[0];
+        // Se asume un bucket llamado "profiles" en Supabase Storage (configúralo previamente)
+        const { data: uploadData, error: uploadError } = await supabaseClient.storage
+          .from('profiles')
+          .upload(`profilePics/${file.name}`, file);
+        if (uploadError) {
+          console.error('Error al subir imagen:', uploadError.message);
+          alert('Error al subir imagen: ' + uploadError.message);
+          return;
+        } else {
+          const { data: publicUrlData } = supabaseClient.storage
+            .from('profiles')
+            .getPublicUrl(uploadData.path);
+          profilePicUrl = publicUrlData.publicUrl;
+        }
+      }
+
+      // Obtener el id del usuario de la sesión
+      const { data: { session: userSession } } = await supabaseClient.auth.getSession();
+      if (!userSession) {
+        alert('No se encontró sesión de usuario');
+        return;
+      }
+      const userId = userSession.user.id;
+
+      // Actualizar o insertar en la tabla "profiles"
+      let { data, error } = await supabaseClient
+        .from('profiles')
+        .update({
+          full_name: fullName,
+          age: age,
+          gender: gender,
+          game_level: gameLevel,
+          locality: locality,
+          province: province,
+          country: country,
+          phone: phone,
+          profile_pic: profilePicUrl
+        })
+        .eq('id', userId);
+      if (error) {
+        // Si falla la actualización, intentar la inserción (si es que no existe aún)
+        ({ data, error } = await supabaseClient
+          .from('profiles')
+          .insert({
+            id: userId,
+            full_name: fullName,
+            age: age,
+            gender: gender,
+            game_level: gameLevel,
+            locality: locality,
+            province: province,
+            country: country,
+            phone: phone,
+            profile_pic: profilePicUrl
+          }));
+      }
+      if (error) {
+        console.error('Error al guardar perfil:', error.message);
+        alert('Error al guardar perfil: ' + error.message);
+      } else {
+        alert('Perfil guardado exitosamente');
+      }
+    });
+
+    // Función para borrar el perfil
+    async function deleteProfile() {
+      if (!confirm('¿Estás seguro de que deseas borrar tu perfil? Esta acción no se puede deshacer.')) return;
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      if (!session) {
+        alert('No se encontró sesión de usuario');
+        return;
+      }
+      const userId = session.user.id;
+      const { error } = await supabaseClient
+        .from('profiles')
+        .delete()
+        .eq('id', userId);
+      if (error) {
+        console.error('Error al borrar perfil:', error.message);
+        alert('Error al borrar perfil: ' + error.message);
+      } else {
+        alert('Perfil borrado exitosamente');
+        // Opcional: redirigir, por ejemplo, a la página de inicio o cerrar sesión
+      }
+    }
+  </script>
+</body>
+</html>
