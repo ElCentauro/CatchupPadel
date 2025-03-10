@@ -226,7 +226,7 @@
         console.error('Error al obtener la sesión:', error);
       } else if (session && session.user) {
         document.getElementById('emailProfile').value = session.user.email;
-        // Aquí puedes cargar otros datos del perfil si ya existen en la tabla "profiles"
+        // Aquí podrías cargar otros datos si ya existen en la tabla "profiles"
       }
     }
     loadProfile();
@@ -250,18 +250,24 @@
       let profilePicUrl = null;
       if (profilePicInput.files.length > 0) {
         const file = profilePicInput.files[0];
-        // Se asume un bucket llamado "profiles" en Supabase Storage (configúralo previamente)
+        // Generar un nombre único para el archivo usando la marca de tiempo
+        const filePath = `profilePics/${Date.now()}_${file.name}`;
         const { data: uploadData, error: uploadError } = await supabaseClient.storage
           .from('profiles')
-          .upload(`profilePics/${file.name}`, file);
+          .upload(filePath, file, { upsert: true });
         if (uploadError) {
           console.error('Error al subir imagen:', uploadError.message);
           alert('Error al subir imagen: ' + uploadError.message);
           return;
         } else {
-          const { data: publicUrlData } = supabaseClient.storage
+          const { data: publicUrlData, error: publicUrlError } = supabaseClient.storage
             .from('profiles')
             .getPublicUrl(uploadData.path);
+          if (publicUrlError) {
+            console.error('Error al obtener URL pública:', publicUrlError.message);
+            alert('Error al obtener URL pública: ' + publicUrlError.message);
+            return;
+          }
           profilePicUrl = publicUrlData.publicUrl;
         }
       }
@@ -290,7 +296,7 @@
         })
         .eq('id', userId);
       if (error) {
-        // Si falla la actualización, intentamos la inserción (si aún no existe)
+        // Si falla la actualización, intentamos la inserción
         ({ data, error } = await supabaseClient
           .from('profiles')
           .insert({
@@ -332,7 +338,7 @@
         alert('Error al borrar perfil: ' + error.message);
       } else {
         alert('Perfil borrado exitosamente');
-        // Opcional: redirigir o cerrar sesión
+        // Opcional: redirigir a index.html o cerrar sesión
       }
     }
   </script>
