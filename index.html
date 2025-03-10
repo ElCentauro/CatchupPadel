@@ -2,154 +2,68 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Catch Up Padel - Inicio</title>
+  <title>Catch Up Padel - Depuración</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- Fuente moderna -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
   <style>
-    /******************************************
-     * RESET BÁSICO Y ESTILOS GENERALES
-     ******************************************/
+    /* RESET y estilos generales */
     * {
-      margin: 0;
-      padding: 0;
+      margin: 0; 
+      padding: 0; 
       box-sizing: border-box;
     }
     body {
       font-family: 'Poppins', sans-serif;
-      color: #333;
       background-color: #f8f8f8;
-      overflow-x: hidden;
+      color: #333;
     }
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
-    button {
-      cursor: pointer;
-      font-family: 'Poppins', sans-serif;
-    }
-
-    /******************************************
-     * BARRA DE NAVEGACIÓN (solo marca + botones)
-     ******************************************/
     nav {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      padding: 1rem 2rem;
+      align-items: center;
       background-color: #fff;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      padding: 1rem 2rem;
     }
     .logo {
-      font-size: 1.6rem;
+      font-size: 1.5rem;
       font-weight: 600;
       color: #2c3e50;
     }
     .nav-right {
       display: flex;
-      align-items: center;
-      gap: 1.5rem;
+      gap: 1rem;
     }
-    .nav-button {
+    button {
       padding: 0.5rem 1rem;
+      border: none;
       border-radius: 0.5rem;
-      border: 1px solid transparent;
-      background-color: #ff9500; /* Color principal */
+      background-color: #ff9500;
       color: #fff;
       font-weight: 500;
-      transition: background-color 0.3s ease;
+      cursor: pointer;
+      transition: background-color 0.3s;
     }
-    .nav-button:hover {
+    button:hover {
       background-color: #e07e00;
     }
 
-    /******************************************
-     * SECCIÓN PRINCIPAL (HERO)
-     ******************************************/
     .hero {
-      padding: 3rem 1rem;
       text-align: center;
-      background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)),
-                  url('https://images.unsplash.com/photo-1593341646581-529f6c49c5d1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80');
-      background-size: cover;
-      background-position: center;
-      color: #fff;
+      padding: 2rem 1rem;
     }
     .hero h1 {
-      font-size: 3rem;
-      font-weight: 700;
+      font-size: 2.5rem;
       margin-bottom: 1rem;
-      max-width: 800px;
-      margin: 0 auto 1rem auto;
-    }
-    .hero p {
-      font-size: 1.15rem;
-      font-weight: 400;
-      max-width: 700px;
-      margin: 0 auto 2rem auto;
-      line-height: 1.6;
-    }
-    .hero-image {
-      display: block;
-      margin: 30px auto;
-      max-width: 600px;
-      width: 100%;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    }
-    .hero-buttons {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-    .hero-button {
-      padding: 0.75rem 1.5rem;
-      border-radius: 0.5rem;
-      border: 1px solid transparent;
-      font-weight: 500;
-      font-size: 1rem;
-      transition: background-color 0.3s ease, color 0.3s ease;
-    }
-    .hero-button-primary {
-      background-color: #ff9500;
-      color: #fff;
-    }
-    .hero-button-primary:hover {
-      background-color: #e07e00;
-    }
-    .hero-button-secondary {
-      background-color: transparent;
-      color: #ff9500;
-      border: 1px solid #ff9500;
-    }
-    .hero-button-secondary:hover {
-      background-color: #ff9500;
-      color: #fff;
     }
 
-    /******************************************
-     * FOOTER
-     ******************************************/
-    footer {
-      text-align: center;
-      padding: 1rem;
-      font-size: 0.9rem;
-      color: #777;
-      background-color: #fff;
-      border-top: 1px solid #eaeaea;
-      margin-top: 2rem;
-    }
-
-    /******************************************
-     * SECCIÓN DE AUTENTICACIÓN (OVERLAY)
-     ******************************************/
+    /* Overlay de autenticación */
     #auth-section {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      display: none; /* Oculto por defecto */
+      display: none;
       justify-content: center;
       align-items: center;
       background: rgba(0,0,0,0.5);
@@ -159,125 +73,69 @@
       background: rgba(255, 255, 255, 0.15);
       backdrop-filter: blur(10px);
       border: 1px solid rgba(255, 255, 255, 0.3);
-      border-radius: 15px;
-      padding: 40px;
-      width: 380px;
+      border-radius: 10px;
+      padding: 2rem;
+      width: 360px;
       text-align: center;
-      color: #ffffff;
-      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-      animation: fadeIn 0.7s ease;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .auth-container h2 {
-      margin-bottom: 25px;
-      font-size: 28px;
-      font-weight: 600;
-      letter-spacing: 1px;
+      color: #fff;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.37);
     }
     form {
       display: flex;
       flex-direction: column;
-      gap: 15px;
+      gap: 1rem;
+      margin-top: 1rem;
     }
     form input {
-      width: 100%;
-      padding: 12px 15px;
+      padding: 0.75rem;
       border: none;
-      border-radius: 8px;
+      border-radius: 5px;
       background: rgba(255, 255, 255, 0.25);
-      color: #ffffff;
-      font-size: 15px;
+      color: #fff;
       outline: none;
-      transition: background 0.3s ease;
-    }
-    form input:focus {
-      background: rgba(255, 255, 255, 0.35);
-    }
-    form input::placeholder {
-      color: rgba(255, 255, 255, 0.8);
+      font-size: 1rem;
     }
     form button {
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
       background: #27ae60;
-      color: #fff;
-      font-size: 16px;
-      font-weight: 600;
-      transition: background 0.3s ease;
+      transition: background 0.3s;
     }
     form button:hover {
       background: #219150;
     }
     .toggle-link {
-      margin-top: 20px;
-      font-size: 14px;
+      margin-top: 1rem;
+      font-size: 0.9rem;
     }
     .toggle-link a {
-      color: #f1c40f;
+      color: #ffd700;
       text-decoration: none;
       font-weight: 600;
       cursor: pointer;
     }
-    .toggle-link a:hover {
-      text-decoration: underline;
-    }
     .message {
-      margin-top: 15px;
-      font-size: 15px;
+      margin-top: 1rem;
       min-height: 20px;
-    }
-
-    /******************************************
-     * MEDIA QUERIES PARA RESPONSIVE
-     ******************************************/
-    @media (max-width: 768px) {
-      nav {
-        flex-direction: column;
-      }
-      .hero h1 {
-        font-size: 2rem;
-      }
-      .hero p {
-        font-size: 1rem;
-      }
-      .hero-image {
-        max-width: 90%;
-      }
     }
   </style>
 </head>
 <body>
 
-  <!-- BARRA DE NAVEGACIÓN: solo Título y Botones -->
+  <!-- Barra de navegación -->
   <nav>
-    <span class="logo">Catch Up Padel</span>
+    <div class="logo">Catch Up Padel</div>
     <div class="nav-right">
-      <button class="nav-button" onclick="showAuthSection('login')">Iniciar Sesión</button>
-      <button class="nav-button" onclick="showAuthSection('signup')">Registrarse</button>
+      <button onclick="showAuthSection('login')">Iniciar Sesión</button>
+      <button onclick="showAuthSection('signup')">Registrarse</button>
     </div>
   </nav>
 
-  <!-- SECCIÓN PRINCIPAL (HERO) -->
+  <!-- Sección principal -->
   <section class="hero">
-    <h1>Catch Up Padel</h1>
-    <p>Conecta con jugadores de pádel cerca de ti y disfruta del mejor deporte en comunidad.</p>
-    <img src="padel.png" alt="Imagen de pádel" class="hero-image">
-    <div class="hero-buttons">
-      <button class="hero-button hero-button-primary" onclick="showAuthSection('signup')">¡Regístrate Ahora!</button>
-      <button class="hero-button hero-button-secondary" onclick="showAuthSection('login')">Iniciar Sesión</button>
-    </div>
+    <h1>Página de Depuración</h1>
+    <p>Haz clic en "Iniciar Sesión" o "Registrarse" para probar la autenticación con Supabase.</p>
   </section>
 
-  <!-- FOOTER -->
-  <footer>
-    © 2025 Catch Up Padel. Todos los derechos reservados.
-  </footer>
-
-  <!-- SECCIÓN DE AUTENTICACIÓN (Oculta por defecto) -->
+  <!-- Overlay de autenticación -->
   <div id="auth-section">
     <div class="auth-container">
       <h2 id="form-title">Registro</h2>
@@ -287,98 +145,143 @@
         <button type="submit" id="submit-button">Registrarse</button>
       </form>
       <div class="toggle-link">
-        <span id="toggle-signup">¿Ya tienes cuenta? <a id="signin-link" href="#" onclick="setMode('login')">Inicia sesión</a></span>
-        <span id="toggle-signin" style="display: none;">¿No tienes cuenta? <a id="signup-link" href="#" onclick="setMode('signup')">Regístrate</a></span>
+        <span id="toggle-signup">
+          ¿Ya tienes cuenta?
+          <a id="signin-link" href="#" onclick="setMode('login')">Inicia sesión</a>
+        </span>
+        <span id="toggle-signin" style="display: none;">
+          ¿No tienes cuenta?
+          <a id="signup-link" href="#" onclick="setMode('signup')">Regístrate</a>
+        </span>
       </div>
       <div class="message" id="message"></div>
     </div>
   </div>
 
-  <!-- SUPABASE -->
+  <!-- Script de Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <script>
-    // CONFIGURACIÓN DE SUPABASE: Reemplaza con tus datos
-    const SUPABASE_URL = 'https://TU-PROYECTO.supabase.co';
-    const SUPABASE_ANON_KEY = 'TU-CLAVE-ANONIMA';
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    /************************************************
+     * 1. CONFIGURACIÓN DE SUPABASE
+     ************************************************/
+    const SUPABASE_URL = 'https://idlvxinjfbsujpvxncbr.supabase.co';  // <-- Cambia esto
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig';
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Mostrar/ocultar la sección de autenticación
-    function showAuthSection(mode) {
-      document.getElementById('auth-section').style.display = 'flex';
-      setMode(mode);
-    }
-    function hideAuthSection() {
-      document.getElementById('auth-section').style.display = 'none';
-    }
-
-    // Variables para el manejo del formulario
-    let mode = 'signup';
+    /************************************************
+     * 2. VARIABLES Y REFERENCIAS AL DOM
+     ************************************************/
+    let mode = 'signup';  // signup o login
+    const authSection = document.getElementById('auth-section');
     const authForm = document.getElementById('auth-form');
     const formTitle = document.getElementById('form-title');
     const submitButton = document.getElementById('submit-button');
     const emailInput = document.getElementById('email');
     const passwordInput = document.getElementById('password');
     const messageDiv = document.getElementById('message');
+    const toggleSignup = document.getElementById('toggle-signup');
+    const toggleSignin = document.getElementById('toggle-signin');
 
+    /************************************************
+     * 3. MOSTRAR/OCULTAR OVERLAY DE AUTENTICACIÓN
+     ************************************************/
+    function showAuthSection(newMode) {
+      console.log('Abriendo overlay en modo:', newMode);
+      setMode(newMode);
+      authSection.style.display = 'flex';
+    }
+    function hideAuthSection() {
+      authSection.style.display = 'none';
+    }
+
+    /************************************************
+     * 4. CAMBIAR ENTRE LOGIN Y SIGNUP
+     ************************************************/
     function setMode(newMode) {
       mode = newMode;
+      console.log('Cambiando a modo:', mode);
       if (mode === 'login') {
         formTitle.textContent = 'Iniciar sesión';
         submitButton.textContent = 'Iniciar sesión';
-        document.getElementById('toggle-signup').style.display = 'none';
-        document.getElementById('toggle-signin').style.display = 'block';
+        toggleSignup.style.display = 'none';
+        toggleSignin.style.display = 'inline';
         messageDiv.textContent = '';
       } else {
         formTitle.textContent = 'Registro';
         submitButton.textContent = 'Registrarse';
-        document.getElementById('toggle-signin').style.display = 'none';
-        document.getElementById('toggle-signup').style.display = 'block';
+        toggleSignin.style.display = 'none';
+        toggleSignup.style.display = 'inline';
         messageDiv.textContent = '';
       }
     }
 
-    // Manejo del envío del formulario
+    /************************************************
+     * 5. MANEJO DEL FORMULARIO
+     ************************************************/
     authForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       messageDiv.textContent = '';
+      messageDiv.style.color = '#fff';
+
       const emailVal = emailInput.value.trim();
       const passVal = passwordInput.value.trim();
 
       if (!emailVal || !passVal) {
         messageDiv.textContent = 'Por favor, completa todos los campos.';
-        messageDiv.style.color = '#ff4d4d';
+        messageDiv.style.color = 'red';
         return;
       }
 
+      console.log('Enviando formulario. Modo:', mode, 'Email:', emailVal);
+
       if (mode === 'signup') {
-        // Registro
-        const { data, error } = await supabaseClient.auth.signUp({
-          email: emailVal,
-          password: passVal
-        });
-        if (error) {
-          messageDiv.textContent = 'Error: ' + error.message;
-          messageDiv.style.color = '#ff4d4d';
-        } else {
-          messageDiv.textContent = 'Registro exitoso. Revisa tu correo para confirmar tu cuenta.';
-          messageDiv.style.color = '#27ae60';
+        // REGISTRO
+        try {
+          const { data, error } = await supabase.auth.signUp({
+            email: emailVal,
+            password: passVal
+          });
+          console.log('Respuesta signUp:', data, error);
+
+          if (error) {
+            console.error('Error al registrar:', error.message);
+            messageDiv.textContent = 'Error: ' + error.message;
+            messageDiv.style.color = 'red';
+          } else {
+            messageDiv.textContent = 'Registro exitoso. Revisa tu correo para confirmar tu cuenta.';
+            messageDiv.style.color = '#27ae60';
+          }
+        } catch (err) {
+          console.error('Excepción al registrar:', err);
+          messageDiv.textContent = 'Excepción: ' + err.message;
+          messageDiv.style.color = 'red';
         }
       } else {
-        // Inicio de sesión
-        const { data, error } = await supabaseClient.auth.signInWithPassword({
-          email: emailVal,
-          password: passVal
-        });
-        if (error) {
-          messageDiv.textContent = 'Error: ' + error.message;
-          messageDiv.style.color = '#ff4d4d';
-        } else {
-          messageDiv.textContent = 'Inicio de sesión exitoso. Redirigiendo...';
-          messageDiv.style.color = '#27ae60';
-          setTimeout(() => {
-            // Redirige a tu página interna
-            window.location.href = "home.html";
-          }, 1000);
+        // LOGIN
+        try {
+          const { data, error } = await supabase.auth.signInWithPassword({
+            email: emailVal,
+            password: passVal
+          });
+          console.log('Respuesta signInWithPassword:', data, error);
+
+          if (error) {
+            console.error('Error al iniciar sesión:', error.message);
+            messageDiv.textContent = 'Error: ' + error.message;
+            messageDiv.style.color = 'red';
+          } else {
+            messageDiv.textContent = 'Inicio de sesión exitoso. Redirigiendo...';
+            messageDiv.style.color = '#27ae60';
+            // Redirige o cierra overlay
+            setTimeout(() => {
+              // window.location.href = "home.html";
+              hideAuthSection();
+            }, 1000);
+          }
+        } catch (err) {
+          console.error('Excepción al iniciar sesión:', err);
+          messageDiv.textContent = 'Excepción: ' + err.message;
+          messageDiv.style.color = 'red';
         }
       }
     });
