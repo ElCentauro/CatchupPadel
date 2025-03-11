@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Catch Up Padel - Pistas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Fuente moderna -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    /* RESET Y ESTILOS GLOBALES */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Poppins', sans-serif; background: #f8f8f8; color: #333; }
+
+    /* MENÚ DE NAVEGACIÓN */
+    nav {
+      width: 100%;
+      background-color: #fff;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .menu-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .menu-item {
+      padding: 0.5rem 1rem;
+      border: 2px solid #ff9500;
+      border-radius: 8px;
+      color: #ff9500;
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 1px;
+      transition: background-color 0.3s, color 0.3s;
+      cursor: pointer;
+    }
+    .menu-item:hover { background-color: #ff9500; color: #fff; }
+    .menu-item.logout {
+      border-color: #e74c3c;
+      color: #e74c3c;
+    }
+    .menu-item.logout:hover { background-color: #e74c3c; color: #fff; }
+
+    /* CONTENEDOR PRINCIPAL */
+    .container {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 1.5rem;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    h1 { text-align: center; margin-bottom: 1.5rem; color: #2c3e50; }
+
+    /* SECCIÓN DE BÚSQUEDA DE ESTABLECIMIENTO */
+    .search-establishment {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    .search-establishment input {
+      padding: 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1rem;
+      width: 60%;
+      max-width: 400px;
+    }
+    .search-establishment button {
+      padding: 0.75rem 1rem;
+      border: none;
+      border-radius: 5px;
+      background-color: #ff9500;
+      color: #fff;
+      font-size: 1rem;
+      margin-left: 0.5rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .search-establishment button:hover { background-color: #e07e00; }
+
+    /* INFORMACIÓN DEL ESTABLECIMIENTO */
+    .establishment-info {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      font-size: 1rem;
+    }
+    .establishment-info span { font-weight: 600; }
+
+    /* BOTÓN PARA GENERAR PISTAS */
+    .btn-generate {
+      display: block;
+      margin: 1rem auto;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 5px;
+      background-color: #27ae60;
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .btn-generate:hover { background-color: #219150; }
+
+    /* FORMULARIO DINÁMICO DE PISTAS */
+    #pistas-form { display: none; }
+    .pistas-container { margin-top: 1.5rem; }
+    .pista-group {
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      background-color: #f9f9f9;
+    }
+    .pista-group h3 { margin-bottom: 0.5rem; color: #2c3e50; }
+    .pista-group label { font-weight: 500; margin-bottom: 0.25rem; }
+    .pista-group input[type="text"],
+    .pista-group select {
+      width: 100%;
+      padding: 0.5rem;
+      margin-bottom: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    /* BOTONES DE GUARDAR Y REGRESAR */
+    .button-group {
+      display: flex;
+      justify-content: space-around;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    .button-group button {
+      flex: 1;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .btn-save { background-color: #27ae60; }
+    .btn-save:hover { background-color: #219150; }
+    .btn-back { background-color: #555; }
+    .btn-back:hover { background-color: #444; }
+    button:disabled { background-color: #aaa !important; cursor: not-allowed; }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .search-establishment input { width: 80%; }
+    }
+  </style>
+</head>
+<body>
+  <!-- MENÚ DE NAVEGACIÓN -->
+  <nav>
+    <div class="menu-container">
+      <a href="perfil.html" class="menu-item">Crear Perfil</a>
+      <a href="#" class="menu-item">Partidos</a>
+      <a href="#" class="menu-item" ondblclick="window.location.href='establecimiento.html'">Canchas</a>
+      <a href="#" class="menu-item" ondblclick="window.location.href='Pistas.html'">Pistas</a>
+      <a href="#" class="menu-item">Chat</a>
+      <a href="#" class="menu-item logout" onclick="logout()">Cerrar Sesión</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1>Crear Pistas para Establecimientos</h1>
+    
+    <!-- SECCIÓN DE BÚSQUEDA DE ESTABLECIMIENTO -->
+    <div class="search-establishment">
+      <input type="text" id="estSearch" placeholder="Buscar establecimiento (ID o Nombre)">
+      <button type="button" id="btn-estSearch">Buscar Establecimiento</button>
+    </div>
+    <!-- Información del establecimiento encontrado -->
+    <div class="establishment-info" id="estInfo" style="display:none;">
+      <p><span>ID:</span> <span id="estId"></span></p>
+      <p><span>Nombre:</span> <span id="estName"></span></p>
+      <p><span>Canchas declaradas:</span> <span id="estCourtCount"></span></p>
+    </div>
+    <!-- Botón para generar pistas (visible solo si se encontró un establecimiento) -->
+    <button type="button" id="btn-generate" class="btn-generate" style="display:none;">Crear Canchas</button>
+    
+    <!-- FORMULARIO DINÁMICO PARA REGISTRAR PISTAS -->
+    <form id="pistas-form" style="display:none;">
+      <div class="pistas-container" id="pistasContainer">
+        <!-- Los grupos de pista se agregarán aquí dinámicamente -->
+      </div>
+      <div class="button-group">
+        <button type="submit" class="btn-save" id="btn-save">Guardar Pistas</button>
+        <button type="button" class="btn-back" id="btn-back">Regresar a Home</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- SUPABASE -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script>
+    // CONFIGURACIÓN DE SUPABASE – REEMPLAZA CON TUS CREDENCIALES REALES
+    const SUPABASE_URL = 'https://idlvxinjfbsujpvxncbr.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig';
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // Función para cerrar sesión
+    function logout() {
+      supabaseClient.auth.signOut().then(() => {
+        window.location.href = "index.html";
+      });
+    }
+
+    /* --- BÚSQUEDA DE ESTABLECIMIENTO --- */
+    document.getElementById('btn-estSearch').addEventListener('click', async () => {
+      const query = document.getElementById('estSearch').value.trim();
+      if (!query) {
+        alert("Por favor, ingresa un ID o Nombre para buscar el establecimiento.");
+        return;
+      }
+      // Se busca por ID exacto o por nombre (ilike)
+      const { data, error } = await supabaseClient
+        .from('establishments')
+        .select('*')
+        .or(`id.ilike.%${query}%,name.ilike.%${query}%`);
+      if (error) {
+        console.error("Error al buscar establecimiento:", error.message);
+        alert("Error al buscar establecimiento: " + error.message);
+        return;
+      }
+      if (!data || data.length === 0) {
+        alert("No se encontró ningún establecimiento con ese ID o Nombre.");
+      } else {
+        // Tomamos el primer resultado
+        const est = data[0];
+        document.getElementById('estInfo').style.display = 'block';
+        document.getElementById('estId').textContent = est.id;
+        document.getElementById('estName').textContent = est.name;
+        document.getElementById('estCourtCount').textContent = est.court_count;
+        document.getElementById('btn-generate').style.display = 'block';
+      }
+    });
+
+    /* --- GENERAR FORMULARIO DINÁMICO DE PISTAS --- */
+    document.getElementById('btn-generate').addEventListener('click', () => {
+      const courtCount = parseInt(document.getElementById('estCourtCount').textContent, 10);
+      if (isNaN(courtCount) || courtCount < 1) {
+        alert("El establecimiento no tiene canchas declaradas válidas.");
+        return;
+      }
+      const container = document.getElementById('pistasContainer');
+      container.innerHTML = ''; // Limpiar contenido previo
+      const estId = document.getElementById('estId').textContent;
+      // Generar grupo de campos para cada pista
+      for (let i = 1; i <= courtCount; i++) {
+        const pistaId = `${estId}-${i}`;
+        const group = document.createElement('div');
+        group.className = 'pista-group';
+        group.innerHTML = `
+          <h3>Pista ${i} (ID: ${pistaId})</h3>
+          <div class="form-group">
+            <label for="pistaName_${i}">Nro/Nombre de la Pista</label>
+            <input type="text" id="pistaName_${i}" name="pistaName_${i}" placeholder="Ej: Pista ${i}" required>
+          </div>
+          <div class="form-group">
+            <label for="surface_${i}">Tipo de superficie</label>
+            <select id="surface_${i}" name="surface_${i}" required>
+              <option value="">Selecciona...</option>
+              <option value="Cemento">Cemento</option>
+              <option value="Césped Artificial">Césped Artificial</option>
+              <option value="Resina Sintética">Resina Sintética</option>
+              <option value="Hormigón Poroso">Hormigón Poroso</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="wall_${i}">Tipo de paredes</label>
+            <select id="wall_${i}" name="wall_${i}" required>
+              <option value="">Selecciona...</option>
+              <option value="Cemento">Cemento</option>
+              <option value="Cristal">Cristal</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="structure_${i}">Medidas y Estructura Profesional</label>
+            <select id="structure_${i}" name="structure_${i}" required>
+              <option value="">Selecciona...</option>
+              <option value="Sí">Sí</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="lighting_${i}">Iluminación</label>
+            <select id="lighting_${i}" name="lighting_${i}" required>
+              <option value="">Selecciona...</option>
+              <option value="Sí">Sí</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="techada_${i}">Techada</label>
+            <select id="techada_${i}" name="techada_${i}" required>
+              <option value="">Selecciona...</option>
+              <option value="Sí">Sí</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+        `;
+        container.appendChild(group);
+      }
+      // Mostrar el formulario de pistas
+      document.getElementById('pistas-form').style.display = 'block';
+    });
+
+    /* --- GUARDAR PISTAS --- */
+    document.getElementById('pistas-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btnSave = document.getElementById('btn-save');
+      btnSave.disabled = true;
+      const establishmentId = document.getElementById('estId').textContent;
+      const courtCount = parseInt(document.getElementById('estCourtCount').textContent, 10);
+      let pistasData = [];
+      for (let i = 1; i <= courtCount; i++) {
+        const pistaId = `${establishmentId}-${i}`;
+        const courtName = document.getElementById(`pistaName_${i}`).value.trim();
+        const surfaceType = document.getElementById(`surface_${i}`).value;
+        const wallType = document.getElementById(`wall_${i}`).value;
+        const professionalStructure = document.getElementById(`structure_${i}`).value;
+        const lighting = document.getElementById(`lighting_${i}`).value;
+        const techada = document.getElementById(`techada_${i}`).value;
+        if (!courtName || !surfaceType || !wallType || !professionalStructure || !lighting || !techada) {
+          alert(`Por favor, completa todos los campos para la pista ${i}.`);
+          btnSave.disabled = false;
+          return;
+        }
+        pistasData.push({
+          id: pistaId,
+          establishment_id: establishmentId,
+          court_name: courtName,
+          surface_type: surfaceType,
+          wall_type: wallType,
+          professional_structure: professionalStructure,
+          lighting: lighting,
+          techada: techada
+        });
+      }
+      const { data, error } = await supabaseClient
+        .from('pistas')
+        .insert(pistasData);
+      if (error) {
+        console.error("Error al guardar pistas:", error.message);
+        alert("Error al guardar pistas: " + error.message);
+        btnSave.disabled = false;
+      } else {
+        alert("Pistas guardadas exitosamente.");
+        document.getElementById('pistas-form').reset();
+        document.getElementById('pistas-form').style.display = 'none';
+        btnSave.disabled = false;
+      }
+    });
+
+    /* --- BOTÓN REGRESAR --- */
+    document.getElementById('btn-back').addEventListener('click', () => {
+      window.location.href = "home.html";
+    });
+  </script>
+</body>
+</html>
