@@ -15,19 +15,16 @@
       padding: 0;
       box-sizing: border-box;
     }
-
     /* Estilos base */
     body {
       font-family: 'Poppins', sans-serif;
-      /* Fondo naranja suave */
       background: linear-gradient(135deg, #fff8f2 0%, #ffe9d9 100%);
       color: #333;
       padding: 1rem;
-      min-height: 100vh; /* Asegura que el gradiente cubra toda la pantalla */
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
-
     /* Contenedor principal */
     .container {
       max-width: 800px;
@@ -39,7 +36,6 @@
       margin-top: 2rem;
       margin-bottom: 2rem;
     }
-
     /* Título principal */
     h1 {
       text-align: center;
@@ -47,25 +43,21 @@
       color: #2c3e50;
       font-weight: 600;
     }
-
     /* Formulario */
     form {
       display: flex;
       flex-direction: column;
       gap: 1rem;
     }
-
     .form-group {
       display: flex;
       flex-direction: column;
     }
-
     label {
       font-weight: 600;
       margin-bottom: 0.5rem;
       color: #444;
     }
-
     input[type="text"],
     input[type="url"],
     input[type="number"],
@@ -76,20 +68,17 @@
       font-size: 1rem;
       background-color: #f9f9f9;
     }
-
     /* Línea de dirección */
     .address-line {
       display: flex;
       flex-wrap: wrap;
       gap: 0.5rem;
     }
-
     .address-line input,
     .address-line select {
       flex: 1;
       min-width: 100px;
     }
-
     /* Botón para buscar en el mapa */
     .action-btn {
       align-self: flex-start;
@@ -104,11 +93,9 @@
       font-weight: 500;
       transition: background-color 0.3s ease;
     }
-
     .action-btn:hover {
       background-color: #e07e00;
     }
-
     /* Mapa con Leaflet */
     #map {
       width: 100%;
@@ -117,7 +104,6 @@
       border: 1px solid #ddd;
       border-radius: 5px;
     }
-
     /* Botones de Grabar y Eliminar */
     .button-group {
       display: flex;
@@ -125,7 +111,6 @@
       margin-top: 1rem;
       gap: 1rem;
     }
-
     .button-group button {
       flex: 1;
       padding: 0.75rem;
@@ -137,21 +122,18 @@
       color: #fff;
       transition: background-color 0.3s ease;
     }
-
     .btn-save {
       background-color: #27ae60;
     }
     .btn-save:hover {
       background-color: #219150;
     }
-
     .btn-delete {
       background-color: #e74c3c;
     }
     .btn-delete:hover {
       background-color: #c0392b;
     }
-
     /* Grupo para URL + Botón */
     .url-group {
       display: flex;
@@ -161,7 +143,6 @@
     .url-group input[type="url"] {
       flex: 1;
     }
-
     /* Responsive */
     @media (max-width: 768px) {
       .container {
@@ -251,14 +232,20 @@
     </form>
   </div>
 
-  <!-- Leaflet JS (sin integridad) -->
+  <!-- Cargar Leaflet JS (sin integridad) -->
   <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+  <!-- Cargar Supabase JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <script>
-    // Función para generar un ID único de 8 dígitos
+    // Configuración de Supabase (reemplaza con tus credenciales reales)
+    const SUPABASE_URL = 'https://idlvxinjfbsujpvxncbr.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig';
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // Generar y asignar el ID único
     function generarUniqueId() {
       return Math.floor(10000000 + Math.random() * 90000000).toString();
     }
-    // Asignar el ID único al cargar la página
     document.getElementById("uniqueId").value = generarUniqueId();
 
     // Listas de provincias para cada país
@@ -273,7 +260,7 @@
       ]
     };
 
-    // Actualizar las opciones de provincia según el país seleccionado
+    // Actualizar opciones de provincia según país
     function updateProvinceOptions() {
       const paisSelect = document.getElementById("pais");
       const provinciaSelect = document.getElementById("provincia");
@@ -287,11 +274,8 @@
           provinciaSelect.appendChild(option);
         });
       }
-      // Al cambiar el país, podemos refrescar el mapa si queremos
-      // actualizarMapa();
     }
     document.getElementById("pais").addEventListener("change", updateProvinceOptions);
-    document.getElementById("provincia").addEventListener("change", () => { /* update si deseas */ });
 
     // Inicialización del mapa con Leaflet
     let map = L.map('map').setView([-34.6037, -58.3816], 12);
@@ -301,22 +285,26 @@
     }).addTo(map);
     let marker;
 
-    // Función principal: busca en el mapa con fallback
+    // Función para buscar en el mapa con fallback automático
     function buscarEnMapa() {
-      // Primero intentamos con todos los campos
+      // Intentamos primero con la búsqueda detallada (todos los campos)
       const primeraDireccion = construirDireccionCompleta(true);
-      console.log("1) Búsqueda detallada:", primeraDireccion);
+      console.log("Búsqueda detallada:", primeraDireccion);
       geocodeNominatim(primeraDireccion, (exito) => {
+        // Si la búsqueda detallada no devuelve resultado, se usa la reducida
         if (!exito) {
-          // Si no hubo éxito, probamos una segunda búsqueda sin código postal ni localidad
           const segundaDireccion = construirDireccionCompleta(false);
-          console.log("2) Búsqueda reducida:", segundaDireccion);
-          geocodeNominatim(segundaDireccion, () => {});
+          console.log("Búsqueda reducida:", segundaDireccion);
+          geocodeNominatim(segundaDireccion, (exito2) => {
+            if (!exito2) {
+              alert("No se encontró la ubicación. Verifica que los datos sean correctos.");
+            }
+          });
         }
       });
     }
 
-    // Construye la dirección con o sin localidad/código postal
+    // Construir la dirección completa (usarTodo = true incluye localidad y CP)
     function construirDireccionCompleta(usarTodo) {
       const pais = document.getElementById("pais").value.trim();
       let provincia = document.getElementById("provincia").value.trim();
@@ -324,23 +312,18 @@
       let direccion = document.getElementById("direccion").value.trim();
       let codigoPostal = document.getElementById("codigoPostal").value.trim();
 
-      // Reemplazar "Ciudad de Buenos Aires" por "Buenos Aires" para Nominatim
+      // Reemplazar "Ciudad de Buenos Aires" por "Buenos Aires" si fuera el caso (aquí usamos CABA en la lista)
       if (provincia.toLowerCase() === "ciudad de buenos aires") {
         provincia = "Buenos Aires";
       }
-
-      // Si 'usarTodo' es false, quitamos localidad y código postal
       if (!usarTodo) {
         localidad = "";
         codigoPostal = "";
       }
-
-      // Solo se requiere que país, provincia y dirección existan
       return `${direccion}${localidad ? ", " + localidad : ""}, ${provincia}, ${pais}${codigoPostal ? ", " + codigoPostal : ""}`;
     }
 
-    // Hace la consulta a Nominatim, si encuentra algo, actualiza el mapa
-    // callback(true/false) según éxito
+    // Función para geocodificar usando Nominatim
     function geocodeNominatim(direccionCompleta, callback) {
       if (!direccionCompleta) {
         callback(false);
@@ -350,8 +333,8 @@
         .then(response => response.json())
         .then(data => {
           if (data && data.length > 0) {
-            const lat = data[0].lat;
-            const lon = data[0].lon;
+            const lat = parseFloat(data[0].lat);
+            const lon = parseFloat(data[0].lon);
             map.setView([lat, lon], 15);
             if (marker) {
               marker.setLatLng([lat, lon]);
@@ -361,7 +344,6 @@
             callback(true);
           } else {
             console.error("No se encontró la ubicación para:", direccionCompleta);
-            alert("No se encontró la ubicación. Verifica que los datos sean correctos.");
             callback(false);
           }
         })
@@ -371,20 +353,7 @@
         });
     }
 
-    // Manejo del envío del formulario (Grabar)
-    document.getElementById("establecimiento-form").addEventListener("submit", function(e) {
-      e.preventDefault();
-      alert("Establecimiento grabado exitosamente.");
-    });
-
-    // Manejo del botón Eliminar
-    document.getElementById("btn-delete").addEventListener("click", function() {
-      if (confirm("¿Estás seguro de eliminar este establecimiento?")) {
-        alert("Establecimiento eliminado.");
-      }
-    });
-
-    // Botón para abrir la URL del lugar en otra pestaña
+    // Botón para abrir la URL del lugar
     document.getElementById("btn-open-url").addEventListener("click", function() {
       const urlLugar = document.getElementById("urlLugar").value.trim();
       if (urlLugar) {
@@ -394,13 +363,74 @@
       }
     });
 
-    // Botón para abrir la URL de Instagram en otra pestaña
+    // Botón para abrir la URL de Instagram
     document.getElementById("btn-open-ig").addEventListener("click", function() {
       const igUrl = document.getElementById("instagramUrl").value.trim();
       if (igUrl) {
         window.open(igUrl, "_blank");
       } else {
         alert("No se ha especificado ninguna dirección de Instagram.");
+      }
+    });
+
+    // Manejo del envío del formulario: insertar en Supabase
+    document.getElementById("establecimiento-form").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      // Recopilar datos del formulario
+      const id = document.getElementById("uniqueId").value.trim();
+      const name = document.getElementById("nombre").value.trim();
+      const country = document.getElementById("pais").value.trim();
+      const province = document.getElementById("provincia").value.trim();
+      const locality = document.getElementById("localidad").value.trim();
+      const address = document.getElementById("direccion").value.trim();
+      const postal_code = document.getElementById("codigoPostal").value.trim();
+      const url = document.getElementById("urlLugar").value.trim();
+      const instagram_url = document.getElementById("instagramUrl").value.trim();
+      const court_count = parseInt(document.getElementById("cantCanchas").value.trim(), 10);
+
+      // Opcional: obtener latitud y longitud si se ha realizado la búsqueda
+      let latitude = null;
+      let longitude = null;
+      if (marker) {
+        const latlng = marker.getLatLng();
+        latitude = latlng.lat;
+        longitude = latlng.lng;
+      }
+
+      // Insertar en la tabla "establishments"
+      const { data, error } = await supabaseClient
+        .from('establishments')
+        .insert([
+          {
+            id,
+            name,
+            country,
+            province,
+            locality: locality || null,
+            address,
+            postal_code,
+            url: url || null,
+            instagram_url: instagram_url || null,
+            court_count,
+            latitude,
+            longitude
+          }
+        ]);
+
+      if (error) {
+        console.error("Error al guardar establecimiento:", error.message);
+        alert("Error al guardar establecimiento: " + error.message);
+      } else {
+        alert("Establecimiento guardado exitosamente.");
+        // Opcional: limpiar el formulario o redirigir
+      }
+    });
+
+    // Manejo del botón Eliminar
+    document.getElementById("btn-delete").addEventListener("click", function() {
+      if (confirm("¿Estás seguro de eliminar este establecimiento?")) {
+        alert("Establecimiento eliminado.");
+        // Aquí implementarías la lógica de borrado en Supabase si es necesario
       }
     });
   </script>
