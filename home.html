@@ -328,7 +328,7 @@
       }
     });
 
-    // Autocompletado para "Localidad"
+    // Autocompletado para "Localidad" (ahora con valores únicos)
     const localityInput = document.getElementById('searchLocality');
     const localitySuggestions = document.getElementById('locality-suggestions');
     localityInput.addEventListener('input', async () => {
@@ -351,7 +351,9 @@
         localitySuggestions.innerHTML = '<div class="suggestion-item">No hay coincidencias</div>';
         localitySuggestions.style.display = 'block';
       } else {
-        let html = data.map(item => `<div class="suggestion-item">${item.locality}</div>`).join('');
+        // Extraer valores únicos
+        const uniqueLocalities = [...new Set(data.map(item => item.locality))];
+        let html = uniqueLocalities.map(locality => `<div class="suggestion-item">${locality}</div>`).join('');
         localitySuggestions.innerHTML = html;
         localitySuggestions.style.display = 'block';
       }
@@ -394,7 +396,6 @@
         // Filtrar registros para que no se dupliquen por misma localidad
         const uniqueByLocality = {};
         data.forEach(profile => {
-          // Si ya se ha agregado una entrada para esta localidad, la saltamos
           if (profile.locality && !uniqueByLocality[profile.locality]) {
             uniqueByLocality[profile.locality] = profile;
           }
@@ -413,7 +414,6 @@
               <p>Nivel: ${profile.game_level || 'N/A'} | Edad: ${profile.age || 'N/A'}</p>
               <p>${profile.locality || ''}</p>
             `;
-            // Doble clic para abrir la ficha en modo solo lectura
             card.ondblclick = () => {
               window.location.href = `perfil.html?userId=${profile.id}&readonly=1`;
             };
