@@ -209,7 +209,8 @@
     <div class="menu-container">
       <a href="perfil.html" class="menu-item">Crear Perfil</a>
       <a href="#" class="menu-item">Partidos</a>
-      <a href="#" class="menu-item">Canchas</a>
+      <!-- Al hacer doble clic en "Canchas" se redirige a establecimiento.html -->
+      <a href="#" class="menu-item" ondblclick="window.location.href='establecimiento.html'">Canchas</a>
       <a href="#" class="menu-item">Chat</a>
       <a href="#" class="menu-item logout" onclick="logout()">Cerrar Sesión</a>
     </div>
@@ -351,7 +352,6 @@
         localitySuggestions.innerHTML = '<div class="suggestion-item">No hay coincidencias</div>';
         localitySuggestions.style.display = 'block';
       } else {
-        // Extraer valores únicos para sugerencias
         const uniqueLocalities = [...new Set(data.map(item => item.locality))];
         let html = uniqueLocalities.map(locality => `<div class="suggestion-item">${locality}</div>`).join('');
         localitySuggestions.innerHTML = html;
@@ -366,7 +366,7 @@
       }
     });
 
-    // Manejo del formulario de búsqueda (se muestran todos los resultados sin filtrar por localidad)
+    // Manejo del formulario de búsqueda
     document.getElementById('search-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const searchName = nameInput.value.trim();
