@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Catch Up Padel - Establecimiento</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Fuente moderna -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <!-- Leaflet CSS (sin integridad para evitar bloqueos) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css">
+  <style>
+    /* Reset básico */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Estilos base */
+    body {
+      font-family: 'Poppins', sans-serif;
+      /* Fondo naranja suave */
+      background: linear-gradient(135deg, #fff8f2 0%, #ffe9d9 100%);
+      color: #333;
+      padding: 1rem;
+      min-height: 100vh; /* Asegura que el gradiente cubra toda la pantalla */
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Contenedor principal */
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background-color: #fff;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    /* Título principal */
+    h1 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: #2c3e50;
+      font-weight: 600;
+    }
+
+    /* Formulario */
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #444;
+    }
+
+    input[type="text"],
+    input[type="url"],
+    input[type="number"],
+    select {
+      padding: 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1rem;
+      background-color: #f9f9f9;
+    }
+
+    /* Línea de dirección */
+    .address-line {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .address-line input,
+    .address-line select {
+      flex: 1;
+      min-width: 100px;
+    }
+
+    /* Botón para buscar en el mapa */
+    .action-btn {
+      align-self: flex-start;
+      padding: 0.5rem 1rem;
+      background-color: #ff9500;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: background-color 0.3s ease;
+    }
+
+    .action-btn:hover {
+      background-color: #e07e00;
+    }
+
+    /* Mapa con Leaflet */
+    #map {
+      width: 100%;
+      height: 300px;
+      margin-top: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+
+    /* Botones de Grabar y Eliminar */
+    .button-group {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 1rem;
+      gap: 1rem;
+    }
+
+    .button-group button {
+      flex: 1;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: #fff;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn-save {
+      background-color: #27ae60;
+    }
+    .btn-save:hover {
+      background-color: #219150;
+    }
+
+    .btn-delete {
+      background-color: #e74c3c;
+    }
+    .btn-delete:hover {
+      background-color: #c0392b;
+    }
+
+    /* Grupo para URL + Botón */
+    .url-group {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .url-group input[type="url"] {
+      flex: 1;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        padding: 1rem;
+      }
+      .address-line {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Crear Establecimiento</h1>
+    <form id="establecimiento-form">
+      <!-- Nombre del establecimiento -->
+      <div class="form-group">
+        <label for="nombre">Nombre del Establecimiento</label>
+        <input type="text" id="nombre" name="nombre" placeholder="Ingresa el nombre" required>
+      </div>
+
+      <!-- ID único generado automáticamente (solo lectura) -->
+      <div class="form-group">
+        <label for="uniqueId">ID Único (8 dígitos)</label>
+        <input type="text" id="uniqueId" name="uniqueId" readonly>
+      </div>
+
+      <!-- Línea de dirección: País, Provincia, Localidad, Dirección, Código Postal -->
+      <div class="form-group">
+        <label>Dirección Completa</label>
+        <div class="address-line">
+          <!-- País (obligatorio) -->
+          <select id="pais" name="pais" required>
+            <option value="">Selecciona País</option>
+            <option value="Argentina">🇦🇷 Argentina</option>
+            <option value="España">🇪🇸 España</option>
+          </select>
+          <!-- Provincia (obligatorio) -->
+          <select id="provincia" name="provincia" required>
+            <option value="">Selecciona Provincia</option>
+          </select>
+          <!-- Localidad (opcional) -->
+          <input type="text" id="localidad" name="localidad" placeholder="Localidad">
+          <!-- Dirección (obligatorio) -->
+          <input type="text" id="direccion" name="direccion" placeholder="Dirección" required>
+          <!-- Código Postal (obligatorio) -->
+          <input type="text" id="codigoPostal" name="codigoPostal" placeholder="Código Postal" required>
+        </div>
+        <!-- Botón para buscar en el mapa -->
+        <button type="button" class="action-btn" onclick="buscarEnMapa()">Buscar en el mapa</button>
+      </div>
+
+      <!-- URL del lugar (con botón para abrir) -->
+      <div class="form-group">
+        <label for="urlLugar">URL del Lugar</label>
+        <div class="url-group">
+          <input type="url" id="urlLugar" name="urlLugar" placeholder="http://...">
+          <button type="button" class="action-btn" id="btn-open-url">Abrir</button>
+        </div>
+      </div>
+
+      <!-- Dirección de Instagram (con botón para abrir) -->
+      <div class="form-group">
+        <label for="instagramUrl">Dirección de Instagram</label>
+        <div class="url-group">
+          <input type="url" id="instagramUrl" name="instagramUrl" placeholder="https://instagram.com/tu-cuenta">
+          <button type="button" class="action-btn" id="btn-open-ig">Abrir</button>
+        </div>
+      </div>
+
+      <!-- Cantidad de canchas -->
+      <div class="form-group">
+        <label for="cantCanchas">Cantidad de Canchas</label>
+        <input type="number" id="cantCanchas" name="cantCanchas" min="1" placeholder="Ej. 2" required>
+      </div>
+
+      <!-- Mapa: se actualizará según la dirección ingresada -->
+      <div id="map"></div>
+
+      <!-- Botones de Grabar y Eliminar -->
+      <div class="button-group">
+        <button type="submit" class="btn-save">Grabar</button>
+        <button type="button" class="btn-delete" id="btn-delete">Eliminar</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Leaflet JS (sin integridad) -->
+  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+  <script>
+    // Función para generar un ID único de 8 dígitos
+    function generarUniqueId() {
+      return Math.floor(10000000 + Math.random() * 90000000).toString();
+    }
+    // Asignar el ID único al cargar la página
+    document.getElementById("uniqueId").value = generarUniqueId();
+
+    // Listas de provincias para cada país
+    const provincias = {
+      "Argentina": [
+        "CABA", "Buenos Aires", "Córdoba", "Santa Fe", "Mendoza", "Tucumán",
+        "Entre Ríos", "Salta", "Chaco", "Corrientes", "Misiones"
+      ],
+      "España": [
+        "Madrid", "Barcelona", "Valencia", "Sevilla", "Zaragoza", "Málaga",
+        "Murcia", "Bilbao", "Alicante", "Granada"
+      ]
+    };
+
+    // Actualizar las opciones de provincia según el país seleccionado
+    function updateProvinceOptions() {
+      const paisSelect = document.getElementById("pais");
+      const provinciaSelect = document.getElementById("provincia");
+      const selectedPais = paisSelect.value;
+      provinciaSelect.innerHTML = '<option value="">Selecciona Provincia</option>';
+      if (provincias[selectedPais]) {
+        provincias[selectedPais].forEach(prov => {
+          const option = document.createElement("option");
+          option.value = prov;
+          option.textContent = prov;
+          provinciaSelect.appendChild(option);
+        });
+      }
+      // Al cambiar el país, podemos refrescar el mapa si queremos
+      // actualizarMapa();
+    }
+    document.getElementById("pais").addEventListener("change", updateProvinceOptions);
+    document.getElementById("provincia").addEventListener("change", () => { /* update si deseas */ });
+
+    // Inicialización del mapa con Leaflet
+    let map = L.map('map').setView([-34.6037, -58.3816], 12);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+    let marker;
+
+    // Función principal: busca en el mapa con fallback
+    function buscarEnMapa() {
+      // Primero intentamos con todos los campos
+      const primeraDireccion = construirDireccionCompleta(true);
+      console.log("1) Búsqueda detallada:", primeraDireccion);
+      geocodeNominatim(primeraDireccion, (exito) => {
+        if (!exito) {
+          // Si no hubo éxito, probamos una segunda búsqueda sin código postal ni localidad
+          const segundaDireccion = construirDireccionCompleta(false);
+          console.log("2) Búsqueda reducida:", segundaDireccion);
+          geocodeNominatim(segundaDireccion, () => {});
+        }
+      });
+    }
+
+    // Construye la dirección con o sin localidad/código postal
+    function construirDireccionCompleta(usarTodo) {
+      const pais = document.getElementById("pais").value.trim();
+      let provincia = document.getElementById("provincia").value.trim();
+      let localidad = document.getElementById("localidad").value.trim();
+      let direccion = document.getElementById("direccion").value.trim();
+      let codigoPostal = document.getElementById("codigoPostal").value.trim();
+
+      // Reemplazar "Ciudad de Buenos Aires" por "Buenos Aires" para Nominatim
+      if (provincia.toLowerCase() === "ciudad de buenos aires") {
+        provincia = "Buenos Aires";
+      }
+
+      // Si 'usarTodo' es false, quitamos localidad y código postal
+      if (!usarTodo) {
+        localidad = "";
+        codigoPostal = "";
+      }
+
+      // Solo se requiere que país, provincia y dirección existan
+      return `${direccion}${localidad ? ", " + localidad : ""}, ${provincia}, ${pais}${codigoPostal ? ", " + codigoPostal : ""}`;
+    }
+
+    // Hace la consulta a Nominatim, si encuentra algo, actualiza el mapa
+    // callback(true/false) según éxito
+    function geocodeNominatim(direccionCompleta, callback) {
+      if (!direccionCompleta) {
+        callback(false);
+        return;
+      }
+      fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(direccionCompleta)}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data && data.length > 0) {
+            const lat = data[0].lat;
+            const lon = data[0].lon;
+            map.setView([lat, lon], 15);
+            if (marker) {
+              marker.setLatLng([lat, lon]);
+            } else {
+              marker = L.marker([lat, lon]).addTo(map);
+            }
+            callback(true);
+          } else {
+            console.error("No se encontró la ubicación para:", direccionCompleta);
+            alert("No se encontró la ubicación. Verifica que los datos sean correctos.");
+            callback(false);
+          }
+        })
+        .catch(error => {
+          console.error("Error al geocodificar:", error);
+          callback(false);
+        });
+    }
+
+    // Manejo del envío del formulario (Grabar)
+    document.getElementById("establecimiento-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+      alert("Establecimiento grabado exitosamente.");
+    });
+
+    // Manejo del botón Eliminar
+    document.getElementById("btn-delete").addEventListener("click", function() {
+      if (confirm("¿Estás seguro de eliminar este establecimiento?")) {
+        alert("Establecimiento eliminado.");
+      }
+    });
+
+    // Botón para abrir la URL del lugar en otra pestaña
+    document.getElementById("btn-open-url").addEventListener("click", function() {
+      const urlLugar = document.getElementById("urlLugar").value.trim();
+      if (urlLugar) {
+        window.open(urlLugar, "_blank");
+      } else {
+        alert("No se ha especificado ninguna URL.");
+      }
+    });
+
+    // Botón para abrir la URL de Instagram en otra pestaña
+    document.getElementById("btn-open-ig").addEventListener("click", function() {
+      const igUrl = document.getElementById("instagramUrl").value.trim();
+      if (igUrl) {
+        window.open(igUrl, "_blank");
+      } else {
+        alert("No se ha especificado ninguna dirección de Instagram.");
+      }
+    });
+  </script>
+</body>
+</html>
