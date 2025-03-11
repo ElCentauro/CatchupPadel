@@ -19,6 +19,7 @@
       background-color: #f8f8f8;
       color: #333;
     }
+
     /* MENÚ DE NAVEGACIÓN */
     nav {
       width: 100%;
@@ -101,6 +102,7 @@
       color: #333;
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
       transition: transform 0.3s;
+      cursor: pointer;
     }
     .floating-card:hover {
       transform: translateY(-5px);
@@ -115,11 +117,12 @@
       color: #555;
     }
 
-    /* SECCIÓN "CONOCE JUGADORES" (BÚSQUEDA) */
+    /* SECCIÓN "CONOCE JUGADORES" (BÚSQUEDA) - OCULTA POR DEFECTO */
     .search-container {
+      display: none; /* Oculta por defecto */
       max-width: 800px;
       margin: 2rem auto;
-      padding: 1rem;
+      padding: 1.5rem 2rem;
       background-color: #fff;
       border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
@@ -139,14 +142,20 @@
     }
     .search-form input,
     .search-form select {
-      padding: 0.75rem;
+      padding: 0.75rem 1rem;
       border: 1px solid #ddd;
       border-radius: 5px;
       font-size: 1rem;
-      width: 250px;
+      background-color: #f9f9f9;
+      transition: box-shadow 0.3s;
+      width: 240px;
+    }
+    .search-form input:focus,
+    .search-form select:focus {
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
     }
     .search-form button {
-      padding: 0.75rem 1rem;
+      padding: 0.75rem 1.5rem;
       border: none;
       border-radius: 5px;
       background-color: #ff9500;
@@ -159,6 +168,28 @@
     .search-form button:hover {
       background-color: #e07e00;
     }
+    /* Caja de sugerencias */
+    .suggestions-box {
+      position: absolute;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      margin-top: 0.5rem;
+      z-index: 999;
+      width: 240px;
+      max-height: 200px;
+      overflow-y: auto;
+      display: none;
+    }
+    .suggestion-item {
+      padding: 0.5rem;
+      cursor: pointer;
+    }
+    .suggestion-item:hover {
+      background-color: #f0f0f0;
+    }
+
     /* Resultados de búsqueda */
     #searchResults {
       display: grid;
@@ -209,7 +240,6 @@
     @media (max-width: 768px) {
       .menu-container {
         flex-direction: column;
-        gap: 0.75rem;
       }
       .hero h1 {
         font-size: 2rem;
@@ -222,6 +252,9 @@
       }
       .search-form input,
       .search-form select {
+        width: 90%;
+      }
+      .suggestions-box {
         width: 90%;
       }
     }
@@ -256,19 +289,30 @@
         <h3>Programa Partidos</h3>
         <p>Crea y únete a juegos cuando te convenga</p>
       </div>
-      <div class="floating-card" onclick="scrollToPlayers()">
+      <div class="floating-card" ondblclick="showPlayersSection()">
         <h3>Conoce Jugadores</h3>
         <p>Conecta con jugadores de tu nivel</p>
       </div>
     </div>
   </section>
 
-  <!-- SECCIÓN "CONOCE JUGADORES" (BÚSQUEDA) -->
+  <!-- SECCIÓN "CONOCE JUGADORES" (BÚSQUEDA) - OCULTA POR DEFECTO -->
   <div class="search-container" id="players-section">
     <h2>Conoce Jugadores</h2>
     <form id="search-form" class="search-form">
-      <input type="text" id="searchName" placeholder="Nombre y Apellido">
-      <input type="text" id="searchLocality" placeholder="Localidad">
+      <!-- Campo Nombre y Apellido con autocompletado -->
+      <div style="position: relative;">
+        <input type="text" id="searchName" placeholder="Nombre y Apellido" autocomplete="off">
+        <div id="name-suggestions" class="suggestions-box"></div>
+      </div>
+
+      <!-- Campo Localidad con autocompletado -->
+      <div style="position: relative;">
+        <input type="text" id="searchLocality" placeholder="Localidad" autocomplete="off">
+        <div id="locality-suggestions" class="suggestions-box"></div>
+      </div>
+
+      <!-- Nivel de juego (lista fija) -->
       <select id="searchLevel">
         <option value="">Nivel de juego</option>
         <option value="principiante">Principiante</option>
@@ -288,7 +332,7 @@
   <!-- SUPABASE -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <script>
-    // Configuración de Supabase
+    // Configuración con tus credenciales
     const SUPABASE_URL = 'https://idlvxinjfbsujpvxncbr.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -300,30 +344,109 @@
       });
     }
 
-    // Scroll a la sección de jugadores
-    function scrollToPlayers() {
+    // Mostrar la sección de "Conoce Jugadores" al hacer doble clic
+    function showPlayersSection() {
       const section = document.getElementById('players-section');
+      section.style.display = 'block';
       section.scrollIntoView({ behavior: 'smooth' });
     }
+
+    // Autocompletado para "Nombre y Apellido"
+    const nameInput = document.getElementById('searchName');
+    const nameSuggestions = document.getElementById('name-suggestions');
+    nameInput.addEventListener('input', async () => {
+      const val = nameInput.value.trim();
+      if (!val) {
+        nameSuggestions.innerHTML = '';
+        nameSuggestions.style.display = 'none';
+        return;
+      }
+      // Consulta a Supabase para sugerencias (máximo 5)
+      const { data, error } = await supabaseClient
+        .from('profiles')
+        .select('full_name')
+        .ilike('full_name', `%${val}%`)
+        .limit(5);
+      if (error) {
+        console.error('Error buscando sugerencias de nombre:', error.message);
+        return;
+      }
+      if (!data || data.length === 0) {
+        nameSuggestions.innerHTML = '<div class="suggestion-item">No hay coincidencias</div>';
+        nameSuggestions.style.display = 'block';
+      } else {
+        let html = data.map(item => `<div class="suggestion-item">${item.full_name}</div>`).join('');
+        nameSuggestions.innerHTML = html;
+        nameSuggestions.style.display = 'block';
+      }
+    });
+    // Click en sugerencia
+    nameSuggestions.addEventListener('click', (e) => {
+      if (e.target.classList.contains('suggestion-item')) {
+        nameInput.value = e.target.textContent;
+        nameSuggestions.innerHTML = '';
+        nameSuggestions.style.display = 'none';
+      }
+    });
+
+    // Autocompletado para "Localidad"
+    const localityInput = document.getElementById('searchLocality');
+    const localitySuggestions = document.getElementById('locality-suggestions');
+    localityInput.addEventListener('input', async () => {
+      const val = localityInput.value.trim();
+      if (!val) {
+        localitySuggestions.innerHTML = '';
+        localitySuggestions.style.display = 'none';
+        return;
+      }
+      // Consulta a Supabase para sugerencias (máximo 5)
+      const { data, error } = await supabaseClient
+        .from('profiles')
+        .select('locality')
+        .ilike('locality', `%${val}%`)
+        .limit(5);
+      if (error) {
+        console.error('Error buscando sugerencias de localidad:', error.message);
+        return;
+      }
+      if (!data || data.length === 0) {
+        localitySuggestions.innerHTML = '<div class="suggestion-item">No hay coincidencias</div>';
+        localitySuggestions.style.display = 'block';
+      } else {
+        let html = data.map(item => `<div class="suggestion-item">${item.locality}</div>`).join('');
+        localitySuggestions.innerHTML = html;
+        localitySuggestions.style.display = 'block';
+      }
+    });
+    // Click en sugerencia
+    localitySuggestions.addEventListener('click', (e) => {
+      if (e.target.classList.contains('suggestion-item')) {
+        localityInput.value = e.target.textContent;
+        localitySuggestions.innerHTML = '';
+        localitySuggestions.style.display = 'none';
+      }
+    });
 
     // Manejo del formulario de búsqueda
     document.getElementById('search-form').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const searchName = document.getElementById('searchName').value.trim();
-      const searchLocality = document.getElementById('searchLocality').value.trim();
+      const searchName = nameInput.value.trim();
+      const searchLocality = localityInput.value.trim();
       const searchLevel = document.getElementById('searchLevel').value;
-      
+
       let query = supabaseClient
         .from('profiles')
         .select('*');
 
+      // Filtro por nombre (ilike)
       if (searchName) {
-        // Filtra por nombre con ilike (case-insensitive)
         query = query.ilike('full_name', `%${searchName}%`);
       }
+      // Filtro por localidad (ilike)
       if (searchLocality) {
         query = query.ilike('locality', `%${searchLocality}%`);
       }
+      // Filtro por nivel de juego
       if (searchLevel) {
         query = query.eq('game_level', searchLevel);
       }
@@ -345,7 +468,7 @@
             card.innerHTML = `
               ${profile.profile_pic ? `<img src="${profile.profile_pic}" alt="Foto de ${profile.full_name}">` : ''}
               <h3>${profile.full_name}</h3>
-              <p>${profile.locality ? profile.locality : ''}</p>
+              <p>${profile.locality || ''}</p>
             `;
             // Doble clic para abrir la ficha en modo lectura
             card.ondblclick = () => {
