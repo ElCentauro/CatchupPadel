@@ -43,7 +43,7 @@
     }
     .menu-item.logout:hover { background-color: #e74c3c; color: #fff; }
 
-    /* SECCIÓN HERO CON TARJETAS FLOTANTES */
+    /* SECCIÓN HERO */
     .hero {
       position: relative;
       padding: 3rem 1rem;
@@ -82,6 +82,110 @@
     .floating-card h3 { font-size: 1rem; margin-bottom: 0.5rem; color: #2c3e50; }
     .floating-card p { font-size: 0.85rem; color: #555; }
 
+    /* SECCIÓN DE BÚSQUEDA DE CANCHAS (OCULTA POR DEFECTO) */
+    .search-cancha {
+      display: none;
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 1.5rem 2rem;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      position: relative;
+    }
+    .search-cancha h2 {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      color: #2c3e50;
+      text-align: center;
+    }
+    .search-field {
+      margin-bottom: 1rem;
+      position: relative;
+    }
+    .search-field label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    .search-field input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1rem;
+      background-color: #f9f9f9;
+    }
+    .suggestions-box {
+      position: absolute;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      margin-top: 0.5rem;
+      z-index: 999;
+      width: 240px;
+      max-height: 200px;
+      overflow-y: auto;
+      display: none;
+    }
+    .suggestion-item {
+      padding: 0.5rem;
+      cursor: pointer;
+    }
+    .suggestion-item:hover { background-color: #f0f0f0; }
+    .search-cancha button {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 5px;
+      background-color: #ff9500;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+      cursor: pointer;
+      margin-top: 1rem;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .search-cancha button:hover { background-color: #e07e00; }
+    /* Botón de cierre para búsqueda de canchas */
+    .close-btn-cancha {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      color: #999;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+    .close-btn-cancha:hover { color: #333; }
+
+    /* RESULTADOS DE BÚSQUEDA DE CANCHAS */
+    .results-container {
+      max-width: 800px;
+      margin: 2rem auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem;
+      padding: 0 1rem;
+    }
+    .result-card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+    .result-card:hover { transform: translateY(-5px); }
+    .result-card h3 { font-size: 1.1rem; margin-bottom: 0.5rem; color: #2c3e50; }
+    .result-card p { font-size: 0.85rem; color: #555; }
+
     /* SECCIÓN "CONOCE JUGADORES" (BÚSQUEDA) - OCULTA POR DEFECTO */
     .search-container {
       display: none;
@@ -117,9 +221,7 @@
       width: 240px;
     }
     .search-form input:focus,
-    .search-form select:focus {
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
-    }
+    .search-form select:focus { box-shadow: 0 0 5px rgba(0,0,0,0.1); }
     .search-form button {
       padding: 0.75rem 1.5rem;
       border: none;
@@ -132,28 +234,20 @@
       cursor: pointer;
     }
     .search-form button:hover { background-color: #e07e00; }
-    
-    /* Caja de sugerencias para autocompletar */
-    .suggestions-box {
+    /* Botón de cierre para búsqueda de jugadores */
+    .close-btn-jugadores {
       position: absolute;
-      background-color: #fff;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-      margin-top: 0.5rem;
-      z-index: 999;
-      width: 240px;
-      max-height: 200px;
-      overflow-y: auto;
-      display: none;
-    }
-    .suggestion-item {
-      padding: 0.5rem;
+      top: 10px;
+      left: 10px;
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      color: #999;
       cursor: pointer;
+      transition: color 0.3s ease;
     }
-    .suggestion-item:hover { background-color: #f0f0f0; }
-
-    /* Resultados de búsqueda */
+    .close-btn-jugadores:hover { color: #333; }
+    /* Resultados de búsqueda (jugadores) */
     #searchResults {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -197,8 +291,7 @@
       .hero h1 { font-size: 2.5rem; }
       .hero p { font-size: 1rem; }
       .floating-card { width: 180px; }
-      .search-form input,
-      .search-form select { width: 90%; }
+      .search-form input, .search-form select { width: 90%; }
       .suggestions-box { width: 90%; }
     }
   </style>
@@ -209,19 +302,22 @@
     <div class="menu-container">
       <a href="perfil.html" class="menu-item">Crear Perfil</a>
       <a href="#" class="menu-item">Partidos</a>
-      <!-- Al hacer doble clic en "Canchas" se redirige a establecimiento.html -->
+      <!-- Se mantiene "Canchas" (doble clic redirige a establecimiento.html) -->
       <a href="#" class="menu-item" ondblclick="window.location.href='establecimiento.html'">Canchas</a>
+      <!-- Nuevo botón "Pistas" -->
+      <a href="#" class="menu-item">Pistas</a>
       <a href="#" class="menu-item">Chat</a>
       <a href="#" class="menu-item logout" onclick="logout()">Cerrar Sesión</a>
     </div>
   </nav>
 
-  <!-- SECCIÓN HERO CON TARJETAS FLOTANTES -->
+  <!-- SECCIÓN HERO -->
   <section class="hero">
     <h1>Bienvenido a Catch Up Padel</h1>
     <p>Conecta con jugadores de pádel cerca de ti y disfruta del mejor deporte en comunidad.</p>
     <div class="cards-container">
-      <div class="floating-card">
+      <!-- Tarjeta Buscar Canchas: Al hacer clic, se muestra la sección de búsqueda de canchas -->
+      <div class="floating-card" onclick="showCanchaSearch()">
         <h3>Buscar Canchas</h3>
         <p>Descubre canchas cercanas</p>
       </div>
@@ -233,6 +329,7 @@
         <h3>Programa Partidos</h3>
         <p>Crea y únete a juegos</p>
       </div>
+      <!-- Tarjeta Conoce Jugadores: Al hacer doble clic se muestra la búsqueda de jugadores -->
       <div class="floating-card" ondblclick="showPlayersSection()">
         <h3>Conoce Jugadores</h3>
         <p>Doble clic para buscar</p>
@@ -240,21 +337,39 @@
     </div>
   </section>
 
+  <!-- SECCIÓN DE BÚSQUEDA DE CANCHAS (OCULTA POR DEFECTO) -->
+  <div class="search-cancha" id="searchCanchaSection">
+    <button class="close-btn-cancha" onclick="closeCanchaSearch()">X</button>
+    <h2>Buscar Cancha</h2>
+    <div class="search-field">
+      <label for="canchaName">Nombre de la Cancha</label>
+      <input type="text" id="canchaName" placeholder="Ingresa el nombre">
+      <div id="nameSuggestions" class="suggestions-box"></div>
+    </div>
+    <div class="search-field">
+      <label for="canchaLocality">Localidad</label>
+      <input type="text" id="canchaLocality" placeholder="Ingresa la localidad">
+      <div id="localitySuggestions" class="suggestions-box"></div>
+    </div>
+    <button type="button" id="btn-search-cancha">Buscar Cancha</button>
+  </div>
+
+  <!-- CONTENEDOR DE RESULTADOS DE CANCHAS -->
+  <div class="results-container" id="canchaResults"></div>
+
   <!-- SECCIÓN "CONOCE JUGADORES" (BÚSQUEDA) - OCULTA POR DEFECTO -->
   <div class="search-container" id="players-section">
+    <button class="close-btn-jugadores" onclick="closePlayersSection()">X</button>
     <h2>Conoce Jugadores</h2>
     <form id="search-form" class="search-form">
-      <!-- Campo Nombre y Apellido con autocompletado -->
       <div style="position: relative;">
         <input type="text" id="searchName" placeholder="Nombre y Apellido" autocomplete="off">
         <div id="name-suggestions" class="suggestions-box"></div>
       </div>
-      <!-- Campo Localidad con autocompletado -->
       <div style="position: relative;">
         <input type="text" id="searchLocality" placeholder="Localidad" autocomplete="off">
         <div id="locality-suggestions" class="suggestions-box"></div>
       </div>
-      <!-- Campo Nivel de juego (lista fija) -->
       <select id="searchLevel">
         <option value="">Nivel de juego</option>
         <option value="principiante">Principiante</option>
@@ -274,7 +389,7 @@
   <!-- SUPABASE -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <script>
-    // Configuración de Supabase con tus credenciales
+    // CONFIGURACIÓN DE SUPABASE – REEMPLAZA CON TUS CREDENCIALES REALES
     const SUPABASE_URL = 'https://idlvxinjfbsujpvxncbr.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -286,16 +401,166 @@
       });
     }
 
-    // Mostrar la sección de "Conoce Jugadores" al hacer doble clic
+    /* --- MOSTRAR / CERRAR SECCIONES --- */
     function showPlayersSection() {
       const section = document.getElementById('players-section');
       section.style.display = 'block';
       section.scrollIntoView({ behavior: 'smooth' });
     }
+    function closePlayersSection() {
+      const section = document.getElementById('players-section');
+      section.style.display = 'none';
+      // Limpiar campos y resultados de jugadores
+      document.getElementById('searchName').value = '';
+      document.getElementById('searchLocality').value = '';
+      document.getElementById('name-suggestions').innerHTML = '';
+      document.getElementById('name-suggestions').style.display = 'none';
+      document.getElementById('locality-suggestions').innerHTML = '';
+      document.getElementById('locality-suggestions').style.display = 'none';
+      document.getElementById('searchResults').innerHTML = '';
+    }
+    function showCanchaSearch() {
+      const section = document.getElementById('searchCanchaSection');
+      section.style.display = 'block';
+      section.scrollIntoView({ behavior: 'smooth' });
+    }
+    function closeCanchaSearch() {
+      const section = document.getElementById('searchCanchaSection');
+      section.style.display = 'none';
+      // Limpiar campos y resultados de canchas
+      document.getElementById('canchaName').value = '';
+      document.getElementById('canchaLocality').value = '';
+      document.getElementById('nameSuggestions').innerHTML = '';
+      document.getElementById('nameSuggestions').style.display = 'none';
+      document.getElementById('localitySuggestions').innerHTML = '';
+      document.getElementById('localitySuggestions').style.display = 'none';
+      document.getElementById('canchaResults').innerHTML = '';
+    }
 
-    // Autocompletado para "Nombre y Apellido"
+    /* --- BÚSQUEDA DE CANCHAS --- */
+    const canchaNameInput = document.getElementById('canchaName');
+    const canchaLocalityInput = document.getElementById('canchaLocality');
+    const nameSuggestionsBox = document.getElementById('nameSuggestions');
+    const localitySuggestionsBox = document.getElementById('localitySuggestions');
+    const canchaResults = document.getElementById('canchaResults');
+
+    // Autocompletado de Nombre (establishments)
+    canchaNameInput.addEventListener('input', async () => {
+      const val = canchaNameInput.value.trim();
+      if (!val) {
+        nameSuggestionsBox.innerHTML = '';
+        nameSuggestionsBox.style.display = 'none';
+        return;
+      }
+      const { data, error } = await supabaseClient
+        .from('establishments')
+        .select('name')
+        .ilike('name', `%${val}%`);
+      if (error) {
+        console.error('Error en autocompletar nombre de cancha:', error.message);
+        return;
+      }
+      if (!data || data.length === 0) {
+        nameSuggestionsBox.innerHTML = '<div class="suggestion-item">No hay coincidencias</div>';
+        nameSuggestionsBox.style.display = 'block';
+      } else {
+        const uniqueNames = [...new Set(data.map(item => item.name))];
+        let html = uniqueNames.map(n => `<div class="suggestion-item">${n}</div>`).join('');
+        nameSuggestionsBox.innerHTML = html;
+        nameSuggestionsBox.style.display = 'block';
+      }
+    });
+    nameSuggestionsBox.addEventListener('click', (e) => {
+      if (e.target.classList.contains('suggestion-item')) {
+        canchaNameInput.value = e.target.textContent;
+        nameSuggestionsBox.innerHTML = '';
+        nameSuggestionsBox.style.display = 'none';
+      }
+    });
+
+    // Autocompletado de Localidad (establishments)
+    canchaLocalityInput.addEventListener('input', async () => {
+      const val = canchaLocalityInput.value.trim();
+      if (!val) {
+        localitySuggestionsBox.innerHTML = '';
+        localitySuggestionsBox.style.display = 'none';
+        return;
+      }
+      const { data, error } = await supabaseClient
+        .from('establishments')
+        .select('locality')
+        .ilike('locality', `%${val}%`);
+      if (error) {
+        console.error('Error en autocompletar localidad de cancha:', error.message);
+        return;
+      }
+      if (!data || data.length === 0) {
+        localitySuggestionsBox.innerHTML = '<div class="suggestion-item">No hay coincidencias</div>';
+        localitySuggestionsBox.style.display = 'block';
+      } else {
+        const uniqueLocalities = [...new Set(data.map(item => item.locality).filter(v => v))];
+        let html = uniqueLocalities.map(loc => `<div class="suggestion-item">${loc}</div>`).join('');
+        localitySuggestionsBox.innerHTML = html;
+        localitySuggestionsBox.style.display = 'block';
+      }
+    });
+    localitySuggestionsBox.addEventListener('click', (e) => {
+      if (e.target.classList.contains('suggestion-item')) {
+        canchaLocalityInput.value = e.target.textContent;
+        localitySuggestionsBox.innerHTML = '';
+        localitySuggestionsBox.style.display = 'none';
+      }
+    });
+
+    // Botón "Buscar Cancha"
+    document.getElementById('btn-search-cancha').addEventListener('click', async () => {
+      const nameFilter = canchaNameInput.value.trim();
+      const localityFilter = canchaLocalityInput.value.trim();
+      canchaResults.innerHTML = '';
+
+      let query = supabaseClient.from('establishments').select('*');
+      if (nameFilter) {
+        query = query.ilike('name', `%${nameFilter}%`);
+      }
+      if (localityFilter) {
+        query = query.ilike('locality', `%${localityFilter}%`);
+      }
+      const { data, error } = await query;
+      if (error) {
+        console.error('Error al buscar canchas:', error.message);
+        canchaResults.innerHTML = `<p style="color:red;">Error al buscar: ${error.message}</p>`;
+      } else {
+        if (!data || data.length === 0) {
+          canchaResults.innerHTML = `<p>No se encontraron canchas.</p>`;
+        } else {
+          data.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'result-card';
+            card.innerHTML = `
+              <h3>${item.name}</h3>
+              <p>Localidad: ${item.locality || 'N/A'}</p>
+              <p>Dirección: ${item.address || 'N/A'}</p>
+              <p>Cantidad de canchas: ${item.court_count || 'N/A'}</p>
+            `;
+            // Doble clic para ver/editar detalles en establecimiento.html
+            card.ondblclick = () => {
+              window.location.href = `establecimiento.html?canchaId=${item.id}`;
+            };
+            canchaResults.appendChild(card);
+          });
+        }
+      }
+    });
+
+    /* --- BÚSQUEDA DE JUGADORES --- */
     const nameInput = document.getElementById('searchName');
     const nameSuggestions = document.getElementById('name-suggestions');
+    const localityInput = document.getElementById('searchLocality');
+    const localitySuggestions = document.getElementById('locality-suggestions');
+    const searchForm = document.getElementById('search-form');
+    const searchResults = document.getElementById('searchResults');
+
+    // Autocompletado para Nombre de Jugador
     nameInput.addEventListener('input', async () => {
       const val = nameInput.value.trim();
       if (!val) {
@@ -329,9 +594,7 @@
       }
     });
 
-    // Autocompletado para "Localidad" (con valores únicos)
-    const localityInput = document.getElementById('searchLocality');
-    const localitySuggestions = document.getElementById('locality-suggestions');
+    // Autocompletado para Localidad de Jugador
     localityInput.addEventListener('input', async () => {
       const val = localityInput.value.trim();
       if (!val) {
@@ -345,7 +608,7 @@
         .ilike('locality', `%${val}%`)
         .limit(5);
       if (error) {
-        console.error('Error buscando sugerencias de localidad:', error.message);
+        console.error('Error buscando sugerencias de localidad (jugador):', error.message);
         return;
       }
       if (!data || data.length === 0) {
@@ -353,7 +616,7 @@
         localitySuggestions.style.display = 'block';
       } else {
         const uniqueLocalities = [...new Set(data.map(item => item.locality))];
-        let html = uniqueLocalities.map(locality => `<div class="suggestion-item">${locality}</div>`).join('');
+        let html = uniqueLocalities.map(loc => `<div class="suggestion-item">${loc}</div>`).join('');
         localitySuggestions.innerHTML = html;
         localitySuggestions.style.display = 'block';
       }
@@ -366,15 +629,15 @@
       }
     });
 
-    // Manejo del formulario de búsqueda
-    document.getElementById('search-form').addEventListener('submit', async (e) => {
+    // Búsqueda de Jugadores al enviar el formulario
+    searchForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const searchName = nameInput.value.trim();
       const searchLocality = localityInput.value.trim();
       const searchLevel = document.getElementById('searchLevel').value;
+      searchResults.innerHTML = '';
 
       let query = supabaseClient.from('profiles').select('*');
-
       if (searchName) {
         query = query.ilike('full_name', `%${searchName}%`);
       }
@@ -386,15 +649,12 @@
       }
 
       const { data, error } = await query;
-      const resultsContainer = document.getElementById('searchResults');
-      resultsContainer.innerHTML = ''; // Limpiar resultados anteriores
-
       if (error) {
-        console.error('Error al buscar perfiles:', error.message);
-        resultsContainer.innerHTML = `<p style="color:red;">Error al buscar perfiles: ${error.message}</p>`;
+        console.error('Error al buscar jugadores:', error.message);
+        searchResults.innerHTML = `<p style="color:red;">Error al buscar perfiles: ${error.message}</p>`;
       } else {
-        if (data.length === 0) {
-          resultsContainer.innerHTML = `<p>No se encontraron perfiles.</p>`;
+        if (!data || data.length === 0) {
+          searchResults.innerHTML = `<p>No se encontraron perfiles.</p>`;
         } else {
           data.forEach(profile => {
             const card = document.createElement('div');
@@ -408,7 +668,7 @@
             card.ondblclick = () => {
               window.location.href = `perfil.html?userId=${profile.id}&readonly=1`;
             };
-            resultsContainer.appendChild(card);
+            searchResults.appendChild(card);
           });
         }
       }
