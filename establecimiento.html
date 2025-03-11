@@ -15,7 +15,6 @@
       padding: 0;
       box-sizing: border-box;
     }
-
     /* Estilos base */
     body {
       font-family: 'Poppins', sans-serif;
@@ -26,7 +25,6 @@
       display: flex;
       flex-direction: column;
     }
-
     /* Contenedor principal */
     .container {
       max-width: 800px;
@@ -38,7 +36,6 @@
       margin-top: 2rem;
       margin-bottom: 2rem;
     }
-
     /* Título principal */
     h1 {
       text-align: center;
@@ -46,25 +43,21 @@
       color: #2c3e50;
       font-weight: 600;
     }
-
     /* Formulario */
     form {
       display: flex;
       flex-direction: column;
       gap: 1rem;
     }
-
     .form-group {
       display: flex;
       flex-direction: column;
     }
-
     label {
       font-weight: 600;
       margin-bottom: 0.5rem;
       color: #444;
     }
-
     input[type="text"],
     input[type="url"],
     input[type="number"],
@@ -75,20 +68,17 @@
       font-size: 1rem;
       background-color: #f9f9f9;
     }
-
     /* Línea de dirección */
     .address-line {
       display: flex;
       flex-wrap: wrap;
       gap: 0.5rem;
     }
-
     .address-line input,
     .address-line select {
       flex: 1;
       min-width: 100px;
     }
-
     /* Botón para buscar en el mapa */
     .action-btn {
       align-self: flex-start;
@@ -106,7 +96,6 @@
     .action-btn:hover {
       background-color: #e07e00;
     }
-
     /* Mapa con Leaflet */
     #map {
       width: 100%;
@@ -115,7 +104,6 @@
       border: 1px solid #ddd;
       border-radius: 5px;
     }
-
     /* Botones de Grabar y Eliminar */
     .button-group {
       display: flex;
@@ -123,7 +111,6 @@
       margin-top: 1rem;
       gap: 1rem;
     }
-
     .button-group button {
       flex: 1;
       padding: 0.75rem;
@@ -135,21 +122,18 @@
       color: #fff;
       transition: background-color 0.3s ease;
     }
-
     .btn-save {
       background-color: #27ae60;
     }
     .btn-save:hover {
       background-color: #219150;
     }
-
     .btn-delete {
       background-color: #e74c3c;
     }
     .btn-delete:hover {
       background-color: #c0392b;
     }
-
     /* Grupo para URL + Botón */
     .url-group {
       display: flex;
@@ -159,7 +143,6 @@
     .url-group input[type="url"] {
       flex: 1;
     }
-
     /* Responsive */
     @media (max-width: 768px) {
       .container {
@@ -182,38 +165,29 @@
         <label for="nombre">Nombre del Establecimiento</label>
         <input type="text" id="nombre" name="nombre" placeholder="Ingresa el nombre" required>
       </div>
-
       <!-- ID único generado automáticamente (solo lectura) -->
       <div class="form-group">
         <label for="uniqueId">ID Único (8 dígitos)</label>
         <input type="text" id="uniqueId" name="uniqueId" readonly>
       </div>
-
       <!-- Línea de dirección: País, Provincia, Localidad, Dirección, Código Postal -->
       <div class="form-group">
         <label>Dirección Completa</label>
         <div class="address-line">
-          <!-- País (obligatorio) -->
           <select id="pais" name="pais" required>
             <option value="">Selecciona País</option>
             <option value="Argentina">🇦🇷 Argentina</option>
             <option value="España">🇪🇸 España</option>
           </select>
-          <!-- Provincia (obligatorio) -->
           <select id="provincia" name="provincia" required>
             <option value="">Selecciona Provincia</option>
           </select>
-          <!-- Localidad (opcional) -->
           <input type="text" id="localidad" name="localidad" placeholder="Localidad">
-          <!-- Dirección (obligatorio) -->
           <input type="text" id="direccion" name="direccion" placeholder="Dirección" required>
-          <!-- Código Postal (obligatorio) -->
           <input type="text" id="codigoPostal" name="codigoPostal" placeholder="Código Postal" required>
         </div>
-        <!-- Botón para buscar en el mapa -->
         <button type="button" class="action-btn" onclick="buscarEnMapa()">Buscar en el mapa</button>
       </div>
-
       <!-- URL del lugar (con botón para abrir) -->
       <div class="form-group">
         <label for="urlLugar">URL del Lugar</label>
@@ -222,7 +196,6 @@
           <button type="button" class="action-btn" id="btn-open-url">Abrir</button>
         </div>
       </div>
-
       <!-- Dirección de Instagram (con botón para abrir) -->
       <div class="form-group">
         <label for="instagramUrl">Dirección de Instagram</label>
@@ -231,16 +204,13 @@
           <button type="button" class="action-btn" id="btn-open-ig">Abrir</button>
         </div>
       </div>
-
       <!-- Cantidad de canchas -->
       <div class="form-group">
         <label for="cantCanchas">Cantidad de Canchas</label>
         <input type="number" id="cantCanchas" name="cantCanchas" min="1" placeholder="Ej. 2" required>
       </div>
-
-      <!-- Mapa: se actualizará según la dirección ingresada -->
+      <!-- Mapa -->
       <div id="map"></div>
-
       <!-- Botones de Grabar y Eliminar -->
       <div class="button-group">
         <button type="submit" class="btn-save" id="btn-save">Grabar</button>
@@ -249,12 +219,12 @@
     </form>
   </div>
 
-  <!-- Leaflet JS (sin integridad) -->
+  <!-- Cargar Leaflet JS (sin integridad) -->
   <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
-  <!-- Supabase JS -->
+  <!-- Cargar Supabase JS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <script>
-    // CONFIGURACIÓN DE SUPABASE – Reemplaza con tus credenciales
+    // CONFIGURACIÓN DE SUPABASE – REEMPLAZA CON TUS CREDENCIALES REALES
     const SUPABASE_URL = 'https://idlvxinjfbsujpvxncbr.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -265,7 +235,7 @@
     }
     document.getElementById("uniqueId").value = generarUniqueId();
 
-    // Listas de provincias para cada país
+    // Opciones de provincias
     const provincias = {
       "Argentina": [
         "CABA", "Buenos Aires", "Córdoba", "Santa Fe", "Mendoza", "Tucumán",
@@ -302,13 +272,12 @@
     }).addTo(map);
     let marker;
 
-    // Función para buscar en el mapa con fallback automático
+    // Función para buscar en el mapa con fallback
     function buscarEnMapa() {
       const primeraDireccion = construirDireccionCompleta(true);
       console.log("Búsqueda detallada:", primeraDireccion);
       geocodeNominatim(primeraDireccion, (exito) => {
         if (!exito) {
-          // Si la primera búsqueda no tuvo éxito, probamos con una reducida
           const segundaDireccion = construirDireccionCompleta(false);
           console.log("Búsqueda reducida:", segundaDireccion);
           geocodeNominatim(segundaDireccion, (exito2) => {
@@ -320,15 +289,14 @@
       });
     }
 
-    // Construir dirección completa
+    // Construir la dirección completa
     function construirDireccionCompleta(usarTodo) {
       const pais = document.getElementById("pais").value.trim();
       let provincia = document.getElementById("provincia").value.trim();
       let localidad = document.getElementById("localidad").value.trim();
       let direccion = document.getElementById("direccion").value.trim();
       let codigoPostal = document.getElementById("codigoPostal").value.trim();
-
-      // Si “Ciudad de Buenos Aires” => “Buenos Aires”
+      // Reemplazar "Ciudad de Buenos Aires" por "Buenos Aires" si fuera el caso
       if (provincia.toLowerCase() === "ciudad de buenos aires") {
         provincia = "Buenos Aires";
       }
@@ -339,7 +307,7 @@
       return `${direccion}${localidad ? ", " + localidad : ""}, ${provincia}, ${pais}${codigoPostal ? ", " + codigoPostal : ""}`;
     }
 
-    // Geocodificar con Nominatim
+    // Geocodificar usando Nominatim
     function geocodeNominatim(direccionCompleta, callback) {
       if (!direccionCompleta) {
         callback(false);
@@ -369,7 +337,7 @@
         });
     }
 
-    // Botón Abrir URL
+    // Botón para abrir la URL del lugar
     document.getElementById("btn-open-url").addEventListener("click", function() {
       const urlLugar = document.getElementById("urlLugar").value.trim();
       if (urlLugar) {
@@ -379,7 +347,7 @@
       }
     });
 
-    // Botón Abrir Instagram
+    // Botón para abrir la URL de Instagram
     document.getElementById("btn-open-ig").addEventListener("click", function() {
       const igUrl = document.getElementById("instagramUrl").value.trim();
       if (igUrl) {
@@ -398,7 +366,7 @@
       // Deshabilitar el botón para prevenir doble envío
       btnSave.disabled = true;
 
-      // Recopilar datos
+      // Recopilar datos del formulario
       const id = document.getElementById("uniqueId").value.trim();
       const name = document.getElementById("nombre").value.trim();
       const country = document.getElementById("pais").value.trim();
@@ -410,7 +378,7 @@
       const instagram_url = document.getElementById("instagramUrl").value.trim();
       const court_count = parseInt(document.getElementById("cantCanchas").value.trim(), 10);
 
-      // Coordenadas
+      // Obtener coordenadas si están disponibles
       let latitude = null;
       let longitude = null;
       if (marker) {
@@ -419,9 +387,9 @@
         longitude = latlng.lng;
       }
 
-      console.log("Insertando establecimiento con valores:", {
-        id, name, country, province, locality, address,
-        postal_code, url, instagram_url, court_count, latitude, longitude
+      console.log("Insertando establecimiento:", {
+        id, name, country, province, locality, address, postal_code,
+        url, instagram_url, court_count, latitude, longitude
       });
 
       try {
@@ -443,30 +411,27 @@
               longitude
             }
           ]);
-
         if (error) {
           console.error("Error al guardar establecimiento:", error);
           alert("Error al guardar establecimiento: " + error.message);
-          // Rehabilitar el botón en caso de error
-          btnSave.disabled = false;
+          btnSave.disabled = false; // Habilitar de nuevo en caso de error
         } else {
-          console.log("Respuesta de inserción:", data);
+          console.log("Inserción exitosa:", data);
           alert("Establecimiento guardado exitosamente.");
           // Aquí podrías limpiar el formulario o redirigir
         }
       } catch (err) {
         console.error("Excepción al guardar establecimiento:", err);
         alert("Excepción al guardar establecimiento: " + err.message);
-        // Rehabilitar el botón en caso de excepción
         btnSave.disabled = false;
       }
     });
 
-    // Botón Eliminar
+    // Botón Eliminar (ejemplo)
     document.getElementById("btn-delete").addEventListener("click", function() {
       if (confirm("¿Estás seguro de eliminar este establecimiento?")) {
         alert("Establecimiento eliminado.");
-        // Lógica de borrado en Supabase si es necesario
+        // Aquí puedes implementar la lógica de borrado en Supabase
       }
     });
   </script>
