@@ -328,7 +328,7 @@
       }
     });
 
-    // Autocompletado para "Localidad" (ahora con valores únicos)
+    // Autocompletado para "Localidad" (con valores únicos)
     const localityInput = document.getElementById('searchLocality');
     const localitySuggestions = document.getElementById('locality-suggestions');
     localityInput.addEventListener('input', async () => {
@@ -351,7 +351,7 @@
         localitySuggestions.innerHTML = '<div class="suggestion-item">No hay coincidencias</div>';
         localitySuggestions.style.display = 'block';
       } else {
-        // Extraer valores únicos
+        // Extraer valores únicos para sugerencias
         const uniqueLocalities = [...new Set(data.map(item => item.locality))];
         let html = uniqueLocalities.map(locality => `<div class="suggestion-item">${locality}</div>`).join('');
         localitySuggestions.innerHTML = html;
@@ -366,7 +366,7 @@
       }
     });
 
-    // Manejo del formulario de búsqueda
+    // Manejo del formulario de búsqueda (se muestran todos los resultados sin filtrar por localidad)
     document.getElementById('search-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const searchName = nameInput.value.trim();
@@ -393,19 +393,10 @@
         console.error('Error al buscar perfiles:', error.message);
         resultsContainer.innerHTML = `<p style="color:red;">Error al buscar perfiles: ${error.message}</p>`;
       } else {
-        // Filtrar registros para que no se dupliquen por misma localidad
-        const uniqueByLocality = {};
-        data.forEach(profile => {
-          if (profile.locality && !uniqueByLocality[profile.locality]) {
-            uniqueByLocality[profile.locality] = profile;
-          }
-        });
-        const uniqueProfiles = Object.values(uniqueByLocality);
-
-        if (uniqueProfiles.length === 0) {
+        if (data.length === 0) {
           resultsContainer.innerHTML = `<p>No se encontraron perfiles.</p>`;
         } else {
-          uniqueProfiles.forEach(profile => {
+          data.forEach(profile => {
             const card = document.createElement('div');
             card.className = 'profile-card';
             card.innerHTML = `
