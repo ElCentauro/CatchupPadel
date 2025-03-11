@@ -234,15 +234,21 @@
     // Manejo del envío del formulario para guardar/actualizar el perfil
     document.getElementById('profile-form').addEventListener('submit', async (e) => {
       e.preventDefault();
-      // Primero, obtenemos la sesión para tener el userId
-      const { data: { session: userSession } } = await supabaseClient.auth.getSession();
+      
+      // Obtener la sesión para tener el userId
+      const { data: { session: userSession }, error: sessionError } = await supabaseClient.auth.getSession();
+      if (sessionError) {
+        console.error('Error al obtener la sesión:', sessionError);
+        alert('Error al obtener la sesión');
+        return;
+      }
       if (!userSession) {
         alert('No se encontró sesión de usuario');
         return;
       }
       const userId = userSession.user.id;
       console.log('User ID obtenido:', userId);
-
+      
       // Recopilar datos del formulario
       const fullName = document.getElementById('fullName').value.trim();
       const email = document.getElementById('emailProfile').value.trim();
@@ -282,7 +288,7 @@
         }
       }
 
-      // Intentar actualizar la fila existente
+      // Intentar actualizar el registro existente
       let { data, error } = await supabaseClient
         .from('profiles')
         .update({
@@ -299,7 +305,7 @@
         .eq('id', userId);
       console.log('Respuesta de update:', { data, error });
       
-      // Si no se actualizó nada (data es vacío) o hubo error, intentar insertar
+      // Si no se actualizó ningún registro (data es vacío), intentamos insertar
       if (!error && (!data || data.length === 0)) {
         console.log('No se actualizó ningún registro, intentando insertar...');
         ({ data, error } = await supabaseClient
