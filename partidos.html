@@ -8,11 +8,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
     /* Reset y estilos globales */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { 
-      font-family: 'Poppins', sans-serif; 
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
       background-color: #FFF4E6; /* Naranja claro */
-      color: #333; 
+      color: #333;
     }
     
     /* Cabecera y navegación */
@@ -37,7 +41,9 @@
       font-weight: 500;
       transition: color 0.3s;
     }
-    header nav a:hover { color: #e07e00; }
+    header nav a:hover {
+      color: #e07e00;
+    }
     
     /* Contenedor principal */
     .container {
@@ -48,7 +54,11 @@
       border-radius: 8px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
-    h1 { text-align: center; margin-bottom: 1.5rem; color: #2c3e50; }
+    h1 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: #2c3e50;
+    }
     
     /* Fieldset y leyendas */
     fieldset {
@@ -58,11 +68,21 @@
       margin-bottom: 1.5rem;
       background-color: #fdfdfd;
     }
-    legend { font-weight: 600; padding: 0 5px; color: #2c3e50; }
+    legend {
+      font-weight: 600;
+      padding: 0 5px;
+      color: #2c3e50;
+    }
     
     /* Grupos de formulario */
-    .form-group { margin-bottom: 1rem; }
-    label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
     input[type="text"],
     input[type="date"],
     input[type="time"],
@@ -74,10 +94,17 @@
       font-size: 1rem;
       transition: border-color 0.3s;
     }
-    input:focus, select:focus { border-color: #ff9500; outline: none; }
+    input:focus, select:focus {
+      border-color: #ff9500;
+      outline: none;
+    }
     
     /* Radio buttons */
-    .radio-group { display: flex; gap: 1rem; margin-top: 0.5rem; }
+    .radio-group {
+      display: flex;
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
     
     /* Botones */
     .btn-create, .btn-join, .btn-schedule {
@@ -97,21 +124,47 @@
     }
     
     /* Sección para programar partidos */
-    .schedule-section { margin-bottom: 1.5rem; }
-    .schedule-section select { max-width: 150px; }
-    #scheduledList { margin-top: 1rem; font-size: 0.95rem; }
-    #scheduledList ul { list-style: none; padding-left: 0; }
-    #scheduledList li { padding: 0.3rem 0; }
+    .schedule-section {
+      margin-bottom: 1.5rem;
+    }
+    .schedule-section select {
+      max-width: 150px;
+    }
+    #scheduledList {
+      margin-top: 1rem;
+      font-size: 0.95rem;
+    }
+    #scheduledList ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    #scheduledList li {
+      padding: 0.3rem 0;
+    }
     
     /* Sección para unirse al partido */
-    .join-section { text-align: center; margin-top: 2rem; }
-    #joinStatus { margin-top: 1rem; }
-    #joinStatus ul { list-style: none; padding-left: 0; }
+    .join-section {
+      text-align: center;
+      margin-top: 2rem;
+    }
+    #joinStatus {
+      margin-top: 1rem;
+    }
+    #joinStatus ul {
+      list-style: none;
+      padding-left: 0;
+    }
     
     /* Responsive */
     @media (max-width: 600px) {
-      header { flex-direction: column; text-align: center; }
-      .container { margin: 1rem; padding: 1rem; }
+      header {
+        flex-direction: column;
+        text-align: center;
+      }
+      .container {
+        margin: 1rem;
+        padding: 1rem;
+      }
     }
   </style>
 </head>
@@ -203,6 +256,11 @@
             <option value="Mixto">Mixto</option>
           </select>
         </div>
+        <!-- Campo para Completitud (se actualiza dinámicamente al unirse jugadores) -->
+        <div class="form-group">
+          <label for="completitud">Completitud</label>
+          <input type="text" id="completitud" value="Parcial (faltan 0)" readonly>
+        </div>
       </fieldset>
       
       <!-- 4. Programar Partidos (Repetición semanal) -->
@@ -251,12 +309,12 @@
     const SUPABASE_URL = 'https://idlvxinjfbsujpvxncbr.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    
-    // Función para generar un ID único de 5 dígitos para el partido
+
+    // Generar un ID único de 5 dígitos para el partido
     function generatePartyId() {
       return Math.floor(10000 + Math.random() * 90000).toString();
     }
-    
+
     // Cargar el nombre del organizador automáticamente desde el perfil del usuario logueado
     async function loadOrganizer() {
       const { data: { session }, error } = await supabaseClient.auth.getSession();
@@ -338,15 +396,28 @@
       const pista = document.getElementById('pistaSelect').value;
       const matchLevel = document.getElementById('matchLevel').value;
       const teamType = document.getElementById('teamType').value;
-      
-      if (!matchName || !matchDate || !startTime || !endTime || !organizer || !playerCount || !cancha || !pista || !matchLevel || !teamType) {
+
+      if (!matchName || !matchDate || !startTime || !endTime || !organizer || !playerCount ||
+          !cancha || !pista || !matchLevel || !teamType) {
         alert('Por favor, completa todos los campos.');
         return;
       }
       
-      // Aquí se podría insertar el partido en una tabla "partidos" de Supabase.
-      // Se muestra en consola para ejemplo.
-      console.log('Datos del partido:', { matchId, matchName, matchDate, startTime, endTime, organizer, playerCount, cancha, pista, matchLevel, teamType });
+      // Se podría insertar el partido en la tabla "partidos" de Supabase. Aquí se muestra en consola.
+      console.log('Datos del partido:', {
+        matchId,
+        matchName,
+        matchDate,
+        startTime,
+        endTime,
+        organizer,
+        playerCount,
+        cancha,
+        pista,
+        matchLevel,
+        teamType,
+        completitud: 'Parcial' // Al crearlo, aún no hay jugadores unidos.
+      });
       alert('Partido creado exitosamente con ID: ' + matchId);
       // Opcional: reiniciar formulario o redirigir
     });
@@ -380,8 +451,10 @@
       }
     });
     
-    // Funcionalidad para "Unirse al Partido"
+    // Arreglo para almacenar los jugadores que se han unido
     let joinedPlayers = [];
+
+    // Botón "Unirse al Partido"
     document.getElementById('btn-join').addEventListener('click', async function() {
       // Obtener el nombre del usuario logueado
       const { data: { session }, error } = await supabaseClient.auth.getSession();
@@ -411,11 +484,16 @@
     function updateJoinStatus() {
       const playerCount = parseInt(document.querySelector('input[name="playerCount"]:checked')?.value || "0", 10);
       const joinStatusDiv = document.getElementById('joinStatus');
+      const completitudInput = document.getElementById('completitud');
       joinStatusDiv.innerHTML = '';
+
       if (playerCount === 0) {
         joinStatusDiv.textContent = 'Selecciona la cantidad de jugadores para ver el estado.';
+        completitudInput.value = 'Parcial (faltan 0)';
         return;
       }
+
+      // Mostrar lista de jugadores que se han unido
       const ul = document.createElement('ul');
       joinedPlayers.forEach(player => {
         const li = document.createElement('li');
@@ -423,10 +501,22 @@
         ul.appendChild(li);
       });
       joinStatusDiv.appendChild(ul);
+
+      // Calcular cuántos jugadores faltan
       const remaining = playerCount - joinedPlayers.length;
-      const msg = document.createElement('p');
-      msg.textContent = remaining > 0 ? `Quedan ${remaining} plazas para cubrir.` : 'El partido está completo.';
-      joinStatusDiv.appendChild(msg);
+
+      // Actualizar la completitud en el formulario
+      if (remaining > 0) {
+        completitudInput.value = `Parcial (faltan ${remaining})`;
+        const msg = document.createElement('p');
+        msg.textContent = `Quedan ${remaining} plazas para cubrir.`;
+        joinStatusDiv.appendChild(msg);
+      } else {
+        completitudInput.value = 'Completo';
+        const msg = document.createElement('p');
+        msg.textContent = 'El partido está completo.';
+        joinStatusDiv.appendChild(msg);
+      }
     }
   </script>
 </body>
