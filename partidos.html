@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Catch Up Padel - Crear Partido</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Fuente moderna -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    /* Reset y estilos globales */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: 'Poppins', sans-serif; 
+      background-color: #FFF4E6; /* Naranja claro */
+      color: #333; 
+    }
+    
+    /* Cabecera y navegación */
+    header {
+      background-color: #fff;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header .logo {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #2c3e50;
+    }
+    header nav a {
+      font-size: 1rem;
+      color: #ff9500;
+      margin-left: 1rem;
+      text-transform: uppercase;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+    header nav a:hover { color: #e07e00; }
+    
+    /* Contenedor principal */
+    .container {
+      max-width: 800px;
+      margin: 2rem auto;
+      background-color: #fff;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    h1 { text-align: center; margin-bottom: 1.5rem; color: #2c3e50; }
+    
+    /* Fieldset y leyendas */
+    fieldset {
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 1rem 1.5rem;
+      margin-bottom: 1.5rem;
+      background-color: #fdfdfd;
+    }
+    legend { font-weight: 600; padding: 0 5px; color: #2c3e50; }
+    
+    /* Grupos de formulario */
+    .form-group { margin-bottom: 1rem; }
+    label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
+    input[type="text"],
+    input[type="date"],
+    input[type="time"],
+    select {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #bbb;
+      border-radius: 5px;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+    input:focus, select:focus { border-color: #ff9500; outline: none; }
+    
+    /* Radio buttons */
+    .radio-group { display: flex; gap: 1rem; margin-top: 0.5rem; }
+    
+    /* Botones */
+    .btn-create, .btn-join, .btn-schedule {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 5px;
+      background-color: #27ae60;
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      margin-top: 1rem;
+    }
+    .btn-create:hover, .btn-join:hover, .btn-schedule:hover {
+      background-color: #219150;
+    }
+    
+    /* Sección para programar partidos */
+    .schedule-section { margin-bottom: 1.5rem; }
+    .schedule-section select { max-width: 150px; }
+    #scheduledList { margin-top: 1rem; font-size: 0.95rem; }
+    #scheduledList ul { list-style: none; padding-left: 0; }
+    #scheduledList li { padding: 0.3rem 0; }
+    
+    /* Sección para unirse al partido */
+    .join-section { text-align: center; margin-top: 2rem; }
+    #joinStatus { margin-top: 1rem; }
+    #joinStatus ul { list-style: none; padding-left: 0; }
+    
+    /* Responsive */
+    @media (max-width: 600px) {
+      header { flex-direction: column; text-align: center; }
+      .container { margin: 1rem; padding: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Cabecera -->
+  <header>
+    <div class="logo">Catch Up Padel</div>
+    <nav>
+      <a href="home.html">Home</a>
+      <a href="perfil.html">Mi Perfil</a>
+      <a href="partidos.html">Partidos</a>
+    </nav>
+  </header>
+  
+  <!-- Contenedor del formulario -->
+  <div class="container">
+    <h1>Crear Partido de Padel</h1>
+    <form id="match-form">
+      <!-- 1. Datos del Partido -->
+      <fieldset>
+        <legend>Datos del Partido</legend>
+        <div class="form-group">
+          <label for="matchName">Nombre del Partido</label>
+          <input type="text" id="matchName" placeholder="Ej. Torneo de Verano" required>
+        </div>
+        <div class="form-group">
+          <label for="matchDate">Fecha del Partido</label>
+          <input type="date" id="matchDate" required>
+        </div>
+        <div class="form-group">
+          <label for="startTime">Hora de Inicio</label>
+          <input type="time" id="startTime" required>
+        </div>
+        <div class="form-group">
+          <label for="endTime">Hora de Fin</label>
+          <input type="time" id="endTime" required>
+        </div>
+      </fieldset>
+      
+      <!-- 2. Datos del Organizador -->
+      <fieldset>
+        <legend>Datos del Organizador</legend>
+        <div class="form-group">
+          <label for="organizer">Organizador</label>
+          <input type="text" id="organizer" readonly>
+        </div>
+      </fieldset>
+      
+      <!-- 3. Detalles del Partido -->
+      <fieldset>
+        <legend>Detalles del Partido</legend>
+        <div class="form-group">
+          <label>Cantidad de Jugadores</label>
+          <div class="radio-group">
+            <label><input type="radio" name="playerCount" value="2" required> 2 jugadores</label>
+            <label><input type="radio" name="playerCount" value="4" required> 4 jugadores</label>
+            <label><input type="radio" name="playerCount" value="6" required> 6 jugadores</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="canchaSelect">Cancha</label>
+          <select id="canchaSelect" required>
+            <option value="">Seleccione una cancha</option>
+            <!-- Opciones cargadas dinámicamente -->
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="pistaSelect">Pista</label>
+          <select id="pistaSelect" required>
+            <option value="">Seleccione una pista</option>
+            <!-- Opciones cargadas según la cancha seleccionada -->
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="matchLevel">Nivel del Partido</label>
+          <select id="matchLevel" required>
+            <option value="">Seleccione el nivel del partido</option>
+            <option value="Principiante">Principiante</option>
+            <option value="Intermedios">Intermedios</option>
+            <option value="Avanzados">Avanzados</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="teamType">Tipo de Parejas</label>
+          <select id="teamType" required>
+            <option value="">Seleccione el tipo de parejas</option>
+            <option value="Femenino">Femenino</option>
+            <option value="Masculino">Masculino</option>
+            <option value="Mixto">Mixto</option>
+          </select>
+        </div>
+      </fieldset>
+      
+      <!-- 4. Programar Partidos (Repetición semanal) -->
+      <fieldset class="schedule-section">
+        <legend>Programar Partidos</legend>
+        <div class="form-group">
+          <label for="repeatWeeks">Repetir partido durante (semanas):</label>
+          <select id="repeatWeeks">
+            <option value="0">No repetir</option>
+            <option value="1">1 semana</option>
+            <option value="2">2 semanas</option>
+            <option value="3">3 semanas</option>
+            <option value="4">4 semanas</option>
+            <option value="5">5 semanas</option>
+            <option value="6">6 semanas</option>
+            <option value="7">7 semanas</option>
+            <option value="8">8 semanas</option>
+            <option value="9">9 semanas</option>
+            <option value="10">10 semanas</option>
+            <option value="11">11 semanas</option>
+            <option value="12">12 semanas</option>
+          </select>
+          <button type="button" id="btn-schedule" class="btn-schedule">Programar Partidos</button>
+        </div>
+        <div id="scheduledList"></div>
+      </fieldset>
+      
+      <!-- Botón para crear el partido -->
+      <button type="submit" class="btn-create">Crear Partido</button>
+    </form>
+    
+    <hr>
+    
+    <!-- 5. Unirse al Partido -->
+    <div class="join-section">
+      <h2>Unirse al Partido</h2>
+      <button type="button" id="btn-join" class="btn-join">Unirse al Partido</button>
+      <div id="joinStatus"></div>
+    </div>
+  </div>
+  
+  <!-- SUPABASE -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script>
+    // CONFIGURACIÓN DE SUPABASE – Reemplaza con tus credenciales reales
+    const SUPABASE_URL = 'https://idlvxinjfbsujpvxncbr.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig';
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    
+    // Función para generar un ID único de 5 dígitos para el partido
+    function generatePartyId() {
+      return Math.floor(10000 + Math.random() * 90000).toString();
+    }
+    
+    // Cargar el nombre del organizador automáticamente desde el perfil del usuario logueado
+    async function loadOrganizer() {
+      const { data: { session }, error } = await supabaseClient.auth.getSession();
+      if (error) {
+        console.error('Error al obtener la sesión:', error.message);
+      } else if (session && session.user) {
+        // Consultar el perfil para obtener el nombre completo
+        const { data: profileData, error: profileError } = await supabaseClient
+          .from('profiles')
+          .select('full_name')
+          .eq('id', session.user.id)
+          .single();
+        if (profileError) {
+          console.error('Error al obtener perfil:', profileError.message);
+          document.getElementById('organizer').value = session.user.email;
+        } else {
+          document.getElementById('organizer').value = profileData.full_name || session.user.email;
+        }
+      }
+    }
+    loadOrganizer();
+    
+    // Cargar las canchas (establecimientos) en el selector
+    async function loadCanchas() {
+      const { data, error } = await supabaseClient
+        .from('establishments')
+        .select('id, name');
+      if (error) {
+        console.error('Error al cargar canchas:', error.message);
+      } else {
+        const canchaSelect = document.getElementById('canchaSelect');
+        data.forEach(est => {
+          const option = document.createElement('option');
+          option.value = est.id;
+          option.textContent = est.name;
+          canchaSelect.appendChild(option);
+        });
+      }
+    }
+    loadCanchas();
+    
+    // Al seleccionar una cancha, cargar las pistas correspondientes
+    document.getElementById('canchaSelect').addEventListener('change', async function() {
+      const canchaId = this.value;
+      const pistaSelect = document.getElementById('pistaSelect');
+      pistaSelect.innerHTML = '<option value="">Seleccione una pista</option>';
+      if (canchaId) {
+        const { data, error } = await supabaseClient
+          .from('pistas')
+          .select('id, court_name')
+          .eq('establishment_id', canchaId);
+        if (error) {
+          console.error('Error al cargar pistas:', error.message);
+        } else {
+          data.forEach(pista => {
+            const option = document.createElement('option');
+            option.value = pista.id;
+            option.textContent = pista.court_name;
+            pistaSelect.appendChild(option);
+          });
+        }
+      }
+    });
+    
+    // Manejo del envío del formulario para crear el partido
+    document.getElementById('match-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      // Generar un ID único de 5 dígitos para el partido
+      const matchId = generatePartyId();
+      
+      // Recopilar datos del partido
+      const matchName = document.getElementById('matchName').value.trim();
+      const matchDate = document.getElementById('matchDate').value;
+      const startTime = document.getElementById('startTime').value;
+      const endTime = document.getElementById('endTime').value;
+      const organizer = document.getElementById('organizer').value;
+      const playerCount = document.querySelector('input[name="playerCount"]:checked')?.value;
+      const cancha = document.getElementById('canchaSelect').value;
+      const pista = document.getElementById('pistaSelect').value;
+      const matchLevel = document.getElementById('matchLevel').value;
+      const teamType = document.getElementById('teamType').value;
+      
+      if (!matchName || !matchDate || !startTime || !endTime || !organizer || !playerCount || !cancha || !pista || !matchLevel || !teamType) {
+        alert('Por favor, completa todos los campos.');
+        return;
+      }
+      
+      // Aquí se podría insertar el partido en una tabla "partidos" de Supabase.
+      // Se muestra en consola para ejemplo.
+      console.log('Datos del partido:', { matchId, matchName, matchDate, startTime, endTime, organizer, playerCount, cancha, pista, matchLevel, teamType });
+      alert('Partido creado exitosamente con ID: ' + matchId);
+      // Opcional: reiniciar formulario o redirigir
+    });
+    
+    // Programar Partidos: Genera partidos repetidos semanalmente según el número de semanas seleccionado
+    document.getElementById('btn-schedule').addEventListener('click', function() {
+      const repeatWeeks = parseInt(document.getElementById('repeatWeeks').value, 10);
+      const matchDateInput = document.getElementById('matchDate').value;
+      const scheduledList = document.getElementById('scheduledList');
+      scheduledList.innerHTML = '';
+      
+      if (!matchDateInput) {
+        alert('Primero ingresa la fecha del partido.');
+        return;
+      }
+      
+      if (repeatWeeks > 0) {
+        const baseDate = new Date(matchDateInput);
+        const ul = document.createElement('ul');
+        for (let i = 0; i < repeatWeeks; i++) {
+          const scheduledDate = new Date(baseDate);
+          scheduledDate.setDate(baseDate.getDate() + i * 7);
+          const options = { year: 'numeric', month: 'long', day: 'numeric' };
+          const li = document.createElement('li');
+          li.textContent = scheduledDate.toLocaleDateString('es-ES', options);
+          ul.appendChild(li);
+        }
+        scheduledList.appendChild(ul);
+      } else {
+        scheduledList.textContent = 'No se programarán partidos adicionales.';
+      }
+    });
+    
+    // Funcionalidad para "Unirse al Partido"
+    let joinedPlayers = [];
+    document.getElementById('btn-join').addEventListener('click', async function() {
+      // Obtener el nombre del usuario logueado
+      const { data: { session }, error } = await supabaseClient.auth.getSession();
+      if (error || !session) {
+        alert('Error al obtener la sesión. Por favor, inicia sesión.');
+        return;
+      }
+      let userName = session.user.email;
+      const { data: profileData, error: profileError } = await supabaseClient
+        .from('profiles')
+        .select('full_name')
+        .eq('id', session.user.id)
+        .single();
+      if (!profileError && profileData && profileData.full_name) {
+        userName = profileData.full_name;
+      }
+      // Evitar duplicados
+      if (joinedPlayers.includes(userName)) {
+        alert('Ya te has unido al partido.');
+        return;
+      }
+      joinedPlayers.push(userName);
+      updateJoinStatus();
+    });
+    
+    // Actualiza el estado del partido (jugadores que se han unido)
+    function updateJoinStatus() {
+      const playerCount = parseInt(document.querySelector('input[name="playerCount"]:checked')?.value || "0", 10);
+      const joinStatusDiv = document.getElementById('joinStatus');
+      joinStatusDiv.innerHTML = '';
+      if (playerCount === 0) {
+        joinStatusDiv.textContent = 'Selecciona la cantidad de jugadores para ver el estado.';
+        return;
+      }
+      const ul = document.createElement('ul');
+      joinedPlayers.forEach(player => {
+        const li = document.createElement('li');
+        li.textContent = player;
+        ul.appendChild(li);
+      });
+      joinStatusDiv.appendChild(ul);
+      const remaining = playerCount - joinedPlayers.length;
+      const msg = document.createElement('p');
+      msg.textContent = remaining > 0 ? `Quedan ${remaining} plazas para cubrir.` : 'El partido está completo.';
+      joinStatusDiv.appendChild(msg);
+    }
+  </script>
+</body>
+</html>
