@@ -8,9 +8,16 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
     /* RESET Y ESTILOS GLOBALES */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Poppins', sans-serif; background-color: #f8f8f8; color: #333; }
-
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f8f8f8;
+      color: #333;
+    }
     /* MENÚ DE NAVEGACIÓN */
     nav {
       width: 100%;
@@ -36,13 +43,18 @@
       transition: background-color 0.3s, color 0.3s;
       cursor: pointer;
     }
-    .menu-item:hover { background-color: #ff9500; color: #fff; }
+    .menu-item:hover {
+      background-color: #ff9500;
+      color: #fff;
+    }
     .menu-item.logout {
       border-color: #e74c3c;
       color: #e74c3c;
     }
-    .menu-item.logout:hover { background-color: #e74c3c; color: #fff; }
-
+    .menu-item.logout:hover {
+      background-color: #e74c3c;
+      color: #fff;
+    }
     /* SECCIÓN HERO */
     .hero {
       position: relative;
@@ -55,9 +67,19 @@
       color: #fff;
       min-height: 60vh;
     }
-    .hero h1 { font-size: 3rem; font-weight: 700; margin-bottom: 1rem; color: #fff; }
-    .hero p { font-size: 1.2rem; margin-bottom: 2rem; max-width: 700px; margin: 0 auto; line-height: 1.6; }
-
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: #fff;
+    }
+    .hero p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
     /* CONTENEDOR DE TARJETAS FLOTANTES */
     .cards-container {
       display: flex;
@@ -78,10 +100,18 @@
       transition: transform 0.3s;
       cursor: pointer;
     }
-    .floating-card:hover { transform: translateY(-5px); }
-    .floating-card h3 { font-size: 1rem; margin-bottom: 0.5rem; color: #2c3e50; }
-    .floating-card p { font-size: 0.85rem; color: #555; }
-
+    .floating-card:hover {
+      transform: translateY(-5px);
+    }
+    .floating-card h3 {
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+      color: #2c3e50;
+    }
+    .floating-card p {
+      font-size: 0.85rem;
+      color: #555;
+    }
     /* SECCIÓN DE BÚSQUEDA DE CANCHAS (OCULTA POR DEFECTO) */
     .search-cancha {
       display: none;
@@ -133,7 +163,9 @@
       padding: 0.5rem;
       cursor: pointer;
     }
-    .suggestion-item:hover { background-color: #f0f0f0; }
+    .suggestion-item:hover {
+      background-color: #f0f0f0;
+    }
     .search-cancha button {
       padding: 0.75rem 1.5rem;
       border: none;
@@ -149,7 +181,9 @@
       margin-left: auto;
       margin-right: auto;
     }
-    .search-cancha button:hover { background-color: #e07e00; }
+    .search-cancha button:hover {
+      background-color: #e07e00;
+    }
     /* Botón de cierre para búsqueda de canchas */
     .close-btn-cancha {
       position: absolute;
@@ -162,9 +196,10 @@
       cursor: pointer;
       transition: color 0.3s ease;
     }
-    .close-btn-cancha:hover { color: #333; }
-
-    /* RESULTADOS DE BÚSQUEDA DE CANCHAS */
+    .close-btn-cancha:hover {
+      color: #333;
+    }
+    /* CONTENEDOR DE RESULTADOS DE CANCHAS */
     .results-container {
       max-width: 800px;
       margin: 2rem auto;
@@ -182,10 +217,18 @@
       transition: transform 0.3s ease;
       cursor: pointer;
     }
-    .result-card:hover { transform: translateY(-5px); }
-    .result-card h3 { font-size: 1.1rem; margin-bottom: 0.5rem; color: #2c3e50; }
-    .result-card p { font-size: 0.85rem; color: #555; }
-
+    .result-card:hover {
+      transform: translateY(-5px);
+    }
+    .result-card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      color: #2c3e50;
+    }
+    .result-card p {
+      font-size: 0.85rem;
+      color: #555;
+    }
     /* SECCIÓN "CONOCE JUGADORES" (BÚSQUEDA) - OCULTA POR DEFECTO */
     .search-container {
       display: none;
@@ -221,7 +264,9 @@
       width: 240px;
     }
     .search-form input:focus,
-    .search-form select:focus { box-shadow: 0 0 5px rgba(0,0,0,0.1); }
+    .search-form select:focus {
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
     .search-form button {
       padding: 0.75rem 1.5rem;
       border: none;
@@ -233,7 +278,9 @@
       transition: background-color 0.3s ease;
       cursor: pointer;
     }
-    .search-form button:hover { background-color: #e07e00; }
+    .search-form button:hover {
+      background-color: #e07e00;
+    }
     /* Botón de cierre para búsqueda de jugadores */
     .close-btn-jugadores {
       position: absolute;
@@ -246,8 +293,10 @@
       cursor: pointer;
       transition: color 0.3s ease;
     }
-    .close-btn-jugadores:hover { color: #333; }
-    /* Resultados de búsqueda (jugadores) */
+    .close-btn-jugadores:hover {
+      color: #333;
+    }
+    /* RESULTADOS DE BÚSQUEDA (JUGADORES) */
     #searchResults {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -263,7 +312,9 @@
       transition: transform 0.3s ease;
       cursor: pointer;
     }
-    .profile-card:hover { transform: translateY(-5px); }
+    .profile-card:hover {
+      transform: translateY(-5px);
+    }
     .profile-card img {
       width: 100%;
       height: 150px;
@@ -271,9 +322,133 @@
       border-radius: 8px;
       margin-bottom: 0.75rem;
     }
-    .profile-card h3 { font-size: 1.1rem; margin-bottom: 0.5rem; color: #2c3e50; }
-    .profile-card p { font-size: 0.85rem; color: #555; }
-
+    .profile-card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      color: #2c3e50;
+    }
+    .profile-card p {
+      font-size: 0.85rem;
+      color: #555;
+    }
+    /* SECCIÓN "BUSCAR PARTIDOS" - OCULTA POR DEFECTO */
+    .search-partidos {
+      display: none;
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 1.5rem 2rem;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      text-align: center;
+      position: relative;
+    }
+    .search-partidos h2 {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      color: #2c3e50;
+    }
+    .search-partidos .search-form-partidos {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .search-partidos input,
+    .search-partidos select {
+      padding: 0.75rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1rem;
+      background-color: #f9f9f9;
+      transition: box-shadow 0.3s;
+      width: 240px;
+    }
+    .search-partidos input:focus,
+    .search-partidos select:focus {
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    .search-partidos button {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 5px;
+      background-color: #ff9500;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+      cursor: pointer;
+    }
+    .search-partidos button:hover {
+      background-color: #e07e00;
+    }
+    /* Botón de cierre para búsqueda de partidos */
+    .close-btn-partidos {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      color: #999;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+    .close-btn-partidos:hover {
+      color: #333;
+    }
+    /* RESULTADOS DE BÚSQUEDA DE PARTIDOS */
+    #partidosResults {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem;
+      padding: 0 1rem;
+    }
+    .partido-card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+    .partido-card:hover {
+      transform: translateY(-5px);
+    }
+    .partido-card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      color: #2c3e50;
+    }
+    .partido-card p {
+      font-size: 0.85rem;
+      color: #555;
+    }
+    .btn-view-partido,
+    .btn-join-partido {
+      margin-top: 0.5rem;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    .btn-view-partido {
+      background-color: #3498db;
+      color: #fff;
+    }
+    .btn-view-partido:hover {
+      background-color: #2980b9;
+    }
+    .btn-join-partido {
+      background-color: #27ae60;
+      color: #fff;
+    }
+    .btn-join-partido:hover {
+      background-color: #219150;
+    }
     /* FOOTER */
     footer {
       text-align: center;
@@ -284,15 +459,76 @@
       border-top: 1px solid #eaeaea;
       margin-top: 2rem;
     }
-
+    /* MODAL ESTILOS */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+    }
+    .modal-content {
+      background-color: #fff;
+      border-radius: 8px;
+      max-width: 600px;
+      width: 90%;
+      padding: 1.5rem;
+      position: relative;
+    }
+    .modal-close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: #999;
+      transition: color 0.3s;
+    }
+    .modal-close:hover {
+      color: #333;
+    }
+    .modal-header {
+      margin-bottom: 1rem;
+    }
+    .modal-body p {
+      margin-bottom: 0.75rem;
+    }
+    .players-list {
+      margin-top: 1rem;
+      border-top: 1px solid #ddd;
+      padding-top: 1rem;
+    }
+    .player-item {
+      margin-bottom: 0.5rem;
+    }
     /* RESPONSIVE */
     @media (max-width: 768px) {
-      .menu-container { flex-direction: column; gap: 0.75rem; }
-      .hero h1 { font-size: 2.5rem; }
-      .hero p { font-size: 1rem; }
-      .floating-card { width: 180px; }
-      .search-form input, .search-form select { width: 90%; }
-      .suggestions-box { width: 90%; }
+      .menu-container {
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+      .hero p {
+        font-size: 1rem;
+      }
+      .floating-card {
+        width: 180px;
+      }
+      .search-form input, .search-form select {
+        width: 90%;
+      }
+      .suggestions-box {
+        width: 90%;
+      }
     }
   </style>
 </head>
@@ -326,7 +562,7 @@
         <h3>Filtrar por Nivel</h3>
         <p>Encuentra jugadores con tu misma habilidad</p>
       </div>
-      <!-- Modificación: doble clic para abrir partidos.html -->
+      <!-- Tarjeta Programa Partidos: doble clic para abrir partidos.html -->
       <div class="floating-card" ondblclick="window.location.href='partidos.html'">
         <h3>Programa Partidos</h3>
         <p>Crea y únete a juegos</p>
@@ -335,6 +571,11 @@
       <div class="floating-card" ondblclick="showPlayersSection()">
         <h3>Conoce Jugadores</h3>
         <p>Doble clic para buscar</p>
+      </div>
+      <!-- NUEVA TARJETA: Buscar Partidos -->
+      <div class="floating-card" ondblclick="showPartidosSearch()">
+        <h3>Buscar Partidos</h3>
+        <p>Encuentra partidos cerca de tu zona y conoce cuántos jugadores faltan</p>
       </div>
     </div>
   </section>
@@ -383,6 +624,44 @@
     <div id="searchResults"></div>
   </div>
 
+  <!-- SECCIÓN "BUSCAR PARTIDOS" - OCULTA POR DEFECTO -->
+  <div class="search-partidos" id="searchPartidosSection">
+    <button class="close-btn-partidos" onclick="closePartidosSearch()">X</button>
+    <h2>Buscar Partidos</h2>
+    <div class="search-form-partidos">
+      <!-- Filtro por Localidad (de la cancha) con autocompletado -->
+      <div style="position: relative;">
+        <input type="text" id="partidosLocality" placeholder="Localidad (opcional)">
+        <div id="partidosLocalitySuggestions" class="suggestions-box"></div>
+      </div>
+      <!-- Filtro por Cancha: se actualizará según la localidad (si se ingresa valor) -->
+      <select id="partidosCancha">
+        <option value="">Todas las canchas</option>
+      </select>
+      <button type="button" id="btn-search-partidos">Buscar Partidos</button>
+    </div>
+    <div id="partidosResults"></div>
+  </div>
+
+  <!-- MODAL PARA VER DETALLE DEL PARTIDO -->
+  <div class="modal-overlay" id="matchModal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeMatchModal()">X</button>
+      <div class="modal-header">
+        <h2 id="modalMatchName">Nombre del Partido</h2>
+      </div>
+      <div class="modal-body">
+        <p id="modalMatchInfo">Información del partido...</p>
+        <p><strong>Cuenta Regresiva: </strong><span id="modalCountdown">Cargando...</span></p>
+        <p id="modalPlayersStatus">Faltan X jugadores de Y</p>
+        <div class="players-list" id="modalPlayersList">
+          <!-- Lista de jugadores unidos -->
+        </div>
+        <button class="btn-join-partido" id="modalJoinBtn" onclick="joinToMatchModal()">Unirse</button>
+      </div>
+    </div>
+  </div>
+
   <!-- FOOTER -->
   <footer>
     © 2025 Catch Up Padel. Todos los derechos reservados.
@@ -396,6 +675,10 @@
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+    let currentMatch = null; // Almacena el partido actual del modal
+    let countdownInterval = null;
+    let loggedUser = null; // Simulación del usuario logueado (se debería obtener de la sesión real)
+
     // Función para cerrar sesión
     function logout() {
       supabaseClient.auth.signOut().then(() => {
@@ -408,6 +691,7 @@
       const { data: { session } } = await supabaseClient.auth.getSession();
       if (session && session.user) {
         const userId = session.user.id;
+        loggedUser = { id: userId, full_name: "Usuario Logueado" }; // Aquí se debe obtener el nombre real
         const { data, error } = await supabaseClient
           .from('profiles')
           .select('*')
@@ -416,7 +700,6 @@
           console.error("Error al consultar el perfil:", error.message);
           return;
         }
-        // Si se encontró un perfil, cambia el texto a "Modificar Perfil"
         if (data && data.length > 0) {
           document.getElementById("profileLink").textContent = "Modificar Perfil";
         } else {
@@ -425,7 +708,7 @@
       }
     }
 
-    /* --- MOSTRAR / CERRAR SECCIONES --- */
+    /* MOSTRAR / CERRAR SECCIONES */
     function showPlayersSection() {
       const section = document.getElementById('players-section');
       section.style.display = 'block';
@@ -434,7 +717,6 @@
     function closePlayersSection() {
       const section = document.getElementById('players-section');
       section.style.display = 'none';
-      // Limpiar campos y resultados de jugadores
       document.getElementById('searchName').value = '';
       document.getElementById('searchLocality').value = '';
       document.getElementById('name-suggestions').innerHTML = '';
@@ -451,7 +733,6 @@
     function closeCanchaSearch() {
       const section = document.getElementById('searchCanchaSection');
       section.style.display = 'none';
-      // Limpiar campos y resultados de canchas
       document.getElementById('canchaName').value = '';
       document.getElementById('canchaLocality').value = '';
       document.getElementById('nameSuggestions').innerHTML = '';
@@ -460,6 +741,88 @@
       document.getElementById('localitySuggestions').style.display = 'none';
       document.getElementById('canchaResults').innerHTML = '';
     }
+    function showPartidosSearch() {
+      const section = document.getElementById('searchPartidosSection');
+      section.style.display = 'block';
+      section.scrollIntoView({ behavior: 'smooth' });
+    }
+    function closePartidosSearch() {
+      const section = document.getElementById('searchPartidosSection');
+      section.style.display = 'none';
+      document.getElementById('partidosLocality').value = '';
+      document.getElementById('partidosCancha').value = '';
+      document.getElementById('partidosResults').innerHTML = '';
+    }
+
+    /* --- AUTOCOMPLETADO PARA PARTIDOS: LOCALIDAD --- */
+    const partidosLocalityInput = document.getElementById('partidosLocality');
+    const partidosLocalitySuggestions = document.getElementById('partidosLocalitySuggestions');
+    partidosLocalityInput.addEventListener('input', async () => {
+      const val = partidosLocalityInput.value.trim();
+      if (!val) {
+        partidosLocalitySuggestions.innerHTML = '';
+        partidosLocalitySuggestions.style.display = 'none';
+        // Si se borra el filtro, cargar todas las canchas
+        loadPartidosCanchas();
+        return;
+      }
+      // Buscar en la tabla 'partidos' para obtener localidades únicas
+      const todayISO = new Date().toISOString().slice(0,10);
+      const { data, error } = await supabaseClient
+        .from('partidos')
+        .select('establishments(locality)', { count: 'exact', head: false })
+        .eq('completitud', 'Parcial')
+        .gte('match_date', todayISO);
+      if (error) {
+        console.error('Error al obtener localidades de partidos:', error.message);
+        return;
+      }
+      // Extraer localidades únicas filtradas que contengan el valor escrito
+      const localidades = data
+        .map(item => item.establishments && item.establishments.locality)
+        .filter(loc => loc && loc.toLowerCase().includes(val.toLowerCase()));
+      const uniqueLocalities = [...new Set(localidades)];
+      if (uniqueLocalities.length === 0) {
+        partidosLocalitySuggestions.innerHTML = '<div class="suggestion-item">No hay coincidencias</div>';
+        partidosLocalitySuggestions.style.display = 'block';
+      } else {
+        partidosLocalitySuggestions.innerHTML = uniqueLocalities.map(loc => `<div class="suggestion-item">${loc}</div>`).join('');
+        partidosLocalitySuggestions.style.display = 'block';
+      }
+    });
+    partidosLocalitySuggestions.addEventListener('click', (e) => {
+      if (e.target.classList.contains('suggestion-item')) {
+        partidosLocalityInput.value = e.target.textContent;
+        partidosLocalitySuggestions.innerHTML = '';
+        partidosLocalitySuggestions.style.display = 'none';
+        // Al seleccionar localidad, actualizar el selector de canchas
+        loadPartidosCanchas();
+      }
+    });
+
+    /* --- ACTUALIZAR SELECT DE CANCHAS SEGÚN FILTRO DE LOCALIDAD --- */
+    async function loadPartidosCanchas() {
+      const localidadFilter = partidosLocalityInput.value.trim();
+      let query = supabaseClient.from('establishments').select('id, name');
+      if (localidadFilter) {
+        query = query.ilike('locality', `%${localidadFilter}%`);
+      }
+      const { data, error } = await query;
+      const partidosCanchaSelect = document.getElementById('partidosCancha');
+      partidosCanchaSelect.innerHTML = '<option value="">Todas las canchas</option>';
+      if (error) {
+        console.error('Error al cargar canchas:', error.message);
+      } else {
+        data.forEach(est => {
+          const option = document.createElement('option');
+          option.value = est.id;
+          option.textContent = est.name;
+          partidosCanchaSelect.appendChild(option);
+        });
+      }
+    }
+    // Cargar inicialmente todas las canchas
+    loadPartidosCanchas();
 
     /* --- BÚSQUEDA DE CANCHAS --- */
     const canchaNameInput = document.getElementById('canchaName');
@@ -468,7 +831,6 @@
     const localitySuggestionsBox = document.getElementById('localitySuggestions');
     const canchaResults = document.getElementById('canchaResults');
 
-    // Autocompletado de Nombre (establishments)
     canchaNameInput.addEventListener('input', async () => {
       const val = canchaNameInput.value.trim();
       if (!val) {
@@ -489,8 +851,7 @@
         nameSuggestionsBox.style.display = 'block';
       } else {
         const uniqueNames = [...new Set(data.map(item => item.name))];
-        let html = uniqueNames.map(n => `<div class="suggestion-item">${n}</div>`).join('');
-        nameSuggestionsBox.innerHTML = html;
+        nameSuggestionsBox.innerHTML = uniqueNames.map(n => `<div class="suggestion-item">${n}</div>`).join('');
         nameSuggestionsBox.style.display = 'block';
       }
     });
@@ -501,8 +862,6 @@
         nameSuggestionsBox.style.display = 'none';
       }
     });
-
-    // Autocompletado de Localidad (establishments)
     canchaLocalityInput.addEventListener('input', async () => {
       const val = canchaLocalityInput.value.trim();
       if (!val) {
@@ -522,9 +881,8 @@
         localitySuggestionsBox.innerHTML = '<div class="suggestion-item">No hay coincidencias</div>';
         localitySuggestionsBox.style.display = 'block';
       } else {
-        const uniqueLocalities = [...new Set(data.map(item => item.locality).filter(v => v))];
-        let html = uniqueLocalities.map(loc => `<div class="suggestion-item">${loc}</div>`).join('');
-        localitySuggestionsBox.innerHTML = html;
+        const uniqueLocalities = [...new Set(data.map(item => item.locality))];
+        localitySuggestionsBox.innerHTML = uniqueLocalities.map(loc => `<div class="suggestion-item">${loc}</div>`).join('');
         localitySuggestionsBox.style.display = 'block';
       }
     });
@@ -535,13 +893,10 @@
         localitySuggestionsBox.style.display = 'none';
       }
     });
-
-    // Botón "Buscar Cancha"
     document.getElementById('btn-search-cancha').addEventListener('click', async () => {
       const nameFilter = canchaNameInput.value.trim();
       const localityFilter = canchaLocalityInput.value.trim();
       canchaResults.innerHTML = '';
-
       let query = supabaseClient.from('establishments').select('*');
       if (nameFilter) {
         query = query.ilike('name', `%${nameFilter}%`);
@@ -566,7 +921,6 @@
               <p>Dirección: ${item.address || 'N/A'}</p>
               <p>Cantidad de canchas: ${item.court_count || 'N/A'}</p>
             `;
-            // Doble clic para ver/editar detalles en establecimiento.html
             card.ondblclick = () => {
               window.location.href = `establecimiento.html?canchaId=${item.id}`;
             };
@@ -583,8 +937,6 @@
     const localitySuggestions = document.getElementById('locality-suggestions');
     const searchForm = document.getElementById('search-form');
     const searchResults = document.getElementById('searchResults');
-
-    // Autocompletado para Nombre de Jugador
     nameInput.addEventListener('input', async () => {
       const val = nameInput.value.trim();
       if (!val) {
@@ -605,8 +957,7 @@
         nameSuggestions.innerHTML = '<div class="suggestion-item">No hay coincidencias</div>';
         nameSuggestions.style.display = 'block';
       } else {
-        let html = data.map(item => `<div class="suggestion-item">${item.full_name}</div>`).join('');
-        nameSuggestions.innerHTML = html;
+        nameSuggestions.innerHTML = data.map(item => `<div class="suggestion-item">${item.full_name}</div>`).join('');
         nameSuggestions.style.display = 'block';
       }
     });
@@ -617,8 +968,6 @@
         nameSuggestions.style.display = 'none';
       }
     });
-
-    // Autocompletado para Localidad de Jugador
     localityInput.addEventListener('input', async () => {
       const val = localityInput.value.trim();
       if (!val) {
@@ -640,8 +989,7 @@
         localitySuggestions.style.display = 'block';
       } else {
         const uniqueLocalities = [...new Set(data.map(item => item.locality))];
-        let html = uniqueLocalities.map(loc => `<div class="suggestion-item">${loc}</div>`).join('');
-        localitySuggestions.innerHTML = html;
+        localitySuggestions.innerHTML = uniqueLocalities.map(loc => `<div class="suggestion-item">${loc}</div>`).join('');
         localitySuggestions.style.display = 'block';
       }
     });
@@ -652,15 +1000,12 @@
         localitySuggestions.style.display = 'none';
       }
     });
-
-    // Búsqueda de Jugadores al enviar el formulario
     searchForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const searchName = nameInput.value.trim();
       const searchLocality = localityInput.value.trim();
       const searchLevel = document.getElementById('searchLevel').value;
       searchResults.innerHTML = '';
-
       let query = supabaseClient.from('profiles').select('*');
       if (searchName) {
         query = query.ilike('full_name', `%${searchName}%`);
@@ -671,7 +1016,6 @@
       if (searchLevel) {
         query = query.eq('game_level', searchLevel);
       }
-
       const { data, error } = await query;
       if (error) {
         console.error('Error al buscar jugadores:', error.message);
@@ -698,7 +1042,135 @@
       }
     });
 
-    // Llamar a checkProfile para actualizar el texto del botón de perfil
+    /* --- BÚSQUEDA DE PARTIDOS --- */
+    const partidosCanchaSelect = document.getElementById('partidosCancha');
+    const partidosResults = document.getElementById('partidosResults');
+    document.getElementById('btn-search-partidos').addEventListener('click', async () => {
+      const localityFilter = partidosLocalityInput.value.trim();
+      const canchaFilter = partidosCanchaSelect.value;
+      partidosResults.innerHTML = '';
+      const todayISO = new Date().toISOString().slice(0,10);
+      // Se incluye además la selección de campos total_players, joined_players y joined_players_details (este último es un arreglo de objetos con full_name)
+      let query = supabaseClient
+        .from('partidos')
+        .select('*, establishments!inner(name, locality), total_players, joined_players, joined_players_details')
+        .eq('completitud', 'Parcial')
+        .gte('match_date', todayISO);
+      if (localityFilter) {
+        query = query.ilike('establishments.locality', `%${localityFilter}%`);
+      }
+      if (canchaFilter) {
+        query = query.eq('cancha_id', canchaFilter);
+      }
+      const { data, error } = await query;
+      if (error) {
+        console.error('Error al buscar partidos:', error.message);
+        partidosResults.innerHTML = `<p style="color:red;">Error al buscar partidos: ${error.message}</p>`;
+      } else {
+        if (!data || data.length === 0) {
+          partidosResults.innerHTML = `<p>No se encontraron partidos.</p>`;
+        } else {
+          data.forEach(partido => {
+            const card = document.createElement('div');
+            card.className = 'partido-card';
+            card.innerHTML = `
+              <h3>${partido.match_name}</h3>
+              <p>Fecha: ${partido.match_date}</p>
+              <p>Hora: ${partido.start_time} - ${partido.end_time}</p>
+              <p>Cancha: ${partido.establishments?.name || ''}</p>
+              <p>Localidad: ${partido.establishments?.locality || ''}</p>
+              <p>Nivel: ${partido.match_level} | Parejas: ${partido.team_type}</p>
+              <p>Estado: ${partido.completitud}</p>
+            `;
+            // Botón para ver el partido en modal
+            const viewBtn = document.createElement('button');
+            viewBtn.className = 'btn-view-partido';
+            viewBtn.textContent = 'Ver el Partido';
+            viewBtn.onclick = () => openMatchModal(partido);
+            card.appendChild(viewBtn);
+            partidosResults.appendChild(card);
+          });
+        }
+      }
+    });
+
+    /* --- MODAL PARA VER DETALLE DEL PARTIDO --- */
+    function openMatchModal(match) {
+      currentMatch = match;
+      // Mostrar datos del partido en el modal
+      document.getElementById('modalMatchName').textContent = match.match_name;
+      document.getElementById('modalMatchInfo').innerHTML = `
+        <strong>Fecha:</strong> ${match.match_date} <br>
+        <strong>Hora:</strong> ${match.start_time} - ${match.end_time} <br>
+        <strong>Cancha:</strong> ${match.establishments?.name || 'N/A'} <br>
+        <strong>Localidad:</strong> ${match.establishments?.locality || 'N/A'} <br>
+        <strong>Nivel:</strong> ${match.match_level} | <strong>Parejas:</strong> ${match.team_type}
+      `;
+      // Calcular y mostrar jugadores faltantes
+      const total = match.total_players || 4;
+      const joined = match.joined_players || 0;
+      const faltan = total - joined;
+      document.getElementById('modalPlayersStatus').textContent = `Faltan ${faltan} jugadores de ${total}`;
+      // Listar jugadores unidos (si existen)
+      const playersList = document.getElementById('modalPlayersList');
+      playersList.innerHTML = '';
+      if (match.joined_players_details && match.joined_players_details.length > 0) {
+        match.joined_players_details.forEach(player => {
+          const p = document.createElement('p');
+          p.className = 'player-item';
+          p.textContent = player.full_name;
+          playersList.appendChild(p);
+        });
+      } else {
+        playersList.innerHTML = '<p>No hay jugadores unidos aún.</p>';
+      }
+      // Mostrar botón de unirse solo si el usuario no está ya en la lista
+      if (match.joined_players_details && match.joined_players_details.some(p => p.id === loggedUser?.id)) {
+        document.getElementById('modalJoinBtn').style.display = 'none';
+      } else {
+        document.getElementById('modalJoinBtn').style.display = 'block';
+      }
+      // Iniciar cronómetro de cuenta regresiva
+      startCountdown(match.match_date, match.start_time);
+      // Mostrar el modal
+      document.getElementById('matchModal').style.display = 'flex';
+    }
+
+    function closeMatchModal() {
+      document.getElementById('matchModal').style.display = 'none';
+      clearInterval(countdownInterval);
+    }
+
+    // Función para iniciar y actualizar la cuenta regresiva
+    function startCountdown(matchDate, matchStartTime) {
+      // Suponiendo que matchDate es "YYYY-MM-DD" y matchStartTime es "HH:MM" (formato 24h)
+      const targetTime = new Date(matchDate + 'T' + matchStartTime + ':00');
+      function updateCountdown() {
+        const now = new Date();
+        let diff = targetTime - now;
+        if (diff < 0) diff = 0;
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+        document.getElementById('modalCountdown').textContent = `${hours}h ${minutes}m ${seconds}s`;
+      }
+      updateCountdown();
+      countdownInterval = setInterval(updateCountdown, 1000);
+    }
+
+    // Función para unirse al partido desde el modal
+    async function joinToMatchModal() {
+      if (!currentMatch || !loggedUser) return;
+      // Aquí se simula la unión; en un escenario real se actualizaría la BD
+      // Agregamos el usuario a la propiedad joined_players_details del partido
+      if (!currentMatch.joined_players_details) currentMatch.joined_players_details = [];
+      currentMatch.joined_players_details.push({ id: loggedUser.id, full_name: loggedUser.full_name });
+      currentMatch.joined_players = (currentMatch.joined_players || 0) + 1;
+      // Actualizar la lista y el estado de jugadores en el modal
+      openMatchModal(currentMatch);
+      alert('Te has unido al partido.');
+    }
+
     checkProfile();
   </script>
 </body>
