@@ -419,7 +419,7 @@
           .eq('id', currentMatchId));
         if (error) {
           alert("Error al modificar partido: " + error.message);
-          console.error(error);
+          console.error("Update error:", error);
         } else {
           alert("Partido modificado exitosamente con ID: " + matchId);
         }
@@ -430,7 +430,7 @@
           .insert([partidoData]));
         if (error) {
           alert("Error al crear partido: " + error.message);
-          console.error(error);
+          console.error("Insert error:", error);
         } else {
           currentMatchId = matchId;
           document.getElementById('btn-create').textContent = "Modificar Partido";
@@ -471,9 +471,15 @@
     // Botón "Unirse al Partido"
     document.getElementById('btn-join').addEventListener('click', async function() {
       // Obtener la sesión
-      const { data: { session }, error } = await supabaseClient.auth.getSession();
-      if (error || !session) {
+      const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
+      if (sessionError || !session) {
         alert('Error al obtener la sesión. Por favor, inicia sesión.');
+        return;
+      }
+      
+      // Verificar que currentMatchId esté definido
+      if (!currentMatchId) {
+        alert('No se ha creado o cargado el partido aún.');
         return;
       }
       
@@ -494,22 +500,19 @@
         return;
       }
       
-      // Insertar en la tabla 'participants'
-      if (!currentMatchId) {
-        alert('No se ha creado o cargado el partido aún.');
-        return;
-      }
-      
+      // Registrar en la tabla 'participants'
+      console.log("Intentando insertar en participants:", { match_id: currentMatchId, user_id: session.user.id });
       const { data: joinData, error: joinError } = await supabaseClient
         .from('participants')
         .insert([{ match_id: currentMatchId, user_id: session.user.id }])
         .select('*');
       if (joinError) {
         console.error('Error al inscribirse en participants:', joinError);
-        alert('Hubo un error al unirse al partido. Revisa la consola para más detalles.');
+        alert('Error al unirse al partido. Revisa la consola para más detalles.');
         return;
       }
       
+      console.log("Datos insertados en participants:", joinData);
       // Actualizar la lista local y el estado de unión
       joinedPlayers.push(userName);
       updateJoinStatus();
