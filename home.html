@@ -683,6 +683,11 @@
 
     // Verifica el perfil del usuario y guarda sus datos
     async function checkProfile() {
+      const profileLink = document.getElementById("profileLink");
+      if (!profileLink) {
+        console.warn("No se encontró el elemento profileLink.");
+        return;
+      }
       const { data: { session } } = await supabaseClient.auth.getSession();
       if (session && session.user) {
         const userId = session.user.id;
@@ -708,9 +713,9 @@
           .select('*')
           .eq('id', userId);
         if (!pError && pData && pData.length > 0) {
-          document.getElementById("profileLink").textContent = "Modificar Perfil";
+          profileLink.textContent = "Modificar Perfil";
         } else {
-          document.getElementById("profileLink").textContent = "Crear Perfil";
+          profileLink.textContent = "Crear Perfil";
         }
       }
     }
@@ -1100,7 +1105,6 @@
         <strong>Localidad:</strong> ${match.establishments?.locality || 'N/A'} <br>
         <strong>Nivel:</strong> ${match.match_level} | <strong>Parejas:</strong> ${match.team_type}
       `;
-      // Imprimir en consola para verificar que currentMatch.id tiene el valor esperado
       console.log('currentMatch:', currentMatch);
       
       // Consultar la tabla 'participants' para obtener los jugadores inscritos
@@ -1173,7 +1177,6 @@
         alert('No hay partido o usuario logueado.');
         return;
       }
-      // Verificar en consola los valores que se van a insertar
       console.log('Insertando en participants con match_id:', currentMatch.id, 'y user_id:', loggedUser.id);
       
       const { data, error } = await supabaseClient
@@ -1189,7 +1192,10 @@
       alert('Te has unido al partido.');
       openMatchModal(currentMatch);
     }
-    checkProfile();
+
+    document.addEventListener('DOMContentLoaded', () => {
+      checkProfile();
+    });
   </script>
 </body>
 </html>
