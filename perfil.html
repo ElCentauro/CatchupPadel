@@ -15,11 +15,15 @@
     }
     body {
       font-family: 'Poppins', sans-serif;
-      background-color: #f8f8f8;
+      background-color: #f0f2f5;
       color: #333;
       line-height: 1.6;
     }
-    /* BARRA DE NAVEGACIÓN SIMPLE */
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+    /* CABECERA */
     header {
       background-color: #fff;
       padding: 1rem 2rem;
@@ -36,16 +40,16 @@
     header nav a {
       font-size: 1rem;
       color: #ff9500;
-      font-weight: 500;
-      text-transform: uppercase;
       margin-left: 1rem;
+      text-transform: uppercase;
+      font-weight: 500;
     }
     /* CONTAINER DEL FORMULARIO */
     .container {
       max-width: 800px;
       margin: 2rem auto;
-      padding: 1rem 2rem;
       background-color: #fff;
+      padding: 2rem;
       border-radius: 10px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
@@ -66,7 +70,7 @@
     label {
       font-weight: 600;
       margin-bottom: 0.5rem;
-      color: #333;
+      color: #2c3e50;
     }
     input[type="text"],
     input[type="email"],
@@ -78,9 +82,18 @@
       border-radius: 5px;
       font-size: 1rem;
       width: 100%;
+      transition: border-color 0.3s;
+    }
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="number"]:focus,
+    input[type="tel"]:focus,
+    select:focus {
+      border-color: #ff9500;
+      outline: none;
     }
     input[disabled] {
-      background-color: #f0f0f0;
+      background-color: #e9ecef;
     }
     input[type="file"] {
       padding: 0.5rem 0;
@@ -94,7 +107,6 @@
       font-weight: 400;
       margin-right: 1rem;
     }
-    /* Grupo de teléfono con prefijo */
     .phone-group {
       display: flex;
       gap: 0.5rem;
@@ -106,7 +118,7 @@
       padding: 0.75rem;
       border: 1px solid #ddd;
       border-radius: 5px;
-      background-color: #f0f0f0;
+      background-color: #e9ecef;
       font-size: 1rem;
     }
     button {
@@ -117,12 +129,13 @@
       font-weight: 600;
       color: #fff;
       cursor: pointer;
+      transition: background-color 0.3s;
     }
     .btn-save {
-      background-color: #27ae60;
+      background-color: #ff9500;
     }
     .btn-save:hover {
-      background-color: #219150;
+      background-color: #e07e00;
     }
     .btn-delete {
       background-color: #e74c3c;
@@ -131,7 +144,24 @@
     .btn-delete:hover {
       background-color: #c0392b;
     }
-    /* Responsive */
+    .btn-delete-photo {
+      background-color: #e74c3c;
+      margin-top: 0.5rem;
+      padding: 0.4rem 0.8rem;
+      font-size: 0.9rem;
+    }
+    .btn-delete-photo:hover {
+      background-color: #c0392b;
+    }
+    /* Vista previa de imagen */
+    #profilePicPreview {
+      max-width: 200px;
+      margin-top: 10px;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      display: block;
+    }
+    /* RESPONSIVE */
     @media (max-width: 600px) {
       header {
         flex-direction: column;
@@ -161,7 +191,7 @@
       </div>
       <div class="form-group">
         <label for="emailProfile">Correo Electrónico</label>
-        <input type="email" id="emailProfile" name="emailProfile" disabled value="">
+        <input type="email" id="emailProfile" name="emailProfile" disabled>
       </div>
       <div class="form-group">
         <label for="age">Edad</label>
@@ -205,6 +235,8 @@
       <div class="form-group">
         <label for="profilePic">Foto de Perfil</label>
         <input type="file" id="profilePic" name="profilePic" accept="image/*">
+        <!-- Aquí se mostrará la vista previa y botón para borrar foto si existe -->
+        <div id="photoActions"></div>
       </div>
       <button type="submit" class="btn-save">Guardar Cambios</button>
       <button type="button" class="btn-delete" onclick="deleteProfile()">Borrar Perfil</button>
@@ -219,15 +251,17 @@
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Cargar datos del perfil (correo y otros campos) si ya existen
+    // Función para cargar el perfil (si existe) y rellenar el formulario
     async function loadProfile() {
       const { data: { session }, error } = await supabaseClient.auth.getSession();
       if (error) {
         console.error('Error al obtener la sesión:', error);
-      } else if (session && session.user) {
+        return;
+      }
+      if (session && session.user) {
         const user = session.user;
         document.getElementById('emailProfile').value = user.email;
-        // Consultar los datos adicionales del perfil
+        // Consultar datos adicionales en la tabla profiles
         const { data: profileData, error: profileError } = await supabaseClient
           .from('profiles')
           .select('*')
@@ -247,46 +281,60 @@
           document.getElementById('province').value = profileData.province || '';
           document.getElementById('country').value = profileData.country || '';
           document.getElementById('phone').value = profileData.phone || '';
-          // Si existe una foto de perfil, mostrarla como vista previa (opcional)
           if (profileData.profile_pic) {
-            let preview = document.getElementById('profilePicPreview');
-            if (!preview) {
-              preview = document.createElement('img');
-              preview.id = 'profilePicPreview';
-              preview.style.maxWidth = '200px';
-              preview.style.display = 'block';
-              preview.style.marginTop = '10px';
-              const fileInput = document.getElementById('profilePic');
-              fileInput.parentNode.insertBefore(preview, fileInput.nextSibling);
-            }
-            preview.src = profileData.profile_pic;
+            showProfilePicPreview(profileData.profile_pic);
           }
         }
       }
     }
     loadProfile();
 
+    // Función para mostrar la vista previa de la foto y agregar botón para borrar
+    function showProfilePicPreview(url) {
+      let preview = document.getElementById('profilePicPreview');
+      const photoActions = document.getElementById('photoActions');
+      if (!preview) {
+        preview = document.createElement('img');
+        preview.id = 'profilePicPreview';
+        preview.style.maxWidth = '200px';
+        preview.style.display = 'block';
+        preview.style.marginTop = '10px';
+        photoActions.appendChild(preview);
+      }
+      preview.src = url;
+      // Agregar botón para borrar la foto si no existe ya
+      let deleteBtn = document.getElementById('deletePhotoBtn');
+      if (!deleteBtn) {
+        deleteBtn = document.createElement('button');
+        deleteBtn.id = 'deletePhotoBtn';
+        deleteBtn.className = 'btn-delete-photo';
+        deleteBtn.textContent = 'Borrar Foto';
+        deleteBtn.onclick = deleteProfilePic;
+        photoActions.appendChild(deleteBtn);
+      }
+    }
+
+    // Función para borrar la foto de perfil (solo vista previa y limpiar file input)
+    function deleteProfilePic() {
+      const preview = document.getElementById('profilePicPreview');
+      if (preview) { preview.remove(); }
+      const deleteBtn = document.getElementById('deletePhotoBtn');
+      if (deleteBtn) { deleteBtn.remove(); }
+      document.getElementById('profilePic').value = "";
+      // Opcional: podrías establecer una variable para indicar que se debe borrar la foto en la actualización.
+    }
+
     // Manejo del envío del formulario para guardar/actualizar el perfil
     document.getElementById('profile-form').addEventListener('submit', async (e) => {
       e.preventDefault();
-      
-      // Obtener la sesión para tener el userId
-      const { data: { session: userSession }, error: sessionError } = await supabaseClient.auth.getSession();
-      if (sessionError) {
-        console.error('Error al obtener la sesión:', sessionError);
-        alert('Error al obtener la sesión');
+      const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
+      if (sessionError || !session) {
+        alert('Error al obtener la sesión de usuario.');
         return;
       }
-      if (!userSession) {
-        alert('No se encontró sesión de usuario');
-        return;
-      }
-      const userId = userSession.user.id;
-      console.log('User ID obtenido:', userId);
-      
+      const userId = session.user.id;
       // Recopilar datos del formulario
       const fullName = document.getElementById('fullName').value.trim();
-      const email = document.getElementById('emailProfile').value.trim();
       const age = document.getElementById('age').value.trim();
       const gender = document.querySelector('input[name="gender"]:checked')?.value;
       const gameLevel = document.getElementById('gameLevel').value;
@@ -295,35 +343,27 @@
       const country = document.getElementById('country').value.trim();
       const phone = document.getElementById('phone').value.trim();
       const profilePicInput = document.getElementById('profilePic');
-
-      // Subida de imagen (si se seleccionó)
       let profilePicUrl = null;
       if (profilePicInput.files.length > 0) {
         const file = profilePicInput.files[0];
-        // Generar un nombre único usando el userId y el timestamp
         const uniqueFileName = `profilePics/${userId}_${Date.now()}_${file.name}`;
         const { data: uploadData, error: uploadError } = await supabaseClient.storage
           .from('profiles')
           .upload(uniqueFileName, file);
-        console.log('Respuesta de upload:', { uploadData, uploadError });
         if (uploadError) {
-          console.error('Error al subir imagen:', uploadError.message);
-          alert('Error al subir imagen: ' + uploadError.message);
+          alert('Error al subir la imagen: ' + uploadError.message);
           return;
-        } else {
-          const { data: publicUrlData, error: urlError } = supabaseClient.storage
-            .from('profiles')
-            .getPublicUrl(uploadData.path);
-          if (urlError) {
-            console.error('Error al obtener URL pública:', urlError.message);
-            alert('Error al obtener URL pública: ' + urlError.message);
-            return;
-          }
-          profilePicUrl = publicUrlData.publicUrl;
         }
+        const { data: publicUrlData, error: urlError } = supabaseClient.storage
+          .from('profiles')
+          .getPublicUrl(uploadData.path);
+        if (urlError) {
+          alert('Error al obtener URL pública: ' + urlError.message);
+          return;
+        }
+        profilePicUrl = publicUrlData.publicUrl;
       }
-
-      // Intentar actualizar el registro existente
+      // Intentar actualizar el perfil
       let { data, error } = await supabaseClient
         .from('profiles')
         .update({
@@ -338,11 +378,7 @@
           profile_pic: profilePicUrl
         })
         .eq('id', userId);
-      console.log('Respuesta de update:', { data, error });
-      
-      // Si no se actualizó ningún registro (data es vacío), intentamos insertar
       if (!error && (!data || data.length === 0)) {
-        console.log('No se actualizó ningún registro, intentando insertar...');
         ({ data, error } = await supabaseClient
           .from('profiles')
           .insert({
@@ -357,11 +393,8 @@
             phone: phone,
             profile_pic: profilePicUrl
           }));
-        console.log('Respuesta de insert:', { data, error });
       }
-      
       if (error) {
-        console.error('Error al guardar perfil:', error.message);
         alert('Error al guardar perfil: ' + error.message);
       } else {
         alert('Perfil guardado exitosamente');
@@ -382,11 +415,9 @@
         .delete()
         .eq('id', userId);
       if (error) {
-        console.error('Error al borrar perfil:', error.message);
         alert('Error al borrar perfil: ' + error.message);
       } else {
         alert('Perfil borrado exitosamente');
-        // Opcional: redirigir o cerrar sesión
       }
     }
   </script>
