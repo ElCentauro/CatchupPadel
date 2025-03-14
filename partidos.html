@@ -255,7 +255,6 @@
 
     // Variable global para almacenar el ID del partido si ya existe
     let currentMatchId = null;
-
     // Arreglo para almacenar los jugadores que se han unido (solo local)
     let joinedPlayers = [];
 
@@ -471,12 +470,14 @@
     
     // Botón "Unirse al Partido"
     document.getElementById('btn-join').addEventListener('click', async function() {
-      // Obtener el nombre del usuario logueado
+      // Obtener la sesión
       const { data: { session }, error } = await supabaseClient.auth.getSession();
       if (error || !session) {
         alert('Error al obtener la sesión. Por favor, inicia sesión.');
         return;
       }
+      
+      // Obtener el nombre del usuario desde su perfil o correo
       let userName = session.user.email;
       const { data: profileData, error: profileError } = await supabaseClient
         .from('profiles')
@@ -486,13 +487,33 @@
       if (!profileError && profileData && profileData.full_name) {
         userName = profileData.full_name;
       }
-      // Evitar duplicados
+      
+      // Evitar duplicados locales
       if (joinedPlayers.includes(userName)) {
         alert('Ya te has unido al partido.');
         return;
       }
+      
+      // Insertar en la tabla 'participants'
+      if (!currentMatchId) {
+        alert('No se ha creado o cargado el partido aún.');
+        return;
+      }
+      
+      const { data: joinData, error: joinError } = await supabaseClient
+        .from('participants')
+        .insert([{ match_id: currentMatchId, user_id: session.user.id }])
+        .select('*');
+      if (joinError) {
+        console.error('Error al inscribirse en participants:', joinError);
+        alert('Hubo un error al unirse al partido. Revisa la consola para más detalles.');
+        return;
+      }
+      
+      // Actualizar la lista local y el estado de unión
       joinedPlayers.push(userName);
       updateJoinStatus();
+      alert('Te has unido al partido.');
     });
     
     // Actualiza el estado del partido (jugadores que se han unido) y actualiza el campo de completitud
@@ -553,7 +574,6 @@
     async function checkProfile() {
       const profileLink = document.getElementById("profileLink");
       if (!profileLink) {
-        // Si no existe el elemento, no hacemos nada
         console.warn("No se encontró el elemento profileLink en esta página.");
         return;
       }
