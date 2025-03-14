@@ -700,6 +700,7 @@
           id: userId,
           full_name: userName
         };
+        console.log('loggedUser:', loggedUser);
 
         // Actualiza el link de perfil según si existe o no un perfil
         const { data: pData, error: pError } = await supabaseClient
@@ -1099,11 +1100,14 @@
         <strong>Localidad:</strong> ${match.establishments?.locality || 'N/A'} <br>
         <strong>Nivel:</strong> ${match.match_level} | <strong>Parejas:</strong> ${match.team_type}
       `;
+      // Imprimir en consola para verificar que currentMatch.id tiene el valor esperado
+      console.log('currentMatch:', currentMatch);
+      
       // Consultar la tabla 'participants' para obtener los jugadores inscritos
       const { data: participantsData, error } = await supabaseClient
         .from('participants')
         .select('user_id, profiles(full_name)')
-        .eq('match_id', match.id);
+        .eq('match_id', currentMatch.id);
       let joinedCount = 0;
       const playersList = document.getElementById('modalPlayersList');
       playersList.innerHTML = '';
@@ -1169,15 +1173,19 @@
         alert('No hay partido o usuario logueado.');
         return;
       }
+      // Verificar en consola los valores que se van a insertar
+      console.log('Insertando en participants con match_id:', currentMatch.id, 'y user_id:', loggedUser.id);
+      
       const { data, error } = await supabaseClient
         .from('participants')
         .insert([{ match_id: currentMatch.id, user_id: loggedUser.id }])
         .select('*');
       if (error) {
-        console.error('Error al inscribirse:', error.message);
-        alert('Hubo un error al unirse al partido.');
+        console.error('Error al inscribirse:', error);
+        alert('Hubo un error al unirse al partido. Revisa la consola para más detalles.');
         return;
       }
+      console.log('Datos de inscripción:', data);
       alert('Te has unido al partido.');
       openMatchModal(currentMatch);
     }
