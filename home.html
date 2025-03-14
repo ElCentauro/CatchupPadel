@@ -477,12 +477,14 @@
       z-index: 2000;
     }
     .modal-content {
-      background-color: #fff;
-      border-radius: 8px;
+      background: linear-gradient(135deg, #f3f3f3 0%, #e0e0e0 100%);
+      border-radius: 10px;
       max-width: 600px;
       width: 90%;
       padding: 1.5rem;
       position: relative;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      border: 2px solid #ff9500;
     }
     .modal-close {
       position: absolute;
@@ -500,17 +502,43 @@
     }
     .modal-header {
       margin-bottom: 1rem;
+      text-align: center;
+      color: #333;
+    }
+    .modal-header h2 {
+      font-size: 1.8rem;
+      color: #2c3e50;
+      margin-bottom: 0.5rem;
     }
     .modal-body p {
       margin-bottom: 0.75rem;
+      color: #333;
     }
-    .players-list {
+    /* Contenedor para los 4 jugadores */
+    .players-grid {
+      background-color: #f9f9f9;
+      border-radius: 8px;
+      padding: 1rem;
       margin-top: 1rem;
-      border-top: 1px solid #ddd;
-      padding-top: 1rem;
     }
-    .player-item {
+    .player-slot {
+      display: flex;
+      align-items: center;
+      background-color: #fff;
       margin-bottom: 0.5rem;
+      border-left: 5px solid #ff9500;
+      padding: 0.5rem;
+      border-radius: 4px;
+    }
+    .player-slot span {
+      font-weight: 600;
+      margin-right: 0.5rem;
+      color: #2c3e50;
+    }
+    .player-slot p {
+      margin: 0;
+      font-weight: 500;
+      color: #555;
     }
     /* RESPONSIVE */
     @media (max-width: 768px) {
@@ -532,6 +560,9 @@
       }
       .suggestions-box {
         width: 90%;
+      }
+      .modal-content {
+        max-width: 95%;
       }
     }
   </style>
@@ -649,9 +680,10 @@
         <p id="modalMatchInfo">Información del partido...</p>
         <p><strong>Cuenta Regresiva: </strong><span id="modalCountdown">Cargando...</span></p>
         <p id="modalPlayersStatus">Faltan X jugadores de Y</p>
-        <div class="players-list" id="modalPlayersList">
-          <!-- Se listarán los participantes consultando la tabla participants -->
-        </div>
+        
+        <!-- Contenedor para mostrar los 4 jugadores -->
+        <div class="players-grid" id="modalPlayersList"></div>
+        
         <button class="btn-join-partido" id="modalJoinBtn" onclick="joinToMatchModal()">Unirse</button>
       </div>
     </div>
@@ -924,7 +956,7 @@
               <p>Cantidad de canchas: ${item.court_count || 'N/A'}</p>
             `;
             card.ondblclick = () => {
-              window.location.href = `establecimiento.html?canchaId=${item.id}`;
+              window.location.href = \`establecimiento.html?canchaId=\${item.id}\`;
             };
             canchaResults.appendChild(card);
           });
@@ -949,7 +981,7 @@
       const { data, error } = await supabaseClient
         .from('profiles')
         .select('full_name')
-        .ilike('full_name', `%${val}%`)
+        .ilike('full_name', \`%\${val}%\`)
         .limit(5);
       if (error) {
         console.error('Error buscando sugerencias:', error.message);
@@ -959,7 +991,7 @@
         nameSuggestions.innerHTML = '<div class="suggestion-item">No hay coincidencias</div>';
         nameSuggestions.style.display = 'block';
       } else {
-        nameSuggestions.innerHTML = data.map(item => `<div class="suggestion-item">${item.full_name}</div>`).join('');
+        nameSuggestions.innerHTML = data.map(item => \`<div class="suggestion-item">\${item.full_name}</div>\`).join('');
         nameSuggestions.style.display = 'block';
       }
     });
@@ -980,7 +1012,7 @@
       const { data, error } = await supabaseClient
         .from('profiles')
         .select('locality')
-        .ilike('locality', `%${val}%`)
+        .ilike('locality', \`%\${val}%\`)
         .limit(5);
       if (error) {
         console.error('Error buscando localidad:', error.message);
@@ -991,7 +1023,7 @@
         localitySuggestions.style.display = 'block';
       } else {
         const uniqueLocalities = [...new Set(data.map(item => item.locality))];
-        localitySuggestions.innerHTML = uniqueLocalities.map(loc => `<div class="suggestion-item">${loc}</div>`).join('');
+        localitySuggestions.innerHTML = uniqueLocalities.map(loc => \`<div class="suggestion-item">\${loc}</div>\`).join('');
         localitySuggestions.style.display = 'block';
       }
     });
@@ -1010,10 +1042,10 @@
       searchResults.innerHTML = '';
       let query = supabaseClient.from('profiles').select('*');
       if (searchName) {
-        query = query.ilike('full_name', `%${searchName}%`);
+        query = query.ilike('full_name', \`%\${searchName}%\`);
       }
       if (searchLocality) {
-        query = query.ilike('locality', `%${searchLocality}%`);
+        query = query.ilike('locality', \`%\${searchLocality}%\`);
       }
       if (searchLevel) {
         query = query.eq('game_level', searchLevel);
@@ -1021,22 +1053,22 @@
       const { data, error } = await query;
       if (error) {
         console.error('Error buscando perfiles:', error.message);
-        searchResults.innerHTML = `<p style="color:red;">Error: ${error.message}</p>`;
+        searchResults.innerHTML = \`<p style="color:red;">Error: \${error.message}</p>\`;
       } else {
         if (!data || data.length === 0) {
-          searchResults.innerHTML = `<p>No se encontraron perfiles.</p>`;
+          searchResults.innerHTML = \`<p>No se encontraron perfiles.</p>\`;
         } else {
           data.forEach(profile => {
             const card = document.createElement('div');
             card.className = 'profile-card';
-            card.innerHTML = `
-              ${profile.profile_pic ? `<img src="${profile.profile_pic}" alt="Foto de ${profile.full_name}">` : ''}
-              <h3>${profile.full_name}</h3>
-              <p>Nivel: ${profile.game_level || 'N/A'} | Edad: ${profile.age || 'N/A'}</p>
-              <p>${profile.locality || ''}</p>
-            `;
+            card.innerHTML = \`
+              \${profile.profile_pic ? \`<img src="\${profile.profile_pic}" alt="Foto de \${profile.full_name}">\` : ''}
+              <h3>\${profile.full_name}</h3>
+              <p>Nivel: \${profile.game_level || 'N/A'} | Edad: \${profile.age || 'N/A'}</p>
+              <p>\${profile.locality || ''}</p>
+            \`;
             card.ondblclick = () => {
-              window.location.href = `perfil.html?userId=${profile.id}&readonly=1`;
+              window.location.href = \`perfil.html?userId=\${profile.id}&readonly=1\`;
             };
             searchResults.appendChild(card);
           });
@@ -1058,7 +1090,7 @@
         .eq('completitud', 'Parcial')
         .gte('match_date', todayISO);
       if (localityFilter) {
-        query = query.ilike('establishments.locality', `%${localityFilter}%`);
+        query = query.ilike('establishments.locality', \`%\${localityFilter}%\`);
       }
       if (canchaFilter) {
         query = query.eq('cancha_id', canchaFilter);
@@ -1066,23 +1098,23 @@
       const { data, error } = await query;
       if (error) {
         console.error('Error buscando partidos:', error.message);
-        partidosResults.innerHTML = `<p style="color:red;">Error: ${error.message}</p>`;
+        partidosResults.innerHTML = \`<p style="color:red;">Error: \${error.message}</p>\`;
       } else {
         if (!data || data.length === 0) {
-          partidosResults.innerHTML = `<p>No se encontraron partidos.</p>`;
+          partidosResults.innerHTML = \`<p>No se encontraron partidos.</p>\`;
         } else {
           data.forEach(partido => {
             const card = document.createElement('div');
             card.className = 'partido-card';
-            card.innerHTML = `
-              <h3>${partido.match_name}</h3>
-              <p>Fecha: ${partido.match_date}</p>
-              <p>Hora: ${partido.start_time} - ${partido.end_time}</p>
-              <p>Cancha: ${partido.establishments?.name || ''}</p>
-              <p>Localidad: ${partido.establishments?.locality || ''}</p>
-              <p>Nivel: ${partido.match_level} | Parejas: ${partido.team_type}</p>
-              <p>Estado: ${partido.completitud}</p>
-            `;
+            card.innerHTML = \`
+              <h3>\${partido.match_name}</h3>
+              <p>Fecha: \${partido.match_date}</p>
+              <p>Hora: \${partido.start_time} - \${partido.end_time}</p>
+              <p>Cancha: \${partido.establishments?.name || ''}</p>
+              <p>Localidad: \${partido.establishments?.locality || ''}</p>
+              <p>Nivel: \${partido.match_level} | Parejas: \${partido.team_type}</p>
+              <p>Estado: \${partido.completitud}</p>
+            \`;
             const viewBtn = document.createElement('button');
             viewBtn.className = 'btn-view-partido';
             viewBtn.textContent = 'Ver el Partido';
@@ -1098,13 +1130,13 @@
     async function openMatchModal(match) {
       currentMatch = match;
       document.getElementById('modalMatchName').textContent = match.match_name;
-      document.getElementById('modalMatchInfo').innerHTML = `
-        <strong>Fecha:</strong> ${match.match_date} <br>
-        <strong>Hora:</strong> ${match.start_time} - ${match.end_time} <br>
-        <strong>Cancha:</strong> ${match.establishments?.name || 'N/A'} <br>
-        <strong>Localidad:</strong> ${match.establishments?.locality || 'N/A'} <br>
-        <strong>Nivel:</strong> ${match.match_level} | <strong>Parejas:</strong> ${match.team_type}
-      `;
+      document.getElementById('modalMatchInfo').innerHTML = \`
+        <strong>Fecha:</strong> \${match.match_date} <br>
+        <strong>Hora:</strong> \${match.start_time} - \${match.end_time} <br>
+        <strong>Cancha:</strong> \${match.establishments?.name || 'N/A'} <br>
+        <strong>Localidad:</strong> \${match.establishments?.locality || 'N/A'} <br>
+        <strong>Nivel:</strong> \${match.match_level} | <strong>Parejas:</strong> \${match.team_type}
+      \`;
       console.log('currentMatch:', currentMatch);
       
       // Consultar la tabla 'participants' para obtener los jugadores inscritos
@@ -1112,6 +1144,7 @@
         .from('participants')
         .select('user_id, profiles(full_name)')
         .eq('match_id', currentMatch.id);
+      
       let joinedCount = 0;
       const playersList = document.getElementById('modalPlayersList');
       playersList.innerHTML = '';
@@ -1120,36 +1153,53 @@
         playersList.innerHTML = '<p>No se pudo cargar la lista de jugadores.</p>';
       } else {
         joinedCount = participantsData.length;
-        if (joinedCount === 0) {
-          playersList.innerHTML = '<p>No hay jugadores unidos aún.</p>';
-        } else {
-          participantsData.forEach(row => {
-            const p = document.createElement('p');
-            p.className = 'player-item';
-            p.textContent = row.profiles?.full_name || 'Jugador sin nombre';
-            playersList.appendChild(p);
-          });
-        }
+        
+        // Suponiendo que total_players es 4 (o lo que haya en match.total_players)
+        const totalPlayers = match.total_players || 4;
+        const playerSlots = new Array(totalPlayers).fill(null);
+
+        // Rellenar con los nombres
+        participantsData.forEach((row, idx) => {
+          if (idx < totalPlayers) {
+            playerSlots[idx] = row.profiles?.full_name || 'Jugador sin nombre';
+          }
+        });
+
+        // Mostrar cada slot como "Jugador 1", "Jugador 2", etc.
+        playerSlots.forEach((slotName, i) => {
+          const slotDiv = document.createElement('div');
+          slotDiv.className = 'player-slot';
+          const label = \`Jugador \${i + 1}:\`;
+          slotDiv.innerHTML = \`
+            <span>\${label}</span>
+            <p>\${slotName ? slotName : 'Slot Libre'}</p>
+          \`;
+          playersList.appendChild(slotDiv);
+        });
+        
+        // Actualiza el contador de cuántos faltan
+        const missing = totalPlayers - joinedCount;
+        document.getElementById('modalPlayersStatus').textContent = \`Faltan \${missing} jugadores de \${totalPlayers}\`;
       }
-      // Calcula cuántos jugadores faltan (suponiendo que total_players está en partidos)
-      const totalPlayers = match.total_players || 4;
-      const missing = totalPlayers - joinedCount;
-      document.getElementById('modalPlayersStatus').textContent = `Faltan ${missing} jugadores de ${totalPlayers}`;
+
       // Muestra botón "Unirse" solo si el usuario aún no está inscrito
       if (!loggedUser) {
         document.getElementById('modalJoinBtn').style.display = 'block';
       } else {
-        const alreadyJoined = participantsData.some(row => row.user_id === loggedUser.id);
+        const alreadyJoined = participantsData?.some(row => row.user_id === loggedUser.id);
         document.getElementById('modalJoinBtn').style.display = alreadyJoined ? 'none' : 'block';
       }
+
       // Inicia la cuenta regresiva
       startCountdown(match.match_date, match.start_time);
       document.getElementById('matchModal').style.display = 'flex';
     }
+
     function closeMatchModal() {
       document.getElementById('matchModal').style.display = 'none';
       clearInterval(countdownInterval);
     }
+
     // Cuenta regresiva: toma matchDate (YYYY-MM-DD) y matchStartTime (HH:MM:SS o HH:MM)
     function startCountdown(matchDate, matchStartTime) {
       const [year, month, day] = matchDate.split('-');
@@ -1158,6 +1208,7 @@
       let minute = parseInt(timeParts[1]) || 0;
       let second = parseInt(timeParts[2]) || 0;
       const targetTime = new Date(year, month - 1, day, hour, minute, second);
+      
       function updateCountdown() {
         const now = new Date();
         let diff = targetTime - now;
@@ -1165,12 +1216,13 @@
         const hours = Math.floor(diff / (1000 * 60 * 60));
         const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-        document.getElementById('modalCountdown').textContent = `${hours}h ${minutes}m ${seconds}s`;
+        document.getElementById('modalCountdown').textContent = \`\${hours}h \${minutes}m \${seconds}s\`;
       }
       updateCountdown();
       clearInterval(countdownInterval);
       countdownInterval = setInterval(updateCountdown, 1000);
     }
+
     // Función para inscribirse en el partido (inserta en la tabla 'participants')
     async function joinToMatchModal() {
       if (!currentMatch || !loggedUser) {
