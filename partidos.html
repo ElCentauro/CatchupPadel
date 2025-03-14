@@ -35,6 +35,7 @@
       text-transform: uppercase;
       font-weight: 500;
       transition: color 0.3s;
+      text-decoration: none;
     }
     header nav a:hover { color: #e07e00; }
     /* Contenedor principal */
@@ -62,6 +63,7 @@
     input[type="text"],
     input[type="date"],
     input[type="time"],
+    input[type="number"],
     select {
       width: 100%;
       padding: 0.75rem;
@@ -109,7 +111,7 @@
   <header>
     <div class="logo">Catch Up Padel</div>
     <nav>
-      <a href="home.html">Home</a>
+      <a href="home.html" id="profileLink">Home</a>
       <a href="perfil.html">Mi Perfil</a>
       <a href="partidos.html">Partidos</a>
     </nav>
@@ -133,6 +135,11 @@
         <div class="form-group">
           <label for="startTime">Hora de Inicio</label>
           <input type="time" id="startTime" required>
+        </div>
+        <!-- Nueva etiqueta Duración (minutos) -->
+        <div class="form-group">
+          <label for="durationMinutes">Duración (minutos)</label>
+          <input type="number" id="durationMinutes" placeholder="Ej. 90">
         </div>
         <div class="form-group">
           <label for="endTime">Hora de Fin</label>
@@ -248,6 +255,9 @@
 
     // Variable global para almacenar el ID del partido si ya existe
     let currentMatchId = null;
+
+    // Arreglo para almacenar los jugadores que se han unido (solo local)
+    let joinedPlayers = [];
 
     // Función para generar un ID único de 5 dígitos para el partido
     function generatePartyId() {
@@ -459,9 +469,6 @@
       }
     });
     
-    // Arreglo para almacenar los jugadores que se han unido
-    let joinedPlayers = [];
-    
     // Botón "Unirse al Partido"
     document.getElementById('btn-join').addEventListener('click', async function() {
       // Obtener el nombre del usuario logueado
@@ -526,8 +533,30 @@
       }
     }
     
-    // Llamar a checkProfile para actualizar el botón de perfil en Home (si se usa)
+    // Evento para calcular automáticamente la hora de fin al cambiar la duración
+    document.getElementById('durationMinutes').addEventListener('input', function() {
+      const startTime = document.getElementById('startTime').value; // "HH:MM"
+      const minutes = parseInt(this.value, 10);
+      if (startTime && minutes > 0) {
+        const [sh, sm] = startTime.split(':').map(Number);
+        let endH = sh;
+        let endM = sm + minutes;
+        endH += Math.floor(endM / 60);
+        endM = endM % 60;
+        // Formatear a HH:MM
+        const endTime = String(endH).padStart(2, '0') + ':' + String(endM).padStart(2, '0');
+        document.getElementById('endTime').value = endTime;
+      }
+    });
+
+    // Ajuste en checkProfile() para evitar error si no existe "profileLink" en esta página
     async function checkProfile() {
+      const profileLink = document.getElementById("profileLink");
+      if (!profileLink) {
+        // Si no existe el elemento, no hacemos nada
+        console.warn("No se encontró el elemento profileLink en esta página.");
+        return;
+      }
       const { data: { session } } = await supabaseClient.auth.getSession();
       if (session && session.user) {
         const userId = session.user.id;
@@ -540,9 +569,9 @@
           return;
         }
         if (data && data.length > 0) {
-          document.getElementById("profileLink").textContent = "Modificar Perfil";
+          profileLink.textContent = "Modificar Perfil";
         } else {
-          document.getElementById("profileLink").textContent = "Crear Perfil";
+          profileLink.textContent = "Crear Perfil";
         }
       }
     }
