@@ -42,6 +42,7 @@
       letter-spacing: 1px;
       transition: background-color 0.3s, color 0.3s;
       cursor: pointer;
+      text-decoration: none;
     }
     .menu-item:hover {
       background-color: #ff9500;
@@ -700,7 +701,7 @@
           full_name: userName
         };
 
-        // Actualiza el link de perfil
+        // Actualiza el link de perfil según si existe o no un perfil
         const { data: pData, error: pError } = await supabaseClient
           .from('profiles')
           .select('*')
@@ -1098,7 +1099,7 @@
         <strong>Localidad:</strong> ${match.establishments?.locality || 'N/A'} <br>
         <strong>Nivel:</strong> ${match.match_level} | <strong>Parejas:</strong> ${match.team_type}
       `;
-      // Consultar la tabla participants para obtener los jugadores inscritos
+      // Consultar la tabla 'participants' para obtener los jugadores inscritos
       const { data: participantsData, error } = await supabaseClient
         .from('participants')
         .select('user_id, profiles(full_name)')
@@ -1162,7 +1163,7 @@
       clearInterval(countdownInterval);
       countdownInterval = setInterval(updateCountdown, 1000);
     }
-    // Función para inscribirse en el partido (inserta en la tabla participants)
+    // Función para inscribirse en el partido (inserta en la tabla 'participants')
     async function joinToMatchModal() {
       if (!currentMatch || !loggedUser) {
         alert('No hay partido o usuario logueado.');
