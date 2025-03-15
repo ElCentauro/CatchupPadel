@@ -400,7 +400,7 @@
       }
       // Ajusta la URL para que apunte a tu reset-password.html en GitHub Pages
       const { data, error } = await supabaseClient.auth.resetPasswordForEmail(email, {
-        redirectTo: 'https://ElCentauro.github.io/CatchupPadel/reset-password.html'
+        redirectTo: 'https://elcentauro.github.io/CatchupPadel/reset-password.html'
       });
       if (error) {
         messageDiv.textContent = 'Error: ' + error.message;
