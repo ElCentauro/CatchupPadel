@@ -223,6 +223,17 @@
       font-size: 15px;
       min-height: 20px;
     }
+    /* Estilo para el enlace de "Olvidé mi contraseña" */
+    #forgot-password-container {
+      margin-top: 10px;
+      font-size: 14px;
+      text-align: center;
+    }
+    #forgot-password-container a {
+      color: #f1c40f;
+      font-weight: 600;
+      cursor: pointer;
+    }
 
     /* RESPONSIVE */
     @media (max-width: 768px) {
@@ -277,6 +288,10 @@
         <input type="password" id="password" placeholder="Contraseña" required>
         <button type="submit" id="submit-button">Registrarse</button>
       </form>
+      <!-- Enlace para recuperar contraseña (solo en login) -->
+      <div id="forgot-password-container" style="display: none;">
+        <a href="#" onclick="forgotPassword()">¿Olvidaste tu contraseña?</a>
+      </div>
       <div class="toggle-link">
         <span id="toggle-signup">¿Ya tienes cuenta? <a id="signin-link" href="#" onclick="setMode('login')">Inicia sesión</a></span>
         <span id="toggle-signin" style="display: none;">¿No tienes cuenta? <a id="signup-link" href="#" onclick="setMode('signup')">Regístrate</a></span>
@@ -290,7 +305,7 @@
   <script>
     // CONFIGURACIÓN DE SUPABASE: Reemplaza con tus datos reales
     const SUPABASE_URL = 'https://idlvxinjfbsujpvxncbr.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig';
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig";
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     // Mostrar/Ocultar el overlay de autenticación
@@ -318,12 +333,16 @@
         submitButton.textContent = 'Iniciar sesión';
         document.getElementById('toggle-signup').style.display = 'none';
         document.getElementById('toggle-signin').style.display = 'inline';
+        // Mostrar el enlace para recuperar contraseña en modo login
+        document.getElementById('forgot-password-container').style.display = 'block';
         messageDiv.textContent = '';
       } else {
         formTitle.textContent = 'Registro';
         submitButton.textContent = 'Registrarse';
         document.getElementById('toggle-signin').style.display = 'none';
         document.getElementById('toggle-signup').style.display = 'inline';
+        // Ocultar el enlace de recuperar contraseña en modo registro
+        document.getElementById('forgot-password-container').style.display = 'none';
         messageDiv.textContent = '';
       }
     }
@@ -364,12 +383,33 @@
           messageDiv.textContent = 'Inicio de sesión exitoso. Redirigiendo...';
           messageDiv.style.color = '#27ae60';
           setTimeout(() => {
-            // Redirige a la página interna (home.html)
+            // Redirige a la página interna (home.html) o la que tú desees
             window.location.href = "home.html";
           }, 1000);
         }
       }
     });
+
+    // Función para recuperar la contraseña
+    async function forgotPassword() {
+      const email = emailInput.value.trim();
+      if (!email) {
+        messageDiv.textContent = 'Por favor, ingresa tu correo electrónico para restablecer la contraseña.';
+        messageDiv.style.color = '#ff4d4d';
+        return;
+      }
+      // Ajusta la URL para que apunte a tu reset-password.html en GitHub Pages
+      const { data, error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+        redirectTo: 'https://ElCentauro.github.io/CatchupPadel/reset-password.html'
+      });
+      if (error) {
+        messageDiv.textContent = 'Error: ' + error.message;
+        messageDiv.style.color = '#ff4d4d';
+      } else {
+        messageDiv.textContent = 'Revisa tu correo electrónico para restablecer tu contraseña.';
+        messageDiv.style.color = '#27ae60';
+      }
+    }
   </script>
 </body>
 </html>
