@@ -8,70 +8,19 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
     /* RESET Y ESTILOS GLOBALES */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      font-family: 'Poppins', sans-serif;
-      background-color: #f0f2f5;
-      color: #333;
-      line-height: 1.6;
-    }
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Poppins', sans-serif; background-color: #f0f2f5; color: #333; line-height: 1.6; }
+    a { text-decoration: none; color: inherit; }
     /* CABECERA */
-    header {
-      background-color: #fff;
-      padding: 1rem 2rem;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    header .logo {
-      font-size: 1.8rem;
-      font-weight: 600;
-      color: #2c3e50;
-    }
-    header nav a {
-      font-size: 1rem;
-      color: #ff9500;
-      margin-left: 1rem;
-      text-transform: uppercase;
-      font-weight: 500;
-    }
+    header { background-color: #fff; padding: 1rem 2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; }
+    header .logo { font-size: 1.8rem; font-weight: 600; color: #2c3e50; }
+    header nav a { font-size: 1rem; color: #ff9500; margin-left: 1rem; text-transform: uppercase; font-weight: 500; }
     /* CONTAINER DEL FORMULARIO */
-    .container {
-      max-width: 800px;
-      margin: 2rem auto;
-      background-color: #fff;
-      padding: 2rem;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    h1 {
-      text-align: center;
-      margin-bottom: 1.5rem;
-      color: #2c3e50;
-    }
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 1.2rem;
-    }
-    .form-group {
-      display: flex;
-      flex-direction: column;
-    }
-    label {
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-      color: #2c3e50;
-    }
+    .container { max-width: 800px; margin: 2rem auto; background-color: #fff; padding: 2rem; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    h1 { text-align: center; margin-bottom: 1.5rem; color: #2c3e50; }
+    form { display: flex; flex-direction: column; gap: 1.2rem; }
+    .form-group { display: flex; flex-direction: column; }
+    label { font-weight: 600; margin-bottom: 0.5rem; color: #2c3e50; }
     input[type="text"],
     input[type="email"],
     input[type="number"],
@@ -88,89 +37,26 @@
     input[type="email"]:focus,
     input[type="number"]:focus,
     input[type="tel"]:focus,
-    select:focus {
-      border-color: #ff9500;
-      outline: none;
-    }
-    input[disabled] {
-      background-color: #e9ecef;
-    }
-    input[type="file"] {
-      padding: 0.5rem 0;
-    }
-    .radio-group {
-      display: flex;
-      gap: 1rem;
-      align-items: center;
-    }
-    .radio-group label {
-      font-weight: 400;
-      margin-right: 1rem;
-    }
-    .phone-group {
-      display: flex;
-      gap: 0.5rem;
-      align-items: center;
-    }
-    .phone-prefix {
-      display: flex;
-      align-items: center;
-      padding: 0.75rem;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      background-color: #e9ecef;
-      font-size: 1rem;
-    }
-    button {
-      padding: 0.75rem;
-      border: none;
-      border-radius: 5px;
-      font-size: 1rem;
-      font-weight: 600;
-      color: #fff;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-    .btn-save {
-      background-color: #ff9500;
-    }
-    .btn-save:hover {
-      background-color: #e07e00;
-    }
-    .btn-delete {
-      background-color: #e74c3c;
-      margin-top: 1rem;
-    }
-    .btn-delete:hover {
-      background-color: #c0392b;
-    }
-    .btn-delete-photo {
-      background-color: #e74c3c;
-      margin-top: 0.5rem;
-      padding: 0.4rem 0.8rem;
-      font-size: 0.9rem;
-    }
-    .btn-delete-photo:hover {
-      background-color: #c0392b;
-    }
+    select:focus { border-color: #ff9500; outline: none; }
+    input[disabled] { background-color: #e9ecef; }
+    input[type="file"] { padding: 0.5rem 0; }
+    .radio-group { display: flex; gap: 1rem; align-items: center; }
+    .radio-group label { font-weight: 400; margin-right: 1rem; }
+    .phone-group { display: flex; gap: 0.5rem; align-items: center; }
+    .phone-prefix { display: flex; align-items: center; padding: 0.75rem; border: 1px solid #ddd; border-radius: 5px; background-color: #e9ecef; font-size: 1rem; }
+    button { padding: 0.75rem; border: none; border-radius: 5px; font-size: 1rem; font-weight: 600; color: #fff; cursor: pointer; transition: background-color 0.3s; }
+    .btn-save { background-color: #ff9500; }
+    .btn-save:hover { background-color: #e07e00; }
+    .btn-delete { background-color: #e74c3c; margin-top: 1rem; }
+    .btn-delete:hover { background-color: #c0392b; }
+    .btn-delete-photo { background-color: #e74c3c; margin-top: 0.5rem; padding: 0.4rem 0.8rem; font-size: 0.9rem; }
+    .btn-delete-photo:hover { background-color: #c0392b; }
     /* Vista previa de imagen */
-    #profilePicPreview {
-      max-width: 200px;
-      margin-top: 10px;
-      border-radius: 5px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      display: block;
-    }
+    #profilePicPreview { max-width: 200px; display: block; margin-top: 10px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
     /* RESPONSIVE */
     @media (max-width: 600px) {
-      header {
-        flex-direction: column;
-        text-align: center;
-      }
-      .container {
-        margin: 1rem;
-        padding: 1rem;
-      }
+      header { flex-direction: column; text-align: center; }
+      .container { margin: 1rem; padding: 1rem; }
     }
   </style>
 </head>
@@ -235,7 +121,6 @@
       <div class="form-group">
         <label for="profilePic">Foto de Perfil</label>
         <input type="file" id="profilePic" name="profilePic" accept="image/*">
-        <!-- Aquí se mostrará la vista previa y botón para borrar foto si existe -->
         <div id="photoActions"></div>
       </div>
       <button type="submit" class="btn-save">Guardar Cambios</button>
@@ -243,56 +128,45 @@
     </form>
   </div>
 
-  <!-- SUPABASE -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <script>
-    // Configuración de Supabase con tus credenciales reales
     const SUPABASE_URL = 'https://idlvxinjfbsujpvxncbr.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Función para cargar el perfil (si existe) y rellenar el formulario
     async function loadProfile() {
       const { data: { session }, error } = await supabaseClient.auth.getSession();
-      if (error) {
-        console.error('Error al obtener la sesión:', error);
-        return;
-      }
+      if (error) { console.error('Error al obtener la sesión:', error); return; }
       if (session && session.user) {
         const user = session.user;
         document.getElementById('emailProfile').value = user.email;
-        // Consultar datos adicionales en la tabla profiles
         const { data: profileData, error: profileError } = await supabaseClient
           .from('profiles')
           .select('*')
           .eq('id', user.id)
           .single();
-        if (profileError) {
-          console.error('Error al obtener el perfil:', profileError.message);
-        } else if (profileData) {
+        if (profileError) { console.error('Error al obtener el perfil:', profileError.message); }
+        else if (profileData) {
           document.getElementById('fullName').value = profileData.full_name || '';
           document.getElementById('age').value = profileData.age || '';
           if (profileData.gender) {
             const genderRadio = document.querySelector(`input[name="gender"][value="${profileData.gender}"]`);
-            if (genderRadio) { genderRadio.checked = true; }
+            if (genderRadio) genderRadio.checked = true;
           }
           document.getElementById('gameLevel').value = profileData.game_level || '';
           document.getElementById('locality').value = profileData.locality || '';
           document.getElementById('province').value = profileData.province || '';
           document.getElementById('country').value = profileData.country || '';
           document.getElementById('phone').value = profileData.phone || '';
-          if (profileData.profile_pic) {
-            showProfilePicPreview(profileData.profile_pic);
-          }
+          if (profileData.profile_pic) { showProfilePicPreview(profileData.profile_pic); }
         }
       }
     }
     loadProfile();
 
-    // Función para mostrar la vista previa de la foto y agregar botón para borrar
     function showProfilePicPreview(url) {
-      let preview = document.getElementById('profilePicPreview');
       const photoActions = document.getElementById('photoActions');
+      let preview = document.getElementById('profilePicPreview');
       if (!preview) {
         preview = document.createElement('img');
         preview.id = 'profilePicPreview';
@@ -302,7 +176,6 @@
         photoActions.appendChild(preview);
       }
       preview.src = url;
-      // Agregar botón para borrar la foto si no existe ya
       let deleteBtn = document.getElementById('deletePhotoBtn');
       if (!deleteBtn) {
         deleteBtn = document.createElement('button');
@@ -314,17 +187,15 @@
       }
     }
 
-    // Función para borrar la foto de perfil (solo vista previa y limpiar file input)
     function deleteProfilePic() {
       const preview = document.getElementById('profilePicPreview');
-      if (preview) { preview.remove(); }
+      if (preview) preview.remove();
       const deleteBtn = document.getElementById('deletePhotoBtn');
-      if (deleteBtn) { deleteBtn.remove(); }
+      if (deleteBtn) deleteBtn.remove();
       document.getElementById('profilePic').value = "";
-      // Opcional: podrías establecer una variable para indicar que se debe borrar la foto en la actualización.
+      // Opcional: se podría marcar una variable para borrar la foto en el update
     }
 
-    // Manejo del envío del formulario para guardar/actualizar el perfil
     document.getElementById('profile-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
@@ -333,7 +204,6 @@
         return;
       }
       const userId = session.user.id;
-      // Recopilar datos del formulario
       const fullName = document.getElementById('fullName').value.trim();
       const age = document.getElementById('age').value.trim();
       const gender = document.querySelector('input[name="gender"]:checked')?.value;
@@ -363,7 +233,6 @@
         }
         profilePicUrl = publicUrlData.publicUrl;
       }
-      // Intentar actualizar el perfil
       let { data, error } = await supabaseClient
         .from('profiles')
         .update({
@@ -401,7 +270,6 @@
       }
     });
 
-    // Función para borrar el perfil
     async function deleteProfile() {
       if (!confirm('¿Estás seguro de que deseas borrar tu perfil? Esta acción no se puede deshacer.')) return;
       const { data: { session } } = await supabaseClient.auth.getSession();
@@ -418,6 +286,7 @@
         alert('Error al borrar perfil: ' + error.message);
       } else {
         alert('Perfil borrado exitosamente');
+        // Opcional: cerrar sesión o redirigir
       }
     }
   </script>
