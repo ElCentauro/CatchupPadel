@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Catch Up Padel - Mi Perfil</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Fuente moderna -->
+  <!-- Fuente Moderna -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
     /* RESET Y ESTILOS GLOBALES */
@@ -23,16 +23,19 @@
       text-decoration: none;
       color: inherit;
     }
+
     /* CABECERA */
     header {
-      background-color: #fff;
+      background-color: #d0ffd0; /* Verde flúor claro */
       padding: 1rem 2rem;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
     header .logo {
+      flex: 1;
+      text-align: center;
       font-size: 1.8rem;
       font-weight: 600;
       color: #2c3e50;
@@ -40,43 +43,59 @@
     header nav a {
       font-size: 1rem;
       color: #ff9500;
-      margin-left: 1rem;
       text-transform: uppercase;
       font-weight: 500;
     }
-    /* CONTAINER DEL FORMULARIO */
+
+    /* CONTENEDOR DEL FORMULARIO */
     .container {
       max-width: 800px;
       margin: 2rem auto;
-      background-color: #fff;
+      background-color: #FFF2E0; /* Naranja suave */
       padding: 2rem;
       border-radius: 10px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
-    h1 {
-      text-align: center;
+    /* Encabezado del formulario (fondo gris claro) */
+    .form-header {
+      background-color: #e9ecef; /* Gris claro */
+      padding: 1rem;
+      border-radius: 8px;
       margin-bottom: 1.5rem;
-      color: #2c3e50;
+      text-align: center;
     }
-    form {
+    .form-header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #2c3e50;
+      margin: 0;
+    }
+
+    /* GRID DEL FORMULARIO: Dos columnas en pantallas grandes */
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+    .form-section {
       display: flex;
       flex-direction: column;
-      gap: 1.2rem;
+      gap: 1rem;
     }
     .form-group {
       display: flex;
       flex-direction: column;
     }
-    label {
+    .form-group label {
       font-weight: 600;
       margin-bottom: 0.5rem;
       color: #2c3e50;
     }
-    input[type="text"],
-    input[type="email"],
-    input[type="number"],
-    input[type="tel"],
-    select {
+    .form-group input[type="text"],
+    .form-group input[type="email"],
+    .form-group input[type="number"],
+    .form-group input[type="tel"],
+    .form-group select {
       padding: 0.75rem;
       border: 1px solid #ddd;
       border-radius: 5px;
@@ -84,11 +103,8 @@
       width: 100%;
       transition: border-color 0.3s;
     }
-    input[type="text"]:focus,
-    input[type="email"]:focus,
-    input[type="number"]:focus,
-    input[type="tel"]:focus,
-    select:focus {
+    .form-group input:focus,
+    .form-group select:focus {
       border-color: #ff9500;
       outline: none;
     }
@@ -98,6 +114,7 @@
     input[type="file"] {
       padding: 0.5rem 0;
     }
+    /* Radio group (Sexo) */
     .radio-group {
       display: flex;
       gap: 1rem;
@@ -107,6 +124,7 @@
       font-weight: 400;
       margin-right: 1rem;
     }
+    /* Teléfono con prefijo */
     .phone-group {
       display: flex;
       gap: 0.5rem;
@@ -121,6 +139,48 @@
       background-color: #e9ecef;
       font-size: 1rem;
     }
+
+    /* Sección para la foto de perfil */
+    .photo-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      border-left: 1px solid #ddd;
+      padding-left: 2rem;
+    }
+    .photo-section h2 {
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+      color: #2c3e50;
+      align-self: flex-start;
+    }
+    .photo-section p {
+      font-size: 0.95rem;
+      color: #555;
+      margin-bottom: 1rem;
+      align-self: flex-start;
+    }
+    #profilePic {
+      margin-bottom: 1rem;
+    }
+    #photoActions {
+      width: 100%;
+    }
+    #profilePicPreview {
+      max-width: 100%;
+      display: block;
+      margin-top: 10px;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    /* Botones */
+    .buttons-row {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
     button {
       padding: 0.75rem;
       border: none;
@@ -133,13 +193,14 @@
     }
     .btn-save {
       background-color: #ff9500;
+      flex: 1;
     }
     .btn-save:hover {
       background-color: #e07e00;
     }
     .btn-delete {
       background-color: #e74c3c;
-      margin-top: 1rem;
+      width: 150px;
     }
     .btn-delete:hover {
       background-color: #c0392b;
@@ -153,19 +214,24 @@
     .btn-delete-photo:hover {
       background-color: #c0392b;
     }
-    /* Vista previa de imagen */
-    #profilePicPreview {
-      max-width: 200px;
-      display: block;
-      margin-top: 10px;
-      border-radius: 5px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+    /* RESPONSIVE: Para pantallas menores a 800px, se usa una sola columna */
+    @media (max-width: 800px) {
+      .profile-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      .photo-section {
+        border-left: none;
+        padding-left: 0;
+      }
     }
-    /* RESPONSIVE */
     @media (max-width: 600px) {
       header {
         flex-direction: column;
-        text-align: center;
+      }
+      header .logo {
+        margin-bottom: 1rem;
       }
       .container {
         margin: 1rem;
@@ -175,73 +241,92 @@
   </style>
 </head>
 <body>
+  <!-- CABECERA -->
   <header>
+    <!-- Título centrado -->
     <div class="logo">Catch Up Padel</div>
+    <!-- Link a Home alineado a la derecha -->
     <nav>
       <a href="home.html">Volver a Home</a>
     </nav>
   </header>
 
+  <!-- CONTENEDOR PRINCIPAL DEL FORMULARIO -->
   <div class="container">
-    <h1>Mi Perfil</h1>
+    <!-- ENCABEZADO DEL FORMULARIO: Fondo gris claro y título "Mi Perfil" centrado -->
+    <div class="form-header">
+      <h1>Mi Perfil</h1>
+    </div>
+
     <form id="profile-form">
-      <div class="form-group">
-        <label for="fullName">Nombre y Apellido</label>
-        <input type="text" id="fullName" name="fullName" placeholder="Ingresa tu nombre y apellido" required>
-      </div>
-      <div class="form-group">
-        <label for="emailProfile">Correo Electrónico</label>
-        <input type="email" id="emailProfile" name="emailProfile" disabled>
-      </div>
-      <div class="form-group">
-        <label for="age">Edad</label>
-        <input type="number" id="age" name="age" placeholder="Ingresa tu edad" required>
-      </div>
-      <div class="form-group">
-        <label>Sexo</label>
-        <div class="radio-group">
-          <label><input type="radio" name="gender" value="femenino" required> Femenino</label>
-          <label><input type="radio" name="gender" value="masculino" required> Masculino</label>
+      <div class="profile-grid">
+        <!-- Sección Izquierda: Datos Personales -->
+        <div class="form-section">
+          <div class="form-group">
+            <label for="fullName">Nombre y Apellido</label>
+            <input type="text" id="fullName" name="fullName" placeholder="Ingresa tu nombre y apellido" required>
+          </div>
+          <div class="form-group">
+            <label for="emailProfile">Correo Electrónico</label>
+            <input type="email" id="emailProfile" name="emailProfile" disabled>
+          </div>
+          <div class="form-group">
+            <label for="age">Edad</label>
+            <input type="number" id="age" name="age" placeholder="Ingresa tu edad" required>
+          </div>
+          <div class="form-group">
+            <label>Sexo</label>
+            <div class="radio-group">
+              <label><input type="radio" name="gender" value="femenino" required> Femenino</label>
+              <label><input type="radio" name="gender" value="masculino" required> Masculino</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="gameLevel">Nivel de juego</label>
+            <select id="gameLevel" name="gameLevel" required>
+              <option value="">Selecciona tu nivel</option>
+              <option value="principiante">Principiante</option>
+              <option value="intermedio">Intermedio</option>
+              <option value="avanzado">Avanzado</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="locality">Localidad</label>
+            <input type="text" id="locality" name="locality" placeholder="Ingresa tu localidad" required>
+          </div>
+          <div class="form-group">
+            <label for="province">Provincia</label>
+            <input type="text" id="province" name="province" placeholder="Ingresa tu provincia" required>
+          </div>
+          <div class="form-group">
+            <label for="country">País</label>
+            <input type="text" id="country" name="country" placeholder="Ingresa tu país" required>
+          </div>
+          <div class="form-group">
+            <label for="phone">Número de Teléfono</label>
+            <div class="phone-group">
+              <div class="phone-prefix">🇦🇷 +54</div>
+              <input type="tel" id="phone" name="phone" placeholder="Ej. 9XXXXXXXX" required>
+            </div>
+          </div>
+        </div>
+        <!-- Sección Derecha: Foto de Perfil -->
+        <div class="photo-section">
+          <h2>Foto de Perfil</h2>
+          <p>Sube tu imagen para que te reconozcan</p>
+          <input type="file" id="profilePic" name="profilePic" accept="image/*">
+          <div id="photoActions"></div>
         </div>
       </div>
-      <div class="form-group">
-        <label for="gameLevel">Nivel de juego</label>
-        <select id="gameLevel" name="gameLevel" required>
-          <option value="">Selecciona tu nivel</option>
-          <option value="principiante">Principiante</option>
-          <option value="intermedio">Intermedio</option>
-          <option value="avanzado">Avanzado</option>
-        </select>
+      <!-- Fila de Botones -->
+      <div class="buttons-row">
+        <button type="submit" class="btn-save">Guardar Cambios</button>
+        <button type="button" class="btn-delete" onclick="deleteProfile()">Borrar Perfil</button>
       </div>
-      <div class="form-group">
-        <label for="locality">Localidad</label>
-        <input type="text" id="locality" name="locality" placeholder="Ingresa tu localidad" required>
-      </div>
-      <div class="form-group">
-        <label for="province">Provincia</label>
-        <input type="text" id="province" name="province" placeholder="Ingresa tu provincia" required>
-      </div>
-      <div class="form-group">
-        <label for="country">País</label>
-        <input type="text" id="country" name="country" placeholder="Ingresa tu país" required>
-      </div>
-      <div class="form-group">
-        <label for="phone">Número de Teléfono</label>
-        <div class="phone-group">
-          <div class="phone-prefix">🇦🇷 +54</div>
-          <input type="tel" id="phone" name="phone" placeholder="Ej. 9XXXXXXXX" required>
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="profilePic">Foto de Perfil</label>
-        <input type="file" id="profilePic" name="profilePic" accept="image/*">
-        <div id="photoActions"></div>
-      </div>
-      <button type="submit" class="btn-save">Guardar Cambios</button>
-      <button type="button" class="btn-delete" onclick="deleteProfile()">Borrar Perfil</button>
     </form>
   </div>
 
+  <!-- SUPABASE -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <script>
     const SUPABASE_URL = 'https://idlvxinjfbsujpvxncbr.supabase.co';
@@ -255,12 +340,12 @@
         return;
       }
       if (session && session.user) {
-        const user = session.user;
-        document.getElementById('emailProfile').value = user.email;
+        const userId = session.user.id;
+        document.getElementById('emailProfile').value = session.user.email;
         const { data: profileData, error: profileError } = await supabaseClient
           .from('profiles')
           .select('*')
-          .eq('id', user.id)
+          .eq('id', userId)
           .single();
         if (profileError) {
           console.error('Error al obtener el perfil:', profileError.message);
@@ -322,6 +407,7 @@
         return;
       }
       const userId = session.user.id;
+
       const fullName = document.getElementById('fullName').value.trim();
       const age = document.getElementById('age').value.trim();
       const gender = document.querySelector('input[name="gender"]:checked')?.value;
@@ -353,7 +439,7 @@
         profilePicUrl = publicUrlData.publicUrl;
       }
 
-      // Usar upsert para evitar errores de clave duplicada
+      // Usar upsert para evitar duplicados
       const { data: upsertData, error: upsertError } = await supabaseClient
         .from('profiles')
         .upsert({
@@ -367,9 +453,7 @@
           country: country,
           phone: phone,
           profile_pic: profilePicUrl
-        }, {
-          onConflict: 'id' // Usa 'id' como clave única
-        });
+        }, { onConflict: 'id' });
 
       if (upsertError) {
         alert('Error al guardar perfil: ' + upsertError.message);
