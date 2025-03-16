@@ -323,7 +323,7 @@
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig";
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Variables de formulario y mensaje
+    // Variables del formulario y mensaje
     const authForm = document.getElementById('auth-form');
     const formTitle = document.getElementById('form-title');
     const submitButton = document.getElementById('submit-button');
@@ -376,7 +376,6 @@
     document.querySelectorAll('input[name="user-role"]').forEach(radio => {
       radio.addEventListener('change', () => {
         if (document.getElementById('role-establecimiento').checked) {
-          // Genera el ID y lo asigna al campo, que es solo lectura
           generatedEstablishmentID = generateEstablishmentID();
           establishmentInput.value = generatedEstablishmentID;
           establishmentField.style.display = 'flex';
@@ -403,33 +402,31 @@
         return;
       }
       
-      // Verificar que se haya seleccionado un rol
-      const selectedRoleElem = document.querySelector('input[name="user-role"]:checked');
-      if (!selectedRoleElem) {
-        messageDiv.textContent = 'Por favor, selecciona un rol (Jugador o Establecimiento).';
-        messageDiv.style.color = '#ff4d4d';
-        return;
-      }
-      const selectedRole = selectedRoleElem.value;
-      
-      // Si el rol es establecimiento, asegurar que se haya generado el ID y se ingrese el nombre
-      let establishmentName = null;
-      if (selectedRole === 'establecimiento') {
-        if (!generatedEstablishmentID) {
-          messageDiv.textContent = 'Error al generar el ID de establecimiento.';
-          messageDiv.style.color = '#ff4d4d';
-          return;
-        }
-        establishmentName = establishmentNameInput.value.trim();
-        if (!establishmentName) {
-          messageDiv.textContent = 'Por favor, ingresa el nombre del establecimiento.';
-          messageDiv.style.color = '#ff4d4d';
-          return;
-        }
-      }
-      
+      // Verificar que se haya seleccionado un rol en modo signup
       if (mode === 'signup') {
-        // Registrar usuario en Supabase Auth
+        const selectedRoleElem = document.querySelector('input[name="user-role"]:checked');
+        if (!selectedRoleElem) {
+          messageDiv.textContent = 'Por favor, selecciona un rol (Jugador o Establecimiento).';
+          messageDiv.style.color = '#ff4d4d';
+          return;
+        }
+        const selectedRole = selectedRoleElem.value;
+        let establishmentName = null;
+        if (selectedRole === 'establecimiento') {
+          if (!generatedEstablishmentID) {
+            messageDiv.textContent = 'Error al generar el ID de establecimiento.';
+            messageDiv.style.color = '#ff4d4d';
+            return;
+          }
+          establishmentName = establishmentNameInput.value.trim();
+          if (!establishmentName) {
+            messageDiv.textContent = 'Por favor, ingresa el nombre del establecimiento.';
+            messageDiv.style.color = '#ff4d4d';
+            return;
+          }
+        }
+        
+        // Registro de usuario en Supabase Auth
         const { data: signUpData, error: signUpError } = await supabaseClient.auth.signUp({
           email: email,
           password: password
@@ -439,7 +436,6 @@
           messageDiv.textContent = 'Error: ' + signUpError.message;
           messageDiv.style.color = '#ff4d4d';
         } else {
-          // Nota: Si se requiere confirmación por email, signUpData.user puede ser null.
           const userId = signUpData.user ? signUpData.user.id : null;
           if (userId) {
             // Insertar perfil en la tabla "perfiles"
@@ -455,7 +451,7 @@
               messageDiv.style.color = '#ff4d4d';
               return;
             }
-            // Si es establecimiento, insertar registro en la tabla "establishments"
+            // Si es establecimiento, insertar en la tabla "establishments"
             if (selectedRole === 'establecimiento') {
               const { error: estabError } = await supabaseClient.from('establishments').insert([
                 {
@@ -477,7 +473,7 @@
           }
         }
       } else {
-        // Inicio de sesión
+        // Modo login
         const { data: signInData, error: signInError } = await supabaseClient.auth.signInWithPassword({
           email: email,
           password: password
@@ -488,9 +484,40 @@
         } else {
           messageDiv.textContent = 'Inicio de sesión exitoso. Redirigiendo...';
           messageDiv.style.color = '#27ae60';
-          setTimeout(() => {
-            window.location.href = "home.html";
-          }, 1000);
+          
+          // Después de iniciar sesión, obtener el usuario autenticado
+          const { data: { user } } = await supabaseClient.auth.getUser();
+          if (!user) {
+            messageDiv.textContent = 'No se pudo obtener la información del usuario.';
+            return;
+          }
+          // Consultar la tabla "perfiles" para determinar el rol
+          const { data: perfil, error: perfilError } = await supabaseClient
+            .from('perfiles')
+            .select("user_id, role, establishment_number")
+            .eq('user_id', user.id)
+            .single();
+          if (perfilError || !perfil) {
+            // Si no hay perfil, redirigir a perfil.html para crearlo
+            window.location.href = "perfil.html";
+          } else {
+            if (perfil.role === "establecimiento") {
+              // Si el usuario es establecimiento, verificar en la tabla "establishments"
+              const { data: estab, error: estabError } = await supabaseClient
+                .from('establishments')
+                .select("id, name")
+                .eq('id', perfil.establishment_number)
+                .single();
+              if (estabError || !estab) {
+                window.location.href = "perfil.html";
+              } else {
+                window.location.href = "establecimiento.html";
+              }
+            } else {
+              // Si el rol es de otro tipo (por ejemplo, jugador), redirigir a home.html
+              window.location.href = "home.html";
+            }
+          }
         }
       }
     });
