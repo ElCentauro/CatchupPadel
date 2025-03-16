@@ -318,7 +318,7 @@
   <!-- Supabase JS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <script>
-    // Configuración de Supabase
+    // Configuración de Supabase (reemplazar con tus datos)
     const SUPABASE_URL = 'https://idlvxinjfbsujpvxncbr.supabase.co';
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig";
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -402,8 +402,8 @@
         return;
       }
       
-      // Verificar que se haya seleccionado un rol en modo signup
       if (mode === 'signup') {
+        // Verificar que se haya seleccionado un rol
         const selectedRoleElem = document.querySelector('input[name="user-role"]:checked');
         if (!selectedRoleElem) {
           messageDiv.textContent = 'Por favor, selecciona un rol (Jugador o Establecimiento).';
@@ -437,6 +437,7 @@
           messageDiv.style.color = '#ff4d4d';
         } else {
           const userId = signUpData.user ? signUpData.user.id : null;
+          console.log("Nuevo usuario registrado:", userId);
           if (userId) {
             // Insertar perfil en la tabla "perfiles"
             const { error: perfilError } = await supabaseClient.from('perfiles').insert([
@@ -451,7 +452,7 @@
               messageDiv.style.color = '#ff4d4d';
               return;
             }
-            // Si es establecimiento, insertar en la tabla "establishments"
+            // Si es establecimiento, insertar registro en la tabla "establishments"
             if (selectedRole === 'establecimiento') {
               const { error: estabError } = await supabaseClient.from('establishments').insert([
                 {
@@ -484,38 +485,42 @@
         } else {
           messageDiv.textContent = 'Inicio de sesión exitoso. Redirigiendo...';
           messageDiv.style.color = '#27ae60';
-          
-          // Después de iniciar sesión, obtener el usuario autenticado
-          const { data: { user } } = await supabaseClient.auth.getUser();
-          if (!user) {
+          // Utilizar el usuario retornado en signInData o obtenerlo con getUser()
+          const currentUser = signInData.user || (await supabaseClient.auth.getUser()).data.user;
+          console.log("Usuario actual:", currentUser);
+          if (!currentUser) {
             messageDiv.textContent = 'No se pudo obtener la información del usuario.';
             return;
           }
-          // Consultar la tabla "perfiles" para determinar el rol
+          // Consultar la tabla "perfiles" para obtener el rol y otros datos
           const { data: perfil, error: perfilError } = await supabaseClient
             .from('perfiles')
             .select("user_id, role, establishment_number")
-            .eq('user_id', user.id)
+            .eq('user_id', currentUser.id)
             .single();
+          console.log("Perfil obtenido:", perfil, perfilError);
           if (perfilError || !perfil) {
-            // Si no hay perfil, redirigir a perfil.html para crearlo
+            // Si no existe perfil, redirigir a perfil.html para crearlo
             window.location.href = "perfil.html";
           } else {
             if (perfil.role === "establecimiento") {
-              // Si el usuario es establecimiento, verificar en la tabla "establishments"
+              // Si el usuario es establecimiento, buscar en "establishments"
               const { data: estab, error: estabError } = await supabaseClient
                 .from('establishments')
                 .select("id, name")
                 .eq('id', perfil.establishment_number)
                 .single();
+              console.log("Datos de establecimiento:", estab, estabError);
               if (estabError || !estab) {
+                // Si no se encontró el registro, redirigir a perfil.html para completarlo
                 window.location.href = "perfil.html";
               } else {
-                window.location.href = "establecimiento.html";
+                // Redirigir a establecimiento.html con datos precargados (id y name)
+                window.location.href = "establecimiento.html?id=" + encodeURIComponent(estab.id) + "&name=" + encodeURIComponent(estab.name);
               }
             } else {
-              // Si el rol es de otro tipo (por ejemplo, jugador), redirigir a home.html
-              window.location.href = "home.html";
+              // Si el rol es jugador, redirigir a la página principal (home.html)
+              window.location.href = "home.html?userId=" + encodeURIComponent(currentUser.id) + "&role=jugador";
             }
           }
         }
