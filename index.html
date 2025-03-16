@@ -485,41 +485,41 @@
         } else {
           messageDiv.textContent = 'Inicio de sesión exitoso. Redirigiendo...';
           messageDiv.style.color = '#27ae60';
-          // Utilizar el usuario retornado en signInData o obtenerlo con getUser()
+          // Obtener el usuario autenticado (usando el dato retornado o getUser())
           const currentUser = signInData.user || (await supabaseClient.auth.getUser()).data.user;
           console.log("Usuario actual:", currentUser);
           if (!currentUser) {
             messageDiv.textContent = 'No se pudo obtener la información del usuario.';
             return;
           }
-          // Consultar la tabla "perfiles" para obtener el rol y otros datos
-          const { data: perfil, error: perfilError } = await supabaseClient
+          // Consultar la tabla "perfiles" para obtener el perfil del usuario
+          const { data: perfilData, error: perfilError } = await supabaseClient
             .from('perfiles')
             .select("user_id, role, establishment_number")
-            .eq('user_id', currentUser.id)
-            .single();
-          console.log("Perfil obtenido:", perfil, perfilError);
-          if (perfilError || !perfil) {
-            // Si no existe perfil, redirigir a perfil.html para crearlo
+            .eq('user_id', currentUser.id);
+          console.log("PerfilData:", perfilData, "PerfilError:", perfilError);
+          if (perfilError || !perfilData || perfilData.length === 0) {
+            // Si no hay perfil, redirigir a perfil.html para crearlo
             window.location.href = "perfil.html";
           } else {
+            const perfil = perfilData[0];  // Asumimos que cada usuario tiene un único perfil
             if (perfil.role === "establecimiento") {
-              // Si el usuario es establecimiento, buscar en "establishments"
-              const { data: estab, error: estabError } = await supabaseClient
+              // Si el usuario es establecimiento, consultar la tabla "establishments"
+              const { data: estabData, error: estabError } = await supabaseClient
                 .from('establishments')
                 .select("id, name")
-                .eq('id', perfil.establishment_number)
-                .single();
-              console.log("Datos de establecimiento:", estab, estabError);
-              if (estabError || !estab) {
+                .eq('id', perfil.establishment_number);
+              console.log("Establishment Data:", estabData, "EstabError:", estabError);
+              if (estabError || !estabData || estabData.length === 0) {
                 // Si no se encontró el registro, redirigir a perfil.html para completarlo
                 window.location.href = "perfil.html";
               } else {
-                // Redirigir a establecimiento.html con datos precargados (id y name)
+                const estab = estabData[0];
+                // Redirigir a establecimiento.html pasando por query string el id y el name
                 window.location.href = "establecimiento.html?id=" + encodeURIComponent(estab.id) + "&name=" + encodeURIComponent(estab.name);
               }
             } else {
-              // Si el rol es jugador, redirigir a la página principal (home.html)
+              // Si el rol es de jugador, redirigir a la página principal (home.html)
               window.location.href = "home.html?userId=" + encodeURIComponent(currentUser.id) + "&role=jugador";
             }
           }
