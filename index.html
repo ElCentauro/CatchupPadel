@@ -130,7 +130,7 @@
       border-top: 1px solid #eaeaea;
       margin-top: 2rem;
     }
-    /* Sección de autenticación (overlay) */
+    /* Modal de autenticación */
     #auth-section {
       position: fixed;
       top: 0;
@@ -154,6 +154,7 @@
       color: #ffffff;
       box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
       animation: fadeIn 0.7s ease;
+      position: relative;
     }
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(-20px); }
@@ -232,6 +233,20 @@
     #establishment-field {
       display: none;
     }
+    /* Botón para cerrar modal */
+    .close-modal {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background: #ff9500;
+      border: none;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -260,6 +275,8 @@
   <!-- Modal de Autenticación -->
   <div id="auth-section">
     <div class="auth-container">
+      <!-- Botón para cerrar el modal -->
+      <button class="close-modal" onclick="hideAuthSection()">×</button>
       <h2 id="form-title">Registro</h2>
       <form id="auth-form">
         <input type="email" id="email" placeholder="Correo electrónico" required>
@@ -297,7 +314,7 @@
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig";
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Variables de formulario y mensajes
+    // Variables de formulario y mensaje
     const authForm = document.getElementById('auth-form');
     const formTitle = document.getElementById('form-title');
     const submitButton = document.getElementById('submit-button');
@@ -305,7 +322,7 @@
     const passwordInput = document.getElementById('password');
     const messageDiv = document.getElementById('message');
 
-    // Mostrar/Ocultar el overlay y cambiar modo (login/signup)
+    // Mostrar/Ocultar modal y cambiar modo (login/signup)
     function showAuthSection(newMode) {
       document.getElementById('auth-section').style.display = 'flex';
       setMode(newMode);
@@ -313,14 +330,12 @@
     function hideAuthSection() {
       document.getElementById('auth-section').style.display = 'none';
     }
-
     let mode = 'signup';
     function setMode(newMode) {
       mode = newMode;
       if (mode === 'login') {
         formTitle.textContent = 'Iniciar sesión';
         submitButton.textContent = 'Iniciar sesión';
-        // En login, ocultar campos adicionales
         document.getElementById('role-selection').style.display = 'none';
         document.getElementById('establishment-field').style.display = 'none';
         document.getElementById('toggle-signup').style.display = 'inline';
@@ -329,7 +344,6 @@
       } else {
         formTitle.textContent = 'Registro';
         submitButton.textContent = 'Registrarse';
-        // En registro, mostrar opción de rol
         document.getElementById('role-selection').style.display = 'flex';
         document.getElementById('toggle-signup').style.display = 'none';
         document.getElementById('toggle-signin').style.display = 'inline';
@@ -363,8 +377,9 @@
       }
       
       if (mode === 'signup') {
-        // Obtener el rol seleccionado
-        const selectedRole = document.querySelector('input[name="user-role"]:checked') ? document.querySelector('input[name="user-role"]:checked').value : '';
+        // Obtener rol seleccionado
+        const selectedRole = document.querySelector('input[name="user-role"]:checked') ? 
+                             document.querySelector('input[name="user-role"]:checked').value : '';
         let establishmentNumber = null;
         if (selectedRole === 'establecimiento') {
           establishmentNumber = document.getElementById('establishment-number').value.trim();
@@ -384,9 +399,10 @@
           messageDiv.textContent = 'Error: ' + signUpError.message;
           messageDiv.style.color = '#ff4d4d';
         } else {
-          // Insertar perfil en la tabla "perfiles" si se obtiene el user id
+          // Nota: Si se requiere confirmación por email, signUpData.user puede ser null.
           const userId = signUpData.user ? signUpData.user.id : null;
           if (userId) {
+            // Insertar perfil en la tabla "perfiles"
             const { data, error } = await supabaseClient.from('perfiles').insert([
               {
                 user_id: userId,
@@ -402,7 +418,7 @@
               messageDiv.style.color = '#27ae60';
             }
           } else {
-            messageDiv.textContent = 'Registro exitoso. Revisa tu correo para confirmar tu cuenta.';
+            messageDiv.textContent = 'Registro exitoso. Revisa tu correo para confirmar tu cuenta y luego inicia sesión para completar tu perfil.';
             messageDiv.style.color = '#27ae60';
           }
         }
