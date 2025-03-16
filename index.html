@@ -485,7 +485,7 @@
         } else {
           messageDiv.textContent = 'Inicio de sesión exitoso. Redirigiendo...';
           messageDiv.style.color = '#27ae60';
-          // Obtener el usuario autenticado (usando el dato retornado o getUser())
+          // Obtener el usuario autenticado (del objeto signInData o con getUser)
           const currentUser = signInData.user || (await supabaseClient.auth.getUser()).data.user;
           console.log("Usuario actual:", currentUser);
           if (!currentUser) {
@@ -499,27 +499,27 @@
             .eq('user_id', currentUser.id);
           console.log("PerfilData:", perfilData, "PerfilError:", perfilError);
           if (perfilError || !perfilData || perfilData.length === 0) {
-            // Si no hay perfil, redirigir a perfil.html para crearlo
+            // Si no se encontró perfil, redirigir a perfil.html
             window.location.href = "perfil.html";
           } else {
-            const perfil = perfilData[0];  // Asumimos que cada usuario tiene un único perfil
+            const perfil = perfilData[0]; // Asumimos que hay un único perfil por usuario
             if (perfil.role === "establecimiento") {
-              // Si el usuario es establecimiento, consultar la tabla "establishments"
+              // Buscar en la tabla "establishments" el registro del establecimiento
               const { data: estabData, error: estabError } = await supabaseClient
                 .from('establishments')
                 .select("id, name")
                 .eq('id', perfil.establishment_number);
               console.log("Establishment Data:", estabData, "EstabError:", estabError);
               if (estabError || !estabData || estabData.length === 0) {
-                // Si no se encontró el registro, redirigir a perfil.html para completarlo
+                // Si no se encontró, redirigir a perfil.html para completarlo
                 window.location.href = "perfil.html";
               } else {
                 const estab = estabData[0];
-                // Redirigir a establecimiento.html pasando por query string el id y el name
+                // Redirigir a establecimiento.html pasando el id y name en la URL
                 window.location.href = "establecimiento.html?id=" + encodeURIComponent(estab.id) + "&name=" + encodeURIComponent(estab.name);
               }
             } else {
-              // Si el rol es de jugador, redirigir a la página principal (home.html)
+              // Si el rol es jugador, redirigir a home.html
               window.location.href = "home.html?userId=" + encodeURIComponent(currentUser.id) + "&role=jugador";
             }
           }
