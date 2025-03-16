@@ -7,7 +7,7 @@
   <!-- Fuente moderna -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
-    /* RESET BÁSICO Y ESTILOS GENERALES */
+    /* RESET y estilos generales */
     * {
       margin: 0;
       padding: 0;
@@ -27,8 +27,7 @@
       cursor: pointer;
       font-family: 'Poppins', sans-serif;
     }
-
-    /* BARRA DE NAVEGACIÓN: Solo Título y Botones */
+    /* Barra de navegación */
     nav {
       display: flex;
       align-items: center;
@@ -59,8 +58,7 @@
     .nav-button:hover {
       background-color: #e07e00;
     }
-
-    /* SECCIÓN PRINCIPAL (HERO) */
+    /* Sección principal (hero) */
     .hero {
       padding: 3rem 1rem;
       text-align: center;
@@ -84,14 +82,13 @@
       margin: 0 auto 2rem auto;
       line-height: 1.6;
     }
-    /* Imagen "padel.png" más grande y destacada */
     .hero-image {
       display: block;
       margin: 30px auto;
       max-width: 600px;
       width: 100%;
       border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
     .hero-buttons {
       display: flex;
@@ -123,8 +120,7 @@
       background-color: #ff9500;
       color: #fff;
     }
-
-    /* FOOTER */
+    /* Footer */
     footer {
       text-align: center;
       padding: 1rem;
@@ -134,8 +130,7 @@
       border-top: 1px solid #eaeaea;
       margin-top: 2rem;
     }
-
-    /* SECCIÓN DE AUTENTICACIÓN (OVERLAY) */
+    /* Sección de autenticación (overlay) */
     #auth-section {
       position: fixed;
       top: 0;
@@ -223,38 +218,23 @@
       font-size: 15px;
       min-height: 20px;
     }
-    /* Estilo para el enlace de "Olvidé mi contraseña" */
-    #forgot-password-container {
+    /* Campos adicionales para el registro */
+    #role-selection {
+      display: flex;
+      justify-content: space-around;
       margin-top: 10px;
-      font-size: 14px;
-      text-align: center;
     }
-    #forgot-password-container a {
-      color: #f1c40f;
-      font-weight: 600;
-      cursor: pointer;
+    .role-option {
+      display: flex;
+      align-items: center;
+      gap: 5px;
     }
-
-    /* RESPONSIVE */
-    @media (max-width: 768px) {
-      nav {
-        flex-direction: column;
-      }
-      .hero h1 {
-        font-size: 2rem;
-      }
-      .hero p {
-        font-size: 1rem;
-      }
-      .hero-image {
-        max-width: 90%;
-      }
+    #establishment-field {
+      display: none;
     }
   </style>
 </head>
 <body>
-
-  <!-- BARRA DE NAVEGACIÓN: Solo Título y Botones -->
   <nav>
     <span class="logo">Catch Up Padel</span>
     <div class="nav-right">
@@ -263,10 +243,9 @@
     </div>
   </nav>
 
-  <!-- SECCIÓN PRINCIPAL (HERO) -->
   <section class="hero">
     <h1>Catch Up Padel</h1>
-    <p>Conecta con jugadores de pádel cerca de ti y disfruta del mejor deporte en comunidad.</p>
+    <p>Conecta con jugadores y establecimientos de pádel y disfruta del mejor deporte en comunidad.</p>
     <img src="padel.png" alt="Imagen de pádel" class="hero-image">
     <div class="hero-buttons">
       <button class="hero-button hero-button-primary" onclick="showAuthSection('signup')">¡Regístrate Ahora!</button>
@@ -274,41 +253,59 @@
     </div>
   </section>
 
-  <!-- FOOTER -->
   <footer>
     © 2025 Catch Up Padel. Todos los derechos reservados.
   </footer>
 
-  <!-- SECCIÓN DE AUTENTICACIÓN (OVERLAY) -->
+  <!-- Modal de Autenticación -->
   <div id="auth-section">
     <div class="auth-container">
       <h2 id="form-title">Registro</h2>
       <form id="auth-form">
         <input type="email" id="email" placeholder="Correo electrónico" required>
         <input type="password" id="password" placeholder="Contraseña" required>
+        <!-- Campos adicionales para el registro -->
+        <div id="role-selection">
+          <div class="role-option">
+            <input type="radio" name="user-role" id="role-jugador" value="jugador" required>
+            <label for="role-jugador">Jugador</label>
+          </div>
+          <div class="role-option">
+            <input type="radio" name="user-role" id="role-establecimiento" value="establecimiento" required>
+            <label for="role-establecimiento">Establecimiento</label>
+          </div>
+        </div>
+        <!-- Campo adicional para establecimiento -->
+        <div id="establishment-field">
+          <input type="text" id="establishment-number" placeholder="Número de Establecimiento">
+        </div>
         <button type="submit" id="submit-button">Registrarse</button>
       </form>
-      <!-- Enlace para recuperar contraseña (solo en login) -->
-      <div id="forgot-password-container" style="display: none;">
-        <a href="#" onclick="forgotPassword()">¿Olvidaste tu contraseña?</a>
-      </div>
       <div class="toggle-link">
-        <span id="toggle-signup">¿Ya tienes cuenta? <a id="signin-link" href="#" onclick="setMode('login')">Inicia sesión</a></span>
-        <span id="toggle-signin" style="display: none;">¿No tienes cuenta? <a id="signup-link" href="#" onclick="setMode('signup')">Regístrate</a></span>
+        <span id="toggle-signup" style="display: none;">¿Ya tienes cuenta? <a id="signin-link" href="#" onclick="setMode('login')">Inicia sesión</a></span>
+        <span id="toggle-signin">¿No tienes cuenta? <a id="signup-link" href="#" onclick="setMode('signup')">Regístrate</a></span>
       </div>
       <div class="message" id="message"></div>
     </div>
   </div>
 
-  <!-- SUPABASE -->
+  <!-- Supabase JS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <script>
-    // CONFIGURACIÓN DE SUPABASE: Reemplaza con tus datos reales
+    // Configuración de Supabase
     const SUPABASE_URL = 'https://idlvxinjfbsujpvxncbr.supabase.co';
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig";
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Mostrar/Ocultar el overlay de autenticación
+    // Variables de formulario y mensajes
+    const authForm = document.getElementById('auth-form');
+    const formTitle = document.getElementById('form-title');
+    const submitButton = document.getElementById('submit-button');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const messageDiv = document.getElementById('message');
+
+    // Mostrar/Ocultar el overlay y cambiar modo (login/signup)
     function showAuthSection(newMode) {
       document.getElementById('auth-section').style.display = 'flex';
       setMode(newMode);
@@ -317,99 +314,116 @@
       document.getElementById('auth-section').style.display = 'none';
     }
 
-    // Variables del formulario
     let mode = 'signup';
-    const authForm = document.getElementById('auth-form');
-    const formTitle = document.getElementById('form-title');
-    const submitButton = document.getElementById('submit-button');
-    const emailInput = document.getElementById('email');
-    const passwordInput = document.getElementById('password');
-    const messageDiv = document.getElementById('message');
-
     function setMode(newMode) {
       mode = newMode;
       if (mode === 'login') {
         formTitle.textContent = 'Iniciar sesión';
         submitButton.textContent = 'Iniciar sesión';
-        document.getElementById('toggle-signup').style.display = 'none';
-        document.getElementById('toggle-signin').style.display = 'inline';
-        // Mostrar el enlace para recuperar contraseña en modo login
-        document.getElementById('forgot-password-container').style.display = 'block';
+        // En login, ocultar campos adicionales
+        document.getElementById('role-selection').style.display = 'none';
+        document.getElementById('establishment-field').style.display = 'none';
+        document.getElementById('toggle-signup').style.display = 'inline';
+        document.getElementById('toggle-signin').style.display = 'none';
         messageDiv.textContent = '';
       } else {
         formTitle.textContent = 'Registro';
         submitButton.textContent = 'Registrarse';
-        document.getElementById('toggle-signin').style.display = 'none';
-        document.getElementById('toggle-signup').style.display = 'inline';
-        // Ocultar el enlace de recuperar contraseña en modo registro
-        document.getElementById('forgot-password-container').style.display = 'none';
+        // En registro, mostrar opción de rol
+        document.getElementById('role-selection').style.display = 'flex';
+        document.getElementById('toggle-signup').style.display = 'none';
+        document.getElementById('toggle-signin').style.display = 'inline';
         messageDiv.textContent = '';
       }
     }
 
+    // Mostrar campo de establecimiento si se selecciona ese rol
+    document.querySelectorAll('input[name="user-role"]').forEach(radio => {
+      radio.addEventListener('change', () => {
+        if (document.getElementById('role-establecimiento').checked) {
+          document.getElementById('establishment-field').style.display = 'block';
+        } else {
+          document.getElementById('establishment-field').style.display = 'none';
+        }
+      });
+    });
+
+    // Manejo del formulario de autenticación
     authForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       messageDiv.textContent = '';
-      const emailVal = emailInput.value.trim();
-      const passVal = passwordInput.value.trim();
-      if (!emailVal || !passVal) {
+      
+      const email = emailInput.value.trim();
+      const password = passwordInput.value.trim();
+      
+      if (!email || !password) {
         messageDiv.textContent = 'Por favor, completa todos los campos.';
         messageDiv.style.color = '#ff4d4d';
         return;
       }
+      
       if (mode === 'signup') {
-        // Registro
-        const { data, error } = await supabaseClient.auth.signUp({
-          email: emailVal,
-          password: passVal
+        // Obtener el rol seleccionado
+        const selectedRole = document.querySelector('input[name="user-role"]:checked') ? document.querySelector('input[name="user-role"]:checked').value : '';
+        let establishmentNumber = null;
+        if (selectedRole === 'establecimiento') {
+          establishmentNumber = document.getElementById('establishment-number').value.trim();
+          if (!establishmentNumber) {
+            messageDiv.textContent = 'Por favor, ingresa el número de establecimiento.';
+            messageDiv.style.color = '#ff4d4d';
+            return;
+          }
+        }
+        // Registrar usuario en Supabase Auth
+        const { data: signUpData, error: signUpError } = await supabaseClient.auth.signUp({
+          email: email,
+          password: password
         });
-        if (error) {
-          messageDiv.textContent = 'Error: ' + error.message;
+        
+        if (signUpError) {
+          messageDiv.textContent = 'Error: ' + signUpError.message;
           messageDiv.style.color = '#ff4d4d';
         } else {
-          messageDiv.textContent = 'Registro exitoso. Revisa tu correo para confirmar tu cuenta.';
-          messageDiv.style.color = '#27ae60';
+          // Insertar perfil en la tabla "perfiles" si se obtiene el user id
+          const userId = signUpData.user ? signUpData.user.id : null;
+          if (userId) {
+            const { data, error } = await supabaseClient.from('perfiles').insert([
+              {
+                user_id: userId,
+                role: selectedRole,
+                establishment_number: selectedRole === 'establecimiento' ? establishmentNumber : null
+              }
+            ]);
+            if (error) {
+              messageDiv.textContent = 'Error al crear perfil: ' + error.message;
+              messageDiv.style.color = '#ff4d4d';
+            } else {
+              messageDiv.textContent = 'Registro y perfil creados exitosamente. Revisa tu correo para confirmar tu cuenta.';
+              messageDiv.style.color = '#27ae60';
+            }
+          } else {
+            messageDiv.textContent = 'Registro exitoso. Revisa tu correo para confirmar tu cuenta.';
+            messageDiv.style.color = '#27ae60';
+          }
         }
       } else {
         // Inicio de sesión
-        const { data, error } = await supabaseClient.auth.signInWithPassword({
-          email: emailVal,
-          password: passVal
+        const { data: signInData, error: signInError } = await supabaseClient.auth.signInWithPassword({
+          email: email,
+          password: password
         });
-        if (error) {
-          messageDiv.textContent = 'Error: ' + error.message;
+        if (signInError) {
+          messageDiv.textContent = 'Error: ' + signInError.message;
           messageDiv.style.color = '#ff4d4d';
         } else {
           messageDiv.textContent = 'Inicio de sesión exitoso. Redirigiendo...';
           messageDiv.style.color = '#27ae60';
           setTimeout(() => {
-            // Redirige a la página interna (home.html) o la que tú desees
             window.location.href = "home.html";
           }, 1000);
         }
       }
     });
-
-    // Función para recuperar la contraseña
-    async function forgotPassword() {
-      const email = emailInput.value.trim();
-      if (!email) {
-        messageDiv.textContent = 'Por favor, ingresa tu correo electrónico para restablecer la contraseña.';
-        messageDiv.style.color = '#ff4d4d';
-        return;
-      }
-      // Ajusta la URL para que apunte a tu reset-password.html en GitHub Pages
-      const { data, error } = await supabaseClient.auth.resetPasswordForEmail(email, {
-        redirectTo: 'https://elcentauro.github.io/CatchupPadel/reset-password.html'
-      });
-      if (error) {
-        messageDiv.textContent = 'Error: ' + error.message;
-        messageDiv.style.color = '#ff4d4d';
-      } else {
-        messageDiv.textContent = 'Revisa tu correo electrónico para restablecer tu contraseña.';
-        messageDiv.style.color = '#27ae60';
-      }
-    }
   </script>
 </body>
 </html>
