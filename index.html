@@ -285,21 +285,23 @@
       <form id="auth-form">
         <input type="email" id="email" placeholder="Correo electrónico" required>
         <input type="password" id="password" placeholder="Contraseña" required>
-        <!-- Selección de Rol -->
+
+        <!-- Selección de Rol (sin 'required' en los radios) -->
         <div id="role-selection">
           <div class="role-option">
-            <input type="radio" name="user-role" id="role-jugador" value="jugador" required>
+            <input type="radio" name="user-role" id="role-jugador" value="jugador">
             <label for="role-jugador">Jugador</label>
           </div>
           <div class="role-option">
-            <input type="radio" name="user-role" id="role-establecimiento" value="establecimiento" required>
+            <input type="radio" name="user-role" id="role-establecimiento" value="establecimiento">
             <label for="role-establecimiento">Establecimiento</label>
           </div>
         </div>
+
         <!-- Campos para Establecimiento: ID generado (solo lectura) y Nombre -->
         <div id="establishment-field">
           <input type="text" id="establishment-number" placeholder="ID de Establecimiento" readonly>
-          <input type="text" id="establishment-name" placeholder="Nombre del Establecimiento" required>
+          <input type="text" id="establishment-name" placeholder="Nombre del Establecimiento">
         </div>
         <button type="submit" id="submit-button">Registrarse</button>
       </form>
@@ -318,7 +320,7 @@
   <!-- Supabase JS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <script>
-    // Configuración de Supabase (reemplazar con tus datos)
+    // Configuración de Supabase
     const SUPABASE_URL = 'https://idlvxinjfbsujpvxncbr.supabase.co';
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig";
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -372,7 +374,7 @@
       }
     }
 
-    // Escuchar cambios en la selección de rol
+    // Escuchar cambios en la selección de rol (quitar 'required' de los radios)
     document.querySelectorAll('input[name="user-role"]').forEach(radio => {
       radio.addEventListener('change', () => {
         if (document.getElementById('role-establecimiento').checked) {
@@ -401,9 +403,9 @@
         messageDiv.style.color = '#ff4d4d';
         return;
       }
-      
+
+      // In modo signup, validar que se haya seleccionado un rol (jugador o establecimiento)
       if (mode === 'signup') {
-        // Registro
         const selectedRoleElem = document.querySelector('input[name="user-role"]:checked');
         if (!selectedRoleElem) {
           messageDiv.textContent = 'Por favor, selecciona un rol (Jugador o Establecimiento).';
@@ -411,6 +413,7 @@
           return;
         }
         const selectedRole = selectedRoleElem.value;
+        
         let establishmentName = null;
         if (selectedRole === 'establecimiento') {
           if (!generatedEstablishmentID) {
@@ -426,7 +429,7 @@
           }
         }
         
-        // Registro de usuario
+        // Registro de usuario en Supabase Auth
         const { data: signUpData, error: signUpError } = await supabaseClient.auth.signUp({
           email: email,
           password: password
@@ -444,12 +447,13 @@
           messageDiv.style.color = '#ff4d4d';
           return;
         }
+        
         // Insertar perfil
         const { error: perfilError } = await supabaseClient.from('perfiles').insert([
           {
             user_id: userId,
             role: selectedRole,
-            establishment_number: selectedRole === 'establecimiento' ? generatedEstablishmentID : null
+            establishment_number: (selectedRole === 'establecimiento') ? generatedEstablishmentID : null
           }
         ]);
         if (perfilError) {
@@ -458,7 +462,7 @@
           console.error("Error perfil:", perfilError);
           return;
         }
-        // Si es establecimiento, insertar registro en establishments
+        // Si es establecimiento, insertar registro en la tabla "establishments"
         if (selectedRole === 'establecimiento') {
           const { error: estabError } = await supabaseClient.from('establishments').insert([
             {
@@ -475,8 +479,9 @@
         }
         messageDiv.textContent = 'Registro exitoso. Revisa tu correo para confirmar tu cuenta y luego inicia sesión.';
         messageDiv.style.color = '#27ae60';
+
       } else {
-        // Login
+        // Modo login
         const { data: signInData, error: signInError } = await supabaseClient.auth.signInWithPassword({
           email: email,
           password: password
@@ -499,7 +504,7 @@
           return;
         }
         
-        // Consultar perfiles
+        // Consultar la tabla "perfiles" para obtener el perfil
         const { data: perfilData, error: perfilError } = await supabaseClient
           .from('perfiles')
           .select("user_id, role, establishment_number")
@@ -510,19 +515,24 @@
           return;
         }
         const perfil = perfilData[0];
+        
         if (perfil.role === "establecimiento") {
+          // Buscar en la tabla "establishments"
           const { data: estabData, error: estabError } = await supabaseClient
             .from('establishments')
             .select("id, name")
             .eq('id', perfil.establishment_number);
           console.log("Establishment Data:", estabData, "EstabError:", estabError);
           if (estabError || !estabData || estabData.length === 0) {
+            // No se encontró, redirigir a perfil
             window.location.href = "perfil.html";
           } else {
             const estab = estabData[0];
+            // Redirigir a establecimiento.html
             window.location.href = "establecimiento.html?id=" + encodeURIComponent(estab.id) + "&name=" + encodeURIComponent(estab.name);
           }
         } else {
+          // Jugador -> home.html
           window.location.href = "home.html?userId=" + encodeURIComponent(currentUser.id) + "&role=jugador";
         }
       }
