@@ -49,8 +49,8 @@
     }
     .nav-button {
       padding: 0.5rem 1rem;
-      border-radius: 0.5rem;
       border: none;
+      border-radius: 0.5rem;
       background-color: #ff9500;
       color: #fff;
       font-weight: 500;
@@ -258,11 +258,10 @@
   </style>
 </head>
 <body>
-  <!-- Barra de navegación -->
   <nav>
     <span class="logo">Catch Up Padel</span>
     <div class="nav-right">
-      <!-- Botones del menú con data-resource para habilitación dinámica -->
+      <!-- Los botones del menú se mostrarán u ocultarán dinámicamente según el rol -->
       <button class="nav-button" data-resource="btn-home">Inicio</button>
       <button class="nav-button" data-resource="btn-establecimientos">Establecimientos</button>
       <button class="nav-button" data-resource="btn-mis-canchas">Mis Canchas</button>
@@ -271,7 +270,6 @@
     </div>
   </nav>
 
-  <!-- Sección principal (hero) -->
   <section class="hero">
     <h1>Catch Up Padel</h1>
     <p>Conecta con jugadores y establecimientos de pádel y disfruta del mejor deporte en comunidad.</p>
@@ -380,7 +378,7 @@
       }
     }
 
-    // Escuchar cambios en la selección de rol (sin required, validación manual)
+    // Escuchar cambios en la selección de rol (validación manual)
     document.querySelectorAll('input[name="user-role"]').forEach(radio => {
       radio.addEventListener('change', () => {
         if (document.getElementById('role-establecimiento').checked) {
@@ -396,22 +394,21 @@
       });
     });
 
-    // Manejo del formulario de autenticación
     authForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       messageDiv.textContent = '';
-      
+
       const email = emailInput.value.trim();
       const password = passwordInput.value.trim();
-      
+
       if (!email || !password) {
         messageDiv.textContent = 'Por favor, completa todos los campos.';
         messageDiv.style.color = '#ff4d4d';
         return;
       }
-      
+
       if (mode === 'signup') {
-        // Validación manual: asegurarse de que se haya seleccionado un rol
+        // Validar que se haya seleccionado un rol manualmente
         const selectedRoleElem = document.querySelector('input[name="user-role"]:checked');
         if (!selectedRoleElem) {
           messageDiv.textContent = 'Por favor, selecciona un rol (Jugador o Establecimiento).';
@@ -433,7 +430,7 @@
             return;
           }
         }
-        
+
         // Registro de usuario
         const { data: signUpData, error: signUpError } = await supabaseClient.auth.signUp({
           email: email,
@@ -452,8 +449,8 @@
           messageDiv.style.color = '#ff4d4d';
           return;
         }
-        
-        // Insertar perfil en la tabla 'perfiles'
+
+        // Insertar perfil en la tabla "perfiles"
         const { error: perfilError } = await supabaseClient.from('perfiles').insert([
           {
             user_id: userId,
@@ -467,8 +464,8 @@
           console.error("Error perfil:", perfilError);
           return;
         }
-        
-        // Si es establecimiento, insertar registro en 'establishments'
+
+        // Si el rol es establecimiento, insertar en "establishments"
         if (selectedRole === 'establecimiento') {
           const { error: estabError } = await supabaseClient.from('establishments').insert([
             {
@@ -499,8 +496,8 @@
         }
         messageDiv.textContent = 'Inicio de sesión exitoso. Redirigiendo...';
         messageDiv.style.color = '#27ae60';
-        
-        // Obtener usuario actual
+
+        // Obtener el usuario actual (del objeto signInData o con getUser())
         const currentUser = signInData.user || (await supabaseClient.auth.getUser()).data.user;
         console.log("Usuario actual:", currentUser);
         if (!currentUser) {
@@ -508,21 +505,21 @@
           messageDiv.style.color = '#ff4d4d';
           return;
         }
-        
-        // Consultar la tabla 'perfiles' para obtener el perfil del usuario
+
+        // Consultar la tabla "perfiles" para obtener el perfil del usuario
         const { data: perfilData, error: perfilError } = await supabaseClient
           .from('perfiles')
           .select("user_id, role, establishment_number")
           .eq('user_id', currentUser.id);
         console.log("PerfilData:", perfilData, "PerfilError:", perfilError);
         if (perfilError || !perfilData || perfilData.length === 0) {
-          // Si no existe perfil, redirigir a perfil.html para completarlo
+          // Si no se encuentra el perfil, redirigir a perfil.html para completarlo
           window.location.href = "perfil.html";
           return;
         }
         const perfil = perfilData[0];
         if (perfil.role === "establecimiento") {
-          // Si el rol es establecimiento, consultar la tabla 'establishments'
+          // Si es establecimiento, consultar la tabla "establishments"
           const { data: estabData, error: estabError } = await supabaseClient
             .from('establishments')
             .select("id, name")
@@ -532,7 +529,7 @@
             window.location.href = "perfil.html";
           } else {
             const estab = estabData[0];
-            // Redirigir a establecimiento.html con id y name en la URL
+            // Redirigir a establecimiento.html pasando id y name
             window.location.href = "establecimiento.html?id=" + encodeURIComponent(estab.id) + "&name=" + encodeURIComponent(estab.name);
           }
         } else {
@@ -542,27 +539,27 @@
       }
     });
 
-    // Funcionalidad para menú dinámico (si el usuario ya está autenticado)
+    // Función para aplicar recursos al menú según el rol del usuario
     async function applyMenuResources() {
-      // Suponemos que el usuario ya está autenticado y tenemos su perfil
+      // Obtener usuario actual
       const { data: userData } = await supabaseClient.auth.getUser();
       if (!userData.user) return;
-      
-      // Consultar el perfil
+
+      // Consultar el perfil para obtener el rol
       const { data: perfilData } = await supabaseClient
         .from('perfiles')
         .select("role")
         .eq('user_id', userData.user.id);
       if (!perfilData || perfilData.length === 0) return;
       const userRole = perfilData[0].role;
-      
-      // Consultar recursos permitidos para el rol (tabla role_resources)
+
+      // Consultar la tabla role_resources para obtener los recursos permitidos
       const { data: resourcesData } = await supabaseClient
         .from('role_resources')
         .select('resource')
         .eq('role', userRole);
       const allowedResources = resourcesData ? resourcesData.map(item => item.resource) : [];
-      
+
       // Aplicar visibilidad en el menú
       document.querySelectorAll('[data-resource]').forEach(btn => {
         const resourceId = btn.getAttribute('data-resource');
@@ -574,7 +571,7 @@
       });
     }
 
-    // Si ya hay un usuario logueado, aplica la funcionalidad del menú dinámico
+    // Si el usuario ya está logueado, aplicar los recursos del menú
     window.addEventListener('DOMContentLoaded', async () => {
       const { data: currentUserData } = await supabaseClient.auth.getUser();
       if (currentUserData.user) {
@@ -582,7 +579,7 @@
       }
     });
 
-    // Logout (para el menú)
+    // Logout para el menú
     document.getElementById('btn-logout').addEventListener('click', async () => {
       await supabaseClient.auth.signOut();
       window.location.href = "index.html";
