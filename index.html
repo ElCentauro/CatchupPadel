@@ -153,7 +153,7 @@
       border-top: 1px solid #eaeaea;
       margin-top: 2rem;
     }
-    /* Modal de autenticación */
+    /* Modal de Autenticación */
     #auth-section {
       position: fixed;
       top: 0;
@@ -485,14 +485,13 @@
           messageDiv.style.color = '#ff4d4d';
           return;
         }
-        // Insertar en la tabla 'profiles' con profile_completed en false
+        // Insertar en la tabla 'profiles' (crear registro de perfil)
         const { error: perfilError } = await supabaseClient
           .from('profiles')
           .insert([{
             user_id: userId,
             role: selectedRole,
-            establishment_number: (selectedRole === 'establecimiento') ? generatedEstablishmentID : null,
-            profile_completed: false
+            establishment_number: (selectedRole === 'establecimiento') ? generatedEstablishmentID : null
           }]);
         if (perfilError) {
           messageDiv.textContent = 'Error al crear registro en profiles: ' + perfilError.message;
@@ -528,7 +527,6 @@
         }
         messageDiv.textContent = 'Inicio de sesión exitoso. Verificando perfil...';
         messageDiv.style.color = '#27ae60';
-
         // Obtener usuario
         const currentUser = signInData.user || (await supabaseClient.auth.getUser()).data.user;
         if (!currentUser) {
@@ -538,17 +536,16 @@
         // Consultar la tabla 'profiles' usando 'user_id'
         const { data: perfil, error: perfilError } = await supabaseClient
           .from('profiles')
-          .select("user_id, role, establishment_number, profile_completed")
+          .select("user_id, role, establishment_number")
           .eq('user_id', currentUser.id)
           .maybeSingle();
-
         console.log("Perfil obtenido:", perfil);
-        // Si no existe registro o profile_completed no es true, redirigir a perfil.html
-        if (perfilError || !perfil || perfil.profile_completed !== true) {
+        // Si no existe registro, redirigir a perfil.html
+        if (perfilError || !perfil) {
           window.location.href = "perfil.html";
           return;
         }
-        // Si existe y está completado, redirigir según el rol
+        // Si existe, redirigir según el rol
         if (perfil.role === "establecimiento") {
           const { data: estab, error: estabError } = await supabaseClient
             .from('establishments')
