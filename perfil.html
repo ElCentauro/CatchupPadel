@@ -25,7 +25,7 @@
     }
     /* CABECERA */
     header {
-      background-color: #d0ffd0;
+      background-color: #d0ffd0; /* Verde flúor claro */
       padding: 1rem 2rem;
       display: flex;
       align-items: center;
@@ -49,7 +49,7 @@
     .container {
       max-width: 800px;
       margin: 2rem auto;
-      background-color: #FFF2E0;
+      background-color: #FFF2E0; /* Naranja suave */
       padding: 2rem;
       border-radius: 10px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
@@ -333,15 +333,20 @@
       }
       if (session && session.user) {
         const userId = session.user.id;
+        // Mostrar email en campo deshabilitado
         document.getElementById('emailProfile').value = session.user.email;
+
+        // Consultar si ya existe el perfil
         const { data: profileData, error: profileError } = await supabaseClient
           .from('profiles')
           .select('*')
           .eq('id', userId)
-          .single();
+          .maybeSingle();
+
         if (profileError) {
           console.error('Error al obtener el perfil:', profileError.message);
         } else if (profileData) {
+          // Cargar datos en el formulario
           document.getElementById('fullName').value = profileData.full_name || '';
           document.getElementById('age').value = profileData.age || '';
           if (profileData.gender) {
@@ -353,6 +358,8 @@
           document.getElementById('province').value = profileData.province || '';
           document.getElementById('country').value = profileData.country || '';
           document.getElementById('phone').value = profileData.phone || '';
+
+          // Si hay foto, mostrar vista previa
           if (profileData.profile_pic) {
             showProfilePicPreview(profileData.profile_pic);
           }
@@ -394,7 +401,7 @@
       document.getElementById('profilePic').value = "";
     }
 
-    // Guardar o actualizar el perfil (upsert) con profile_completed: true
+    // Guardar o actualizar el perfil con "onConflict: 'id'"
     document.getElementById('profile-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
@@ -404,6 +411,7 @@
       }
       const userId = session.user.id;
 
+      // Tomar valores del formulario
       const fullName = document.getElementById('fullName').value.trim();
       const age = document.getElementById('age').value.trim();
       const gender = document.querySelector('input[name="gender"]:checked')?.value;
@@ -414,6 +422,7 @@
       const phone = document.getElementById('phone').value.trim();
       const profilePicInput = document.getElementById('profilePic');
 
+      // Subir imagen si se seleccionó una nueva
       let profilePicUrl = null;
       if (profilePicInput.files.length > 0) {
         const file = profilePicInput.files[0];
@@ -425,6 +434,7 @@
           alert('Error al subir la imagen: ' + uploadError.message);
           return;
         }
+        // Obtener URL pública
         const { data: publicUrlData, error: urlError } = supabaseClient.storage
           .from('profiles')
           .getPublicUrl(uploadData.path);
@@ -435,7 +445,7 @@
         profilePicUrl = publicUrlData.publicUrl;
       }
 
-      // Upsert: guardar o actualizar el perfil, marcándolo como completado
+      // Hacer upsert con "id = userId" y onConflict: 'id'
       const { data: upsertData, error: upsertError } = await supabaseClient
         .from('profiles')
         .upsert({
@@ -459,7 +469,7 @@
       }
     });
 
-    // Función para borrar el perfil
+    // Borrar el perfil
     async function deleteProfile() {
       if (!confirm('¿Estás seguro de que deseas borrar tu perfil? Esta acción no se puede deshacer.')) return;
       const { data: { session } } = await supabaseClient.auth.getSession();
