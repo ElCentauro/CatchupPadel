@@ -8,25 +8,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
     /* RESET y estilos generales */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Poppins', sans-serif;
       color: #333;
       background-color: #f8f8f8;
       overflow-x: hidden;
     }
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
-    button {
-      cursor: pointer;
-      font-family: 'Poppins', sans-serif;
-    }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; font-family: 'Poppins', sans-serif; }
 
     /* Barra de navegación */
     nav {
@@ -56,14 +46,12 @@
       font-weight: 500;
       transition: background-color 0.3s ease;
     }
-    .nav-button:hover {
-      background-color: #e07e00;
-    }
+    .nav-button:hover { background-color: #e07e00; }
 
-    /* Menú dinámico (reemplaza a los botones Iniciar/Registrar cuando hay login) */
+    /* Menú dinámico: se mostrará solo si hay usuario logueado */
     .menu-container {
       display: flex;
-      justify-content: center; /* centra horizontalmente */
+      justify-content: center;
       gap: 1rem;
       margin: 1rem 0;
     }
@@ -80,9 +68,7 @@
       background-color: #ff9500;
       color: #fff;
     }
-    .hidden {
-      display: none !important;
-    }
+    .hidden { display: none !important; }
 
     /* Sección principal (hero) */
     .hero {
@@ -134,9 +120,7 @@
       background-color: #ff9500;
       color: #fff;
     }
-    .hero-button-primary:hover {
-      background-color: #e07e00;
-    }
+    .hero-button-primary:hover { background-color: #e07e00; }
     .hero-button-secondary {
       background-color: transparent;
       color: #ff9500;
@@ -161,10 +145,7 @@
     /* Modal de autenticación */
     #auth-section {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      top: 0; left: 0; right: 0; bottom: 0;
       display: none;
       justify-content: center;
       align-items: center;
@@ -180,7 +161,7 @@
       width: 380px;
       text-align: center;
       color: #ffffff;
-      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+      box-shadow: 0 8px 32px 0 rgba(31,38,135,0.37);
       animation: fadeIn 0.7s ease;
       position: relative;
     }
@@ -204,18 +185,14 @@
       padding: 12px 15px;
       border: none;
       border-radius: 8px;
-      background: rgba(255, 255, 255, 0.25);
+      background: rgba(255,255,255,0.25);
       color: #ffffff;
       font-size: 15px;
       outline: none;
       transition: background 0.3s ease;
     }
-    form input:focus {
-      background: rgba(255, 255, 255, 0.35);
-    }
-    form input::placeholder {
-      color: rgba(255, 255, 255, 0.8);
-    }
+    form input:focus { background: rgba(255,255,255,0.35); }
+    form input::placeholder { color: rgba(255,255,255,0.8); }
     form button {
       padding: 12px;
       border: none;
@@ -226,9 +203,7 @@
       font-weight: 600;
       transition: background 0.3s ease;
     }
-    form button:hover {
-      background: #219150;
-    }
+    form button:hover { background: #219150; }
     .toggle-link {
       margin-top: 20px;
       font-size: 14px;
@@ -239,9 +214,7 @@
       font-weight: 600;
       cursor: pointer;
     }
-    .toggle-link a:hover {
-      text-decoration: underline;
-    }
+    .toggle-link a:hover { text-decoration: underline; }
     .message {
       margin-top: 15px;
       font-size: 15px;
@@ -283,14 +256,14 @@
   <!-- Barra de navegación -->
   <nav>
     <span class="logo">Catch Up Padel</span>
-    <!-- Contenedor para botones de login/signup (solo visibles si no hay usuario logueado) -->
+    <!-- Botones de login/registro (visibles solo si no hay usuario logueado) -->
     <div class="nav-right" id="nav-auth-buttons">
       <button class="nav-button" onclick="showAuthSection('login')">Iniciar Sesión</button>
       <button class="nav-button" onclick="showAuthSection('signup')">Registrarse</button>
     </div>
   </nav>
 
-  <!-- Menú dinámico (aparecerá tras login) -->
+  <!-- Menú dinámico (se genera si hay usuario logueado) -->
   <div class="menu-container" id="menu-container"></div>
 
   <!-- Sección principal (hero) -->
@@ -304,6 +277,7 @@
     </div>
   </section>
 
+  <!-- Footer -->
   <footer>
     © 2025 Catch Up Padel. Todos los derechos reservados.
   </footer>
@@ -327,7 +301,7 @@
             <label for="role-establecimiento">Establecimiento</label>
           </div>
         </div>
-        <!-- Campos para Establecimiento: ID generado (solo lectura) y Nombre -->
+        <!-- Campos para Establecimiento: ID y Nombre -->
         <div id="establishment-field">
           <input type="text" id="establishment-number" placeholder="ID de Establecimiento" readonly>
           <input type="text" id="establishment-name" placeholder="Nombre del Establecimiento" required>
@@ -346,7 +320,7 @@
     </div>
   </div>
 
-  <!-- Supabase JS -->
+  <!-- Supabase JS (CDN) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <script>
     // CONFIGURACIÓN DE SUPABASE – REEMPLAZA CON TUS DATOS REALES
@@ -354,7 +328,7 @@
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Variables del formulario y mensaje
+    // Variables del formulario y elementos del DOM
     const authForm = document.getElementById('auth-form');
     const formTitle = document.getElementById('form-title');
     const submitButton = document.getElementById('submit-button');
@@ -370,13 +344,13 @@
     let generatedEstablishmentID = null;
     let mode = 'signup';
 
-    // Generar ID de establecimiento
+    // Función para generar ID de establecimiento
     function generateEstablishmentID() {
       const randomNumber = Math.floor(100000 + Math.random() * 900000);
       return "EST-" + randomNumber;
     }
 
-    // Mostrar/Ocultar modal y cambiar modo (login/signup)
+    // Mostrar/Ocultar modal y cambiar modo
     function showAuthSection(newMode) {
       document.getElementById('auth-section').style.display = 'flex';
       setMode(newMode);
@@ -404,7 +378,7 @@
       }
     }
 
-    // Cambios en la selección de rol
+    // Escuchar cambios en la selección de rol
     document.querySelectorAll('input[name="user-role"]').forEach(radio => {
       radio.addEventListener('change', () => {
         if (document.getElementById('role-establecimiento').checked) {
@@ -420,14 +394,13 @@
       });
     });
 
-    // Listener del formulario (registro/login)
+    // Submit del formulario: registro o login
     authForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       messageDiv.textContent = '';
 
       const email = emailInput.value.trim();
       const password = passwordInput.value.trim();
-
       if (!email || !password) {
         messageDiv.textContent = 'Por favor, completa todos los campos.';
         messageDiv.style.color = '#ff4d4d';
@@ -435,7 +408,7 @@
       }
 
       if (mode === 'signup') {
-        // Verificar rol
+        // Validar selección de rol
         const selectedRoleElem = document.querySelector('input[name="user-role"]:checked');
         if (!selectedRoleElem) {
           messageDiv.textContent = 'Por favor, selecciona un rol (Jugador o Establecimiento).';
@@ -458,14 +431,12 @@
           }
         }
 
-        // Registrar en Supabase Auth
-        const { data: signUpData, error: signUpError } = await supabaseClient.auth.signUp({
-          email,
-          password
-        });
+        // Registrar usuario en Supabase Auth
+        const { data: signUpData, error: signUpError } = await supabaseClient.auth.signUp({ email, password });
         if (signUpError) {
           messageDiv.textContent = 'Error: ' + signUpError.message;
           messageDiv.style.color = '#ff4d4d';
+          console.error("Error signUp:", signUpError);
           return;
         }
         const userId = signUpData.user ? signUpData.user.id : null;
@@ -475,17 +446,14 @@
           return;
         }
 
-        // Insertar en 'perfiles' (ajusta a tu schema real)
+        // Insertar perfil en la tabla 'perfiles'
         const { error: perfilError } = await supabaseClient
           .from('perfiles')
-          .insert([{
-            user_id: userId,
-            role: selectedRole,
-            establishment_number: (selectedRole === 'establecimiento') ? generatedEstablishmentID : null
-          }]);
+          .insert([{ user_id: userId, role: selectedRole, establishment_number: (selectedRole === 'establecimiento') ? generatedEstablishmentID : null }]);
         if (perfilError) {
           messageDiv.textContent = 'Error al crear perfil: ' + perfilError.message;
           messageDiv.style.color = '#ff4d4d';
+          console.error("Error perfil:", perfilError);
           return;
         }
 
@@ -493,86 +461,78 @@
         if (selectedRole === 'establecimiento') {
           const { error: estabError } = await supabaseClient
             .from('establishments')
-            .insert([{
-              id: generatedEstablishmentID,
-              name: establishmentName
-            }]);
+            .insert([{ id: generatedEstablishmentID, name: establishmentName }]);
           if (estabError) {
             messageDiv.textContent = 'Error al crear establecimiento: ' + estabError.message;
             messageDiv.style.color = '#ff4d4d';
+            console.error("Error establishment:", estabError);
             return;
           }
         }
         messageDiv.textContent = 'Registro exitoso. Revisa tu correo y luego inicia sesión.';
         messageDiv.style.color = '#27ae60';
-
       } else {
         // Modo login
-        const { data: signInData, error: signInError } = await supabaseClient.auth.signInWithPassword({
-          email,
-          password
-        });
+        const { data: signInData, error: signInError } = await supabaseClient.auth.signInWithPassword({ email, password });
         if (signInError) {
           messageDiv.textContent = 'Error: ' + signInError.message;
           messageDiv.style.color = '#ff4d4d';
+          console.error("Error signIn:", signInError);
           return;
         }
         messageDiv.textContent = 'Inicio de sesión exitoso. Redirigiendo...';
         messageDiv.style.color = '#27ae60';
 
-        // Obtener usuario
+        // Obtener usuario actual
         const currentUser = signInData.user || (await supabaseClient.auth.getUser()).data.user;
         if (!currentUser) {
           messageDiv.textContent = 'No se pudo obtener la información del usuario.';
           return;
         }
 
-        // Consultar 'perfiles'
-        const { data: perfil, error: perfilError } = await supabaseClient
+        // Consultar la tabla 'perfiles'
+        const { data: perfilData, error: perfilError } = await supabaseClient
           .from('perfiles')
           .select("user_id, role, establishment_number")
           .eq('user_id', currentUser.id)
-          .single();
-        if (perfilError || !perfil) {
+          .maybeSingle();
+        if (perfilError || !perfilData) {
           window.location.href = "perfil.html";
-        } else {
-          if (perfil.role === "establecimiento") {
-            // Buscar en 'establishments'
-            const { data: estab, error: estabError } = await supabaseClient
-              .from('establishments')
-              .select("id, name")
-              .eq('id', perfil.establishment_number)
-              .single();
-            if (estabError || !estab) {
-              window.location.href = "perfil.html";
-            } else {
-              window.location.href = "establecimiento.html?id=" + encodeURIComponent(estab.id) + "&name=" + encodeURIComponent(estab.name);
-            }
+          return;
+        }
+        if (perfilData.role === "establecimiento") {
+          // Buscar en 'establishments'
+          const { data: estabData, error: estabError } = await supabaseClient
+            .from('establishments')
+            .select("id, name")
+            .eq('id', perfilData.establishment_number)
+            .maybeSingle();
+          if (estabError || !estabData) {
+            window.location.href = "perfil.html";
           } else {
-            // Jugador -> home.html (ajusta a tu preferencia)
-            window.location.href = "home.html?userId=" + encodeURIComponent(currentUser.id) + "&role=" + encodeURIComponent(perfil.role);
+            window.location.href = "establecimiento.html?id=" + encodeURIComponent(estabData.id) + "&name=" + encodeURIComponent(estabData.name);
           }
+        } else {
+          // Rol jugador: redirigir a home.html
+          window.location.href = "home.html?userId=" + encodeURIComponent(currentUser.id) + "&role=" + encodeURIComponent(perfilData.role);
         }
       }
     });
 
-    // Función que construye el menú según la tabla resources, role_resources, etc.
+    // Función para construir el menú dinámico según recursos permitidos
     async function applyMenuResources() {
-      // Limpiar contenedor del menú
+      // Limpiar menú actual
       menuContainer.innerHTML = '';
 
-      // Obtener usuario
+      // Obtener usuario actual
       const { data: userData } = await supabaseClient.auth.getUser();
       if (!userData || !userData.user) {
-        // Si no hay usuario logueado, mostramos los botones de nav (login/register) y salimos
         navAuthButtons.classList.remove('hidden');
         return;
       }
-
-      // Ocultamos los botones de nav (login/register)
       navAuthButtons.classList.add('hidden');
 
-      // Buscar su rol en la tabla 'perfiles'
+      // Consultar el perfil para obtener el rol (asumimos que 'role' es un texto: "jugador", etc.)
       const { data: perfilData, error: perfilErr } = await supabaseClient
         .from('perfiles')
         .select('role')
@@ -582,9 +542,9 @@
         console.warn("No se encontró el perfil, menú vacío.");
         return;
       }
-      const userRole = perfilData.role; // 'jugador' o 'establecimiento', etc.
+      const userRole = perfilData.role;
 
-      // 1) Consultar role_resources para obtener la lista de resources que puede usar
+      // Consultar role_resources para obtener la lista de resource_id permitidos para ese rol
       const { data: rrData, error: rrError } = await supabaseClient
         .from('role_resources')
         .select('resource_id')
@@ -595,34 +555,29 @@
       }
       const resourceIds = rrData.map(item => item.resource_id);
 
-      // 2) Consultar resources para obtener resource_name y resource_url
+      // Consultar resources para obtener nombre y URL (solo los permitidos)
       const { data: resData, error: resError } = await supabaseClient
         .from('resources')
         .select('id, resource_name, resource_url')
-        .in('id', resourceIds); // Solo los que el rol puede usar
+        .in('id', resourceIds);
       if (resError) {
         console.error("Error consultando resources:", resError);
         return;
       }
 
-      // 3) Crear un botón por cada recurso
+      // Generar botones del menú
       resData.forEach(resource => {
         const btn = document.createElement('button');
         btn.textContent = resource.resource_name.toUpperCase();
         btn.style.cursor = 'pointer';
         btn.addEventListener('click', () => {
           // Redirige a resource_url
-          if (resource.resource_url.endsWith('.html')) {
-            window.location.href = resource.resource_url;
-          } else {
-            // Si es un link a un path o URL externa
-            window.location.href = resource.resource_url;
-          }
+          window.location.href = resource.resource_url;
         });
         menuContainer.appendChild(btn);
       });
 
-      // 4) Agregamos manualmente un botón "Cerrar Sesión"
+      // Agregar botón de "Cerrar Sesión"
       const logoutBtn = document.createElement('button');
       logoutBtn.textContent = 'CERRAR SESIÓN';
       logoutBtn.style.borderColor = 'red';
@@ -634,13 +589,11 @@
       menuContainer.appendChild(logoutBtn);
     }
 
-    // Al cargar la página, verificar si hay usuario logueado y armar menú
+    // Si hay usuario logueado, aplicar menú dinámico al cargar la página
     window.addEventListener('DOMContentLoaded', async () => {
       const { data: currentUserData } = await supabaseClient.auth.getUser();
-      if (currentUserData.user) {
-        // Ocultar botones de login/registro
+      if (currentUserData && currentUserData.user) {
         navAuthButtons.classList.add('hidden');
-        // Generar menú
         applyMenuResources();
       }
     });
