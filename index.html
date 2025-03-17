@@ -538,7 +538,7 @@
           .eq('user_id', currentUser.id)
           .maybeSingle();
         console.log("Perfil obtenido:", perfil);
-        // Si existe registro en profiles, redirigir a home.html o establecimiento.html
+        // Si existe registro en profiles, redirigir a home.html (o establecimiento.html)
         if (perfil) {
           if (perfil.role === "establecimiento") {
             const { data: estab, error: estabError } = await supabaseClient
@@ -565,7 +565,7 @@
       }
     });
 
-    // Función para construir el menú dinámico (si se utiliza)
+    // Función para construir el menú dinámico (opcional)
     async function applyMenuResources() {
       menuContainer.innerHTML = '';
       const { data: userData } = await supabaseClient.auth.getUser();
