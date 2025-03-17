@@ -316,7 +316,8 @@
       <form id="auth-form">
         <input type="email" id="email" placeholder="Correo electrónico" required>
         <input type="password" id="password" placeholder="Contraseña" required>
-        <!-- Selección de Rol -->
+
+        <!-- Selección de Rol (por defecto se marcan como required en el HTML, pero luego se manipulan por JS) -->
         <div id="role-selection">
           <div class="role-option">
             <input type="radio" name="user-role" id="role-jugador" value="jugador" required>
@@ -327,11 +328,13 @@
             <label for="role-establecimiento">Establecimiento</label>
           </div>
         </div>
+
         <!-- Campos para Establecimiento: ID generado (solo lectura) y Nombre -->
         <div id="establishment-field">
           <input type="text" id="establishment-number" placeholder="ID de Establecimiento" readonly>
           <input type="text" id="establishment-name" placeholder="Nombre del Establecimiento" required>
         </div>
+
         <button type="submit" id="submit-button">Registrarse</button>
       </form>
       <div class="toggle-link">
@@ -367,6 +370,10 @@
     const navAuthButtons = document.getElementById('nav-auth-buttons');
     const menuContainer = document.getElementById('menu-container');
 
+    // Radios de rol
+    const roleJugadorRadio = document.getElementById('role-jugador');
+    const roleEstablecimientoRadio = document.getElementById('role-establecimiento');
+
     let generatedEstablishmentID = null;
     let mode = 'signup';
 
@@ -384,22 +391,49 @@
     function hideAuthSection() {
       document.getElementById('auth-section').style.display = 'none';
     }
+
+    // Ajustar required según modo
     function setMode(newMode) {
       mode = newMode;
+
       if (mode === 'login') {
         formTitle.textContent = 'Iniciar sesión';
         submitButton.textContent = 'Iniciar sesión';
-        document.getElementById('role-selection').style.display = 'none';
-        establishmentField.style.display = 'none';
         document.getElementById('toggle-signup').style.display = 'inline';
         document.getElementById('toggle-signin').style.display = 'none';
+
+        // Ocultamos radios y establecimiento
+        document.getElementById('role-selection').style.display = 'none';
+        establishmentField.style.display = 'none';
+
+        // Quitar required de radios y del campo de establecimiento
+        roleJugadorRadio.removeAttribute('required');
+        roleEstablecimientoRadio.removeAttribute('required');
+        establishmentNameInput.removeAttribute('required');
+
         messageDiv.textContent = '';
       } else {
         formTitle.textContent = 'Registro';
         submitButton.textContent = 'Registrarse';
-        document.getElementById('role-selection').style.display = 'flex';
         document.getElementById('toggle-signup').style.display = 'none';
         document.getElementById('toggle-signin').style.display = 'inline';
+
+        // Mostramos radios
+        document.getElementById('role-selection').style.display = 'flex';
+
+        // Volvemos a poner required a los radios
+        roleJugadorRadio.setAttribute('required', true);
+        roleEstablecimientoRadio.setAttribute('required', true);
+
+        // Verificamos si está seleccionado 'establecimiento' para ver si se muestra o no
+        if (roleEstablecimientoRadio.checked) {
+          establishmentField.style.display = 'flex';
+          establishmentNameInput.setAttribute('required', true);
+        } else {
+          establishmentField.style.display = 'none';
+          establishmentNameInput.removeAttribute('required');
+        }
+
         messageDiv.textContent = '';
       }
     }
@@ -407,14 +441,16 @@
     // Cambios en la selección de rol
     document.querySelectorAll('input[name="user-role"]').forEach(radio => {
       radio.addEventListener('change', () => {
-        if (document.getElementById('role-establecimiento').checked) {
+        if (roleEstablecimientoRadio.checked) {
           generatedEstablishmentID = generateEstablishmentID();
           establishmentInput.value = generatedEstablishmentID;
           establishmentField.style.display = 'flex';
+          establishmentNameInput.setAttribute('required', true);
         } else {
           establishmentField.style.display = 'none';
           establishmentInput.value = '';
           establishmentNameInput.value = '';
+          establishmentNameInput.removeAttribute('required');
           generatedEstablishmentID = null;
         }
       });
@@ -475,7 +511,7 @@
           return;
         }
 
-        // Insertar en 'perfiles' (ajusta a tu schema real)
+        // Insertar en 'perfiles'
         const { error: perfilError } = await supabaseClient
           .from('perfiles')
           .insert([{
@@ -534,6 +570,7 @@
           .eq('user_id', currentUser.id)
           .single();
         if (perfilError || !perfil) {
+          // Redirigir a perfil genérico si no existe
           window.location.href = "perfil.html";
         } else {
           if (perfil.role === "establecimiento") {
@@ -599,7 +636,7 @@
       const { data: resData, error: resError } = await supabaseClient
         .from('resources')
         .select('id, resource_name, resource_url')
-        .in('id', resourceIds); // Solo los que el rol puede usar
+        .in('id', resourceIds);
       if (resError) {
         console.error("Error consultando resources:", resError);
         return;
