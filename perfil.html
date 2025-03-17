@@ -25,7 +25,7 @@
     }
     /* CABECERA */
     header {
-      background-color: #d0ffd0; /* Verde flúor claro */
+      background-color: #d0ffd0;
       padding: 1rem 2rem;
       display: flex;
       align-items: center;
@@ -49,14 +49,13 @@
     .container {
       max-width: 800px;
       margin: 2rem auto;
-      background-color: #FFF2E0; /* Naranja suave */
+      background-color: #FFF2E0;
       padding: 2rem;
       border-radius: 10px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
-    /* Encabezado del formulario (fondo gris claro) */
     .form-header {
-      background-color: #e9ecef; /* Gris claro */
+      background-color: #e9ecef;
       padding: 1rem;
       border-radius: 8px;
       margin-bottom: 1.5rem;
@@ -68,7 +67,7 @@
       color: #2c3e50;
       margin: 0;
     }
-    /* GRID DEL FORMULARIO: Dos columnas en pantallas grandes */
+    /* GRID DEL FORMULARIO */
     .profile-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -209,7 +208,7 @@
     .btn-delete-photo:hover {
       background-color: #c0392b;
     }
-    /* RESPONSIVE: Para pantallas menores a 800px, se usa una sola columna */
+    /* RESPONSIVE */
     @media (max-width: 800px) {
       .profile-grid {
         grid-template-columns: 1fr;
@@ -320,10 +319,12 @@
   <!-- SUPABASE -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <script>
+    // Configuración de Supabase
     const SUPABASE_URL = 'https://idlvxinjfbsujpvxncbr.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+    // Cargar datos del perfil
     async function loadProfile() {
       const { data: { session }, error } = await supabaseClient.auth.getSession();
       if (error) {
@@ -360,6 +361,7 @@
     }
     loadProfile();
 
+    // Mostrar vista previa de la foto
     function showProfilePicPreview(url) {
       const photoActions = document.getElementById('photoActions');
       let preview = document.getElementById('profilePicPreview');
@@ -371,6 +373,7 @@
         photoActions.appendChild(preview);
       }
       preview.src = url;
+      // Agregar botón para borrar la foto
       let deleteBtn = document.getElementById('deletePhotoBtn');
       if (!deleteBtn) {
         deleteBtn = document.createElement('button');
@@ -382,6 +385,7 @@
       }
     }
 
+    // Borrar la vista previa de la foto y limpiar el input
     function deleteProfilePic() {
       const preview = document.getElementById('profilePicPreview');
       if (preview) preview.remove();
@@ -390,6 +394,7 @@
       document.getElementById('profilePic').value = "";
     }
 
+    // Guardar o actualizar el perfil (upsert) con profile_completed: true
     document.getElementById('profile-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
@@ -430,7 +435,7 @@
         profilePicUrl = publicUrlData.publicUrl;
       }
 
-      // Usar upsert para guardar o actualizar el perfil y marcarlo como completado
+      // Upsert: guardar o actualizar el perfil, marcándolo como completado
       const { data: upsertData, error: upsertError } = await supabaseClient
         .from('profiles')
         .upsert({
@@ -454,6 +459,7 @@
       }
     });
 
+    // Función para borrar el perfil
     async function deleteProfile() {
       if (!confirm('¿Estás seguro de que deseas borrar tu perfil? Esta acción no se puede deshacer.')) return;
       const { data: { session } } = await supabaseClient.auth.getSession();
