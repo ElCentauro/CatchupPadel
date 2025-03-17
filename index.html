@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- Fuente moderna -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-
   <style>
     /* RESET y estilos generales */
     * {
@@ -61,7 +60,7 @@
       background-color: #e07e00;
     }
 
-    /* Menú dinámico (se genera si hay usuario logueado) */
+    /* Menú dinámico */
     .menu-container {
       display: flex;
       justify-content: center;
@@ -162,7 +161,10 @@
     /* Modal de autenticación */
     #auth-section {
       position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
       display: none;
       justify-content: center;
       align-items: center;
@@ -170,15 +172,15 @@
       z-index: 9999;
     }
     .auth-container {
-      background: rgba(255,255,255,0.15);
+      background: rgba(255, 255, 255, 0.15);
       backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.3);
+      border: 1px solid rgba(255, 255, 255, 0.3);
       border-radius: 15px;
       padding: 40px;
       width: 380px;
       text-align: center;
       color: #ffffff;
-      box-shadow: 0 8px 32px 0 rgba(31,38,135,0.37);
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
       animation: fadeIn 0.7s ease;
       position: relative;
     }
@@ -192,29 +194,29 @@
       font-weight: 600;
       letter-spacing: 1px;
     }
-    .auth-container form {
+    form {
       display: flex;
       flex-direction: column;
       gap: 15px;
     }
-    .auth-container form input {
+    form input {
       width: 100%;
       padding: 12px 15px;
       border: none;
       border-radius: 8px;
-      background: rgba(255,255,255,0.25);
+      background: rgba(255, 255, 255, 0.25);
       color: #ffffff;
       font-size: 15px;
       outline: none;
       transition: background 0.3s ease;
     }
-    .auth-container form input:focus {
-      background: rgba(255,255,255,0.35);
+    form input:focus {
+      background: rgba(255, 255, 255, 0.35);
     }
-    .auth-container form input::placeholder {
-      color: rgba(255,255,255,0.8);
+    form input::placeholder {
+      color: rgba(255, 255, 255, 0.8);
     }
-    .auth-container form button {
+    form button {
       padding: 12px;
       border: none;
       border-radius: 8px;
@@ -224,7 +226,7 @@
       font-weight: 600;
       transition: background 0.3s ease;
     }
-    .auth-container form button:hover {
+    form button:hover {
       background: #219150;
     }
     .toggle-link {
@@ -235,6 +237,7 @@
       color: #f1c40f;
       text-decoration: none;
       font-weight: 600;
+      cursor: pointer;
     }
     .toggle-link a:hover {
       text-decoration: underline;
@@ -244,9 +247,17 @@
       font-size: 15px;
       min-height: 20px;
     }
-    /* Radios sin required */
-    .role-option input[type="radio"] { /* sin required */ }
-
+    /* Campos adicionales para el registro */
+    #role-selection {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 10px;
+    }
+    .role-option {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
     #establishment-field {
       display: none;
       flex-direction: column;
@@ -255,11 +266,13 @@
     }
     .close-modal {
       position: absolute;
-      top: 5px; right: 5px;
+      top: 5px;
+      right: 5px;
       background: #ff9500;
       border: none;
       border-radius: 50%;
-      width: 30px; height: 30px;
+      width: 30px;
+      height: 30px;
       color: #fff;
       font-size: 16px;
       cursor: pointer;
@@ -267,18 +280,19 @@
   </style>
 </head>
 <body>
+  <!-- Barra de navegación -->
   <nav>
     <span class="logo">Catch Up Padel</span>
-    <!-- Botones login/registro (si no hay usuario logueado) -->
     <div class="nav-right" id="nav-auth-buttons">
       <button class="nav-button" onclick="showAuthSection('login')">Iniciar Sesión</button>
       <button class="nav-button" onclick="showAuthSection('signup')">Registrarse</button>
     </div>
   </nav>
 
-  <!-- Menú dinámico (si hay usuario logueado) -->
+  <!-- Menú dinámico (aparecerá tras login) -->
   <div class="menu-container" id="menu-container"></div>
 
+  <!-- Sección principal (hero) -->
   <section class="hero">
     <h1>Catch Up Padel</h1>
     <p>Conecta con jugadores y establecimientos de pádel y disfruta del mejor deporte en comunidad.</p>
@@ -297,35 +311,36 @@
   <div id="auth-section">
     <div class="auth-container">
       <button class="close-modal" onclick="hideAuthSection()">×</button>
-      <h2 id="form-title">Registrarse</h2>
+      <h2 id="form-title">Registro</h2>
       <form id="auth-form">
-        <input type="email" id="email" placeholder="Correo electrónico">
-        <input type="password" id="password" placeholder="Contraseña">
-        <!-- Selección de Rol (sin required) -->
+        <input type="email" id="email" placeholder="Correo electrónico" required>
+        <input type="password" id="password" placeholder="Contraseña" required>
+
+        <!-- Selección de Rol -->
         <div id="role-selection">
           <div class="role-option">
-            <input type="radio" name="user-role" id="role-jugador" value="jugador">
+            <input type="radio" name="user-role" id="role-jugador" value="jugador" required>
             <label for="role-jugador">Jugador</label>
           </div>
           <div class="role-option">
-            <input type="radio" name="user-role" id="role-establecimiento" value="establecimiento">
+            <input type="radio" name="user-role" id="role-establecimiento" value="establecimiento" required>
             <label for="role-establecimiento">Establecimiento</label>
           </div>
         </div>
-        <!-- Campos para Establecimiento: ID y Nombre -->
+
+        <!-- Campos para Establecimiento -->
         <div id="establishment-field">
           <input type="text" id="establishment-number" placeholder="ID de Establecimiento" readonly>
-          <input type="text" id="establishment-name" placeholder="Nombre del Establecimiento">
+          <input type="text" id="establishment-name" placeholder="Nombre del Establecimiento" required>
         </div>
+
         <button type="submit" id="submit-button">Registrarse</button>
       </form>
       <div class="toggle-link">
-        <span id="toggle-signup" style="display: none;">
-          ¿Ya tienes cuenta?
+        <span id="toggle-signup" style="display: none;">¿Ya tienes cuenta?
           <a id="signin-link" href="#" onclick="setMode('login')">Inicia sesión</a>
         </span>
-        <span id="toggle-signin">
-          ¿No tienes cuenta?
+        <span id="toggle-signin">¿No tienes cuenta?
           <a id="signup-link" href="#" onclick="setMode('signup')">Regístrate</a>
         </span>
       </div>
@@ -336,12 +351,12 @@
   <!-- Supabase JS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <script>
-    // Reemplaza con tus datos
+    // CONFIGURACIÓN DE SUPABASE – REEMPLAZA CON TUS DATOS REALES
     const SUPABASE_URL = 'https://idlvxinjfbsujpvxncbr.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Variables y elementos
+    // Variables del formulario y mensaje
     const authForm = document.getElementById('auth-form');
     const formTitle = document.getElementById('form-title');
     const submitButton = document.getElementById('submit-button');
@@ -354,6 +369,10 @@
     const navAuthButtons = document.getElementById('nav-auth-buttons');
     const menuContainer = document.getElementById('menu-container');
 
+    // Radios de rol
+    const roleJugadorRadio = document.getElementById('role-jugador');
+    const roleEstablecimientoRadio = document.getElementById('role-establecimiento');
+
     let generatedEstablishmentID = null;
     let mode = 'signup';
 
@@ -363,7 +382,7 @@
       return "EST-" + randomNumber;
     }
 
-    // Mostrar/Ocultar modal
+    // Mostrar/Ocultar modal y cambiar modo (login/signup)
     function showAuthSection(newMode) {
       document.getElementById('auth-section').style.display = 'flex';
       setMode(newMode);
@@ -372,49 +391,78 @@
       document.getElementById('auth-section').style.display = 'none';
     }
 
+    // Ajustar required según modo
     function setMode(newMode) {
       mode = newMode;
+
       if (mode === 'login') {
         formTitle.textContent = 'Iniciar sesión';
         submitButton.textContent = 'Iniciar sesión';
-        document.getElementById('role-selection').style.display = 'none';
-        establishmentField.style.display = 'none';
         document.getElementById('toggle-signup').style.display = 'inline';
         document.getElementById('toggle-signin').style.display = 'none';
+
+        // Ocultamos radios y establecimiento
+        document.getElementById('role-selection').style.display = 'none';
+        establishmentField.style.display = 'none';
+
+        // Quitar required de radios y del campo de establecimiento
+        roleJugadorRadio.removeAttribute('required');
+        roleEstablecimientoRadio.removeAttribute('required');
+        establishmentNameInput.removeAttribute('required');
+
         messageDiv.textContent = '';
       } else {
-        formTitle.textContent = 'Registrarse';
+        formTitle.textContent = 'Registro';
         submitButton.textContent = 'Registrarse';
-        document.getElementById('role-selection').style.display = 'flex';
         document.getElementById('toggle-signup').style.display = 'none';
         document.getElementById('toggle-signin').style.display = 'inline';
+
+        // Mostramos radios
+        document.getElementById('role-selection').style.display = 'flex';
+
+        // Volvemos a poner required a los radios
+        roleJugadorRadio.setAttribute('required', true);
+        roleEstablecimientoRadio.setAttribute('required', true);
+
+        // Verificamos si está seleccionado 'establecimiento' para ver si se muestra o no
+        if (roleEstablecimientoRadio.checked) {
+          establishmentField.style.display = 'flex';
+          establishmentNameInput.setAttribute('required', true);
+        } else {
+          establishmentField.style.display = 'none';
+          establishmentNameInput.removeAttribute('required');
+        }
+
         messageDiv.textContent = '';
       }
     }
 
-    // Radios: si es establecimiento, generamos un ID
+    // Cambios en la selección de rol
     document.querySelectorAll('input[name="user-role"]').forEach(radio => {
       radio.addEventListener('change', () => {
-        if (document.getElementById('role-establecimiento').checked) {
+        if (roleEstablecimientoRadio.checked) {
           generatedEstablishmentID = generateEstablishmentID();
           establishmentInput.value = generatedEstablishmentID;
           establishmentField.style.display = 'flex';
+          establishmentNameInput.setAttribute('required', true);
         } else {
           establishmentField.style.display = 'none';
           establishmentInput.value = '';
           establishmentNameInput.value = '';
+          establishmentNameInput.removeAttribute('required');
           generatedEstablishmentID = null;
         }
       });
     });
 
-    // Submit del formulario (registro / login)
+    // Listener del formulario (registro/login)
     authForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       messageDiv.textContent = '';
 
       const email = emailInput.value.trim();
       const password = passwordInput.value.trim();
+
       if (!email || !password) {
         messageDiv.textContent = 'Por favor, completa todos los campos.';
         messageDiv.style.color = '#ff4d4d';
@@ -422,15 +470,16 @@
       }
 
       if (mode === 'signup') {
-        // Validar rol manualmente
+        // MODO REGISTRO
         const selectedRoleElem = document.querySelector('input[name="user-role"]:checked');
         if (!selectedRoleElem) {
-          messageDiv.textContent = 'Selecciona un rol (Jugador o Establecimiento).';
+          messageDiv.textContent = 'Por favor, selecciona un rol (Jugador o Establecimiento).';
           messageDiv.style.color = '#ff4d4d';
           return;
         }
-        const selectedRole = selectedRoleElem.value; // 'jugador' / 'establecimiento'
+        const selectedRole = selectedRoleElem.value;
         let establishmentName = null;
+
         if (selectedRole === 'establecimiento') {
           if (!generatedEstablishmentID) {
             messageDiv.textContent = 'Error al generar el ID de establecimiento.';
@@ -439,14 +488,17 @@
           }
           establishmentName = establishmentNameInput.value.trim();
           if (!establishmentName) {
-            messageDiv.textContent = 'Ingresa el nombre del establecimiento.';
+            messageDiv.textContent = 'Por favor, ingresa el nombre del establecimiento.';
             messageDiv.style.color = '#ff4d4d';
             return;
           }
         }
 
-        // Registrar usuario en Supabase Auth
-        const { data: signUpData, error: signUpError } = await supabaseClient.auth.signUp({ email, password });
+        // Registrar en Supabase Auth
+        const { data: signUpData, error: signUpError } = await supabaseClient.auth.signUp({
+          email,
+          password
+        });
         if (signUpError) {
           messageDiv.textContent = 'Error: ' + signUpError.message;
           messageDiv.style.color = '#ff4d4d';
@@ -454,21 +506,23 @@
         }
         const userId = signUpData.user ? signUpData.user.id : null;
         if (!userId) {
-          messageDiv.textContent = 'Registro exitoso. Verifica tu correo.';
-          messageDiv.style.color = '#27ae60';
+          messageDiv.textContent = 'Error al registrar el usuario.';
+          messageDiv.style.color = '#ff4d4d';
           return;
         }
 
-        // Insertar perfil en la tabla 'perfiles'
+        // Insertar en la tabla 'profiles'
+        // Aquí se inserta usando la columna 'user_id' para relacionar con el usuario
         const { error: perfilError } = await supabaseClient
-          .from('perfiles')
-          .insert([{ 
+          .from('profiles')
+          .insert([{
             user_id: userId,
             role: selectedRole,
-            establishment_number: (selectedRole === 'establecimiento') ? generatedEstablishmentID : null
+            establishment_number: (selectedRole === 'establecimiento') ? generatedEstablishmentID : null,
+            profile_completed: false
           }]);
         if (perfilError) {
-          messageDiv.textContent = 'Error al crear perfil: ' + perfilError.message;
+          messageDiv.textContent = 'Error al crear registro en profiles: ' + perfilError.message;
           messageDiv.style.color = '#ff4d4d';
           return;
         }
@@ -477,7 +531,10 @@
         if (selectedRole === 'establecimiento') {
           const { error: estabError } = await supabaseClient
             .from('establishments')
-            .insert([{ id: generatedEstablishmentID, name: establishmentName }]);
+            .insert([{
+              id: generatedEstablishmentID,
+              name: establishmentName
+            }]);
           if (estabError) {
             messageDiv.textContent = 'Error al crear establecimiento: ' + estabError.message;
             messageDiv.style.color = '#ff4d4d';
@@ -488,80 +545,95 @@
         messageDiv.style.color = '#27ae60';
 
       } else {
-        // Modo login
-        const { data: signInData, error: signInError } = await supabaseClient.auth.signInWithPassword({ email, password });
+        // MODO LOGIN
+        const { data: signInData, error: signInError } = await supabaseClient.auth.signInWithPassword({
+          email,
+          password
+        });
         if (signInError) {
           messageDiv.textContent = 'Error: ' + signInError.message;
           messageDiv.style.color = '#ff4d4d';
           return;
         }
-        messageDiv.textContent = 'Inicio de sesión exitoso. Redirigiendo...';
+        messageDiv.textContent = 'Inicio de sesión exitoso. Verificando perfil...';
         messageDiv.style.color = '#27ae60';
 
-        // Obtener usuario actual
+        // Obtener usuario
         const currentUser = signInData.user || (await supabaseClient.auth.getUser()).data.user;
         if (!currentUser) {
-          messageDiv.textContent = 'No se pudo obtener el usuario.';
+          messageDiv.textContent = 'No se pudo obtener la información del usuario.';
           return;
         }
 
-        // Consultar la tabla 'perfiles'
-        const { data: perfilData, error: perfilError } = await supabaseClient
-          .from('perfiles')
-          .select("user_id, role, establishment_number")
+        // Consultar la tabla 'profiles' para ver si existe y si profile_completed es true
+        // Se usa 'user_id' para relacionar con currentUser.id
+        const { data: perfil, error: perfilError } = await supabaseClient
+          .from('profiles')
+          .select("user_id, role, establishment_number, profile_completed")
           .eq('user_id', currentUser.id)
           .maybeSingle();
-        if (perfilError || !perfilData) {
+
+        if (perfilError || !perfil) {
+          // Si no existe registro, redirigir a perfil.html
           window.location.href = "perfil.html";
           return;
         }
 
-        // Redirigir según rol
-        if (perfilData.role === "establecimiento") {
-          // Buscar en 'establishments'
-          const { data: estabData, error: estabError } = await supabaseClient
+        // Si existe la fila, chequear si profile_completed es true
+        if (!perfil.profile_completed) {
+          window.location.href = "perfil.html";
+          return;
+        }
+
+        // Si está completado, redirigir según el rol
+        if (perfil.role === "establecimiento") {
+          // Buscar en 'establishments' para redirigir
+          const { data: estab, error: estabError } = await supabaseClient
             .from('establishments')
             .select("id, name")
-            .eq('id', perfilData.establishment_number)
-            .maybeSingle();
-          if (estabError || !estabData) {
+            .eq('id', perfil.establishment_number)
+            .single();
+          if (estabError || !estab) {
             window.location.href = "perfil.html";
           } else {
-            window.location.href = "establecimiento.html?id=" + encodeURIComponent(estabData.id) + "&name=" + encodeURIComponent(estabData.name);
+            window.location.href = "establecimiento.html?id=" 
+              + encodeURIComponent(estab.id) 
+              + "&name=" + encodeURIComponent(estab.name);
           }
         } else {
-          // Jugador -> home.html
-          window.location.href = "home.html?userId=" + encodeURIComponent(currentUser.id) + "&role=" + encodeURIComponent(perfilData.role);
+          // Si es jugador, ir a home.html
+          window.location.href = "home.html?userId=" 
+            + encodeURIComponent(currentUser.id) 
+            + "&role=" + encodeURIComponent(perfil.role);
         }
       }
     });
 
-    // Construir menú dinámico
+    // Función que construye el menú dinámico (si usas role_resources, etc.)
     async function applyMenuResources() {
-      // Limpiar menú
       menuContainer.innerHTML = '';
 
-      // Obtener usuario actual
       const { data: userData } = await supabaseClient.auth.getUser();
       if (!userData || !userData.user) {
         navAuthButtons.classList.remove('hidden');
         return;
       }
+
       navAuthButtons.classList.add('hidden');
 
-      // Consultar rol en 'perfiles'
+      // Consultar el rol en la tabla 'profiles'
       const { data: perfilData, error: perfilErr } = await supabaseClient
-        .from('perfiles')
+        .from('profiles')
         .select('role')
         .eq('user_id', userData.user.id)
         .maybeSingle();
       if (perfilErr || !perfilData) {
-        console.warn("No se encontró perfil, menú vacío.");
+        console.warn("No se encontró el perfil, menú vacío.");
         return;
       }
-      const userRole = perfilData.role; // "jugador", "establecimiento", etc.
+      const userRole = perfilData.role;
 
-      // role_resources -> resource_id
+      // Consultar role_resources
       const { data: rrData, error: rrError } = await supabaseClient
         .from('role_resources')
         .select('resource_id')
@@ -572,7 +644,7 @@
       }
       const resourceIds = rrData.map(item => item.resource_id);
 
-      // resources -> resource_name, resource_url
+      // Consultar resources
       const { data: resData, error: resError } = await supabaseClient
         .from('resources')
         .select('id, resource_name, resource_url')
@@ -582,18 +654,21 @@
         return;
       }
 
-      // Crear un botón por cada recurso
       resData.forEach(resource => {
         const btn = document.createElement('button');
         btn.textContent = resource.resource_name.toUpperCase();
         btn.style.cursor = 'pointer';
         btn.addEventListener('click', () => {
-          window.location.href = resource.resource_url;
+          if (resource.resource_url.endsWith('.html')) {
+            window.location.href = resource.resource_url;
+          } else {
+            window.location.href = resource.resource_url;
+          }
         });
         menuContainer.appendChild(btn);
       });
 
-      // Agregar botón "Cerrar Sesión"
+      // Botón "Cerrar Sesión"
       const logoutBtn = document.createElement('button');
       logoutBtn.textContent = 'CERRAR SESIÓN';
       logoutBtn.style.borderColor = 'red';
@@ -608,7 +683,7 @@
     // Al cargar la página, si hay usuario, construir menú
     window.addEventListener('DOMContentLoaded', async () => {
       const { data: currentUserData } = await supabaseClient.auth.getUser();
-      if (currentUserData && currentUserData.user) {
+      if (currentUserData.user) {
         navAuthButtons.classList.add('hidden');
         applyMenuResources();
       }
