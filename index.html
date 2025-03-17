@@ -8,25 +8,16 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
     /* RESET y estilos generales */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Poppins', sans-serif;
       color: #333;
       background-color: #f8f8f8;
       overflow-x: hidden;
     }
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
-    button {
-      cursor: pointer;
-      font-family: 'Poppins', sans-serif;
-    }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; font-family: 'Poppins', sans-serif; }
+
     /* Barra de navegación */
     nav {
       display: flex;
@@ -41,7 +32,7 @@
       font-weight: 600;
       color: #2c3e50;
     }
-    /* Botones del menú con atributo data-resource para control dinámico */
+    /* Menú: cada botón tiene un data-resource para control dinámico */
     .nav-right {
       display: flex;
       align-items: center;
@@ -56,12 +47,9 @@
       font-weight: 500;
       transition: background-color 0.3s ease;
     }
-    .nav-button:hover {
-      background-color: #e07e00;
-    }
-    .hidden {
-      display: none !important;
-    }
+    .nav-button:hover { background-color: #e07e00; }
+    .hidden { display: none !important; }
+
     /* Sección principal (hero) */
     .hero {
       padding: 3rem 1rem;
@@ -124,6 +112,7 @@
       background-color: #ff9500;
       color: #fff;
     }
+
     /* Footer */
     footer {
       text-align: center;
@@ -134,13 +123,11 @@
       border-top: 1px solid #eaeaea;
       margin-top: 2rem;
     }
-    /* Modal de Autenticación */
+
+    /* Modal de autenticación */
     #auth-section {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      top: 0; left: 0; right: 0; bottom: 0;
       display: none;
       justify-content: center;
       align-items: center;
@@ -261,7 +248,7 @@
   <nav>
     <span class="logo">Catch Up Padel</span>
     <div class="nav-right">
-      <!-- Los botones del menú se mostrarán u ocultarán dinámicamente según el rol -->
+      <!-- Botones del menú con data-resource para control de acceso -->
       <button class="nav-button" data-resource="btn-home">Inicio</button>
       <button class="nav-button" data-resource="btn-establecimientos">Establecimientos</button>
       <button class="nav-button" data-resource="btn-mis-canchas">Mis Canchas</button>
@@ -293,7 +280,7 @@
       <form id="auth-form">
         <input type="email" id="email" placeholder="Correo electrónico" required>
         <input type="password" id="password" placeholder="Contraseña" required>
-        <!-- Selección de Rol (sin atributo required, se valida manualmente) -->
+        <!-- Selección de Rol (sin 'required', validación manual) -->
         <div id="role-selection">
           <div class="role-option">
             <input type="radio" name="user-role" id="role-jugador" value="jugador">
@@ -304,7 +291,7 @@
             <label for="role-establecimiento">Establecimiento</label>
           </div>
         </div>
-        <!-- Campos para Establecimiento: ID generado (solo lectura) y Nombre -->
+        <!-- Campos para Establecimiento: ID generado y Nombre -->
         <div id="establishment-field">
           <input type="text" id="establishment-number" placeholder="ID de Establecimiento" readonly>
           <input type="text" id="establishment-name" placeholder="Nombre del Establecimiento">
@@ -408,7 +395,7 @@
       }
 
       if (mode === 'signup') {
-        // Validar que se haya seleccionado un rol manualmente
+        // Validación manual: verificar selección de rol
         const selectedRoleElem = document.querySelector('input[name="user-role"]:checked');
         if (!selectedRoleElem) {
           messageDiv.textContent = 'Por favor, selecciona un rol (Jugador o Establecimiento).';
@@ -450,7 +437,7 @@
           return;
         }
 
-        // Insertar perfil en la tabla "perfiles"
+        // Insertar perfil en la tabla 'perfiles'
         const { error: perfilError } = await supabaseClient.from('perfiles').insert([
           {
             user_id: userId,
@@ -465,7 +452,7 @@
           return;
         }
 
-        // Si el rol es establecimiento, insertar en "establishments"
+        // Si el rol es establecimiento, insertar en 'establishments'
         if (selectedRole === 'establecimiento') {
           const { error: estabError } = await supabaseClient.from('establishments').insert([
             {
@@ -482,6 +469,7 @@
         }
         messageDiv.textContent = 'Registro exitoso. Revisa tu correo para confirmar tu cuenta y luego inicia sesión.';
         messageDiv.style.color = '#27ae60';
+
       } else {
         // Modo login
         const { data: signInData, error: signInError } = await supabaseClient.auth.signInWithPassword({
@@ -497,7 +485,7 @@
         messageDiv.textContent = 'Inicio de sesión exitoso. Redirigiendo...';
         messageDiv.style.color = '#27ae60';
 
-        // Obtener el usuario actual (del objeto signInData o con getUser())
+        // Obtener el usuario actual
         const currentUser = signInData.user || (await supabaseClient.auth.getUser()).data.user;
         console.log("Usuario actual:", currentUser);
         if (!currentUser) {
@@ -506,20 +494,20 @@
           return;
         }
 
-        // Consultar la tabla "perfiles" para obtener el perfil del usuario
+        // Consultar la tabla 'perfiles' para obtener el perfil del usuario
         const { data: perfilData, error: perfilError } = await supabaseClient
           .from('perfiles')
           .select("user_id, role, establishment_number")
           .eq('user_id', currentUser.id);
         console.log("PerfilData:", perfilData, "PerfilError:", perfilError);
         if (perfilError || !perfilData || perfilData.length === 0) {
-          // Si no se encuentra el perfil, redirigir a perfil.html para completarlo
+          // Si no se encontró el perfil, redirigir a perfil.html para completarlo
           window.location.href = "perfil.html";
           return;
         }
         const perfil = perfilData[0];
         if (perfil.role === "establecimiento") {
-          // Si es establecimiento, consultar la tabla "establishments"
+          // Consultar la tabla 'establishments'
           const { data: estabData, error: estabError } = await supabaseClient
             .from('establishments')
             .select("id, name")
@@ -529,11 +517,11 @@
             window.location.href = "perfil.html";
           } else {
             const estab = estabData[0];
-            // Redirigir a establecimiento.html pasando id y name
+            // Redirigir a establecimiento.html pasando id y name en la URL
             window.location.href = "establecimiento.html?id=" + encodeURIComponent(estab.id) + "&name=" + encodeURIComponent(estab.name);
           }
         } else {
-          // Si el rol es jugador, redirigir a home.html
+          // Rol jugador: redirigir a home.html
           window.location.href = "home.html?userId=" + encodeURIComponent(currentUser.id) + "&role=jugador";
         }
       }
@@ -544,22 +532,22 @@
       // Obtener usuario actual
       const { data: userData } = await supabaseClient.auth.getUser();
       if (!userData.user) return;
-
-      // Consultar el perfil para obtener el rol
+      
+      // Consultar la tabla 'perfiles' para obtener el rol
       const { data: perfilData } = await supabaseClient
         .from('perfiles')
         .select("role")
         .eq('user_id', userData.user.id);
       if (!perfilData || perfilData.length === 0) return;
       const userRole = perfilData[0].role;
-
+      
       // Consultar la tabla role_resources para obtener los recursos permitidos
       const { data: resourcesData } = await supabaseClient
         .from('role_resources')
         .select('resource')
         .eq('role', userRole);
       const allowedResources = resourcesData ? resourcesData.map(item => item.resource) : [];
-
+      
       // Aplicar visibilidad en el menú
       document.querySelectorAll('[data-resource]').forEach(btn => {
         const resourceId = btn.getAttribute('data-resource');
@@ -571,7 +559,7 @@
       });
     }
 
-    // Si el usuario ya está logueado, aplicar los recursos del menú
+    // Si ya hay un usuario logueado, aplicar la funcionalidad del menú dinámico
     window.addEventListener('DOMContentLoaded', async () => {
       const { data: currentUserData } = await supabaseClient.auth.getUser();
       if (currentUserData.user) {
