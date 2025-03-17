@@ -445,7 +445,6 @@
         messageDiv.style.color = '#ff4d4d';
         return;
       }
-
       if (mode === 'signup') {
         // MODO REGISTRO
         const selectedRoleElem = document.querySelector('input[name="user-role"]:checked');
@@ -485,7 +484,7 @@
           messageDiv.style.color = '#ff4d4d';
           return;
         }
-        // Insertar en la tabla 'profiles' (crear registro de perfil)
+        // Insertar en la tabla 'profiles'
         const { error: perfilError } = await supabaseClient
           .from('profiles')
           .insert([{
@@ -513,7 +512,6 @@
         }
         messageDiv.textContent = 'Registro exitoso. Revisa tu correo y luego inicia sesión.';
         messageDiv.style.color = '#27ae60';
-
       } else {
         // MODO LOGIN
         const { data: signInData, error: signInError } = await supabaseClient.auth.signInWithPassword({
@@ -540,34 +538,34 @@
           .eq('user_id', currentUser.id)
           .maybeSingle();
         console.log("Perfil obtenido:", perfil);
-        // Si no existe registro, redirigir a perfil.html
-        if (perfilError || !perfil) {
-          window.location.href = "perfil.html";
-          return;
-        }
-        // Si existe, redirigir según el rol
-        if (perfil.role === "establecimiento") {
-          const { data: estab, error: estabError } = await supabaseClient
-            .from('establishments')
-            .select("id, name")
-            .eq('id', perfil.establishment_number)
-            .single();
-          if (estabError || !estab) {
-            window.location.href = "perfil.html";
+        // Si existe registro en profiles, redirigir a home.html o establecimiento.html
+        if (perfil) {
+          if (perfil.role === "establecimiento") {
+            const { data: estab, error: estabError } = await supabaseClient
+              .from('establishments')
+              .select("id, name")
+              .eq('id', perfil.establishment_number)
+              .single();
+            if (estabError || !estab) {
+              window.location.href = "perfil.html";
+            } else {
+              window.location.href = "establecimiento.html?id=" 
+                + encodeURIComponent(estab.id) 
+                + "&name=" + encodeURIComponent(estab.name);
+            }
           } else {
-            window.location.href = "establecimiento.html?id=" 
-              + encodeURIComponent(estab.id) 
-              + "&name=" + encodeURIComponent(estab.name);
+            window.location.href = "home.html?userId=" 
+              + encodeURIComponent(currentUser.id) 
+              + "&role=" + encodeURIComponent(perfil.role);
           }
         } else {
-          window.location.href = "home.html?userId=" 
-            + encodeURIComponent(currentUser.id) 
-            + "&role=" + encodeURIComponent(perfil.role);
+          // Si no existe registro en profiles, redirigir a perfil.html
+          window.location.href = "perfil.html";
         }
       }
     });
 
-    // Función para construir el menú dinámico
+    // Función para construir el menú dinámico (si se utiliza)
     async function applyMenuResources() {
       menuContainer.innerHTML = '';
       const { data: userData } = await supabaseClient.auth.getUser();
