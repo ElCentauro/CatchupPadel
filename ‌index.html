@@ -8,15 +8,23 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
     /* RESET y estilos generales */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+    }
     body {
       font-family: 'Poppins', sans-serif;
       color: #333;
       background-color: #f8f8f8;
       overflow-x: hidden;
     }
-    a { text-decoration: none; color: inherit; }
-    button { cursor: pointer; font-family: 'Poppins', sans-serif; }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+    button {
+      cursor: pointer;
+      font-family: 'Poppins', sans-serif;
+    }
 
     /* Barra de navegación */
     nav {
@@ -46,12 +54,14 @@
       font-weight: 500;
       transition: background-color 0.3s ease;
     }
-    .nav-button:hover { background-color: #e07e00; }
+    .nav-button:hover {
+      background-color: #e07e00;
+    }
 
-    /* Menú dinámico: se mostrará solo si hay usuario logueado */
+    /* Menú dinámico */
     .menu-container {
       display: flex;
-      justify-content: center;
+      justify-content: center; /* centra horizontalmente */
       gap: 1rem;
       margin: 1rem 0;
     }
@@ -68,9 +78,11 @@
       background-color: #ff9500;
       color: #fff;
     }
-    .hidden { display: none !important; }
+    .hidden {
+      display: none !important;
+    }
 
-    /* Sección principal (hero) */
+    /* Hero */
     .hero {
       padding: 3rem 1rem;
       text-align: center;
@@ -120,7 +132,9 @@
       background-color: #ff9500;
       color: #fff;
     }
-    .hero-button-primary:hover { background-color: #e07e00; }
+    .hero-button-primary:hover {
+      background-color: #e07e00;
+    }
     .hero-button-secondary {
       background-color: transparent;
       color: #ff9500;
@@ -175,12 +189,12 @@
       font-weight: 600;
       letter-spacing: 1px;
     }
-    form {
+    .auth-container form {
       display: flex;
       flex-direction: column;
       gap: 15px;
     }
-    form input {
+    .auth-container form input {
       width: 100%;
       padding: 12px 15px;
       border: none;
@@ -191,9 +205,13 @@
       outline: none;
       transition: background 0.3s ease;
     }
-    form input:focus { background: rgba(255,255,255,0.35); }
-    form input::placeholder { color: rgba(255,255,255,0.8); }
-    form button {
+    .auth-container form input:focus {
+      background: rgba(255,255,255,0.35);
+    }
+    .auth-container form input::placeholder {
+      color: rgba(255,255,255,0.8);
+    }
+    .auth-container form button {
       padding: 12px;
       border: none;
       border-radius: 8px;
@@ -203,7 +221,9 @@
       font-weight: 600;
       transition: background 0.3s ease;
     }
-    form button:hover { background: #219150; }
+    .auth-container form button:hover {
+      background: #219150;
+    }
     .toggle-link {
       margin-top: 20px;
       font-size: 14px;
@@ -212,24 +232,18 @@
       color: #f1c40f;
       text-decoration: none;
       font-weight: 600;
-      cursor: pointer;
     }
-    .toggle-link a:hover { text-decoration: underline; }
+    .toggle-link a:hover {
+      text-decoration: underline;
+    }
     .message {
       margin-top: 15px;
       font-size: 15px;
       min-height: 20px;
     }
-    /* Campos adicionales para el registro */
-    #role-selection {
-      display: flex;
-      justify-content: space-around;
-      margin-top: 10px;
-    }
-    .role-option {
-      display: flex;
-      align-items: center;
-      gap: 5px;
+    /* Quitar 'required' de los radios para evitar error "not focusable" */
+    .role-option input[type="radio"] {
+      /* NO required */
     }
     #establishment-field {
       display: none;
@@ -239,13 +253,11 @@
     }
     .close-modal {
       position: absolute;
-      top: 5px;
-      right: 5px;
+      top: 5px; right: 5px;
       background: #ff9500;
       border: none;
       border-radius: 50%;
-      width: 30px;
-      height: 30px;
+      width: 30px; height: 30px;
       color: #fff;
       font-size: 16px;
       cursor: pointer;
@@ -256,17 +268,17 @@
   <!-- Barra de navegación -->
   <nav>
     <span class="logo">Catch Up Padel</span>
-    <!-- Botones de login/registro (visibles solo si no hay usuario logueado) -->
+    <!-- Botones login/registro (solo visibles si no hay usuario logueado) -->
     <div class="nav-right" id="nav-auth-buttons">
       <button class="nav-button" onclick="showAuthSection('login')">Iniciar Sesión</button>
       <button class="nav-button" onclick="showAuthSection('signup')">Registrarse</button>
     </div>
   </nav>
 
-  <!-- Menú dinámico (se genera si hay usuario logueado) -->
+  <!-- Menú dinámico (si hay usuario logueado) -->
   <div class="menu-container" id="menu-container"></div>
 
-  <!-- Sección principal (hero) -->
+  <!-- Hero principal -->
   <section class="hero">
     <h1>Catch Up Padel</h1>
     <p>Conecta con jugadores y establecimientos de pádel y disfruta del mejor deporte en comunidad.</p>
@@ -277,7 +289,6 @@
     </div>
   </section>
 
-  <!-- Footer -->
   <footer>
     © 2025 Catch Up Padel. Todos los derechos reservados.
   </footer>
@@ -288,23 +299,23 @@
       <button class="close-modal" onclick="hideAuthSection()">×</button>
       <h2 id="form-title">Registro</h2>
       <form id="auth-form">
-        <input type="email" id="email" placeholder="Correo electrónico" required>
-        <input type="password" id="password" placeholder="Contraseña" required>
-        <!-- Selección de Rol -->
+        <input type="email" id="email" placeholder="Correo electrónico">
+        <input type="password" id="password" placeholder="Contraseña">
+        <!-- Selección de Rol (sin required) -->
         <div id="role-selection">
           <div class="role-option">
-            <input type="radio" name="user-role" id="role-jugador" value="jugador" required>
+            <input type="radio" name="user-role" id="role-jugador" value="jugador">
             <label for="role-jugador">Jugador</label>
           </div>
           <div class="role-option">
-            <input type="radio" name="user-role" id="role-establecimiento" value="establecimiento" required>
+            <input type="radio" name="user-role" id="role-establecimiento" value="establecimiento">
             <label for="role-establecimiento">Establecimiento</label>
           </div>
         </div>
-        <!-- Campos para Establecimiento: ID y Nombre -->
+        <!-- Campos para Establecimiento -->
         <div id="establishment-field">
           <input type="text" id="establishment-number" placeholder="ID de Establecimiento" readonly>
-          <input type="text" id="establishment-name" placeholder="Nombre del Establecimiento" required>
+          <input type="text" id="establishment-name" placeholder="Nombre del Establecimiento">
         </div>
         <button type="submit" id="submit-button">Registrarse</button>
       </form>
@@ -323,12 +334,12 @@
   <!-- Supabase JS (CDN) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <script>
-    // CONFIGURACIÓN DE SUPABASE – REEMPLAZA CON TUS DATOS REALES
+    // CONFIGURACIÓN DE SUPABASE – Reemplaza con tus datos
     const SUPABASE_URL = 'https://idlvxinjfbsujpvxncbr.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Variables del formulario y elementos del DOM
+    // Variables y elementos
     const authForm = document.getElementById('auth-form');
     const formTitle = document.getElementById('form-title');
     const submitButton = document.getElementById('submit-button');
@@ -344,13 +355,13 @@
     let generatedEstablishmentID = null;
     let mode = 'signup';
 
-    // Función para generar ID de establecimiento
+    // Generar ID de establecimiento
     function generateEstablishmentID() {
       const randomNumber = Math.floor(100000 + Math.random() * 900000);
       return "EST-" + randomNumber;
     }
 
-    // Mostrar/Ocultar modal y cambiar modo
+    // Mostrar/ocultar modal y cambiar modo (login/signup)
     function showAuthSection(newMode) {
       document.getElementById('auth-section').style.display = 'flex';
       setMode(newMode);
@@ -369,7 +380,7 @@
         document.getElementById('toggle-signin').style.display = 'none';
         messageDiv.textContent = '';
       } else {
-        formTitle.textContent = 'Registro';
+        formTitle.textContent = 'Registrarse';
         submitButton.textContent = 'Registrarse';
         document.getElementById('role-selection').style.display = 'flex';
         document.getElementById('toggle-signup').style.display = 'none';
@@ -378,7 +389,7 @@
       }
     }
 
-    // Escuchar cambios en la selección de rol
+    // Radios: si se elige establecimiento, generamos un ID
     document.querySelectorAll('input[name="user-role"]').forEach(radio => {
       radio.addEventListener('change', () => {
         if (document.getElementById('role-establecimiento').checked) {
@@ -394,28 +405,29 @@
       });
     });
 
-    // Submit del formulario: registro o login
+    // Listener del formulario
     authForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       messageDiv.textContent = '';
 
       const email = emailInput.value.trim();
       const password = passwordInput.value.trim();
+
       if (!email || !password) {
-        messageDiv.textContent = 'Por favor, completa todos los campos.';
+        messageDiv.textContent = 'Completa todos los campos.';
         messageDiv.style.color = '#ff4d4d';
         return;
       }
 
       if (mode === 'signup') {
-        // Validar selección de rol
+        // Validar rol manualmente
         const selectedRoleElem = document.querySelector('input[name="user-role"]:checked');
         if (!selectedRoleElem) {
-          messageDiv.textContent = 'Por favor, selecciona un rol (Jugador o Establecimiento).';
+          messageDiv.textContent = 'Selecciona un rol (Jugador o Establecimiento).';
           messageDiv.style.color = '#ff4d4d';
           return;
         }
-        const selectedRole = selectedRoleElem.value;
+        const selectedRole = selectedRoleElem.value; // 'jugador' o 'establecimiento'
         let establishmentName = null;
         if (selectedRole === 'establecimiento') {
           if (!generatedEstablishmentID) {
@@ -425,24 +437,24 @@
           }
           establishmentName = establishmentNameInput.value.trim();
           if (!establishmentName) {
-            messageDiv.textContent = 'Por favor, ingresa el nombre del establecimiento.';
+            messageDiv.textContent = 'Ingresa el nombre del establecimiento.';
             messageDiv.style.color = '#ff4d4d';
             return;
           }
         }
 
-        // Registrar usuario en Supabase Auth
+        // Registrar en Supabase Auth
         const { data: signUpData, error: signUpError } = await supabaseClient.auth.signUp({ email, password });
         if (signUpError) {
           messageDiv.textContent = 'Error: ' + signUpError.message;
           messageDiv.style.color = '#ff4d4d';
-          console.error("Error signUp:", signUpError);
+          console.error("signUpError:", signUpError);
           return;
         }
         const userId = signUpData.user ? signUpData.user.id : null;
         if (!userId) {
-          messageDiv.textContent = 'Error al registrar el usuario.';
-          messageDiv.style.color = '#ff4d4d';
+          messageDiv.textContent = 'Registro exitoso. Verifica tu correo.';
+          messageDiv.style.color = '#27ae60';
           return;
         }
 
@@ -453,7 +465,6 @@
         if (perfilError) {
           messageDiv.textContent = 'Error al crear perfil: ' + perfilError.message;
           messageDiv.style.color = '#ff4d4d';
-          console.error("Error perfil:", perfilError);
           return;
         }
 
@@ -465,28 +476,27 @@
           if (estabError) {
             messageDiv.textContent = 'Error al crear establecimiento: ' + estabError.message;
             messageDiv.style.color = '#ff4d4d';
-            console.error("Error establishment:", estabError);
             return;
           }
         }
         messageDiv.textContent = 'Registro exitoso. Revisa tu correo y luego inicia sesión.';
         messageDiv.style.color = '#27ae60';
+
       } else {
         // Modo login
         const { data: signInData, error: signInError } = await supabaseClient.auth.signInWithPassword({ email, password });
         if (signInError) {
           messageDiv.textContent = 'Error: ' + signInError.message;
           messageDiv.style.color = '#ff4d4d';
-          console.error("Error signIn:", signInError);
           return;
         }
         messageDiv.textContent = 'Inicio de sesión exitoso. Redirigiendo...';
         messageDiv.style.color = '#27ae60';
 
-        // Obtener usuario actual
+        // Obtener usuario
         const currentUser = signInData.user || (await supabaseClient.auth.getUser()).data.user;
         if (!currentUser) {
-          messageDiv.textContent = 'No se pudo obtener la información del usuario.';
+          messageDiv.textContent = 'No se pudo obtener el usuario.';
           return;
         }
 
@@ -500,6 +510,8 @@
           window.location.href = "perfil.html";
           return;
         }
+
+        // Redirigir según rol
         if (perfilData.role === "establecimiento") {
           // Buscar en 'establishments'
           const { data: estabData, error: estabError } = await supabaseClient
@@ -513,38 +525,40 @@
             window.location.href = "establecimiento.html?id=" + encodeURIComponent(estabData.id) + "&name=" + encodeURIComponent(estabData.name);
           }
         } else {
-          // Rol jugador: redirigir a home.html
+          // Jugador -> home.html
           window.location.href = "home.html?userId=" + encodeURIComponent(currentUser.id) + "&role=" + encodeURIComponent(perfilData.role);
         }
       }
     });
 
-    // Función para construir el menú dinámico según recursos permitidos
+    // Construir el menú dinámico
     async function applyMenuResources() {
-      // Limpiar menú actual
+      // Limpiar menú
       menuContainer.innerHTML = '';
 
       // Obtener usuario actual
       const { data: userData } = await supabaseClient.auth.getUser();
       if (!userData || !userData.user) {
+        // Mostrar botones de login/registro
         navAuthButtons.classList.remove('hidden');
         return;
       }
+      // Ocultar botones de login/registro
       navAuthButtons.classList.add('hidden');
 
-      // Consultar el perfil para obtener el rol (asumimos que 'role' es un texto: "jugador", etc.)
+      // Consultar el rol en 'perfiles'
       const { data: perfilData, error: perfilErr } = await supabaseClient
         .from('perfiles')
         .select('role')
         .eq('user_id', userData.user.id)
         .maybeSingle();
       if (perfilErr || !perfilData) {
-        console.warn("No se encontró el perfil, menú vacío.");
+        console.warn("No se encontró perfil, menú vacío.");
         return;
       }
-      const userRole = perfilData.role;
+      const userRole = perfilData.role; // 'jugador', 'establecimiento', etc.
 
-      // Consultar role_resources para obtener la lista de resource_id permitidos para ese rol
+      // role_resources -> resource_id
       const { data: rrData, error: rrError } = await supabaseClient
         .from('role_resources')
         .select('resource_id')
@@ -555,7 +569,7 @@
       }
       const resourceIds = rrData.map(item => item.resource_id);
 
-      // Consultar resources para obtener nombre y URL (solo los permitidos)
+      // resources -> resource_name, resource_url
       const { data: resData, error: resError } = await supabaseClient
         .from('resources')
         .select('id, resource_name, resource_url')
@@ -565,19 +579,18 @@
         return;
       }
 
-      // Generar botones del menú
+      // Crear botón por cada recurso
       resData.forEach(resource => {
         const btn = document.createElement('button');
         btn.textContent = resource.resource_name.toUpperCase();
         btn.style.cursor = 'pointer';
         btn.addEventListener('click', () => {
-          // Redirige a resource_url
           window.location.href = resource.resource_url;
         });
         menuContainer.appendChild(btn);
       });
 
-      // Agregar botón de "Cerrar Sesión"
+      // Agregar botón "Cerrar Sesión"
       const logoutBtn = document.createElement('button');
       logoutBtn.textContent = 'CERRAR SESIÓN';
       logoutBtn.style.borderColor = 'red';
@@ -589,7 +602,7 @@
       menuContainer.appendChild(logoutBtn);
     }
 
-    // Si hay usuario logueado, aplicar menú dinámico al cargar la página
+    // Al cargar la página, si hay usuario logueado, generar menú
     window.addEventListener('DOMContentLoaded', async () => {
       const { data: currentUserData } = await supabaseClient.auth.getUser();
       if (currentUserData && currentUserData.user) {
