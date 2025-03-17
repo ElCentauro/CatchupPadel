@@ -23,7 +23,6 @@
       text-decoration: none;
       color: inherit;
     }
-
     /* CABECERA */
     header {
       background-color: #d0ffd0; /* Verde flúor claro */
@@ -46,7 +45,6 @@
       text-transform: uppercase;
       font-weight: 500;
     }
-
     /* CONTENEDOR DEL FORMULARIO */
     .container {
       max-width: 800px;
@@ -70,7 +68,6 @@
       color: #2c3e50;
       margin: 0;
     }
-
     /* GRID DEL FORMULARIO: Dos columnas en pantallas grandes */
     .profile-grid {
       display: grid;
@@ -139,7 +136,6 @@
       background-color: #e9ecef;
       font-size: 1rem;
     }
-
     /* Sección para la foto de perfil */
     .photo-section {
       display: flex;
@@ -174,7 +170,6 @@
       border-radius: 5px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
-
     /* Botones */
     .buttons-row {
       display: flex;
@@ -214,7 +209,6 @@
     .btn-delete-photo:hover {
       background-color: #c0392b;
     }
-
     /* RESPONSIVE: Para pantallas menores a 800px, se usa una sola columna */
     @media (max-width: 800px) {
       .profile-grid {
@@ -243,9 +237,7 @@
 <body>
   <!-- CABECERA -->
   <header>
-    <!-- Título centrado -->
     <div class="logo">Catch Up Padel</div>
-    <!-- Link a Home alineado a la derecha -->
     <nav>
       <a href="home.html">Volver a Home</a>
     </nav>
@@ -253,7 +245,6 @@
 
   <!-- CONTENEDOR PRINCIPAL DEL FORMULARIO -->
   <div class="container">
-    <!-- ENCABEZADO DEL FORMULARIO: Fondo gris claro y título "Mi Perfil" centrado -->
     <div class="form-header">
       <h1>Mi Perfil</h1>
     </div>
@@ -439,7 +430,7 @@
         profilePicUrl = publicUrlData.publicUrl;
       }
 
-      // Usar upsert para evitar duplicados
+      // Usar upsert para guardar o actualizar el perfil y marcarlo como completado
       const { data: upsertData, error: upsertError } = await supabaseClient
         .from('profiles')
         .upsert({
@@ -452,7 +443,8 @@
           province: province,
           country: country,
           phone: phone,
-          profile_pic: profilePicUrl
+          profile_pic: profilePicUrl,
+          profile_completed: true
         }, { onConflict: 'id' });
 
       if (upsertError) {
