@@ -27,6 +27,7 @@
       cursor: pointer;
       font-family: 'Poppins', sans-serif;
     }
+
     /* Barra de navegación */
     nav {
       display: flex;
@@ -58,29 +59,7 @@
     .nav-button:hover {
       background-color: #e07e00;
     }
-    /* Menú dinámico */
-    .menu-container {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      margin: 1rem 0;
-    }
-    .menu-container button {
-      padding: 0.75rem 1.5rem;
-      border: 1px solid #ff9500;
-      border-radius: 0.5rem;
-      background-color: #fff;
-      color: #ff9500;
-      font-weight: 600;
-      transition: background-color 0.3s ease;
-    }
-    .menu-container button:hover {
-      background-color: #ff9500;
-      color: #fff;
-    }
-    .hidden {
-      display: none !important;
-    }
+
     /* Sección principal (hero) */
     .hero {
       padding: 3rem 1rem;
@@ -143,6 +122,7 @@
       background-color: #ff9500;
       color: #fff;
     }
+
     /* Footer */
     footer {
       text-align: center;
@@ -153,7 +133,8 @@
       border-top: 1px solid #eaeaea;
       margin-top: 2rem;
     }
-    /* Modal de Autenticación */
+
+    /* Modal de autenticación */
     #auth-section {
       position: fixed;
       top: 0;
@@ -242,7 +223,7 @@
       font-size: 15px;
       min-height: 20px;
     }
-    /* Campos adicionales para el registro */
+    /* Selección de Rol (Jugador/Establecimiento) */
     #role-selection {
       display: flex;
       justify-content: space-around;
@@ -278,14 +259,12 @@
   <!-- Barra de navegación -->
   <nav>
     <span class="logo">Catch Up Padel</span>
+    <!-- Botones de login/registro (solo si no hay sesión) -->
     <div class="nav-right" id="nav-auth-buttons">
       <button class="nav-button" onclick="showAuthSection('login')">Iniciar Sesión</button>
       <button class="nav-button" onclick="showAuthSection('signup')">Registrarse</button>
     </div>
   </nav>
-
-  <!-- Menú dinámico -->
-  <div class="menu-container" id="menu-container"></div>
 
   <!-- Sección principal (hero) -->
   <section class="hero">
@@ -348,25 +327,22 @@
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Variables del formulario y mensaje
+    // Variables
     const authForm = document.getElementById('auth-form');
     const formTitle = document.getElementById('form-title');
     const submitButton = document.getElementById('submit-button');
     const emailInput = document.getElementById('email');
     const passwordInput = document.getElementById('password');
     const messageDiv = document.getElementById('message');
+    const navAuthButtons = document.getElementById('nav-auth-buttons');
+    const roleJugadorRadio = document.getElementById('role-jugador');
+    const roleEstablecimientoRadio = document.getElementById('role-establecimiento');
     const establishmentField = document.getElementById('establishment-field');
     const establishmentInput = document.getElementById('establishment-number');
     const establishmentNameInput = document.getElementById('establishment-name');
-    const navAuthButtons = document.getElementById('nav-auth-buttons');
-    const menuContainer = document.getElementById('menu-container');
 
-    // Radios de rol
-    const roleJugadorRadio = document.getElementById('role-jugador');
-    const roleEstablecimientoRadio = document.getElementById('role-establecimiento');
-
-    let generatedEstablishmentID = null;
     let mode = 'signup';
+    let generatedEstablishmentID = null;
 
     // Generar ID de establecimiento
     function generateEstablishmentID() {
@@ -383,7 +359,7 @@
       document.getElementById('auth-section').style.display = 'none';
     }
 
-    // Ajustar required según modo
+    // Cambiar modo del formulario
     function setMode(newMode) {
       mode = newMode;
       if (mode === 'login') {
@@ -416,7 +392,7 @@
       }
     }
 
-    // Cambios en la selección de rol
+    // Listener para cambiar la vista si se elige "establecimiento"
     document.querySelectorAll('input[name="user-role"]').forEach(radio => {
       radio.addEventListener('change', () => {
         if (roleEstablecimientoRadio.checked) {
@@ -434,19 +410,22 @@
       });
     });
 
-    // Listener del formulario (registro/login)
+    // Evento de submit del formulario
     authForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       messageDiv.textContent = '';
-      const email = emailInput.value.trim();
-      const password = passwordInput.value.trim();
-      if (!email || !password) {
+
+      const emailVal = emailInput.value.trim();
+      const passVal = passwordInput.value.trim();
+
+      if (!emailVal || !passVal) {
         messageDiv.textContent = 'Por favor, completa todos los campos.';
         messageDiv.style.color = '#ff4d4d';
         return;
       }
+
       if (mode === 'signup') {
-        // MODO REGISTRO
+        // Registro
         const selectedRoleElem = document.querySelector('input[name="user-role"]:checked');
         if (!selectedRoleElem) {
           messageDiv.textContent = 'Por favor, selecciona un rol (Jugador o Establecimiento).';
@@ -468,10 +447,11 @@
             return;
           }
         }
-        // Registrar en Supabase Auth
+
+        // Crear usuario en Supabase Auth
         const { data: signUpData, error: signUpError } = await supabaseClient.auth.signUp({
-          email,
-          password
+          email: emailVal,
+          password: passVal
         });
         if (signUpError) {
           messageDiv.textContent = 'Error: ' + signUpError.message;
@@ -480,23 +460,26 @@
         }
         const userId = signUpData.user ? signUpData.user.id : null;
         if (!userId) {
-          messageDiv.textContent = 'Error al registrar el usuario.';
+          messageDiv.textContent = 'Error al registrar el usuario en Auth.';
           messageDiv.style.color = '#ff4d4d';
           return;
         }
-        // Insertar en la tabla 'profiles'
+
+        // Insertar en la tabla "perfiles"
         const { error: perfilError } = await supabaseClient
-          .from('profiles')
+          .from('perfiles')
           .insert([{
             user_id: userId,
             role: selectedRole,
             establishment_number: (selectedRole === 'establecimiento') ? generatedEstablishmentID : null
           }]);
         if (perfilError) {
-          messageDiv.textContent = 'Error al crear registro en profiles: ' + perfilError.message;
+          messageDiv.textContent = 'Error al crear registro en "perfiles": ' + perfilError.message;
           messageDiv.style.color = '#ff4d4d';
           return;
         }
+
+        // Si es establecimiento, crear registro en "establishments"
         if (selectedRole === 'establecimiento') {
           const { error: estabError } = await supabaseClient
             .from('establishments')
@@ -512,11 +495,12 @@
         }
         messageDiv.textContent = 'Registro exitoso. Revisa tu correo y luego inicia sesión.';
         messageDiv.style.color = '#27ae60';
+
       } else {
         // MODO LOGIN
         const { data: signInData, error: signInError } = await supabaseClient.auth.signInWithPassword({
-          email,
-          password
+          email: emailVal,
+          password: passVal
         });
         if (signInError) {
           messageDiv.textContent = 'Error: ' + signInError.message;
@@ -525,22 +509,27 @@
         }
         messageDiv.textContent = 'Inicio de sesión exitoso. Verificando perfil...';
         messageDiv.style.color = '#27ae60';
+
         // Obtener usuario
         const currentUser = signInData.user || (await supabaseClient.auth.getUser()).data.user;
         if (!currentUser) {
           messageDiv.textContent = 'No se pudo obtener la información del usuario.';
           return;
         }
-        // Consultar la tabla 'profiles' usando 'user_id'
+
+        // Consultar la tabla "perfiles"
         const { data: perfil, error: perfilError } = await supabaseClient
-          .from('profiles')
+          .from('perfiles')
           .select("user_id, role, establishment_number")
           .eq('user_id', currentUser.id)
-          .maybeSingle();
-        console.log("Perfil obtenido:", perfil);
-        // Si existe registro en profiles, redirigir a home.html (o establecimiento.html)
-        if (perfil) {
+          .single(); // si esperas exactamente 1
+        if (perfilError || !perfil) {
+          // Si no existe registro en "perfiles", ir a perfil.html
+          window.location.href = "perfil.html";
+        } else {
+          // Ver rol
           if (perfil.role === "establecimiento") {
+            // Buscar en "establishments"
             const { data: estab, error: estabError } = await supabaseClient
               .from('establishments')
               .select("id, name")
@@ -549,83 +538,26 @@
             if (estabError || !estab) {
               window.location.href = "perfil.html";
             } else {
-              window.location.href = "establecimiento.html?id=" 
-                + encodeURIComponent(estab.id) 
+              // Redirigir a la página de establecimiento
+              window.location.href = "establecimiento.html?id=" + encodeURIComponent(estab.id) 
                 + "&name=" + encodeURIComponent(estab.name);
             }
           } else {
-            window.location.href = "home.html?userId=" 
-              + encodeURIComponent(currentUser.id) 
+            // Jugador -> home.html
+            window.location.href = "home.html?userId=" + encodeURIComponent(currentUser.id) 
               + "&role=" + encodeURIComponent(perfil.role);
           }
-        } else {
-          // Si no existe registro en profiles, redirigir a perfil.html
-          window.location.href = "perfil.html";
         }
       }
     });
 
-    // Función para construir el menú dinámico (opcional)
-    async function applyMenuResources() {
-      menuContainer.innerHTML = '';
-      const { data: userData } = await supabaseClient.auth.getUser();
-      if (!userData || !userData.user) {
-        navAuthButtons.classList.remove('hidden');
-        return;
-      }
-      navAuthButtons.classList.add('hidden');
-      const { data: perfilData, error: perfilErr } = await supabaseClient
-        .from('profiles')
-        .select('role')
-        .eq('user_id', userData.user.id)
-        .maybeSingle();
-      if (perfilErr || !perfilData) {
-        console.warn("No se encontró el perfil, menú vacío.");
-        return;
-      }
-      const userRole = perfilData.role;
-      const { data: rrData, error: rrError } = await supabaseClient
-        .from('role_resources')
-        .select('resource_id')
-        .eq('role', userRole);
-      if (rrError || !rrData) {
-        console.warn("Error consultando role_resources:", rrError);
-        return;
-      }
-      const resourceIds = rrData.map(item => item.resource_id);
-      const { data: resData, error: resError } = await supabaseClient
-        .from('resources')
-        .select('id, resource_name, resource_url')
-        .in('id', resourceIds);
-      if (resError) {
-        console.error("Error consultando resources:", resError);
-        return;
-      }
-      resData.forEach(resource => {
-        const btn = document.createElement('button');
-        btn.textContent = resource.resource_name.toUpperCase();
-        btn.style.cursor = 'pointer';
-        btn.addEventListener('click', () => {
-          window.location.href = resource.resource_url;
-        });
-        menuContainer.appendChild(btn);
-      });
-      const logoutBtn = document.createElement('button');
-      logoutBtn.textContent = 'CERRAR SESIÓN';
-      logoutBtn.style.borderColor = 'red';
-      logoutBtn.style.color = 'red';
-      logoutBtn.addEventListener('click', async () => {
-        await supabaseClient.auth.signOut();
-        window.location.reload();
-      });
-      menuContainer.appendChild(logoutBtn);
-    }
-
+    // Al cargar la página, verificar si ya hay usuario logueado y ocultar botones de login
     window.addEventListener('DOMContentLoaded', async () => {
       const { data: currentUserData } = await supabaseClient.auth.getUser();
-      if (currentUserData.user) {
+      if (currentUserData && currentUserData.user) {
+        // Ya hay usuario -> Ocultar botones
         navAuthButtons.classList.add('hidden');
-        applyMenuResources();
+        // Podrías redirigir a home.html directamente, según tu preferencia
       }
     });
   </script>
