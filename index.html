@@ -8,289 +8,72 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
     /* RESET y estilos generales */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      font-family: 'Poppins', sans-serif;
-      color: #333;
-      background-color: #f8f8f8;
-      overflow-x: hidden;
-    }
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
-    button {
-      cursor: pointer;
-      font-family: 'Poppins', sans-serif;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Poppins', sans-serif; color: #333; background-color: #f8f8f8; overflow-x: hidden; }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; font-family: 'Poppins', sans-serif; }
 
     /* Barra de navegación */
-    nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1rem 2rem;
-      background-color: #fff;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    .logo {
-      font-size: 1.6rem;
-      font-weight: 600;
-      color: #2c3e50;
-    }
-    .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-    }
-    .nav-button {
-      padding: 0.5rem 1rem;
-      border-radius: 0.5rem;
-      border: 1px solid transparent;
-      background-color: #ff9500;
-      color: #fff;
-      font-weight: 500;
-      transition: background-color 0.3s ease;
-    }
-    .nav-button:hover {
-      background-color: #e07e00;
-    }
+    nav { display: flex; align-items: center; justify-content: space-between; padding: 1rem 2rem; background-color: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .logo { font-size: 1.6rem; font-weight: 600; color: #2c3e50; }
+    .nav-right { display: flex; align-items: center; gap: 1.5rem; }
+    .nav-button { padding: 0.5rem 1rem; border-radius: 0.5rem; border: 1px solid transparent; background-color: #ff9500; color: #fff; font-weight: 500; transition: background-color 0.3s ease; }
+    .nav-button:hover { background-color: #e07e00; }
 
-    /* Menú dinámico (reemplaza a los botones Iniciar/Registrar cuando hay login) */
-    .menu-container {
-      display: flex;
-      justify-content: center; /* centra horizontalmente */
-      gap: 1rem;
-      margin: 1rem 0;
-    }
-    .menu-container button {
-      padding: 0.75rem 1.5rem;
-      border: 1px solid #ff9500;
-      border-radius: 0.5rem;
-      background-color: #fff;
-      color: #ff9500;
-      font-weight: 600;
-      transition: background-color 0.3s ease;
-    }
-    .menu-container button:hover {
-      background-color: #ff9500;
-      color: #fff;
-    }
-    .hidden {
-      display: none !important;
-    }
+    /* Menú dinámico */
+    .menu-container { display: flex; justify-content: center; gap: 1rem; margin: 1rem 0; }
+    .menu-container button { padding: 0.75rem 1.5rem; border: 1px solid #ff9500; border-radius: 0.5rem; background-color: #fff; color: #ff9500; font-weight: 600; transition: background-color 0.3s ease; }
+    .menu-container button:hover { background-color: #ff9500; color: #fff; }
+    .hidden { display: none !important; }
 
     /* Sección principal (hero) */
-    .hero {
-      padding: 3rem 1rem;
-      text-align: center;
-      background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)),
-                  url('https://images.unsplash.com/photo-1593341646581-529f6c49c5d1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80');
-      background-size: cover;
-      background-position: center;
-      color: #fff;
-    }
-    .hero h1 {
-      font-size: 3rem;
-      font-weight: 700;
-      margin-bottom: 1rem;
-      max-width: 800px;
-      margin: 0 auto 1rem auto;
-    }
-    .hero p {
-      font-size: 1.15rem;
-      font-weight: 400;
-      max-width: 700px;
-      margin: 0 auto 2rem auto;
-      line-height: 1.6;
-    }
-    .hero-image {
-      display: block;
-      margin: 30px auto;
-      max-width: 600px;
-      width: 100%;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    }
-    .hero-buttons {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-    .hero-button {
-      padding: 0.75rem 1.5rem;
-      border-radius: 0.5rem;
-      border: 1px solid transparent;
-      font-weight: 500;
-      font-size: 1rem;
-      transition: background-color 0.3s ease, color 0.3s ease;
-    }
-    .hero-button-primary {
-      background-color: #ff9500;
-      color: #fff;
-    }
-    .hero-button-primary:hover {
-      background-color: #e07e00;
-    }
-    .hero-button-secondary {
-      background-color: transparent;
-      color: #ff9500;
-      border: 1px solid #ff9500;
-    }
-    .hero-button-secondary:hover {
-      background-color: #ff9500;
-      color: #fff;
-    }
+    .hero { padding: 3rem 1rem; text-align: center; background: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1593341646581-529f6c49c5d1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80'); background-size: cover; background-position: center; color: #fff; }
+    .hero h1 { font-size: 3rem; font-weight: 700; margin-bottom: 1rem; max-width: 800px; margin: 0 auto 1rem auto; }
+    .hero p { font-size: 1.15rem; font-weight: 400; max-width: 700px; margin: 0 auto 2rem auto; line-height: 1.6; }
+    .hero-image { display: block; margin: 30px auto; max-width: 600px; width: 100%; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+    .hero-buttons { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+    .hero-button { padding: 0.75rem 1.5rem; border-radius: 0.5rem; border: 1px solid transparent; font-weight: 500; font-size: 1rem; transition: background-color 0.3s ease, color 0.3s ease; }
+    .hero-button-primary { background-color: #ff9500; color: #fff; }
+    .hero-button-primary:hover { background-color: #e07e00; }
+    .hero-button-secondary { background-color: transparent; color: #ff9500; border: 1px solid #ff9500; }
+    .hero-button-secondary:hover { background-color: #ff9500; color: #fff; }
 
     /* Footer */
-    footer {
-      text-align: center;
-      padding: 1rem;
-      font-size: 0.9rem;
-      color: #777;
-      background-color: #fff;
-      border-top: 1px solid #eaeaea;
-      margin-top: 2rem;
-    }
+    footer { text-align: center; padding: 1rem; font-size: 0.9rem; color: #777; background-color: #fff; border-top: 1px solid #eaeaea; margin-top: 2rem; }
 
-    /* Modal de autenticación */
-    #auth-section {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      display: none;
-      justify-content: center;
-      align-items: center;
-      background: rgba(0,0,0,0.5);
-      z-index: 9999;
-    }
-    .auth-container {
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      border-radius: 15px;
-      padding: 40px;
-      width: 380px;
-      text-align: center;
-      color: #ffffff;
-      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-      animation: fadeIn 0.7s ease;
-      position: relative;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .auth-container h2 {
-      margin-bottom: 25px;
-      font-size: 28px;
-      font-weight: 600;
-      letter-spacing: 1px;
-    }
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-    form input {
-      width: 100%;
-      padding: 12px 15px;
-      border: none;
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.25);
-      color: #ffffff;
-      font-size: 15px;
-      outline: none;
-      transition: background 0.3s ease;
-    }
-    form input:focus {
-      background: rgba(255, 255, 255, 0.35);
-    }
-    form input::placeholder {
-      color: rgba(255, 255, 255, 0.8);
-    }
-    form button {
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
-      background: #27ae60;
-      color: #fff;
-      font-size: 16px;
-      font-weight: 600;
-      transition: background 0.3s ease;
-    }
-    form button:hover {
-      background: #219150;
-    }
-    .toggle-link {
-      margin-top: 20px;
-      font-size: 14px;
-    }
-    .toggle-link a {
-      color: #f1c40f;
-      text-decoration: none;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    .toggle-link a:hover {
-      text-decoration: underline;
-    }
-    .message {
-      margin-top: 15px;
-      font-size: 15px;
-      min-height: 20px;
-    }
+    /* Modal de Autenticación */
+    #auth-section { position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: none; justify-content: center; align-items: center; background: rgba(0,0,0,0.5); z-index: 9999; }
+    .auth-container { background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.3); border-radius: 15px; padding: 40px; width: 380px; text-align: center; color: #fff; box-shadow: 0 8px 32px rgba(31,38,135,0.37); animation: fadeIn 0.7s ease; position: relative; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+    .auth-container h2 { margin-bottom: 25px; font-size: 28px; font-weight: 600; letter-spacing: 1px; }
+    form { display: flex; flex-direction: column; gap: 15px; }
+    form input { width: 100%; padding: 12px 15px; border: none; border-radius: 8px; background: rgba(255,255,255,0.25); color: #fff; font-size: 15px; outline: none; transition: background 0.3s ease; }
+    form input:focus { background: rgba(255,255,255,0.35); }
+    form input::placeholder { color: rgba(255,255,255,0.8); }
+    form button { padding: 12px; border: none; border-radius: 8px; background: #27ae60; color: #fff; font-size: 16px; font-weight: 600; transition: background 0.3s ease; }
+    form button:hover { background: #219150; }
+    .toggle-link { margin-top: 20px; font-size: 14px; }
+    .toggle-link a { color: #f1c40f; text-decoration: none; font-weight: 600; cursor: pointer; }
+    .toggle-link a:hover { text-decoration: underline; }
+    .message { margin-top: 15px; font-size: 15px; min-height: 20px; }
     /* Campos adicionales para el registro */
-    #role-selection {
-      display: flex;
-      justify-content: space-around;
-      margin-top: 10px;
-    }
-    .role-option {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-    #establishment-field {
-      display: none;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 10px;
-    }
-    .close-modal {
-      position: absolute;
-      top: 5px;
-      right: 5px;
-      background: #ff9500;
-      border: none;
-      border-radius: 50%;
-      width: 30px;
-      height: 30px;
-      color: #fff;
-      font-size: 16px;
-      cursor: pointer;
-    }
+    #role-selection { display: flex; justify-content: space-around; margin-top: 10px; }
+    .role-option { display: flex; align-items: center; gap: 5px; }
+    #establishment-field { display: none; flex-direction: column; gap: 10px; margin-top: 10px; }
+    .close-modal { position: absolute; top: 5px; right: 5px; background: #ff9500; border: none; border-radius: 50%; width: 30px; height: 30px; color: #fff; font-size: 16px; cursor: pointer; }
   </style>
 </head>
 <body>
   <!-- Barra de navegación -->
   <nav>
     <span class="logo">Catch Up Padel</span>
-    <!-- Contenedor para botones de login/signup (solo visibles si no hay usuario logueado) -->
     <div class="nav-right" id="nav-auth-buttons">
       <button class="nav-button" onclick="showAuthSection('login')">Iniciar Sesión</button>
       <button class="nav-button" onclick="showAuthSection('signup')">Registrarse</button>
     </div>
   </nav>
 
-  <!-- Menú dinámico (aparecerá tras login) -->
+  <!-- Menú dinámico -->
   <div class="menu-container" id="menu-container"></div>
 
   <!-- Sección principal (hero) -->
@@ -316,8 +99,7 @@
       <form id="auth-form">
         <input type="email" id="email" placeholder="Correo electrónico" required>
         <input type="password" id="password" placeholder="Contraseña" required>
-
-        <!-- Selección de Rol (por defecto se marcan como required en el HTML, pero luego se manipulan por JS) -->
+        <!-- Selección de Rol -->
         <div id="role-selection">
           <div class="role-option">
             <input type="radio" name="user-role" id="role-jugador" value="jugador" required>
@@ -328,13 +110,11 @@
             <label for="role-establecimiento">Establecimiento</label>
           </div>
         </div>
-
-        <!-- Campos para Establecimiento: ID generado (solo lectura) y Nombre -->
+        <!-- Campos para Establecimiento -->
         <div id="establishment-field">
           <input type="text" id="establishment-number" placeholder="ID de Establecimiento" readonly>
           <input type="text" id="establishment-name" placeholder="Nombre del Establecimiento" required>
         </div>
-
         <button type="submit" id="submit-button">Registrarse</button>
       </form>
       <div class="toggle-link">
@@ -377,7 +157,7 @@
     let generatedEstablishmentID = null;
     let mode = 'signup';
 
-    // Generar ID de establecimiento
+    // Función para generar un ID de establecimiento
     function generateEstablishmentID() {
       const randomNumber = Math.floor(100000 + Math.random() * 900000);
       return "EST-" + randomNumber;
@@ -392,40 +172,28 @@
       document.getElementById('auth-section').style.display = 'none';
     }
 
-    // Ajustar required según modo
+    // Ajustar required según el modo
     function setMode(newMode) {
       mode = newMode;
-
       if (mode === 'login') {
         formTitle.textContent = 'Iniciar sesión';
         submitButton.textContent = 'Iniciar sesión';
         document.getElementById('toggle-signup').style.display = 'inline';
         document.getElementById('toggle-signin').style.display = 'none';
-
-        // Ocultamos radios y establecimiento
         document.getElementById('role-selection').style.display = 'none';
         establishmentField.style.display = 'none';
-
-        // Quitar required de radios y del campo de establecimiento
         roleJugadorRadio.removeAttribute('required');
         roleEstablecimientoRadio.removeAttribute('required');
         establishmentNameInput.removeAttribute('required');
-
         messageDiv.textContent = '';
       } else {
         formTitle.textContent = 'Registro';
         submitButton.textContent = 'Registrarse';
         document.getElementById('toggle-signup').style.display = 'none';
         document.getElementById('toggle-signin').style.display = 'inline';
-
-        // Mostramos radios
         document.getElementById('role-selection').style.display = 'flex';
-
-        // Volvemos a poner required a los radios
         roleJugadorRadio.setAttribute('required', true);
         roleEstablecimientoRadio.setAttribute('required', true);
-
-        // Verificamos si está seleccionado 'establecimiento' para ver si se muestra o no
         if (roleEstablecimientoRadio.checked) {
           establishmentField.style.display = 'flex';
           establishmentNameInput.setAttribute('required', true);
@@ -433,7 +201,6 @@
           establishmentField.style.display = 'none';
           establishmentNameInput.removeAttribute('required');
         }
-
         messageDiv.textContent = '';
       }
     }
@@ -456,22 +223,19 @@
       });
     });
 
-    // Listener del formulario (registro/login)
+    // Listener del formulario (modo registro/login)
     authForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       messageDiv.textContent = '';
-
       const email = emailInput.value.trim();
       const password = passwordInput.value.trim();
-
       if (!email || !password) {
         messageDiv.textContent = 'Por favor, completa todos los campos.';
         messageDiv.style.color = '#ff4d4d';
         return;
       }
-
       if (mode === 'signup') {
-        // Verificar rol
+        // MODO REGISTRO
         const selectedRoleElem = document.querySelector('input[name="user-role"]:checked');
         if (!selectedRoleElem) {
           messageDiv.textContent = 'Por favor, selecciona un rol (Jugador o Establecimiento).';
@@ -493,7 +257,6 @@
             return;
           }
         }
-
         // Registrar en Supabase Auth
         const { data: signUpData, error: signUpError } = await supabaseClient.auth.signUp({
           email,
@@ -510,22 +273,19 @@
           messageDiv.style.color = '#ff4d4d';
           return;
         }
-
-        // Insertar en 'perfiles'
+        // Insertar en la tabla 'profiles'
         const { error: perfilError } = await supabaseClient
-          .from('perfiles')
+          .from('profiles')
           .insert([{
-            user_id: userId,
+            id: userId,   // Relacionamos usando el campo id (UID de Supabase Auth)
             role: selectedRole,
             establishment_number: (selectedRole === 'establecimiento') ? generatedEstablishmentID : null
           }]);
         if (perfilError) {
-          messageDiv.textContent = 'Error al crear perfil: ' + perfilError.message;
+          messageDiv.textContent = 'Error al crear registro en profiles: ' + perfilError.message;
           messageDiv.style.color = '#ff4d4d';
           return;
         }
-
-        // Si es establecimiento, insertar en 'establishments'
         if (selectedRole === 'establecimiento') {
           const { error: estabError } = await supabaseClient
             .from('establishments')
@@ -541,9 +301,8 @@
         }
         messageDiv.textContent = 'Registro exitoso. Revisa tu correo y luego inicia sesión.';
         messageDiv.style.color = '#27ae60';
-
       } else {
-        // Modo login
+        // MODO LOGIN
         const { data: signInData, error: signInError } = await supabaseClient.auth.signInWithPassword({
           email,
           password
@@ -553,28 +312,23 @@
           messageDiv.style.color = '#ff4d4d';
           return;
         }
-        messageDiv.textContent = 'Inicio de sesión exitoso. Redirigiendo...';
+        messageDiv.textContent = 'Inicio de sesión exitoso. Verificando perfil...';
         messageDiv.style.color = '#27ae60';
-
         // Obtener usuario
         const currentUser = signInData.user || (await supabaseClient.auth.getUser()).data.user;
         if (!currentUser) {
           messageDiv.textContent = 'No se pudo obtener la información del usuario.';
           return;
         }
-
-        // Consultar 'perfiles'
+        // Consultar la tabla 'profiles' usando el campo id
         const { data: perfil, error: perfilError } = await supabaseClient
-          .from('perfiles')
-          .select("user_id, role, establishment_number")
-          .eq('user_id', currentUser.id)
-          .single();
-        if (perfilError || !perfil) {
-          // Redirigir a perfil genérico si no existe
-          window.location.href = "perfil.html";
-        } else {
+          .from('profiles')
+          .select("id, role, establishment_number")
+          .eq('id', currentUser.id)
+          .maybeSingle();
+        console.log("Perfil obtenido:", perfil);
+        if (perfil) {
           if (perfil.role === "establecimiento") {
-            // Buscar en 'establishments'
             const { data: estab, error: estabError } = await supabaseClient
               .from('establishments')
               .select("id, name")
@@ -583,45 +337,41 @@
             if (estabError || !estab) {
               window.location.href = "perfil.html";
             } else {
-              window.location.href = "establecimiento.html?id=" + encodeURIComponent(estab.id) + "&name=" + encodeURIComponent(estab.name);
+              window.location.href = "establecimiento.html?id=" 
+                + encodeURIComponent(estab.id) 
+                + "&name=" + encodeURIComponent(estab.name);
             }
           } else {
-            // Jugador -> home.html (ajusta a tu preferencia)
-            window.location.href = "home.html?userId=" + encodeURIComponent(currentUser.id) + "&role=" + encodeURIComponent(perfil.role);
+            window.location.href = "home.html?userId=" 
+              + encodeURIComponent(currentUser.id) 
+              + "&role=" + encodeURIComponent(perfil.role);
           }
+        } else {
+          // Si no existe registro en profiles, redirigir a perfil.html
+          window.location.href = "perfil.html";
         }
       }
     });
 
-    // Función que construye el menú según la tabla resources, role_resources, etc.
+    // Función para construir el menú dinámico (opcional)
     async function applyMenuResources() {
-      // Limpiar contenedor del menú
       menuContainer.innerHTML = '';
-
-      // Obtener usuario
       const { data: userData } = await supabaseClient.auth.getUser();
       if (!userData || !userData.user) {
-        // Si no hay usuario logueado, mostramos los botones de nav (login/register) y salimos
         navAuthButtons.classList.remove('hidden');
         return;
       }
-
-      // Ocultamos los botones de nav (login/register)
       navAuthButtons.classList.add('hidden');
-
-      // Buscar su rol en la tabla 'perfiles'
       const { data: perfilData, error: perfilErr } = await supabaseClient
-        .from('perfiles')
+        .from('profiles')
         .select('role')
-        .eq('user_id', userData.user.id)
+        .eq('id', userData.user.id)
         .maybeSingle();
       if (perfilErr || !perfilData) {
         console.warn("No se encontró el perfil, menú vacío.");
         return;
       }
-      const userRole = perfilData.role; // 'jugador' o 'establecimiento', etc.
-
-      // 1) Consultar role_resources para obtener la lista de resources que puede usar
+      const userRole = perfilData.role;
       const { data: rrData, error: rrError } = await supabaseClient
         .from('role_resources')
         .select('resource_id')
@@ -631,8 +381,6 @@
         return;
       }
       const resourceIds = rrData.map(item => item.resource_id);
-
-      // 2) Consultar resources para obtener resource_name y resource_url
       const { data: resData, error: resError } = await supabaseClient
         .from('resources')
         .select('id, resource_name, resource_url')
@@ -641,25 +389,15 @@
         console.error("Error consultando resources:", resError);
         return;
       }
-
-      // 3) Crear un botón por cada recurso
       resData.forEach(resource => {
         const btn = document.createElement('button');
         btn.textContent = resource.resource_name.toUpperCase();
         btn.style.cursor = 'pointer';
         btn.addEventListener('click', () => {
-          // Redirige a resource_url
-          if (resource.resource_url.endsWith('.html')) {
-            window.location.href = resource.resource_url;
-          } else {
-            // Si es un link a un path o URL externa
-            window.location.href = resource.resource_url;
-          }
+          window.location.href = resource.resource_url;
         });
         menuContainer.appendChild(btn);
       });
-
-      // 4) Agregamos manualmente un botón "Cerrar Sesión"
       const logoutBtn = document.createElement('button');
       logoutBtn.textContent = 'CERRAR SESIÓN';
       logoutBtn.style.borderColor = 'red';
@@ -671,13 +409,10 @@
       menuContainer.appendChild(logoutBtn);
     }
 
-    // Al cargar la página, verificar si hay usuario logueado y armar menú
     window.addEventListener('DOMContentLoaded', async () => {
       const { data: currentUserData } = await supabaseClient.auth.getUser();
       if (currentUserData.user) {
-        // Ocultar botones de login/registro
         navAuthButtons.classList.add('hidden');
-        // Generar menú
         applyMenuResources();
       }
     });
