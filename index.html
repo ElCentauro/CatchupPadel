@@ -8,59 +8,270 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
     /* RESET y estilos generales */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Poppins', sans-serif; color: #333; background-color: #f8f8f8; overflow-x: hidden; }
-    a { text-decoration: none; color: inherit; }
-    button { cursor: pointer; font-family: 'Poppins', sans-serif; }
-
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      color: #333;
+      background-color: #f8f8f8;
+      overflow-x: hidden;
+    }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+    button {
+      cursor: pointer;
+      font-family: 'Poppins', sans-serif;
+    }
     /* Barra de navegación */
-    nav { display: flex; align-items: center; justify-content: space-between; padding: 1rem 2rem; background-color: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-    .logo { font-size: 1.6rem; font-weight: 600; color: #2c3e50; }
-    .nav-right { display: flex; align-items: center; gap: 1.5rem; }
-    .nav-button { padding: 0.5rem 1rem; border-radius: 0.5rem; border: 1px solid transparent; background-color: #ff9500; color: #fff; font-weight: 500; transition: background-color 0.3s ease; }
-    .nav-button:hover { background-color: #e07e00; }
-
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .logo {
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: #2c3e50;
+    }
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .nav-button {
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      border: 1px solid transparent;
+      background-color: #ff9500;
+      color: #fff;
+      font-weight: 500;
+      transition: background-color 0.3s ease;
+    }
+    .nav-button:hover {
+      background-color: #e07e00;
+    }
     /* Menú dinámico */
-    .menu-container { display: flex; justify-content: center; gap: 1rem; margin: 1rem 0; }
-    .menu-container button { padding: 0.75rem 1.5rem; border: 1px solid #ff9500; border-radius: 0.5rem; background-color: #fff; color: #ff9500; font-weight: 600; transition: background-color 0.3s ease; }
-    .menu-container button:hover { background-color: #ff9500; color: #fff; }
-    .hidden { display: none !important; }
-
+    .menu-container {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .menu-container button {
+      padding: 0.75rem 1.5rem;
+      border: 1px solid #ff9500;
+      border-radius: 0.5rem;
+      background-color: #fff;
+      color: #ff9500;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+    }
+    .menu-container button:hover {
+      background-color: #ff9500;
+      color: #fff;
+    }
+    .hidden {
+      display: none !important;
+    }
     /* Sección principal (hero) */
-    .hero { padding: 3rem 1rem; text-align: center; background: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1593341646581-529f6c49c5d1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80'); background-size: cover; background-position: center; color: #fff; }
-    .hero h1 { font-size: 3rem; font-weight: 700; margin-bottom: 1rem; max-width: 800px; margin: 0 auto 1rem auto; }
-    .hero p { font-size: 1.15rem; font-weight: 400; max-width: 700px; margin: 0 auto 2rem auto; line-height: 1.6; }
-    .hero-image { display: block; margin: 30px auto; max-width: 600px; width: 100%; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
-    .hero-buttons { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
-    .hero-button { padding: 0.75rem 1.5rem; border-radius: 0.5rem; border: 1px solid transparent; font-weight: 500; font-size: 1rem; transition: background-color 0.3s ease, color 0.3s ease; }
-    .hero-button-primary { background-color: #ff9500; color: #fff; }
-    .hero-button-primary:hover { background-color: #e07e00; }
-    .hero-button-secondary { background-color: transparent; color: #ff9500; border: 1px solid #ff9500; }
-    .hero-button-secondary:hover { background-color: #ff9500; color: #fff; }
-
+    .hero {
+      padding: 3rem 1rem;
+      text-align: center;
+      background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)),
+                  url('https://images.unsplash.com/photo-1593341646581-529f6c49c5d1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80');
+      background-size: cover;
+      background-position: center;
+      color: #fff;
+    }
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      max-width: 800px;
+      margin: 0 auto 1rem auto;
+    }
+    .hero p {
+      font-size: 1.15rem;
+      font-weight: 400;
+      max-width: 700px;
+      margin: 0 auto 2rem auto;
+      line-height: 1.6;
+    }
+    .hero-image {
+      display: block;
+      margin: 30px auto;
+      max-width: 600px;
+      width: 100%;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    .hero-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .hero-button {
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      border: 1px solid transparent;
+      font-weight: 500;
+      font-size: 1rem;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    .hero-button-primary {
+      background-color: #ff9500;
+      color: #fff;
+    }
+    .hero-button-primary:hover {
+      background-color: #e07e00;
+    }
+    .hero-button-secondary {
+      background-color: transparent;
+      color: #ff9500;
+      border: 1px solid #ff9500;
+    }
+    .hero-button-secondary:hover {
+      background-color: #ff9500;
+      color: #fff;
+    }
     /* Footer */
-    footer { text-align: center; padding: 1rem; font-size: 0.9rem; color: #777; background-color: #fff; border-top: 1px solid #eaeaea; margin-top: 2rem; }
-
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: #777;
+      background-color: #fff;
+      border-top: 1px solid #eaeaea;
+      margin-top: 2rem;
+    }
     /* Modal de Autenticación */
-    #auth-section { position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: none; justify-content: center; align-items: center; background: rgba(0,0,0,0.5); z-index: 9999; }
-    .auth-container { background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.3); border-radius: 15px; padding: 40px; width: 380px; text-align: center; color: #fff; box-shadow: 0 8px 32px rgba(31,38,135,0.37); animation: fadeIn 0.7s ease; position: relative; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-    .auth-container h2 { margin-bottom: 25px; font-size: 28px; font-weight: 600; letter-spacing: 1px; }
-    form { display: flex; flex-direction: column; gap: 15px; }
-    form input { width: 100%; padding: 12px 15px; border: none; border-radius: 8px; background: rgba(255,255,255,0.25); color: #fff; font-size: 15px; outline: none; transition: background 0.3s ease; }
-    form input:focus { background: rgba(255,255,255,0.35); }
-    form input::placeholder { color: rgba(255,255,255,0.8); }
-    form button { padding: 12px; border: none; border-radius: 8px; background: #27ae60; color: #fff; font-size: 16px; font-weight: 600; transition: background 0.3s ease; }
-    form button:hover { background: #219150; }
-    .toggle-link { margin-top: 20px; font-size: 14px; }
-    .toggle-link a { color: #f1c40f; text-decoration: none; font-weight: 600; cursor: pointer; }
-    .toggle-link a:hover { text-decoration: underline; }
-    .message { margin-top: 15px; font-size: 15px; min-height: 20px; }
+    #auth-section {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      background: rgba(0,0,0,0.5);
+      z-index: 9999;
+    }
+    .auth-container {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 15px;
+      padding: 40px;
+      width: 380px;
+      text-align: center;
+      color: #ffffff;
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+      animation: fadeIn 0.7s ease;
+      position: relative;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .auth-container h2 {
+      margin-bottom: 25px;
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    form input {
+      width: 100%;
+      padding: 12px 15px;
+      border: none;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.25);
+      color: #ffffff;
+      font-size: 15px;
+      outline: none;
+      transition: background 0.3s ease;
+    }
+    form input:focus {
+      background: rgba(255, 255, 255, 0.35);
+    }
+    form input::placeholder {
+      color: rgba(255, 255, 255, 0.8);
+    }
+    form button {
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: #27ae60;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 600;
+      transition: background 0.3s ease;
+    }
+    form button:hover {
+      background: #219150;
+    }
+    .toggle-link {
+      margin-top: 20px;
+      font-size: 14px;
+    }
+    .toggle-link a {
+      color: #f1c40f;
+      text-decoration: none;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .toggle-link a:hover {
+      text-decoration: underline;
+    }
+    .message {
+      margin-top: 15px;
+      font-size: 15px;
+      min-height: 20px;
+    }
     /* Campos adicionales para el registro */
-    #role-selection { display: flex; justify-content: space-around; margin-top: 10px; }
-    .role-option { display: flex; align-items: center; gap: 5px; }
-    #establishment-field { display: none; flex-direction: column; gap: 10px; margin-top: 10px; }
-    .close-modal { position: absolute; top: 5px; right: 5px; background: #ff9500; border: none; border-radius: 50%; width: 30px; height: 30px; color: #fff; font-size: 16px; cursor: pointer; }
+    #role-selection {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 10px;
+    }
+    .role-option {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    #establishment-field {
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .close-modal {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background: #ff9500;
+      border: none;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -157,7 +368,7 @@
     let generatedEstablishmentID = null;
     let mode = 'signup';
 
-    // Función para generar un ID de establecimiento
+    // Generar ID de establecimiento
     function generateEstablishmentID() {
       const randomNumber = Math.floor(100000 + Math.random() * 900000);
       return "EST-" + randomNumber;
@@ -172,7 +383,7 @@
       document.getElementById('auth-section').style.display = 'none';
     }
 
-    // Ajustar required según el modo
+    // Ajustar required según modo
     function setMode(newMode) {
       mode = newMode;
       if (mode === 'login') {
@@ -223,7 +434,7 @@
       });
     });
 
-    // Listener del formulario (modo registro/login)
+    // Listener del formulario (registro/login)
     authForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       messageDiv.textContent = '';
@@ -277,7 +488,7 @@
         const { error: perfilError } = await supabaseClient
           .from('profiles')
           .insert([{
-            id: userId,   // Relacionamos usando el campo id (UID de Supabase Auth)
+            user_id: userId,
             role: selectedRole,
             establishment_number: (selectedRole === 'establecimiento') ? generatedEstablishmentID : null
           }]);
@@ -320,13 +531,14 @@
           messageDiv.textContent = 'No se pudo obtener la información del usuario.';
           return;
         }
-        // Consultar la tabla 'profiles' usando el campo id
+        // Consultar la tabla 'profiles' usando 'user_id'
         const { data: perfil, error: perfilError } = await supabaseClient
           .from('profiles')
-          .select("id, role, establishment_number")
-          .eq('id', currentUser.id)
+          .select("user_id, role, establishment_number")
+          .eq('user_id', currentUser.id)
           .maybeSingle();
         console.log("Perfil obtenido:", perfil);
+        // Si existe registro en profiles, redirigir a home.html (o establecimiento.html)
         if (perfil) {
           if (perfil.role === "establecimiento") {
             const { data: estab, error: estabError } = await supabaseClient
@@ -365,7 +577,7 @@
       const { data: perfilData, error: perfilErr } = await supabaseClient
         .from('profiles')
         .select('role')
-        .eq('id', userData.user.id)
+        .eq('user_id', userData.user.id)
         .maybeSingle();
       if (perfilErr || !perfilData) {
         console.warn("No se encontró el perfil, menú vacío.");
