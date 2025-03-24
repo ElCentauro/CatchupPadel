@@ -257,6 +257,7 @@
         <!-- Datos fijos (ID, Nombre) -->
         <div class="form-group">
           <label for="uniqueId">ID Único (8 dígitos)</label>
+          <!-- Se actualizará el valor con el parámetro "id" de la URL -->
           <input type="text" id="uniqueId" name="uniqueId" readonly value="12345678">
         </div>
         <div class="form-group">
@@ -640,6 +641,17 @@
         } catch (err) {
           alert("Excepción al eliminar establecimiento: " + err.message);
         }
+      }
+    });
+
+    // EXTRAER EL ID DEL ESTABLECIMIENTO DE LA URL Y CARGAR LOS DATOS
+    window.addEventListener('DOMContentLoaded', function() {
+      const params = new URLSearchParams(window.location.search);
+      const estId = params.get('id');
+      if (estId) {
+        // Se coloca el ID en el campo único y se carga el establecimiento
+        document.getElementById('uniqueId').value = estId;
+        cargarEstablecimiento(estId);
       }
     });
   </script>
