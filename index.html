@@ -27,7 +27,6 @@
       cursor: pointer;
       font-family: 'Poppins', sans-serif;
     }
-
     /* Barra de navegación */
     nav {
       display: flex;
@@ -59,7 +58,6 @@
     .nav-button:hover {
       background-color: #e07e00;
     }
-
     /* Sección principal (hero) */
     .hero {
       padding: 3rem 1rem;
@@ -122,7 +120,6 @@
       background-color: #ff9500;
       color: #fff;
     }
-
     /* Footer */
     footer {
       text-align: center;
@@ -133,7 +130,6 @@
       border-top: 1px solid #eaeaea;
       margin-top: 2rem;
     }
-
     /* Modal de autenticación */
     #auth-section {
       position: fixed;
@@ -510,40 +506,30 @@
         messageDiv.textContent = 'Inicio de sesión exitoso. Verificando perfil...';
         messageDiv.style.color = '#27ae60';
 
-        // Obtener usuario
+        // Obtener usuario a partir del UID de Supabase
         const currentUser = signInData.user || (await supabaseClient.auth.getUser()).data.user;
         if (!currentUser) {
           messageDiv.textContent = 'No se pudo obtener la información del usuario.';
           return;
         }
 
-        // Consultar la tabla "perfiles"
+        // Consultar la tabla "perfiles" usando el UID del usuario
         const { data: perfil, error: perfilError } = await supabaseClient
           .from('perfiles')
-          .select("user_id, role, establishment_number")
+          .select("user_id, establishment_number")
           .eq('user_id', currentUser.id)
           .single();
-        if (perfilError || !perfil) {
-          // Si no existe registro en "perfiles", redirige a perfil.html
+        if (perfilError) {
           window.location.href = "perfil.html";
           return;
         }
 
-        // Si existe un establishment_number, intentamos obtener el registro en "establishments"
-        if (perfil.establishment_number) {
-          const { data: estab, error: estabError } = await supabaseClient
-            .from('establishments')
-            .select("id, name")
-            .eq('id', perfil.establishment_number)
-            .maybeSingle();
-          if (estab) {
-            window.location.href = "establecimiento.html?id=" + encodeURIComponent(estab.id) +
-              "&name=" + encodeURIComponent(estab.name);
-            return;
-          }
+        // Si establishment_number no es nulo, es un establecimiento
+        if (perfil.establishment_number !== null) {
+          window.location.href = "establecimiento.html?id=" + encodeURIComponent(perfil.establishment_number);
+        } else {
+          window.location.href = "perfil.html";
         }
-        // Si no se encontró registro en "establishments", redirige a perfil.html
-        window.location.href = "perfil.html";
       }
     });
 
@@ -551,7 +537,6 @@
     window.addEventListener('DOMContentLoaded', async () => {
       const { data: currentUserData } = await supabaseClient.auth.getUser();
       if (currentUserData && currentUserData.user) {
-        // Ya hay usuario -> Ocultar botones
         navAuthButtons.classList.add('hidden');
       }
     });
