@@ -245,8 +245,8 @@
 
     <!-- Contenido del formulario -->
     <div class="content">
-      <!-- Sección de búsqueda con autocompletado (para usuarios Admin) -->
-      <div class="search-section">
+      <!-- Sección de búsqueda (se oculta para usuarios de Establecimiento) -->
+      <div class="search-section" id="search-section">
         <label for="searchQuery">Buscar Establecimiento (ID, Nombre o Calle):</label>
         <input type="text" id="searchQuery" placeholder="Escribe para buscar...">
         <ul class="suggestions" id="suggestions"></ul>
@@ -257,12 +257,12 @@
         <!-- Datos fijos (ID, Nombre) -->
         <div class="form-group">
           <label for="uniqueId">ID Único (8 dígitos)</label>
-          <!-- Se actualizará el valor con el parámetro "id" de la URL -->
-          <input type="text" id="uniqueId" name="uniqueId" readonly value="12345678">
+          <!-- El valor se asignará desde el perfil (establishment_number) y será de solo lectura -->
+          <input type="text" id="uniqueId" name="uniqueId" readonly>
         </div>
         <div class="form-group">
           <label for="nombre">Nombre del Establecimiento</label>
-          <input type="text" id="nombre" name="nombre" readonly value="Mi Establecimiento">
+          <input type="text" id="nombre" name="nombre" readonly>
         </div>
 
         <!-- Sección de Dirección -->
@@ -466,7 +466,7 @@
       window.location.href = "home.html";
     });
 
-    // Autocompletado: búsqueda por id, name o address
+    // Autocompletado: búsqueda por id, name o address (mantenerlo para Admin, pero se oculta si es establecimiento)
     const searchInput = document.getElementById("searchQuery");
     const suggestionsList = document.getElementById("suggestions");
 
@@ -644,14 +644,33 @@
       }
     });
 
-    // EXTRAER EL ID DEL ESTABLECIMIENTO DE LA URL Y CARGAR LOS DATOS
-    window.addEventListener('DOMContentLoaded', function() {
-      const params = new URLSearchParams(window.location.search);
-      const estId = params.get('id');
-      if (estId) {
-        // Se coloca el ID en el campo único y se carga el establecimiento
-        document.getElementById('uniqueId').value = estId;
-        cargarEstablecimiento(estId);
+    // Al cargar la página, obtener el usuario logueado, consultar su perfil y asignar el establishment_number
+    window.addEventListener('DOMContentLoaded', async function() {
+      // Oculta la sección de búsqueda para usuarios de establecimiento
+      document.getElementById("search-section").style.display = "none";
+
+      const { data: currentUserData, error: userError } = await supabaseClient.auth.getUser();
+      if (userError || !currentUserData || !currentUserData.user) {
+        console.error("No se pudo obtener el usuario logueado.");
+        return;
+      }
+      const uid = currentUserData.user.id;
+      const { data: perfil, error: perfilError } = await supabaseClient
+        .from('perfiles')
+        .select("establishment_number")
+        .eq('user_id', uid)
+        .single();
+      if (perfilError || !perfil) {
+        console.error("No se encontró el perfil para el usuario.");
+        return;
+      }
+      // Si establishment_number es distinto de null, se asigna al campo de solo lectura y se cargan los datos
+      if (perfil.establishment_number) {
+        document.getElementById("uniqueId").value = perfil.establishment_number;
+        // Cargar los datos del establecimiento a partir de establishment_number
+        cargarEstablecimiento(perfil.establishment_number);
+      } else {
+        console.error("El usuario no tiene asignado un establishment_number.");
       }
     });
   </script>
