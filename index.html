@@ -526,25 +526,24 @@
         if (perfilError || !perfil) {
           // Si no existe registro en "perfiles", redirige a perfil.html
           window.location.href = "perfil.html";
-        } else {
-          if (perfil.role === "establecimiento") {
-            // Buscar en "establishments"
-            const { data: estab, error: estabError } = await supabaseClient
-              .from('establishments')
-              .select("id, name")
-              .eq('id', perfil.establishment_number)
-              .single();
-            if (estabError || !estab) {
-              window.location.href = "perfil.html";
-            } else {
-              window.location.href = "establecimiento.html?id=" + encodeURIComponent(estab.id) +
-                "&name=" + encodeURIComponent(estab.name);
-            }
-          } else {
-            // Si no es establecimiento, redirige a perfil.html
-            window.location.href = "perfil.html";
+          return;
+        }
+
+        // Si existe un establishment_number, intentamos obtener el registro en "establishments"
+        if (perfil.establishment_number) {
+          const { data: estab, error: estabError } = await supabaseClient
+            .from('establishments')
+            .select("id, name")
+            .eq('id', perfil.establishment_number)
+            .maybeSingle();
+          if (estab) {
+            window.location.href = "establecimiento.html?id=" + encodeURIComponent(estab.id) +
+              "&name=" + encodeURIComponent(estab.name);
+            return;
           }
         }
+        // Si no se encontró registro en "establishments", redirige a perfil.html
+        window.location.href = "perfil.html";
       }
     });
 
@@ -554,7 +553,6 @@
       if (currentUserData && currentUserData.user) {
         // Ya hay usuario -> Ocultar botones
         navAuthButtons.classList.add('hidden');
-        // Podrías redirigir a perfil.html directamente, según tu preferencia
       }
     });
   </script>
