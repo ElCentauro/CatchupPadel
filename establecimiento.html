@@ -245,7 +245,8 @@
 
     <!-- Contenido del formulario -->
     <div class="content">
-      <!-- Sección de búsqueda (se oculta para usuarios de Establecimiento) -->
+      <!-- Sección de búsqueda con autocompletado (para admin). 
+           Se puede ocultar si el usuario es "establecimiento". -->
       <div class="search-section" id="search-section">
         <label for="searchQuery">Buscar Establecimiento (ID, Nombre o Calle):</label>
         <input type="text" id="searchQuery" placeholder="Escribe para buscar...">
@@ -257,7 +258,6 @@
         <!-- Datos fijos (ID, Nombre) -->
         <div class="form-group">
           <label for="uniqueId">ID Único (8 dígitos)</label>
-          <!-- El valor se asignará desde el perfil (establishment_number) y será de solo lectura -->
           <input type="text" id="uniqueId" name="uniqueId" readonly>
         </div>
         <div class="form-group">
@@ -466,7 +466,7 @@
       window.location.href = "home.html";
     });
 
-    // Autocompletado: búsqueda por id, name o address (mantenerlo para Admin, pero se oculta si es establecimiento)
+    // Autocompletado: búsqueda por id, name o address (para admin)
     const searchInput = document.getElementById("searchQuery");
     const suggestionsList = document.getElementById("suggestions");
 
@@ -475,7 +475,6 @@
       suggestionsList.innerHTML = "";
       if (!query) return;
 
-      // Buscar en 3 campos: id, name y address
       let { data, error } = await supabaseClient
         .from('establishments')
         .select("id, name, address")
@@ -496,7 +495,6 @@
 
       uniqueData.forEach(item => {
         const li = document.createElement("li");
-        // Mostrar name (ID) - address (si existe)
         li.textContent = `${item.name} (${item.id})${item.address ? " - " + item.address : ""}`;
         li.addEventListener("click", () => {
           cargarEstablecimiento(item.id);
@@ -507,33 +505,54 @@
       });
     });
 
+    // ---------------------------------------------------------------------------------
+    // Función que carga un establecimiento a partir de un ID (con .maybeSingle())
+    // ---------------------------------------------------------------------------------
     async function cargarEstablecimiento(id) {
+      // 1. Limpia prefijos "eq." y sufijos ":algo" si existieran
+      let realId = id;
+      if (realId.startsWith("eq.")) {
+        realId = realId.replace("eq.", "");
+      }
+      if (realId.includes(":")) {
+        realId = realId.split(":")[0];
+      }
+
+      // 2. Usa .maybeSingle() para evitar error si no hay filas
       const { data, error } = await supabaseClient
         .from('establishments')
         .select("*")
-        .eq('id', id)
-        .single();
+        .eq('id', realId)
+        .maybeSingle();
+
       if (error) {
         alert("Error al cargar establecimiento: " + error.message);
         return;
       }
-      document.getElementById("uniqueId").value = data.id;
-      document.getElementById("nombre").value = data.name;
-      document.getElementById("pais").value = data.country;
+      if (!data) {
+        alert("No se encontró ningún establecimiento con ID: " + realId);
+        return;
+      }
+
+      // Rellenar campos
+      document.getElementById("uniqueId").value = data.id || "";
+      document.getElementById("nombre").value = data.name || "";
+      document.getElementById("pais").value = data.country || "";
       updateProvinceOptions();
-      document.getElementById("provincia").value = data.province;
+      document.getElementById("provincia").value = data.province || "";
       document.getElementById("localidad").value = data.locality || "";
       document.getElementById("calleNumero").value = data.address || "";
       document.getElementById("codigoPostal").value = data.postal_code || "";
       document.getElementById("urlLugar").value = data.url || "";
       document.getElementById("instagramUrl").value = data.instagram_url || "";
-      document.getElementById("cantCanchas").value = data.court_count;
+      document.getElementById("cantCanchas").value = data.court_count || "";
 
       formMode = "update";
       alert("Establecimiento cargado para modificar.");
       buscarEnMapa();
     }
 
+    // Evento de submit para grabar
     document.getElementById("establecimiento-form").addEventListener("submit", async function(e) {
       e.preventDefault();
       const btnSave = document.getElementById("btn-save");
@@ -616,6 +635,7 @@
       btnSave.disabled = false;
     });
 
+    // Botón Eliminar
     document.getElementById("btn-delete").addEventListener("click", async function() {
       const id = document.getElementById("uniqueId").value.trim();
       if (!id) {
@@ -644,34 +664,39 @@
       }
     });
 
-    // Al cargar la página, obtener el usuario logueado, consultar su perfil y asignar el establishment_number
+    // ---------------------------------------------------------------------------------
+    // Al cargar la página: obtener el usuario, cargar su establishment_number, etc.
+    // ---------------------------------------------------------------------------------
     window.addEventListener('DOMContentLoaded', async function() {
-      // Oculta la sección de búsqueda para usuarios de establecimiento
+      // Si es un usuario Establecimiento, podrías ocultar la sección de búsqueda:
       document.getElementById("search-section").style.display = "none";
 
+      // 1. Obtener el usuario logueado
       const { data: currentUserData, error: userError } = await supabaseClient.auth.getUser();
       if (userError || !currentUserData || !currentUserData.user) {
         console.error("No se pudo obtener el usuario logueado.");
         return;
       }
       const uid = currentUserData.user.id;
+
+      // 2. Buscar su perfil
       const { data: perfil, error: perfilError } = await supabaseClient
         .from('perfiles')
         .select("establishment_number")
         .eq('user_id', uid)
-        .single();
-      if (perfilError || !perfil) {
-        console.error("No se encontró el perfil para el usuario.");
+        .maybeSingle();
+
+      if (perfilError) {
+        console.error("Error al buscar perfil:", perfilError.message);
         return;
       }
-      // Si establishment_number es distinto de null, se asigna al campo de solo lectura y se cargan los datos
-      if (perfil.establishment_number) {
-        document.getElementById("uniqueId").value = perfil.establishment_number;
-        // Cargar los datos del establecimiento a partir de establishment_number
-        cargarEstablecimiento(perfil.establishment_number);
-      } else {
-        console.error("El usuario no tiene asignado un establishment_number.");
+      if (!perfil || !perfil.establishment_number) {
+        console.error("No se encontró establishment_number en el perfil.");
+        return;
       }
+
+      // 3. Cargar el establecimiento
+      cargarEstablecimiento(perfil.establishment_number);
     });
   </script>
 </body>
