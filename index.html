@@ -522,12 +522,11 @@
           .from('perfiles')
           .select("user_id, role, establishment_number")
           .eq('user_id', currentUser.id)
-          .single(); // si esperas exactamente 1
+          .single();
         if (perfilError || !perfil) {
-          // Si no existe registro en "perfiles", ir a perfil.html
+          // Si no existe registro en "perfiles", redirige a perfil.html
           window.location.href = "perfil.html";
         } else {
-          // Ver rol
           if (perfil.role === "establecimiento") {
             // Buscar en "establishments"
             const { data: estab, error: estabError } = await supabaseClient
@@ -538,14 +537,12 @@
             if (estabError || !estab) {
               window.location.href = "perfil.html";
             } else {
-              // Redirigir a la página de establecimiento
-              window.location.href = "establecimiento.html?id=" + encodeURIComponent(estab.id) 
-                + "&name=" + encodeURIComponent(estab.name);
+              window.location.href = "establecimiento.html?id=" + encodeURIComponent(estab.id) +
+                "&name=" + encodeURIComponent(estab.name);
             }
           } else {
-            // Jugador -> home.html
-            window.location.href = "home.html?userId=" + encodeURIComponent(currentUser.id) 
-              + "&role=" + encodeURIComponent(perfil.role);
+            // Si no es establecimiento, redirige a perfil.html
+            window.location.href = "perfil.html";
           }
         }
       }
@@ -557,7 +554,7 @@
       if (currentUserData && currentUserData.user) {
         // Ya hay usuario -> Ocultar botones
         navAuthButtons.classList.add('hidden');
-        // Podrías redirigir a home.html directamente, según tu preferencia
+        // Podrías redirigir a perfil.html directamente, según tu preferencia
       }
     });
   </script>
