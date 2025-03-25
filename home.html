@@ -725,7 +725,7 @@
 
     async function checkProfile() {
       const profileLink = document.getElementById("profileLink");
-      if (!profileLink) { console.warn("No se encontró el elemento profileLink."); return; }
+      if (!profileLink) return;
       const { data: { session } } = await supabaseClient.auth.getSession();
       if (session && session.user) {
         const userId = session.user.id;
@@ -734,12 +734,11 @@
           .select('full_name')
           .eq('id', userId)
           .single();
-        let userName = "Usuario Logueado";
+        let userName = session.user.email;
         if (!error && profileData && profileData.full_name) {
           userName = profileData.full_name;
         }
-        loggedUser = { id: userId, full_name: userName };
-        console.log('loggedUser:', loggedUser);
+        loggedUser = { id: userId, name: userName };
         const { data: pData } = await supabaseClient
           .from('profiles')
           .select('*')
@@ -1078,39 +1077,46 @@
         <strong>Localidad:</strong> ${match.establishments?.locality || 'N/A'} <br>
         <strong>Nivel:</strong> ${match.match_level} | <strong>Parejas:</strong> ${match.team_type}
       `;
-      console.log('currentMatch:', currentMatch);
       const { data: participantsData, error } = await supabaseClient
         .from('participants')
         .select('user_id, profiles(full_name)')
         .eq('match_id', currentMatch.id);
       const playersList = document.getElementById('modalPlayersList');
       playersList.innerHTML = '';
-      let joinedCount = (participantsData) ? participantsData.length : 0;
       const totalPlayers = currentMatch.total_players || 4;
-      const slots = [];
+      let joinedCount = (participantsData) ? participantsData.length : 0;
+      
+      // Iteramos para crear cada slot: si existe participante, mostramos su nombre y un botón "Ver"
       for (let i = 0; i < totalPlayers; i++) {
-        if (i < joinedCount) {
-          slots.push(participantsData[i].profiles?.full_name || 'Jugador sin nombre');
-        } else {
-          slots.push(null);
-        }
-      }
-      slots.forEach((slotName, i) => {
         const slotDiv = document.createElement('div');
         slotDiv.className = 'player-slot';
         const infoDiv = document.createElement('div');
         infoDiv.className = 'player-info';
-        infoDiv.innerHTML = `<span>Jugador ${i + 1}:</span> <p>${slotName ? slotName : 'Slot Libre'}</p>`;
-        slotDiv.appendChild(infoDiv);
-        if (!slotName && loggedUser && !(participantsData && participantsData.some(row => row.user_id === loggedUser.id))) {
-          const joinBtn = document.createElement('button');
-          joinBtn.className = 'btn-join-slot';
-          joinBtn.textContent = 'Unirse';
-          joinBtn.onclick = joinToMatchModal;
-          slotDiv.appendChild(joinBtn);
+        if (i < joinedCount) {
+          const participant = participantsData[i];
+          const participantName = participant.profiles?.full_name || 'Jugador sin nombre';
+          infoDiv.innerHTML = `<span>Jugador ${i + 1}:</span> <p>${participantName}</p>`;
+          const viewBtn = document.createElement('button');
+          viewBtn.textContent = 'Ver';
+          viewBtn.onclick = () => {
+            window.location.href = `perfil.html?userId=${participant.user_id}&readonly=1`;
+          };
+          slotDiv.appendChild(infoDiv);
+          slotDiv.appendChild(viewBtn);
+        } else {
+          infoDiv.innerHTML = `<span>Jugador ${i + 1}:</span> <p>Slot Libre</p>`;
+          slotDiv.appendChild(infoDiv);
+          // Si el usuario logueado aún no se ha unido, mostramos botón "Unirse"
+          if (loggedUser && !(participantsData && participantsData.some(row => row.user_id === loggedUser.id))) {
+            const joinBtn = document.createElement('button');
+            joinBtn.className = 'btn-join-slot';
+            joinBtn.textContent = 'Unirse';
+            joinBtn.onclick = joinToMatchModal;
+            slotDiv.appendChild(joinBtn);
+          }
         }
         playersList.appendChild(slotDiv);
-      });
+      }
       const missing = totalPlayers - joinedCount;
       document.getElementById('modalPlayersStatus').textContent = `Faltan ${missing} jugadores de ${totalPlayers}`;
       if (!loggedUser) {
@@ -1154,7 +1160,6 @@
         alert('No hay partido o usuario logueado.');
         return;
       }
-      console.log('Insertando en participants con match_id:', currentMatch.id, 'y user_id:', loggedUser.id);
       const { data, error } = await supabaseClient
         .from('participants')
         .insert([{ match_id: currentMatch.id, user_id: loggedUser.id }])
@@ -1164,7 +1169,6 @@
         alert('Hubo un error al unirse al partido. Revisa la consola para más detalles.');
         return;
       }
-      console.log('Datos de inscripción:', data);
       alert('Te has unido al partido.');
       openMatchModal(currentMatch);
     }
