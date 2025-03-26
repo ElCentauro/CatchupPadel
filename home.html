@@ -778,10 +778,9 @@
       document.getElementById('localitySuggestions').style.display = 'none';
       document.getElementById('canchaResults').innerHTML = '';
     }
-    // Se actualiza para limpiar los filtros y mostrar la sección de búsqueda de partidos
+    // Se limpia y se muestra la sección de búsqueda de partidos
     function showPartidosSearch() {
       const section = document.getElementById('searchPartidosSection');
-      // Limpiar valores previos
       document.getElementById('partidosLocality').value = '';
       document.getElementById('partidosCancha').value = '';
       document.getElementById('partidosResults').innerHTML = '';
@@ -1030,7 +1029,7 @@
     const partidosCanchaSelect = document.getElementById('partidosCancha');
     const partidosResults = document.getElementById('partidosResults');
     document.getElementById('btn-search-partidos').addEventListener('click', async () => {
-      const localityFilter = partidosLocalityInput.value.trim();
+      const localityFilter = document.getElementById('partidosLocality').value.trim();
       const canchaFilter = partidosCanchaSelect.value;
       partidosResults.innerHTML = '';
       const todayISO = new Date().toISOString().slice(0,10);
@@ -1082,24 +1081,24 @@
         <strong>Localidad:</strong> ${match.establishments?.locality || 'N/A'} <br>
         <strong>Nivel:</strong> ${match.match_level} | <strong>Parejas:</strong> ${match.team_type}
       `;
-      // Obtener participantes del partido con el nombre completo del perfil
+      // Se fuerza la relación inner para obtener el full_name de cada participante
       const { data: participantsData, error } = await supabaseClient
         .from('participants')
-        .select('user_id, profiles(full_name)')
+        .select('user_id, profiles!inner(full_name)')
         .eq('match_id', currentMatch.id);
       const playersList = document.getElementById('modalPlayersList');
       playersList.innerHTML = '';
       if (error) {
         console.error("Error al obtener participantes:", error);
       }
-      // Mostrar los participantes ya inscritos con su botón "Ver"
+      // Mostrar cada participante con su nombre obtenido del perfil y el botón "Ver"
       if (participantsData && participantsData.length > 0) {
         participantsData.forEach((participant, index) => {
           const slotDiv = document.createElement('div');
           slotDiv.className = 'player-slot';
           const infoDiv = document.createElement('div');
           infoDiv.className = 'player-info';
-          const participantName = participant.profiles?.full_name || 'Jugador sin nombre';
+          const participantName = participant.profiles.full_name || 'Jugador sin nombre';
           infoDiv.innerHTML = `<span>Jugador ${index + 1}:</span> <p>${participantName}</p>`;
           const viewBtn = document.createElement('button');
           viewBtn.textContent = 'Ver';
@@ -1113,7 +1112,7 @@
       } else {
         playersList.innerHTML = '<p>No hay jugadores inscritos.</p>';
       }
-      // Mostrar slots vacíos si existen
+      // Calcular y mostrar slots vacíos si es que hay
       const totalPlayers = currentMatch.total_players || 4;
       const joinedCount = participantsData ? participantsData.length : 0;
       const emptySlots = totalPlayers - joinedCount;
@@ -1137,7 +1136,7 @@
           playersList.appendChild(slotDiv);
       }
       document.getElementById('modalPlayersStatus').textContent = `Faltan ${emptySlots} jugadores de ${totalPlayers}`;
-      // Actualizar botón "Unirse" del modal según si ya se ha unido
+      // Actualizar el botón "Unirse" del modal según si el usuario ya está inscrito
       if (loggedUser && participantsData && participantsData.some(row => row.user_id === loggedUser.id)) {
           document.getElementById('modalJoinBtn').style.display = 'none';
       } else {
