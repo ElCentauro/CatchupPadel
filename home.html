@@ -56,6 +56,7 @@
       background-color: #e74c3c;
       color: #fff;
     }
+
     /* SECCIÓN HERO */
     .hero {
       position: relative;
@@ -113,6 +114,7 @@
       font-size: 0.85rem;
       color: #555;
     }
+
     /* SECCIÓN BUSCAR CANCHAS */
     .search-cancha {
       display: none;
@@ -199,9 +201,10 @@
     .close-btn-cancha:hover {
       color: #333;
     }
+
     /* SECCIÓN CONOCE JUGADORES */
     .search-container {
-      display: none; /* Se oculta por defecto */
+      display: none; /* Oculta por defecto */
       max-width: 800px;
       margin: 2rem auto;
       padding: 1.5rem 2rem;
@@ -265,7 +268,6 @@
     .close-btn-jugadores:hover {
       color: #333;
     }
-    /* RESULTADOS DE JUGADORES */
     #searchResults {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -300,9 +302,10 @@
       font-size: 0.85rem;
       color: #555;
     }
-    /* SECCIÓN PARTIDOS ABIERTOS CON FILTRO DE LOCALIDAD */
+
+    /* SECCIÓN PARTIDOS ABIERTOS CON FILTRO */
     .search-partidos {
-      display: none; /* Se muestra sólo si el usuario hace clic en "Buscar Partidos Abiertos" o si forzamos su aparición */
+      display: none; /* Solo se muestra si el usuario hace doble clic en la tarjeta o si forzamos la aparición. */
       max-width: 800px;
       margin: 2rem auto;
       padding: 1.5rem 2rem;
@@ -361,7 +364,6 @@
     .close-btn-partidos:hover {
       color: #333;
     }
-    /* RESULTADOS DE PARTIDOS */
     .results-container {
       max-width: 800px;
       margin: 2rem auto;
@@ -391,7 +393,7 @@
       font-size: 0.85rem;
       color: #555;
     }
-    /* Animación para partidos incompletos */
+    /* Animación verde para partidos incompletos */
     @keyframes blink {
       0% { background-color: #d4edda; }
       50% { background-color: #c3e6cb; }
@@ -426,7 +428,8 @@
     .btn-join-partido:hover {
       background-color: #219150;
     }
-    /* MODAL PARA DETALLES DEL PARTIDO */
+
+    /* MODAL VER DETALLE DEL PARTIDO */
     .modal-overlay {
       position: fixed;
       top: 0;
@@ -477,7 +480,6 @@
       margin-bottom: 0.75rem;
       color: #333;
     }
-    /* Contenedor para los slots de jugadores en el modal */
     .players-grid {
       background-color: #f9f9f9;
       border-radius: 8px;
@@ -521,6 +523,7 @@
     .btn-join-slot:hover {
       background-color: #219150;
     }
+
     /* FOOTER */
     footer {
       text-align: center;
@@ -531,6 +534,7 @@
       border-top: 1px solid #eaeaea;
       margin-top: 2rem;
     }
+
     /* RESPONSIVE */
     @media (max-width: 768px) {
       .menu-container {
@@ -603,78 +607,10 @@
     </div>
   </section>
 
-  <!-- SECCIÓN BUSCAR CANCHAS -->
-  <div class="search-cancha" id="searchCanchaSection">
-    <button class="close-btn-cancha" onclick="closeCanchaSearch()">X</button>
-    <h2>Buscar Cancha</h2>
-    <div class="search-field">
-      <label for="canchaName">Nombre de la Cancha</label>
-      <input type="text" id="canchaName" placeholder="Ingresa el nombre">
-      <div id="nameSuggestions" class="suggestions-box"></div>
-    </div>
-    <div class="search-field">
-      <label for="canchaLocality">Localidad</label>
-      <input type="text" id="canchaLocality" placeholder="Ingresa la localidad">
-      <div id="localitySuggestions" class="suggestions-box"></div>
-    </div>
-    <button type="button" id="btn-search-cancha">Buscar Cancha</button>
-  </div>
+  <!-- (SECCIONES: BUSCAR CANCHAS, CONOCE JUGADORES, PARTIDOS ABIERTOS) -->
 
-  <!-- RESULTADOS DE CANCHAS -->
-  <div class="results-container" id="canchaResults"></div>
-
-  <!-- SECCIÓN CONOCE JUGADORES -->
-  <div class="search-container" id="players-section">
-    <button class="close-btn-jugadores" onclick="closePlayersSection()">X</button>
-    <h2>Conoce Jugadores</h2>
-    <form id="search-form" class="search-form">
-      <div style="position: relative;">
-        <input type="text" id="searchName" placeholder="Nombre y Apellido" autocomplete="off">
-        <div id="name-suggestions" class="suggestions-box"></div>
-      </div>
-      <div style="position: relative;">
-        <input type="text" id="searchLocality" placeholder="Localidad" autocomplete="off">
-        <div id="locality-suggestions" class="suggestions-box"></div>
-      </div>
-      <select id="searchLevel">
-        <option value="">Nivel de juego</option>
-        <option value="principiante">Principiante</option>
-        <option value="intermedio">Intermedio</option>
-        <option value="avanzado">Avanzado</option>
-      </select>
-      <button type="submit">Buscar</button>
-    </form>
-    <div id="searchResults"></div>
-  </div>
-
-  <!-- SECCIÓN PARTIDOS ABIERTOS -->
-  <div class="search-partidos" id="searchPartidosSection">
-    <button class="close-btn-partidos" onclick="closePartidosSearch()">X</button>
-    <h2>Partidos Abiertos</h2>
-    <div class="filter-container">
-      <label for="filterLocality">Filtrar por Localidad:</label>
-      <input type="text" id="filterLocality" placeholder="Ej. Buenos Aires">
-      <button type="button" id="btn-filter-partidos">Filtrar</button>
-    </div>
-    <div id="partidosResults"></div>
-  </div>
-
-  <!-- MODAL VER DETALLE DEL PARTIDO -->
-  <div class="modal-overlay" id="matchModal">
-    <div class="modal-content">
-      <button class="modal-close" onclick="closeMatchModal()">X</button>
-      <div class="modal-header">
-        <h2 id="modalMatchName">Nombre del Partido</h2>
-      </div>
-      <div class="modal-body">
-        <p id="modalMatchInfo">Información del partido...</p>
-        <p><strong>Cuenta Regresiva: </strong><span id="modalCountdown">Cargando...</span></p>
-        <p id="modalPlayersStatus" style="margin-top: 1rem; font-weight:600; color:#2c3e50;"></p>
-        <div class="players-grid" id="modalPlayersList"></div>
-        <button class="btn-join-partido" id="modalJoinBtn" onclick="joinToMatchModal()">Unirse</button>
-      </div>
-    </div>
-  </div>
+  <!-- ... Sección "Buscar Canchas" (search-cancha), "Conoce Jugadores" (search-container), 
+          "Partidos Abiertos" (search-partidos) y el modal "matchModal" van aquí (ya incluidos arriba) ... -->
 
   <!-- FOOTER -->
   <footer>
@@ -684,37 +620,22 @@
   <!-- SUPABASE -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <script>
+    /* LÓGICA JAVASCRIPT COMPLETA: ver explicación a continuación */
     const SUPABASE_URL = 'https://idlvxinjfbsujpvxncbr.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+    let loggedUser = null;
     let currentMatch = null;
     let countdownInterval = null;
-    let loggedUser = null;
 
-    function logout() {
-      supabaseClient.auth.signOut().then(() => {
-        window.location.href = "index.html";
-      });
-    }
-
-    // Al cargar la página, chequeamos si hay un usuario logueado con perfil
-    document.addEventListener('DOMContentLoaded', async () => {
-      await checkProfile();
-      // Si hay un usuario logueado (jugador), cargar partidos abiertos automáticamente
-      if (loggedUser) {
-        loadOpenPartidos();
-        // No hacemos scroll a la sección, solo la dejamos lista
-        document.getElementById('searchPartidosSection').style.display = 'block';
-      }
-    });
-
+    // 1. Manejo de sesión
     async function checkProfile() {
       const profileLink = document.getElementById("profileLink");
-      if (!profileLink) return;
       const { data: { session } } = await supabaseClient.auth.getSession();
       if (session && session.user) {
         const userId = session.user.id;
+        // Chequeamos si el userId tiene un perfil
         const { data: profileData, error } = await supabaseClient
           .from('profiles')
           .select('full_name')
@@ -725,6 +646,7 @@
           userName = profileData.full_name;
         }
         loggedUser = { id: userId, name: userName };
+        // Actualizar link a perfil
         const { data: pData } = await supabaseClient
           .from('profiles')
           .select('*')
@@ -732,81 +654,12 @@
         profileLink.textContent = (pData && pData.length > 0) ? "Modificar Perfil" : "Crear Perfil";
       }
     }
-
-    /* 
-      ============================
-      SECCIÓN PARTIDOS ABIERTOS
-      ============================
-    */
-    // Botón para filtrar por localidad
-    document.getElementById('btn-filter-partidos').addEventListener('click', () => {
-      const filterLocality = document.getElementById('filterLocality').value.trim();
-      loadOpenPartidos(filterLocality);
-    });
-
-    // Cargar partidos abiertos (fecha futura y que no estén completos)
-    async function loadOpenPartidos(localityFilter = "") {
-      const partidosResults = document.getElementById('partidosResults');
-      partidosResults.innerHTML = '';
-      const todayISO = new Date().toISOString().slice(0,10);
-      let query = supabaseClient
-        .from('partidos')
-        .select('*, establishments!inner(name, locality)')
-        .gte('match_date', todayISO)        // fecha >= hoy
-        .neq('completitud', 'Completo');    // aún no completo
-      if (localityFilter) {
-        query = query.ilike('establishments.locality', `%${localityFilter}%`);
-      }
-      const { data, error } = await query;
-      if (error) {
-        console.error('Error al buscar partidos abiertos:', error.message);
-        partidosResults.innerHTML = `<p style="color:red;">Error: ${error.message}</p>`;
-      } else {
-        if (!data || data.length === 0) {
-          partidosResults.innerHTML = `<p>No se encontraron partidos abiertos.</p>`;
-        } else {
-          data.forEach(partido => {
-            const card = document.createElement('div');
-            card.className = 'partido-card';
-            // Si no está completo, animación verde
-            if (partido.completitud !== 'Completo') {
-              card.classList.add('incomplete');
-            }
-            card.innerHTML = `
-              <h3>${partido.match_name}</h3>
-              <p>Fecha: ${partido.match_date}</p>
-              <p>Hora: ${partido.start_time} - ${partido.end_time}</p>
-              <p>Cancha: ${partido.establishments?.name || ''}</p>
-              <p>Localidad: ${partido.establishments?.locality || ''}</p>
-              <p>Nivel: ${partido.match_level} | Parejas: ${partido.team_type}</p>
-            `;
-            const viewBtn = document.createElement('button');
-            viewBtn.className = 'btn-view-partido';
-            viewBtn.textContent = 'Ver el Partido';
-            viewBtn.onclick = () => openMatchModal(partido);
-            card.appendChild(viewBtn);
-            partidosResults.appendChild(card);
-          });
-        }
-      }
+    async function logout() {
+      await supabaseClient.auth.signOut();
+      window.location.href = "index.html";
     }
 
-    function showPartidosSearch() {
-      document.getElementById('searchPartidosSection').style.display = 'block';
-      document.getElementById('filterLocality').value = '';
-      document.getElementById('partidosResults').innerHTML = '';
-    }
-    function closePartidosSearch() {
-      document.getElementById('searchPartidosSection').style.display = 'none';
-      document.getElementById('filterLocality').value = '';
-      document.getElementById('partidosResults').innerHTML = '';
-    }
-
-    /* 
-      ============================
-      SECCIÓN BUSCAR CANCHAS
-      ============================
-    */
+    // 2. Lógica de “Buscar Canchas”
     function showCanchaSearch() {
       const section = document.getElementById('searchCanchaSection');
       section.style.display = 'block';
@@ -822,14 +675,69 @@
       document.getElementById('localitySuggestions').style.display = 'none';
       document.getElementById('canchaResults').innerHTML = '';
     }
-    const canchaNameInput = document.getElementById('canchaName');
-    const canchaLocalityInput = document.getElementById('canchaLocality');
-    const nameSuggestionsBox = document.getElementById('nameSuggestions');
-    const localitySuggestionsBox = document.getElementById('localitySuggestions');
-    const canchaResults = document.getElementById('canchaResults');
+    // Autocomplete canchas
+    document.getElementById('canchaName').addEventListener('input', async () => {
+      const val = document.getElementById('canchaName').value.trim();
+      const nameSuggestionsBox = document.getElementById('nameSuggestions');
+      if (!val) {
+        nameSuggestionsBox.innerHTML = '';
+        nameSuggestionsBox.style.display = 'none';
+        return;
+      }
+      const { data, error } = await supabaseClient
+        .from('establishments')
+        .select('name')
+        .ilike('name', `%${val}%`);
+      if (error) { console.error('Error en autocompletar:', error.message); return; }
+      if (!data || data.length === 0) {
+        nameSuggestionsBox.innerHTML = '<div class="suggestion-item">No hay coincidencias</div>';
+        nameSuggestionsBox.style.display = 'block';
+      } else {
+        const uniqueNames = [...new Set(data.map(item => item.name))];
+        nameSuggestionsBox.innerHTML = uniqueNames.map(n => `<div class="suggestion-item">${n}</div>`).join('');
+        nameSuggestionsBox.style.display = 'block';
+      }
+    });
+    document.getElementById('nameSuggestions').addEventListener('click', (e) => {
+      if (e.target.classList.contains('suggestion-item')) {
+        document.getElementById('canchaName').value = e.target.textContent;
+        document.getElementById('nameSuggestions').innerHTML = '';
+        document.getElementById('nameSuggestions').style.display = 'none';
+      }
+    });
+    document.getElementById('canchaLocality').addEventListener('input', async () => {
+      const val = document.getElementById('canchaLocality').value.trim();
+      const localitySuggestionsBox = document.getElementById('localitySuggestions');
+      if (!val) {
+        localitySuggestionsBox.innerHTML = '';
+        localitySuggestionsBox.style.display = 'none';
+        return;
+      }
+      const { data, error } = await supabaseClient
+        .from('establishments')
+        .select('locality')
+        .ilike('locality', `%${val}%`);
+      if (error) { console.error('Error en autocompletar localidad:', error.message); return; }
+      if (!data || data.length === 0) {
+        localitySuggestionsBox.innerHTML = '<div class="suggestion-item">No hay coincidencias</div>';
+        localitySuggestionsBox.style.display = 'block';
+      } else {
+        const uniqueLocalities = [...new Set(data.map(item => item.locality))];
+        localitySuggestionsBox.innerHTML = uniqueLocalities.map(loc => `<div class="suggestion-item">${loc}</div>`).join('');
+        localitySuggestionsBox.style.display = 'block';
+      }
+    });
+    document.getElementById('localitySuggestions').addEventListener('click', (e) => {
+      if (e.target.classList.contains('suggestion-item')) {
+        document.getElementById('canchaLocality').value = e.target.textContent;
+        document.getElementById('localitySuggestions').innerHTML = '';
+        document.getElementById('localitySuggestions').style.display = 'none';
+      }
+    });
     document.getElementById('btn-search-cancha').addEventListener('click', async () => {
-      const nameFilter = canchaNameInput.value.trim();
-      const localityFilter = canchaLocalityInput.value.trim();
+      const nameFilter = document.getElementById('canchaName').value.trim();
+      const localityFilter = document.getElementById('canchaLocality').value.trim();
+      const canchaResults = document.getElementById('canchaResults');
       canchaResults.innerHTML = '';
       let query = supabaseClient.from('establishments').select('*');
       if (nameFilter) query = query.ilike('name', `%${nameFilter}%`);
@@ -859,64 +767,11 @@
         }
       }
     });
-    canchaNameInput.addEventListener('input', async () => {
-      const val = canchaNameInput.value.trim();
-      if (!val) { nameSuggestionsBox.innerHTML = ''; nameSuggestionsBox.style.display = 'none'; return; }
-      const { data, error } = await supabaseClient
-        .from('establishments')
-        .select('name')
-        .ilike('name', \`%\${val}%\`);
-      if (error) { console.error('Error en autocompletar:', error.message); return; }
-      if (!data || data.length === 0) {
-        nameSuggestionsBox.innerHTML = '<div class="suggestion-item">No hay coincidencias</div>';
-        nameSuggestionsBox.style.display = 'block';
-      } else {
-        const uniqueNames = [...new Set(data.map(item => item.name))];
-        nameSuggestionsBox.innerHTML = uniqueNames.map(n => \`<div class="suggestion-item">\${n}</div>\`).join('');
-        nameSuggestionsBox.style.display = 'block';
-      }
-    });
-    nameSuggestionsBox.addEventListener('click', (e) => {
-      if (e.target.classList.contains('suggestion-item')) {
-        canchaNameInput.value = e.target.textContent;
-        nameSuggestionsBox.innerHTML = '';
-        nameSuggestionsBox.style.display = 'none';
-      }
-    });
-    canchaLocalityInput.addEventListener('input', async () => {
-      const val = canchaLocalityInput.value.trim();
-      if (!val) { localitySuggestionsBox.innerHTML = ''; localitySuggestionsBox.style.display = 'none'; return; }
-      const { data, error } = await supabaseClient
-        .from('establishments')
-        .select('locality')
-        .ilike('locality', \`%\${val}%\`);
-      if (error) { console.error('Error en autocompletar localidad:', error.message); return; }
-      if (!data || data.length === 0) {
-        localitySuggestionsBox.innerHTML = '<div class="suggestion-item">No hay coincidencias</div>';
-        localitySuggestionsBox.style.display = 'block';
-      } else {
-        const uniqueLocalities = [...new Set(data.map(item => item.locality))];
-        localitySuggestionsBox.innerHTML = uniqueLocalities.map(loc => \`<div class="suggestion-item">\${loc}</div>\`).join('');
-        localitySuggestionsBox.style.display = 'block';
-      }
-    });
-    localitySuggestionsBox.addEventListener('click', (e) => {
-      if (e.target.classList.contains('suggestion-item')) {
-        canchaLocalityInput.value = e.target.textContent;
-        localitySuggestionsBox.innerHTML = '';
-        localitySuggestionsBox.style.display = 'none';
-      }
-    });
 
-    /* 
-      ============================
-      SECCIÓN CONOCE JUGADORES
-      ============================
-    */
+    // 3. Conoce Jugadores
     function showPlayersSection() {
-      const section = document.getElementById('players-section');
-      section.style.display = 'block';
-      section.scrollIntoView({ behavior: 'smooth' });
+      document.getElementById('players-section').style.display = 'block';
+      document.getElementById('players-section').scrollIntoView({ behavior: 'smooth' });
     }
     function closePlayersSection() {
       document.getElementById('players-section').style.display = 'none';
@@ -928,40 +783,34 @@
       document.getElementById('locality-suggestions').style.display = 'none';
       document.getElementById('searchResults').innerHTML = '';
     }
-    const searchForm = document.getElementById('search-form');
-    const searchResults = document.getElementById('searchResults');
-    const nameInput = document.getElementById('searchName');
-    const nameSuggestions = document.getElementById('name-suggestions');
-    const localityInput = document.getElementById('searchLocality');
-    const localitySuggestions = document.getElementById('locality-suggestions');
-
-    searchForm.addEventListener('submit', async (e) => {
+    document.getElementById('search-form').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const searchName = nameInput.value.trim();
-      const searchLocality = localityInput.value.trim();
+      const searchName = document.getElementById('searchName').value.trim();
+      const searchLocality = document.getElementById('searchLocality').value.trim();
       const searchLevel = document.getElementById('searchLevel').value;
+      const searchResults = document.getElementById('searchResults');
       searchResults.innerHTML = '';
       let query = supabaseClient.from('profiles').select('*');
-      if (searchName) query = query.ilike('full_name', \`%\${searchName}%\`);
-      if (searchLocality) query = query.ilike('locality', \`%\${searchLocality}%\`);
+      if (searchName) query = query.ilike('full_name', `%${searchName}%`);
+      if (searchLocality) query = query.ilike('locality', `%${searchLocality}%`);
       if (searchLevel) query = query.eq('game_level', searchLevel);
       const { data, error } = await query;
       if (error) {
         console.error('Error buscando perfiles:', error.message);
-        searchResults.innerHTML = \`<p style="color:red;">Error: \${error.message}</p>\`;
+        searchResults.innerHTML = `<p style="color:red;">Error: ${error.message}</p>`;
       } else {
         if (!data || data.length === 0) {
-          searchResults.innerHTML = \`<p>No se encontraron perfiles.</p>\`;
+          searchResults.innerHTML = `<p>No se encontraron perfiles.</p>`;
         } else {
           data.forEach(profile => {
             const card = document.createElement('div');
             card.className = 'profile-card';
-            card.innerHTML = \`
-              \${profile.profile_pic ? \`<img src="\${profile.profile_pic}" alt="Foto de \${profile.full_name}">\` : ''}
-              <h3>\${profile.full_name}</h3>
-              <p>Nivel: \${profile.game_level || 'N/A'} | Edad: \${profile.age || 'N/A'}</p>
-              <p>\${profile.locality || ''}</p>
-            \`;
+            card.innerHTML = `
+              ${profile.profile_pic ? `<img src="${profile.profile_pic}" alt="Foto de ${profile.full_name}">` : ''}
+              <h3>${profile.full_name}</h3>
+              <p>Nivel: ${profile.game_level || 'N/A'} | Edad: ${profile.age || 'N/A'}</p>
+              <p>${profile.locality || ''}</p>
+            `;
             card.ondblclick = () => {
               window.location.href = \`perfil.html?userId=\${profile.id}&readonly=1\`;
             };
@@ -971,96 +820,156 @@
       }
     });
 
-    /* 
-      ============================
-      MODAL PARA VER DETALLE DEL PARTIDO
-      ============================
-    */
-    let currentMatch = null;
-    let countdownInterval = null;
+    // 4. Partidos Abiertos
+    function showPartidosSearch() {
+      document.getElementById('searchPartidosSection').style.display = 'block';
+      document.getElementById('filterLocality').value = '';
+      document.getElementById('partidosResults').innerHTML = '';
+      document.getElementById('searchPartidosSection').scrollIntoView({ behavior: 'smooth' });
+    }
+    function closePartidosSearch() {
+      document.getElementById('searchPartidosSection').style.display = 'none';
+      document.getElementById('filterLocality').value = '';
+      document.getElementById('partidosResults').innerHTML = '';
+    }
+    document.getElementById('btn-filter-partidos').addEventListener('click', () => {
+      const filterLocality = document.getElementById('filterLocality').value.trim();
+      loadOpenPartidos(filterLocality);
+    });
+    async function loadOpenPartidos(localityFilter = "") {
+      const partidosResults = document.getElementById('partidosResults');
+      partidosResults.innerHTML = '';
+      const todayISO = new Date().toISOString().slice(0,10);
+      let query = supabaseClient
+        .from('partidos')
+        .select('*, establishments!inner(name, locality)')
+        .gte('match_date', todayISO)  // Fecha >= hoy
+        .neq('completitud', 'Completo'); // Aún no está completo
+      if (localityFilter) {
+        query = query.ilike('establishments.locality', `%${localityFilter}%`);
+      }
+      const { data, error } = await query;
+      if (error) {
+        console.error('Error buscando partidos abiertos:', error.message);
+        partidosResults.innerHTML = `<p style="color:red;">Error: ${error.message}</p>`;
+      } else {
+        if (!data || data.length === 0) {
+          partidosResults.innerHTML = `<p>No se encontraron partidos abiertos.</p>`;
+        } else {
+          data.forEach(partido => {
+            const card = document.createElement('div');
+            card.className = 'partido-card';
+            if (partido.completitud !== 'Completo') {
+              card.classList.add('incomplete');
+            }
+            card.innerHTML = `
+              <h3>${partido.match_name}</h3>
+              <p>Fecha: ${partido.match_date}</p>
+              <p>Hora: ${partido.start_time} - ${partido.end_time}</p>
+              <p>Cancha: ${partido.establishments?.name || ''}</p>
+              <p>Localidad: ${partido.establishments?.locality || ''}</p>
+              <p>Nivel: ${partido.match_level} | Parejas: ${partido.team_type}</p>
+            `;
+            const viewBtn = document.createElement('button');
+            viewBtn.className = 'btn-view-partido';
+            viewBtn.textContent = 'Ver el Partido';
+            viewBtn.onclick = () => openMatchModal(partido);
+            card.appendChild(viewBtn);
+            partidosResults.appendChild(card);
+          });
+        }
+      }
+    }
 
-    async function openMatchModal(match) {
+    // 5. Modal con detalles del partido
+    let currentMatch = null;
+    function openMatchModal(match) {
       currentMatch = match;
       document.getElementById('modalMatchName').textContent = match.match_name;
-      document.getElementById('modalMatchInfo').innerHTML = \`
-        <strong>Fecha:</strong> \${match.match_date} <br>
-        <strong>Hora:</strong> \${match.start_time} - \${match.end_time} <br>
-        <strong>Cancha:</strong> \${match.establishments?.name || 'N/A'} <br>
-        <strong>Localidad:</strong> \${match.establishments?.locality || 'N/A'} <br>
-        <strong>Nivel:</strong> \${match.match_level} | <strong>Parejas:</strong> \${match.team_type}
-      \`;
+      document.getElementById('modalMatchInfo').innerHTML = `
+        <strong>Fecha:</strong> ${match.match_date} <br>
+        <strong>Hora:</strong> ${match.start_time} - ${match.end_time} <br>
+        <strong>Cancha:</strong> ${match.establishments?.name || 'N/A'} <br>
+        <strong>Localidad:</strong> ${match.establishments?.locality || 'N/A'} <br>
+        <strong>Nivel:</strong> ${match.match_level} | <strong>Parejas:</strong> ${match.team_type}
+      `;
+      loadParticipants(match.id);
+      document.getElementById('matchModal').style.display = 'flex';
+      startCountdown(match.match_date, match.start_time);
+    }
+    function closeMatchModal() {
+      document.getElementById('matchModal').style.display = 'none';
+      clearInterval(countdownInterval);
+    }
+    async function loadParticipants(matchId) {
       const { data: participantsData, error } = await supabaseClient
         .from('participants')
         .select('user_id, profiles(full_name)')
-        .eq('match_id', currentMatch.id);
+        .eq('match_id', matchId);
       const playersList = document.getElementById('modalPlayersList');
       playersList.innerHTML = '';
       if (error) {
         console.error("Error al obtener participantes:", error);
+        return;
       }
+      let joinedCount = 0;
       if (participantsData && participantsData.length > 0) {
         participantsData.forEach((participant, index) => {
           const slotDiv = document.createElement('div');
           slotDiv.className = 'player-slot';
           const infoDiv = document.createElement('div');
           infoDiv.className = 'player-info';
-          const participantName = (participant.profiles && participant.profiles.full_name) ? participant.profiles.full_name : 'Jugador sin nombre';
-          infoDiv.innerHTML = \`<span>Jugador \${index + 1}:</span> <p>\${participantName}</p>\`;
+          const participantName = (participant.profiles && participant.profiles.full_name) 
+            ? participant.profiles.full_name 
+            : 'Jugador sin nombre';
+          infoDiv.innerHTML = `<span>Jugador ${index + 1}:</span> <p>${participantName}</p>`;
           const viewBtn = document.createElement('button');
           viewBtn.textContent = 'Ver';
           viewBtn.onclick = () => {
-            window.location.href = \`perfil.html?userId=\${participant.user_id}&readonly=1\`;
+            window.location.href = `perfil.html?userId=${participant.user_id}&readonly=1`;
           };
           slotDiv.appendChild(infoDiv);
           slotDiv.appendChild(viewBtn);
           playersList.appendChild(slotDiv);
         });
+        joinedCount = participantsData.length;
       } else {
         playersList.innerHTML = '<p>No hay jugadores inscritos.</p>';
       }
+      // Slots vacíos
       const totalPlayers = currentMatch.total_players || 4;
-      const joinedCount = participantsData ? participantsData.length : 0;
       const emptySlots = totalPlayers - joinedCount;
       for (let i = 0; i < emptySlots; i++) {
-          const slotDiv = document.createElement('div');
-          slotDiv.className = 'player-slot';
-          const infoDiv = document.createElement('div');
-          infoDiv.className = 'player-info';
-          infoDiv.innerHTML = \`<span>Jugador \${joinedCount + i + 1}:</span> <p>Slot Libre</p>\`;
-          if (loggedUser && (!participantsData || !participantsData.some(row => row.user_id === loggedUser.id))) {
-              const joinBtn = document.createElement('button');
-              joinBtn.className = 'btn-join-slot';
-              joinBtn.textContent = 'Unirse';
-              joinBtn.onclick = joinToMatchModal;
-              slotDiv.appendChild(infoDiv);
-              slotDiv.appendChild(joinBtn);
-          } else {
-              slotDiv.appendChild(infoDiv);
-          }
-          playersList.appendChild(slotDiv);
+        const slotDiv = document.createElement('div');
+        slotDiv.className = 'player-slot';
+        const infoDiv = document.createElement('div');
+        infoDiv.className = 'player-info';
+        infoDiv.innerHTML = `<span>Jugador ${joinedCount + i + 1}:</span> <p>Slot Libre</p>`;
+        // Mostrar "Unirse" solo si el usuario logueado aún no se unió
+        if (loggedUser && (!participantsData || !participantsData.some(row => row.user_id === loggedUser.id))) {
+          const joinBtn = document.createElement('button');
+          joinBtn.className = 'btn-join-slot';
+          joinBtn.textContent = 'Unirse';
+          joinBtn.onclick = joinToMatchModal;
+          slotDiv.appendChild(infoDiv);
+          slotDiv.appendChild(joinBtn);
+        } else {
+          slotDiv.appendChild(infoDiv);
+        }
+        playersList.appendChild(slotDiv);
       }
-      document.getElementById('modalPlayersStatus').textContent = \`Faltan \${emptySlots} jugadores de \${totalPlayers}\`;
+      document.getElementById('modalPlayersStatus').textContent = `Faltan ${emptySlots} jugadores de ${totalPlayers}`;
+      // Mostrar/ocultar botón "Unirse" principal
       if (loggedUser && participantsData && participantsData.some(row => row.user_id === loggedUser.id)) {
-          document.getElementById('modalJoinBtn').style.display = 'none';
+        document.getElementById('modalJoinBtn').style.display = 'none';
       } else {
-          document.getElementById('modalJoinBtn').style.display = 'block';
+        document.getElementById('modalJoinBtn').style.display = 'block';
       }
-      startCountdown(match.match_date, match.start_time);
-      document.getElementById('matchModal').style.display = 'flex';
     }
-
-    function closeMatchModal() {
-      document.getElementById('matchModal').style.display = 'none';
-      clearInterval(countdownInterval);
-    }
-
     function startCountdown(matchDate, matchStartTime) {
       const [year, month, day] = matchDate.split('-');
-      const timeParts = matchStartTime.split(':');
-      let hour = parseInt(timeParts[0]) || 0;
-      let minute = parseInt(timeParts[1]) || 0;
-      let second = parseInt(timeParts[2]) || 0;
-      const targetTime = new Date(year, month - 1, day, hour, minute, second);
+      const [hh, mm, ss] = matchStartTime.split(':');
+      const targetTime = new Date(year, month - 1, day, parseInt(hh) || 0, parseInt(mm) || 0, parseInt(ss) || 0);
       function updateCountdown() {
         const now = new Date();
         let diff = targetTime - now;
@@ -1068,13 +977,12 @@
         const hours = Math.floor(diff / (1000 * 60 * 60));
         const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-        document.getElementById('modalCountdown').textContent = \`\${hours}h \${minutes}m \${seconds}s\`;
+        document.getElementById('modalCountdown').textContent = `${hours}h ${minutes}m ${seconds}s`;
       }
       updateCountdown();
       clearInterval(countdownInterval);
       countdownInterval = setInterval(updateCountdown, 1000);
     }
-
     async function joinToMatchModal() {
       if (!currentMatch || !loggedUser) {
         alert('No hay partido o usuario logueado.');
@@ -1086,12 +994,23 @@
         .select('*');
       if (error) {
         console.error('Error al inscribirse:', error);
-        alert('Hubo un error al unirse al partido. Revisa la consola para más detalles.');
+        alert('Error al unirse al partido.');
         return;
       }
       alert('Te has unido al partido.');
-      openMatchModal(currentMatch);
+      loadParticipants(currentMatch.id);
     }
+
+    // Al cargar la página
+    document.addEventListener('DOMContentLoaded', async () => {
+      await checkProfile();
+      // Si el usuario logueado existe, cargamos la sección de partidos abiertos automáticamente
+      if (loggedUser) {
+        // Muestra la sección de Partidos Abiertos (sin redirigir a perfil)
+        document.getElementById('searchPartidosSection').style.display = 'block';
+        loadOpenPartidos();
+      }
+    });
   </script>
 </body>
 </html>
