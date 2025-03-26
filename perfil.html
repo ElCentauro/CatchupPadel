@@ -310,7 +310,7 @@
       </div>
       <!-- Fila de Botones -->
       <div class="buttons-row">
-        <button type="submit" class="btn-save">Guardar Cambios</button>
+        <button type="submit" class="btn-save" id="saveBtn">Guardar Cambios</button>
         <button type="button" class="btn-delete" onclick="deleteProfile()">Borrar Perfil</button>
       </div>
     </form>
@@ -324,45 +324,66 @@
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Cargar datos del perfil
     async function loadProfile() {
-      const { data: { session }, error } = await supabaseClient.auth.getSession();
-      if (error) {
-        console.error('Error al obtener la sesión:', error);
+      // Leer parámetros de la URL
+      const params = new URLSearchParams(window.location.search);
+      const urlUserId = params.get('userId'); // ID del perfil que se quiere ver
+      const readonly = params.get('readonly') === '1';
+
+      // Si se recibió un userId, usarlo; de lo contrario, usar el del usuario logueado
+      let finalUserId = urlUserId;
+      if (!finalUserId) {
+        const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
+        if (session && session.user) {
+          finalUserId = session.user.id;
+        } else {
+          alert('No se encontró usuario logueado ni se especificó un perfil.');
+          return;
+        }
+      }
+
+      // Si se está en modo solo lectura, ocultar el botón de guardar
+      if (readonly) {
+        document.getElementById('saveBtn').style.display = 'none';
+      }
+
+      // Si el perfil que se va a mostrar es distinto al del usuario logueado y se está en modo readonly,
+      // se desactivan los inputs para que no se puedan modificar.
+      if (readonly) {
+        const inputs = document.querySelectorAll('#profile-form input, #profile-form select');
+        inputs.forEach(input => input.disabled = true);
+      }
+
+      // Consultar el perfil del usuario correspondiente (finalUserId)
+      const { data: profileData, error: profileError } = await supabaseClient
+        .from('profiles')
+        .select('*')
+        .eq('id', finalUserId)
+        .maybeSingle();
+
+      if (profileError) {
+        console.error('Error al obtener el perfil:', profileError.message);
         return;
       }
-      if (session && session.user) {
-        const userId = session.user.id;
-        // Mostrar email en campo deshabilitado
-        document.getElementById('emailProfile').value = session.user.email;
 
-        // Consultar si ya existe el perfil
-        const { data: profileData, error: profileError } = await supabaseClient
-          .from('profiles')
-          .select('*')
-          .eq('id', userId)
-          .maybeSingle();
+      if (profileData) {
+        // Cargar datos en el formulario
+        document.getElementById('fullName').value = profileData.full_name || '';
+        document.getElementById('age').value = profileData.age || '';
+        if (profileData.gender) {
+          const genderRadio = document.querySelector(`input[name="gender"][value="${profileData.gender}"]`);
+          if (genderRadio) genderRadio.checked = true;
+        }
+        document.getElementById('gameLevel').value = profileData.game_level || '';
+        document.getElementById('locality').value = profileData.locality || '';
+        document.getElementById('province').value = profileData.province || '';
+        document.getElementById('country').value = profileData.country || '';
+        document.getElementById('phone').value = profileData.phone || '';
 
-        if (profileError) {
-          console.error('Error al obtener el perfil:', profileError.message);
-        } else if (profileData) {
-          // Cargar datos en el formulario
-          document.getElementById('fullName').value = profileData.full_name || '';
-          document.getElementById('age').value = profileData.age || '';
-          if (profileData.gender) {
-            const genderRadio = document.querySelector(`input[name="gender"][value="${profileData.gender}"]`);
-            if (genderRadio) genderRadio.checked = true;
-          }
-          document.getElementById('gameLevel').value = profileData.game_level || '';
-          document.getElementById('locality').value = profileData.locality || '';
-          document.getElementById('province').value = profileData.province || '';
-          document.getElementById('country').value = profileData.country || '';
-          document.getElementById('phone').value = profileData.phone || '';
-
-          // Si hay foto, mostrar vista previa
-          if (profileData.profile_pic) {
-            showProfilePicPreview(profileData.profile_pic);
-          }
+        // Mostrar email (ya cargado desde la sesión)
+        // Mostrar vista previa de la foto, si existe
+        if (profileData.profile_pic) {
+          showProfilePicPreview(profileData.profile_pic);
         }
       }
     }
@@ -380,15 +401,19 @@
         photoActions.appendChild(preview);
       }
       preview.src = url;
-      // Agregar botón para borrar la foto
-      let deleteBtn = document.getElementById('deletePhotoBtn');
-      if (!deleteBtn) {
-        deleteBtn = document.createElement('button');
-        deleteBtn.id = 'deletePhotoBtn';
-        deleteBtn.className = 'btn-delete-photo';
-        deleteBtn.textContent = 'Borrar Foto';
-        deleteBtn.onclick = deleteProfilePic;
-        photoActions.appendChild(deleteBtn);
+      // Agregar botón para borrar la foto si el usuario no está en modo readonly
+      const params = new URLSearchParams(window.location.search);
+      const readonly = params.get('readonly') === '1';
+      if (!readonly) {
+        let deleteBtn = document.getElementById('deletePhotoBtn');
+        if (!deleteBtn) {
+          deleteBtn = document.createElement('button');
+          deleteBtn.id = 'deletePhotoBtn';
+          deleteBtn.className = 'btn-delete-photo';
+          deleteBtn.textContent = 'Borrar Foto';
+          deleteBtn.onclick = deleteProfilePic;
+          photoActions.appendChild(deleteBtn);
+        }
       }
     }
 
@@ -401,9 +426,10 @@
       document.getElementById('profilePic').value = "";
     }
 
-    // Guardar o actualizar el perfil con "onConflict: 'id'"
+    // Guardar o actualizar el perfil
     document.getElementById('profile-form').addEventListener('submit', async (e) => {
       e.preventDefault();
+      // Obtener el usuario logueado (este es el que se actualizará si no se está en modo readonly)
       const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
       if (sessionError || !session) {
         alert('Error al obtener la sesión de usuario.');
@@ -445,7 +471,7 @@
         profilePicUrl = publicUrlData.publicUrl;
       }
 
-      // Hacer upsert con "id = userId" y onConflict: 'id'
+      // Hacer upsert con onConflict: 'id'
       const { data: upsertData, error: upsertError } = await supabaseClient
         .from('profiles')
         .upsert({
