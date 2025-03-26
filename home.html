@@ -8,30 +8,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
     /* RESET Y ESTILOS GLOBALES */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      font-family: 'Poppins', sans-serif;
-      background-color: #f8f8f8;
-      color: #333;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Poppins', sans-serif; background-color: #f8f8f8; color: #333; }
     /* MENÚ DE NAVEGACIÓN */
-    nav {
-      width: 100%;
-      background-color: #fff;
-      padding: 1rem 2rem;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    .menu-container {
-      display: flex;
-      justify-content: space-evenly;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
+    nav { width: 100%; background-color: #fff; padding: 1rem 2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .menu-container { display: flex; justify-content: space-evenly; align-items: center; flex-wrap: wrap; gap: 1rem; }
     .menu-item {
       padding: 0.5rem 1rem;
       border: 2px solid #ff9500;
@@ -44,19 +25,9 @@
       cursor: pointer;
       text-decoration: none;
     }
-    .menu-item:hover {
-      background-color: #ff9500;
-      color: #fff;
-    }
-    .menu-item.logout {
-      border-color: #e74c3c;
-      color: #e74c3c;
-    }
-    .menu-item.logout:hover {
-      background-color: #e74c3c;
-      color: #fff;
-    }
-
+    .menu-item:hover { background-color: #ff9500; color: #fff; }
+    .menu-item.logout { border-color: #e74c3c; color: #e74c3c; }
+    .menu-item.logout:hover { background-color: #e74c3c; color: #fff; }
     /* SECCIÓN HERO */
     .hero {
       position: relative;
@@ -64,505 +35,211 @@
       text-align: center;
       background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)),
                   url('https://images.unsplash.com/photo-1593341646581-529f6c49c5d1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80');
-      background-size: cover;
-      background-position: center;
-      color: #fff;
-      min-height: 60vh;
+      background-size: cover; background-position: center; color: #fff; min-height: 60vh;
     }
-    .hero h1 {
-      font-size: 3rem;
-      font-weight: 700;
-      margin-bottom: 1rem;
-      color: #fff;
-    }
-    .hero p {
-      font-size: 1.2rem;
-      margin-bottom: 2rem;
-      max-width: 700px;
-      margin: 0 auto;
-      line-height: 1.6;
-    }
-    /* CONTENEDOR DE TARJETAS FLOTANTES */
-    .cards-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 1rem;
-      margin-top: 2rem;
-    }
+    .hero h1 { font-size: 3rem; font-weight: 700; margin-bottom: 1rem; color: #fff; }
+    .hero p { font-size: 1.2rem; margin-bottom: 2rem; max-width: 700px; margin: 0 auto; line-height: 1.6; }
+    /* TARJETAS FLOTANTES */
+    .cards-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-top: 2rem; }
     .floating-card {
       background-color: rgba(255,255,255,0.9);
       backdrop-filter: blur(4px);
-      border-radius: 8px;
-      padding: 1rem;
-      width: 220px;
-      text-align: center;
-      color: #333;
+      border-radius: 8px; padding: 1rem;
+      width: 220px; text-align: center; color: #333;
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-      transition: transform 0.3s;
-      cursor: pointer;
+      transition: transform 0.3s; cursor: pointer;
     }
-    .floating-card:hover {
-      transform: translateY(-5px);
-    }
-    .floating-card h3 {
-      font-size: 1rem;
-      margin-bottom: 0.5rem;
-      color: #2c3e50;
-    }
-    .floating-card p {
-      font-size: 0.85rem;
-      color: #555;
-    }
-
+    .floating-card:hover { transform: translateY(-5px); }
+    .floating-card h3 { font-size: 1rem; margin-bottom: 0.5rem; color: #2c3e50; }
+    .floating-card p { font-size: 0.85rem; color: #555; }
     /* SECCIÓN BUSCAR CANCHAS */
     .search-cancha {
       display: none;
-      max-width: 800px;
-      margin: 2rem auto;
-      padding: 1.5rem 2rem;
-      background-color: #fff;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      position: relative;
+      max-width: 800px; margin: 2rem auto; padding: 1.5rem 2rem;
+      background-color: #fff; border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1); position: relative;
     }
-    .search-cancha h2 {
-      font-size: 1.8rem;
-      margin-bottom: 1rem;
-      color: #2c3e50;
-      text-align: center;
-    }
-    .search-field {
-      margin-bottom: 1rem;
-      position: relative;
-    }
-    .search-field label {
-      display: block;
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-    }
+    .search-cancha h2 { font-size: 1.8rem; margin-bottom: 1rem; color: #2c3e50; text-align: center; }
+    .search-field { margin-bottom: 1rem; position: relative; }
+    .search-field label { display: block; font-weight: 600; margin-bottom: 0.5rem; }
     .search-field input {
-      width: 100%;
-      padding: 0.75rem 1rem;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      font-size: 1rem;
-      background-color: #f9f9f9;
+      width: 100%; padding: 0.75rem 1rem;
+      border: 1px solid #ddd; border-radius: 5px; font-size: 1rem; background-color: #f9f9f9;
     }
     .suggestions-box {
-      position: absolute;
-      background-color: #fff;
-      border: 1px solid #ddd;
-      border-radius: 5px;
+      position: absolute; background-color: #fff;
+      border: 1px solid #ddd; border-radius: 5px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-      margin-top: 0.5rem;
-      z-index: 999;
-      width: 240px;
-      max-height: 200px;
-      overflow-y: auto;
-      display: none;
+      margin-top: 0.5rem; z-index: 999; width: 240px; max-height: 200px;
+      overflow-y: auto; display: none;
     }
-    .suggestion-item {
-      padding: 0.5rem;
-      cursor: pointer;
-    }
-    .suggestion-item:hover {
-      background-color: #f0f0f0;
-    }
+    .suggestion-item { padding: 0.5rem; cursor: pointer; }
+    .suggestion-item:hover { background-color: #f0f0f0; }
     .search-cancha button {
-      padding: 0.75rem 1.5rem;
-      border: none;
-      border-radius: 5px;
-      background-color: #ff9500;
-      color: #fff;
-      font-size: 1rem;
-      font-weight: 600;
-      transition: background-color 0.3s ease;
-      cursor: pointer;
-      margin-top: 1rem;
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
+      padding: 0.75rem 1.5rem; border: none; border-radius: 5px;
+      background-color: #ff9500; color: #fff; font-size: 1rem; font-weight: 600;
+      transition: background-color 0.3s ease; cursor: pointer; margin-top: 1rem;
+      display: block; margin-left: auto; margin-right: auto;
     }
-    .search-cancha button:hover {
-      background-color: #e07e00;
-    }
+    .search-cancha button:hover { background-color: #e07e00; }
     .close-btn-cancha {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      background: none;
-      border: none;
-      font-size: 1.2rem;
-      color: #999;
-      cursor: pointer;
+      position: absolute; top: 10px; left: 10px; background: none;
+      border: none; font-size: 1.2rem; color: #999; cursor: pointer;
       transition: color 0.3s ease;
     }
-    .close-btn-cancha:hover {
-      color: #333;
-    }
-
+    .close-btn-cancha:hover { color: #333; }
     /* SECCIÓN CONOCE JUGADORES */
     .search-container {
-      display: none; /* Oculta por defecto */
-      max-width: 800px;
-      margin: 2rem auto;
-      padding: 1.5rem 2rem;
-      background-color: #fff;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      text-align: center;
-      position: relative;
+      display: none;
+      max-width: 800px; margin: 2rem auto; padding: 1.5rem 2rem;
+      background-color: #fff; border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1); text-align: center; position: relative;
     }
-    .search-container h2 {
-      font-size: 1.8rem;
-      margin-bottom: 1rem;
-      color: #2c3e50;
-    }
-    .search-form {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 1rem;
-      margin-bottom: 1rem;
-    }
-    .search-form input,
-    .search-form select {
-      padding: 0.75rem 1rem;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      font-size: 1rem;
-      background-color: #f9f9f9;
-      transition: box-shadow 0.3s;
+    .search-container h2 { font-size: 1.8rem; margin-bottom: 1rem; color: #2c3e50; }
+    .search-form { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-bottom: 1rem; }
+    .search-form input, .search-form select {
+      padding: 0.75rem 1rem; border: 1px solid #ddd; border-radius: 5px;
+      font-size: 1rem; background-color: #f9f9f9; transition: box-shadow 0.3s;
       width: 240px;
     }
-    .search-form input:focus,
-    .search-form select:focus {
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
-    }
+    .search-form input:focus, .search-form select:focus { box-shadow: 0 0 5px rgba(0,0,0,0.1); }
     .search-form button {
-      padding: 0.75rem 1.5rem;
-      border: none;
-      border-radius: 5px;
-      background-color: #ff9500;
-      color: #fff;
-      font-size: 1rem;
-      font-weight: 600;
-      transition: background-color 0.3s ease;
-      cursor: pointer;
+      padding: 0.75rem 1.5rem; border: none; border-radius: 5px;
+      background-color: #ff9500; color: #fff; font-size: 1rem; font-weight: 600;
+      transition: background-color 0.3s ease; cursor: pointer;
     }
-    .search-form button:hover {
-      background-color: #e07e00;
-    }
+    .search-form button:hover { background-color: #e07e00; }
     .close-btn-jugadores {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      background: none;
-      border: none;
-      font-size: 1.2rem;
-      color: #999;
-      cursor: pointer;
+      position: absolute; top: 10px; left: 10px; background: none;
+      border: none; font-size: 1.2rem; color: #999; cursor: pointer;
       transition: color 0.3s ease;
     }
-    .close-btn-jugadores:hover {
-      color: #333;
-    }
+    .close-btn-jugadores:hover { color: #333; }
     #searchResults {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 1rem;
-      padding: 0 1rem;
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem; padding: 0 1rem;
     }
     .profile-card {
-      background: #fff;
-      border-radius: 8px;
-      padding: 1rem;
-      text-align: center;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      transition: transform 0.3s ease;
-      cursor: pointer;
+      background: #fff; border-radius: 8px; padding: 1rem; text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: transform 0.3s ease; cursor: pointer;
     }
-    .profile-card:hover {
-      transform: translateY(-5px);
-    }
+    .profile-card:hover { transform: translateY(-5px); }
     .profile-card img {
-      width: 100%;
-      height: 150px;
-      object-fit: cover;
-      border-radius: 8px;
-      margin-bottom: 0.75rem;
+      width: 100%; height: 150px; object-fit: cover; border-radius: 8px; margin-bottom: 0.75rem;
     }
-    .profile-card h3 {
-      font-size: 1.1rem;
-      margin-bottom: 0.5rem;
-      color: #2c3e50;
-    }
-    .profile-card p {
-      font-size: 0.85rem;
-      color: #555;
-    }
-
-    /* SECCIÓN PARTIDOS ABIERTOS CON FILTRO */
+    .profile-card h3 { font-size: 1.1rem; margin-bottom: 0.5rem; color: #2c3e50; }
+    .profile-card p { font-size: 0.85rem; color: #555; }
+    /* SECCIÓN PARTIDOS ABIERTOS */
     .search-partidos {
-      display: none; /* Solo se muestra si el usuario hace doble clic en la tarjeta o si forzamos la aparición. */
-      max-width: 800px;
-      margin: 2rem auto;
-      padding: 1.5rem 2rem;
-      background-color: #fff;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      position: relative;
+      display: none;
+      max-width: 800px; margin: 2rem auto; padding: 1.5rem 2rem;
+      background-color: #fff; border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1); position: relative;
     }
-    .search-partidos h2 {
-      font-size: 1.8rem;
-      margin-bottom: 1rem;
-      color: #2c3e50;
-    }
+    .search-partidos h2 { font-size: 1.8rem; margin-bottom: 1rem; color: #2c3e50; }
     .filter-container {
-      display: flex;
-      gap: 1rem;
-      margin-bottom: 1rem;
-      align-items: center;
+      display: flex; gap: 1rem; margin-bottom: 1rem; align-items: center;
     }
-    .filter-container label {
-      font-weight: 600;
-      color: #2c3e50;
-    }
+    .filter-container label { font-weight: 600; color: #2c3e50; }
     .filter-container input {
-      padding: 0.5rem;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      font-size: 1rem;
+      padding: 0.5rem; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem;
       width: 200px;
     }
     .search-partidos button {
-      padding: 0.75rem 1.5rem;
-      border: none;
-      border-radius: 5px;
-      background-color: #ff9500;
-      color: #fff;
-      font-size: 1rem;
-      font-weight: 600;
-      transition: background-color 0.3s ease;
-      cursor: pointer;
+      padding: 0.75rem 1.5rem; border: none; border-radius: 5px;
+      background-color: #ff9500; color: #fff; font-size: 1rem; font-weight: 600;
+      transition: background-color 0.3s ease; cursor: pointer;
     }
-    .search-partidos button:hover {
-      background-color: #e07e00;
-    }
+    .search-partidos button:hover { background-color: #e07e00; }
     .close-btn-partidos {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      background: none;
-      border: none;
-      font-size: 1.2rem;
-      color: #999;
-      cursor: pointer;
+      position: absolute; top: 10px; left: 10px; background: none;
+      border: none; font-size: 1.2rem; color: #999; cursor: pointer;
       transition: color 0.3s ease;
     }
-    .close-btn-partidos:hover {
-      color: #333;
-    }
+    .close-btn-partidos:hover { color: #333; }
     .results-container {
-      max-width: 800px;
-      margin: 2rem auto;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 1rem;
-      padding: 0 1rem;
+      max-width: 800px; margin: 2rem auto;
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem; padding: 0 1rem;
     }
     .partido-card {
-      background: #fff;
-      border-radius: 8px;
-      padding: 1rem;
-      text-align: center;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      transition: transform 0.3s ease;
-      cursor: pointer;
+      background: #fff; border-radius: 8px; padding: 1rem; text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: transform 0.3s ease; cursor: default;
     }
-    .partido-card:hover {
-      transform: translateY(-5px);
+    .partido-card:hover { transform: translateY(-5px); }
+    .partido-card h3 { font-size: 1.1rem; margin-bottom: 0.5rem; color: #2c3e50; }
+    .partido-card p { font-size: 0.85rem; color: #555; }
+    .btn-view-partido {
+      margin-top: 0.5rem; padding: 0.5rem 1rem;
+      background-color: #3498db; color: #fff; border: none;
+      border-radius: 5px; cursor: pointer; font-size: 0.9rem;
     }
-    .partido-card h3 {
-      font-size: 1.1rem;
-      margin-bottom: 0.5rem;
-      color: #2c3e50;
+    .btn-view-partido:hover { background-color: #2980b9; }
+    .btn-join-partido {
+      margin-top: 0.5rem; padding: 0.5rem 1rem;
+      background-color: #27ae60; color: #fff; border: none;
+      border-radius: 5px; cursor: pointer; font-size: 0.9rem;
     }
-    .partido-card p {
-      font-size: 0.85rem;
-      color: #555;
+    .btn-join-partido:hover { background-color: #219150; }
+    /* MODAL PARA DETALLES DEL PARTIDO */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.5); display: none;
+      justify-content: center; align-items: center; z-index: 2000;
     }
-    /* Animación verde para partidos incompletos */
+    .modal-content {
+      background: linear-gradient(135deg, #f3f3f3 0%, #e0e0e0 100%);
+      border-radius: 10px; max-width: 600px; width: 90%; padding: 1.5rem;
+      position: relative; box-shadow: 0 0 15px rgba(0,0,0,0.2); border: 2px solid #ff9500;
+    }
+    .modal-close {
+      position: absolute; top: 10px; right: 10px;
+      background: none; border: none; font-size: 1.2rem; cursor: pointer;
+      color: #999; transition: color 0.3s;
+    }
+    .modal-close:hover { color: #333; }
+    .modal-header { margin-bottom: 1rem; text-align: center; color: #333; }
+    .modal-header h2 { font-size: 1.8rem; color: #2c3e50; margin-bottom: 0.5rem; }
+    .modal-body p { margin-bottom: 0.75rem; color: #333; }
+    .players-grid {
+      background-color: #f9f9f9; border-radius: 8px; padding: 1rem; margin-top: 1rem;
+    }
+    .player-slot {
+      display: flex; align-items: center; background-color: #fff;
+      margin-bottom: 0.5rem; border-left: 5px solid #ff9500;
+      padding: 0.5rem; border-radius: 4px; justify-content: space-between;
+    }
+    .player-info { display: flex; align-items: center; gap: 0.5rem; }
+    .player-slot span { font-weight: 600; color: #2c3e50; }
+    .player-slot p { margin: 0; font-weight: 500; color: #555; }
+    .btn-join-slot {
+      background-color: #27ae60; color: #fff; border: none;
+      padding: 0.3rem 0.6rem; border-radius: 4px; cursor: pointer; font-size: 0.8rem;
+      transition: background-color 0.3s;
+    }
+    .btn-join-slot:hover { background-color: #219150; }
+    /* Animación para partidos incompletos */
     @keyframes blink {
       0% { background-color: #d4edda; }
       50% { background-color: #c3e6cb; }
       100% { background-color: #d4edda; }
     }
-    .incomplete {
-      animation: blink 1s infinite;
-    }
-    .btn-view-partido {
-      margin-top: 0.5rem;
-      padding: 0.5rem 1rem;
-      background-color: #3498db;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 0.9rem;
-    }
-    .btn-view-partido:hover {
-      background-color: #2980b9;
-    }
-    .btn-join-partido {
-      margin-top: 0.5rem;
-      padding: 0.5rem 1rem;
-      background-color: #27ae60;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 0.9rem;
-    }
-    .btn-join-partido:hover {
-      background-color: #219150;
-    }
-
-    /* MODAL VER DETALLE DEL PARTIDO */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0,0,0,0.5);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 2000;
-    }
-    .modal-content {
-      background: linear-gradient(135deg, #f3f3f3 0%, #e0e0e0 100%);
-      border-radius: 10px;
-      max-width: 600px;
-      width: 90%;
-      padding: 1.5rem;
-      position: relative;
-      box-shadow: 0 0 15px rgba(0,0,0,0.2);
-      border: 2px solid #ff9500;
-    }
-    .modal-close {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: none;
-      border: none;
-      font-size: 1.2rem;
-      cursor: pointer;
-      color: #999;
-      transition: color 0.3s;
-    }
-    .modal-close:hover {
-      color: #333;
-    }
-    .modal-header {
-      margin-bottom: 1rem;
-      text-align: center;
-      color: #333;
-    }
-    .modal-header h2 {
-      font-size: 1.8rem;
-      color: #2c3e50;
-      margin-bottom: 0.5rem;
-    }
-    .modal-body p {
-      margin-bottom: 0.75rem;
-      color: #333;
-    }
-    .players-grid {
-      background-color: #f9f9f9;
-      border-radius: 8px;
-      padding: 1rem;
-      margin-top: 1rem;
-    }
-    .player-slot {
-      display: flex;
-      align-items: center;
-      background-color: #fff;
-      margin-bottom: 0.5rem;
-      border-left: 5px solid #ff9500;
-      padding: 0.5rem;
-      border-radius: 4px;
-      justify-content: space-between;
-    }
-    .player-info {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .player-slot span {
-      font-weight: 600;
-      color: #2c3e50;
-    }
-    .player-slot p {
-      margin: 0;
-      font-weight: 500;
-      color: #555;
-    }
-    .btn-join-slot {
-      background-color: #27ae60;
-      color: #fff;
-      border: none;
-      padding: 0.3rem 0.6rem;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.8rem;
-      transition: background-color 0.3s;
-    }
-    .btn-join-slot:hover {
-      background-color: #219150;
-    }
-
+    .incomplete { animation: blink 1s infinite; }
     /* FOOTER */
     footer {
-      text-align: center;
-      padding: 1rem;
-      font-size: 0.9rem;
-      color: #777;
-      background-color: #fff;
-      border-top: 1px solid #eaeaea;
-      margin-top: 2rem;
+      text-align: center; padding: 1rem; font-size: 0.9rem;
+      color: #777; background-color: #fff; border-top: 1px solid #eaeaea; margin-top: 2rem;
     }
-
     /* RESPONSIVE */
     @media (max-width: 768px) {
-      .menu-container {
-        flex-direction: column;
-        gap: 0.75rem;
-      }
-      .hero h1 {
-        font-size: 2.5rem;
-      }
-      .hero p {
-        font-size: 1rem;
-      }
-      .floating-card {
-        width: 180px;
-      }
-      .search-form input, .search-form select {
-        width: 90%;
-      }
-      .suggestions-box {
-        width: 90%;
-      }
-      .modal-content {
-        max-width: 95%;
-      }
-      .filter-container {
-        flex-direction: column;
-        gap: 0.5rem;
-      }
+      .menu-container { flex-direction: column; gap: 0.75rem; }
+      .hero h1 { font-size: 2.5rem; }
+      .hero p { font-size: 1rem; }
+      .floating-card { width: 180px; }
+      .search-form input, .search-form select { width: 90%; }
+      .suggestions-box { width: 90%; }
+      .modal-content { max-width: 95%; }
+      .filter-container { flex-direction: column; gap: 0.5rem; }
     }
   </style>
 </head>
@@ -596,21 +273,89 @@
         <h3>Programa Partidos</h3>
         <p>Crea y únete a juegos</p>
       </div>
-      <div class="floating-card" ondblclick="showPlayersSection()">
+      <div class="floating-card" onclick="showPlayersSection()">
         <h3>Conoce Jugadores</h3>
         <p>Doble clic para buscar</p>
       </div>
-      <div class="floating-card" ondblclick="showPartidosSearch()">
+      <div class="floating-card" onclick="showPartidosSearch()">
         <h3>Buscar Partidos Abiertos</h3>
-        <p>Ver partidos futuros con cupos disponibles</p>
+        <p>Partidos futuros con cupos disponibles</p>
       </div>
     </div>
   </section>
 
-  <!-- (SECCIONES: BUSCAR CANCHAS, CONOCE JUGADORES, PARTIDOS ABIERTOS) -->
+  <!-- SECCIÓN BUSCAR CANCHAS -->
+  <div class="search-cancha" id="searchCanchaSection">
+    <button class="close-btn-cancha" onclick="closeCanchaSearch()">X</button>
+    <h2>Buscar Cancha</h2>
+    <div class="search-field">
+      <label for="canchaName">Nombre de la Cancha</label>
+      <input type="text" id="canchaName" placeholder="Ingresa el nombre">
+      <div id="nameSuggestions" class="suggestions-box"></div>
+    </div>
+    <div class="search-field">
+      <label for="canchaLocality">Localidad</label>
+      <input type="text" id="canchaLocality" placeholder="Ingresa la localidad">
+      <div id="localitySuggestions" class="suggestions-box"></div>
+    </div>
+    <button type="button" id="btn-search-cancha">Buscar Cancha</button>
+  </div>
 
-  <!-- ... Sección "Buscar Canchas" (search-cancha), "Conoce Jugadores" (search-container), 
-          "Partidos Abiertos" (search-partidos) y el modal "matchModal" van aquí (ya incluidos arriba) ... -->
+  <!-- RESULTADOS DE CANCHAS -->
+  <div class="results-container" id="canchaResults"></div>
+
+  <!-- SECCIÓN CONOCE JUGADORES -->
+  <div class="search-container" id="players-section">
+    <button class="close-btn-jugadores" onclick="closePlayersSection()">X</button>
+    <h2>Conoce Jugadores</h2>
+    <form id="search-form" class="search-form">
+      <div style="position: relative;">
+        <input type="text" id="searchName" placeholder="Nombre y Apellido" autocomplete="off">
+        <div id="name-suggestions" class="suggestions-box"></div>
+      </div>
+      <div style="position: relative;">
+        <input type="text" id="searchLocality" placeholder="Localidad" autocomplete="off">
+        <div id="locality-suggestions" class="suggestions-box"></div>
+      </div>
+      <select id="searchLevel">
+        <option value="">Nivel de juego</option>
+        <option value="principiante">Principiante</option>
+        <option value="intermedio">Intermedio</option>
+        <option value="avanzado">Avanzado</option>
+      </select>
+      <button type="submit">Buscar</button>
+    </form>
+    <div id="searchResults"></div>
+  </div>
+
+  <!-- SECCIÓN PARTIDOS ABIERTOS (FILTRO POR LOCALIDAD) -->
+  <div class="search-partidos" id="searchPartidosSection">
+    <button class="close-btn-partidos" onclick="closePartidosSearch()">X</button>
+    <h2>Partidos Abiertos</h2>
+    <div class="filter-container">
+      <label for="filterLocality">Filtrar por Localidad:</label>
+      <input type="text" id="filterLocality" placeholder="Ej. Buenos Aires">
+      <button type="button" id="btn-filter-partidos">Filtrar</button>
+    </div>
+    <div id="partidosResults"></div>
+  </div>
+
+  <!-- MODAL VER DETALLE DEL PARTIDO -->
+  <div class="modal-overlay" id="matchModal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeMatchModal()">X</button>
+      <div class="modal-header">
+        <h2 id="modalMatchName">Nombre del Partido</h2>
+      </div>
+      <div class="modal-body">
+        <p id="modalMatchInfo">Información del partido...</p>
+        <p><strong>Cuenta Regresiva: </strong><span id="modalCountdown">Cargando...</span></p>
+        <p id="modalPlayersStatus" style="margin-top: 1rem; font-weight:600; color:#2c3e50;"></p>
+        <div class="players-grid" id="modalPlayersList"></div>
+        <button class="btn-join-partido" id="modalJoinBtn" onclick="joinToMatchModal()">Unirse</button>
+      </div>
+    </div>
+  </div>
 
   <!-- FOOTER -->
   <footer>
@@ -620,7 +365,7 @@
   <!-- SUPABASE -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <script>
-    /* LÓGICA JAVASCRIPT COMPLETA: ver explicación a continuación */
+    // Configuración de Supabase
     const SUPABASE_URL = 'https://idlvxinjfbsujpvxncbr.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -629,13 +374,13 @@
     let currentMatch = null;
     let countdownInterval = null;
 
-    // 1. Manejo de sesión
+    // NO redirigir a perfil.html automáticamente.
     async function checkProfile() {
       const profileLink = document.getElementById("profileLink");
+      if (!profileLink) return;
       const { data: { session } } = await supabaseClient.auth.getSession();
       if (session && session.user) {
         const userId = session.user.id;
-        // Chequeamos si el userId tiene un perfil
         const { data: profileData, error } = await supabaseClient
           .from('profiles')
           .select('full_name')
@@ -646,7 +391,6 @@
           userName = profileData.full_name;
         }
         loggedUser = { id: userId, name: userName };
-        // Actualizar link a perfil
         const { data: pData } = await supabaseClient
           .from('profiles')
           .select('*')
@@ -654,12 +398,16 @@
         profileLink.textContent = (pData && pData.length > 0) ? "Modificar Perfil" : "Crear Perfil";
       }
     }
-    async function logout() {
-      await supabaseClient.auth.signOut();
-      window.location.href = "index.html";
+
+    function logout() {
+      supabaseClient.auth.signOut().then(() => {
+        window.location.href = "index.html";
+      });
     }
 
-    // 2. Lógica de “Buscar Canchas”
+    /* ==============================
+       SECCIÓN BUSCAR CANCHAS
+    ============================== */
     function showCanchaSearch() {
       const section = document.getElementById('searchCanchaSection');
       section.style.display = 'block';
@@ -675,7 +423,39 @@
       document.getElementById('localitySuggestions').style.display = 'none';
       document.getElementById('canchaResults').innerHTML = '';
     }
-    // Autocomplete canchas
+    document.getElementById('btn-search-cancha').addEventListener('click', async () => {
+      const nameFilter = document.getElementById('canchaName').value.trim();
+      const localityFilter = document.getElementById('canchaLocality').value.trim();
+      const canchaResults = document.getElementById('canchaResults');
+      canchaResults.innerHTML = '';
+      let query = supabaseClient.from('establishments').select('*');
+      if (nameFilter) query = query.ilike('name', `%${nameFilter}%`);
+      if (localityFilter) query = query.ilike('locality', `%${localityFilter}%`);
+      const { data, error } = await query;
+      if (error) {
+        console.error('Error buscando canchas:', error.message);
+        canchaResults.innerHTML = `<p style="color:red;">Error: ${error.message}</p>`;
+      } else {
+        if (!data || data.length === 0) {
+          canchaResults.innerHTML = `<p>No se encontraron canchas.</p>`;
+        } else {
+          data.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'result-card';
+            card.innerHTML = `
+              <h3>${item.name}</h3>
+              <p>Localidad: ${item.locality || 'N/A'}</p>
+              <p>Dirección: ${item.address || 'N/A'}</p>
+              <p>Cantidad de canchas: ${item.court_count || 'N/A'}</p>
+            `;
+            card.ondblclick = () => {
+              window.location.href = `establecimiento.html?canchaId=${item.id}`;
+            };
+            canchaResults.appendChild(card);
+          });
+        }
+      }
+    });
     document.getElementById('canchaName').addEventListener('input', async () => {
       const val = document.getElementById('canchaName').value.trim();
       const nameSuggestionsBox = document.getElementById('nameSuggestions');
@@ -734,41 +514,10 @@
         document.getElementById('localitySuggestions').style.display = 'none';
       }
     });
-    document.getElementById('btn-search-cancha').addEventListener('click', async () => {
-      const nameFilter = document.getElementById('canchaName').value.trim();
-      const localityFilter = document.getElementById('canchaLocality').value.trim();
-      const canchaResults = document.getElementById('canchaResults');
-      canchaResults.innerHTML = '';
-      let query = supabaseClient.from('establishments').select('*');
-      if (nameFilter) query = query.ilike('name', `%${nameFilter}%`);
-      if (localityFilter) query = query.ilike('locality', `%${localityFilter}%`);
-      const { data, error } = await query;
-      if (error) {
-        console.error('Error buscando canchas:', error.message);
-        canchaResults.innerHTML = `<p style="color:red;">Error: ${error.message}</p>`;
-      } else {
-        if (!data || data.length === 0) {
-          canchaResults.innerHTML = `<p>No se encontraron canchas.</p>`;
-        } else {
-          data.forEach(item => {
-            const card = document.createElement('div');
-            card.className = 'result-card';
-            card.innerHTML = `
-              <h3>${item.name}</h3>
-              <p>Localidad: ${item.locality || 'N/A'}</p>
-              <p>Dirección: ${item.address || 'N/A'}</p>
-              <p>Cantidad de canchas: ${item.court_count || 'N/A'}</p>
-            `;
-            card.ondblclick = () => {
-              window.location.href = \`establecimiento.html?canchaId=\${item.id}\`;
-            };
-            canchaResults.appendChild(card);
-          });
-        }
-      }
-    });
 
-    // 3. Conoce Jugadores
+    /* ==============================
+       SECCIÓN CONOCE JUGADORES
+    ============================== */
     function showPlayersSection() {
       document.getElementById('players-section').style.display = 'block';
       document.getElementById('players-section').scrollIntoView({ behavior: 'smooth' });
@@ -812,7 +561,7 @@
               <p>${profile.locality || ''}</p>
             `;
             card.ondblclick = () => {
-              window.location.href = \`perfil.html?userId=\${profile.id}&readonly=1\`;
+              window.location.href = `perfil.html?userId=${profile.id}&readonly=1`;
             };
             searchResults.appendChild(card);
           });
@@ -820,12 +569,16 @@
       }
     });
 
-    // 4. Partidos Abiertos
+    /* ==============================
+       SECCIÓN PARTIDOS ABIERTOS
+    ============================== */
+    // Funciones para mostrar/ocultar la sección de partidos abiertos
     function showPartidosSearch() {
-      document.getElementById('searchPartidosSection').style.display = 'block';
+      const section = document.getElementById('searchPartidosSection');
+      section.style.display = 'block';
       document.getElementById('filterLocality').value = '';
       document.getElementById('partidosResults').innerHTML = '';
-      document.getElementById('searchPartidosSection').scrollIntoView({ behavior: 'smooth' });
+      // No hacemos scroll automático para no interferir con otras secciones
     }
     function closePartidosSearch() {
       document.getElementById('searchPartidosSection').style.display = 'none';
@@ -843,8 +596,8 @@
       let query = supabaseClient
         .from('partidos')
         .select('*, establishments!inner(name, locality)')
-        .gte('match_date', todayISO)  // Fecha >= hoy
-        .neq('completitud', 'Completo'); // Aún no está completo
+        .gte('match_date', todayISO)  // Fecha futura o de hoy
+        .neq('completitud', 'Completo'); // Aún no se completó
       if (localityFilter) {
         query = query.ilike('establishments.locality', `%${localityFilter}%`);
       }
@@ -856,9 +609,15 @@
         if (!data || data.length === 0) {
           partidosResults.innerHTML = `<p>No se encontraron partidos abiertos.</p>`;
         } else {
+          // Se limpian duplicados (en caso de que se llame más de una vez)
+          const matchesMap = {};
           data.forEach(partido => {
+            matchesMap[partido.id] = partido;
+          });
+          Object.values(matchesMap).forEach(partido => {
             const card = document.createElement('div');
             card.className = 'partido-card';
+            // Si no está completo, aplicar animación verde
             if (partido.completitud !== 'Completo') {
               card.classList.add('incomplete');
             }
@@ -881,8 +640,9 @@
       }
     }
 
-    // 5. Modal con detalles del partido
-    let currentMatch = null;
+    /* ==============================
+       MODAL PARA DETALLE DEL PARTIDO
+    ============================== */
     function openMatchModal(match) {
       currentMatch = match;
       document.getElementById('modalMatchName').textContent = match.match_name;
@@ -908,20 +668,18 @@
         .eq('match_id', matchId);
       const playersList = document.getElementById('modalPlayersList');
       playersList.innerHTML = '';
+      let joinedCount = 0;
       if (error) {
         console.error("Error al obtener participantes:", error);
         return;
       }
-      let joinedCount = 0;
       if (participantsData && participantsData.length > 0) {
         participantsData.forEach((participant, index) => {
           const slotDiv = document.createElement('div');
           slotDiv.className = 'player-slot';
           const infoDiv = document.createElement('div');
           infoDiv.className = 'player-info';
-          const participantName = (participant.profiles && participant.profiles.full_name) 
-            ? participant.profiles.full_name 
-            : 'Jugador sin nombre';
+          const participantName = (participant.profiles && participant.profiles.full_name) ? participant.profiles.full_name : 'Jugador sin nombre';
           infoDiv.innerHTML = `<span>Jugador ${index + 1}:</span> <p>${participantName}</p>`;
           const viewBtn = document.createElement('button');
           viewBtn.textContent = 'Ver';
@@ -936,7 +694,6 @@
       } else {
         playersList.innerHTML = '<p>No hay jugadores inscritos.</p>';
       }
-      // Slots vacíos
       const totalPlayers = currentMatch.total_players || 4;
       const emptySlots = totalPlayers - joinedCount;
       for (let i = 0; i < emptySlots; i++) {
@@ -945,7 +702,6 @@
         const infoDiv = document.createElement('div');
         infoDiv.className = 'player-info';
         infoDiv.innerHTML = `<span>Jugador ${joinedCount + i + 1}:</span> <p>Slot Libre</p>`;
-        // Mostrar "Unirse" solo si el usuario logueado aún no se unió
         if (loggedUser && (!participantsData || !participantsData.some(row => row.user_id === loggedUser.id))) {
           const joinBtn = document.createElement('button');
           joinBtn.className = 'btn-join-slot';
@@ -959,7 +715,6 @@
         playersList.appendChild(slotDiv);
       }
       document.getElementById('modalPlayersStatus').textContent = `Faltan ${emptySlots} jugadores de ${totalPlayers}`;
-      // Mostrar/ocultar botón "Unirse" principal
       if (loggedUser && participantsData && participantsData.some(row => row.user_id === loggedUser.id)) {
         document.getElementById('modalJoinBtn').style.display = 'none';
       } else {
@@ -968,8 +723,11 @@
     }
     function startCountdown(matchDate, matchStartTime) {
       const [year, month, day] = matchDate.split('-');
-      const [hh, mm, ss] = matchStartTime.split(':');
-      const targetTime = new Date(year, month - 1, day, parseInt(hh) || 0, parseInt(mm) || 0, parseInt(ss) || 0);
+      const timeParts = matchStartTime.split(':');
+      let hour = parseInt(timeParts[0]) || 0;
+      let minute = parseInt(timeParts[1]) || 0;
+      let second = parseInt(timeParts[2]) || 0;
+      const targetTime = new Date(year, month - 1, day, hour, minute, second);
       function updateCountdown() {
         const now = new Date();
         let diff = targetTime - now;
@@ -994,19 +752,19 @@
         .select('*');
       if (error) {
         console.error('Error al inscribirse:', error);
-        alert('Error al unirse al partido.');
+        alert('Error al unirse al partido. Revisa la consola para más detalles.');
         return;
       }
       alert('Te has unido al partido.');
+      // Recargar participantes sin volver a abrir el modal (para actualizar la lista)
       loadParticipants(currentMatch.id);
     }
 
-    // Al cargar la página
+    // Al cargar la página, se chequea la sesión y, si existe usuario, se muestra la sección de partidos abiertos
     document.addEventListener('DOMContentLoaded', async () => {
       await checkProfile();
-      // Si el usuario logueado existe, cargamos la sección de partidos abiertos automáticamente
+      // Si hay un usuario logueado (jugador), mostramos la sección de partidos abiertos sin redireccionar a perfil.html
       if (loggedUser) {
-        // Muestra la sección de Partidos Abiertos (sin redirigir a perfil)
         document.getElementById('searchPartidosSection').style.display = 'block';
         loadOpenPartidos();
       }
