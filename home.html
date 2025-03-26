@@ -778,8 +778,13 @@
       document.getElementById('localitySuggestions').style.display = 'none';
       document.getElementById('canchaResults').innerHTML = '';
     }
+    // Se actualiza para limpiar los filtros y mostrar la sección de búsqueda de partidos
     function showPartidosSearch() {
       const section = document.getElementById('searchPartidosSection');
+      // Limpiar valores previos
+      document.getElementById('partidosLocality').value = '';
+      document.getElementById('partidosCancha').value = '';
+      document.getElementById('partidosResults').innerHTML = '';
       section.style.display = 'block';
       section.scrollIntoView({ behavior: 'smooth' });
     }
@@ -963,4 +968,230 @@
     });
     localityInput.addEventListener('input', async () => {
       const val = localityInput.value.trim();
-      if (!val) { localitySuggestions.innerHTML = ''; localitySuggestions.style.display
+      if (!val) { localitySuggestions.innerHTML = ''; localitySuggestions.style.display = 'none'; return; }
+      const { data, error } = await supabaseClient
+        .from('profiles')
+        .select('locality')
+        .ilike('locality', `%${val}%`)
+        .limit(5);
+      if (error) { console.error('Error buscando localidad:', error.message); return; }
+      if (!data || data.length === 0) {
+        localitySuggestions.innerHTML = '<div class="suggestion-item">No hay coincidencias</div>';
+        localitySuggestions.style.display = 'block';
+      } else {
+        const uniqueLocalities = [...new Set(data.map(item => item.locality))];
+        localitySuggestions.innerHTML = uniqueLocalities.map(loc => `<div class="suggestion-item">${loc}</div>`).join('');
+        localitySuggestions.style.display = 'block';
+      }
+    });
+    localitySuggestions.addEventListener('click', (e) => {
+      if (e.target.classList.contains('suggestion-item')) {
+        localityInput.value = e.target.textContent;
+        localitySuggestions.innerHTML = '';
+        localitySuggestions.style.display = 'none';
+      }
+    });
+    searchForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const searchName = nameInput.value.trim();
+      const searchLocality = localityInput.value.trim();
+      const searchLevel = document.getElementById('searchLevel').value;
+      searchResults.innerHTML = '';
+      let query = supabaseClient.from('profiles').select('*');
+      if (searchName) query = query.ilike('full_name', `%${searchName}%`);
+      if (searchLocality) query = query.ilike('locality', `%${searchLocality}%`);
+      if (searchLevel) query = query.eq('game_level', searchLevel);
+      const { data, error } = await query;
+      if (error) {
+        console.error('Error buscando perfiles:', error.message);
+        searchResults.innerHTML = `<p style="color:red;">Error: ${error.message}</p>`;
+      } else {
+        if (!data || data.length === 0) {
+          searchResults.innerHTML = `<p>No se encontraron perfiles.</p>`;
+        } else {
+          data.forEach(profile => {
+            const card = document.createElement('div');
+            card.className = 'profile-card';
+            card.innerHTML = `
+              ${profile.profile_pic ? `<img src="${profile.profile_pic}" alt="Foto de ${profile.full_name}">` : ''}
+              <h3>${profile.full_name}</h3>
+              <p>Nivel: ${profile.game_level || 'N/A'} | Edad: ${profile.age || 'N/A'}</p>
+              <p>${profile.locality || ''}</p>
+            `;
+            card.ondblclick = () => {
+              window.location.href = `perfil.html?userId=${profile.id}&readonly=1`;
+            };
+            searchResults.appendChild(card);
+          });
+        }
+      }
+    });
+
+    const partidosCanchaSelect = document.getElementById('partidosCancha');
+    const partidosResults = document.getElementById('partidosResults');
+    document.getElementById('btn-search-partidos').addEventListener('click', async () => {
+      const localityFilter = partidosLocalityInput.value.trim();
+      const canchaFilter = partidosCanchaSelect.value;
+      partidosResults.innerHTML = '';
+      const todayISO = new Date().toISOString().slice(0,10);
+      let query = supabaseClient
+        .from('partidos')
+        .select('*, establishments!inner(name, locality)')
+        .eq('completitud', 'Parcial')
+        .gte('match_date', todayISO);
+      if (localityFilter) query = query.ilike('establishments.locality', `%${localityFilter}%`);
+      if (canchaFilter) query = query.eq('cancha_id', canchaFilter);
+      const { data, error } = await query;
+      if (error) {
+        console.error('Error buscando partidos:', error.message);
+        partidosResults.innerHTML = `<p style="color:red;">Error: ${error.message}</p>`;
+      } else {
+        if (!data || data.length === 0) {
+          partidosResults.innerHTML = `<p>No se encontraron partidos.</p>`;
+        } else {
+          data.forEach(partido => {
+            const card = document.createElement('div');
+            card.className = 'partido-card';
+            card.innerHTML = `
+              <h3>${partido.match_name}</h3>
+              <p>Fecha: ${partido.match_date}</p>
+              <p>Hora: ${partido.start_time} - ${partido.end_time}</p>
+              <p>Cancha: ${partido.establishments?.name || ''}</p>
+              <p>Localidad: ${partido.establishments?.locality || ''}</p>
+              <p>Nivel: ${partido.match_level} | Parejas: ${partido.team_type}</p>
+              <p>Estado: ${partido.completitud}</p>
+            `;
+            const viewBtn = document.createElement('button');
+            viewBtn.className = 'btn-view-partido';
+            viewBtn.textContent = 'Ver el Partido';
+            viewBtn.onclick = () => openMatchModal(partido);
+            card.appendChild(viewBtn);
+            partidosResults.appendChild(card);
+          });
+        }
+      }
+    });
+
+    async function openMatchModal(match) {
+      currentMatch = match;
+      document.getElementById('modalMatchName').textContent = match.match_name;
+      document.getElementById('modalMatchInfo').innerHTML = `
+        <strong>Fecha:</strong> ${match.match_date} <br>
+        <strong>Hora:</strong> ${match.start_time} - ${match.end_time} <br>
+        <strong>Cancha:</strong> ${match.establishments?.name || 'N/A'} <br>
+        <strong>Localidad:</strong> ${match.establishments?.locality || 'N/A'} <br>
+        <strong>Nivel:</strong> ${match.match_level} | <strong>Parejas:</strong> ${match.team_type}
+      `;
+      // Obtener participantes del partido con el nombre completo del perfil
+      const { data: participantsData, error } = await supabaseClient
+        .from('participants')
+        .select('user_id, profiles(full_name)')
+        .eq('match_id', currentMatch.id);
+      const playersList = document.getElementById('modalPlayersList');
+      playersList.innerHTML = '';
+      if (error) {
+        console.error("Error al obtener participantes:", error);
+      }
+      // Mostrar los participantes ya inscritos con su botón "Ver"
+      if (participantsData && participantsData.length > 0) {
+        participantsData.forEach((participant, index) => {
+          const slotDiv = document.createElement('div');
+          slotDiv.className = 'player-slot';
+          const infoDiv = document.createElement('div');
+          infoDiv.className = 'player-info';
+          const participantName = participant.profiles?.full_name || 'Jugador sin nombre';
+          infoDiv.innerHTML = `<span>Jugador ${index + 1}:</span> <p>${participantName}</p>`;
+          const viewBtn = document.createElement('button');
+          viewBtn.textContent = 'Ver';
+          viewBtn.onclick = () => {
+            window.location.href = `perfil.html?userId=${participant.user_id}&readonly=1`;
+          };
+          slotDiv.appendChild(infoDiv);
+          slotDiv.appendChild(viewBtn);
+          playersList.appendChild(slotDiv);
+        });
+      } else {
+        playersList.innerHTML = '<p>No hay jugadores inscritos.</p>';
+      }
+      // Mostrar slots vacíos si existen
+      const totalPlayers = currentMatch.total_players || 4;
+      const joinedCount = participantsData ? participantsData.length : 0;
+      const emptySlots = totalPlayers - joinedCount;
+      for (let i = 0; i < emptySlots; i++) {
+          const slotDiv = document.createElement('div');
+          slotDiv.className = 'player-slot';
+          const infoDiv = document.createElement('div');
+          infoDiv.className = 'player-info';
+          infoDiv.innerHTML = `<span>Jugador ${joinedCount + i + 1}:</span> <p>Slot Libre</p>`;
+          // Si el usuario logueado aún no se ha unido, se muestra botón "Unirse"
+          if (loggedUser && (!participantsData || !participantsData.some(row => row.user_id === loggedUser.id))) {
+              const joinBtn = document.createElement('button');
+              joinBtn.className = 'btn-join-slot';
+              joinBtn.textContent = 'Unirse';
+              joinBtn.onclick = joinToMatchModal;
+              slotDiv.appendChild(infoDiv);
+              slotDiv.appendChild(joinBtn);
+          } else {
+              slotDiv.appendChild(infoDiv);
+          }
+          playersList.appendChild(slotDiv);
+      }
+      document.getElementById('modalPlayersStatus').textContent = `Faltan ${emptySlots} jugadores de ${totalPlayers}`;
+      // Actualizar botón "Unirse" del modal según si ya se ha unido
+      if (loggedUser && participantsData && participantsData.some(row => row.user_id === loggedUser.id)) {
+          document.getElementById('modalJoinBtn').style.display = 'none';
+      } else {
+          document.getElementById('modalJoinBtn').style.display = 'block';
+      }
+      startCountdown(match.match_date, match.start_time);
+      document.getElementById('matchModal').style.display = 'flex';
+    }
+
+    function closeMatchModal() {
+      document.getElementById('matchModal').style.display = 'none';
+      clearInterval(countdownInterval);
+    }
+
+    function startCountdown(matchDate, matchStartTime) {
+      const [year, month, day] = matchDate.split('-');
+      const timeParts = matchStartTime.split(':');
+      let hour = parseInt(timeParts[0]) || 0;
+      let minute = parseInt(timeParts[1]) || 0;
+      let second = parseInt(timeParts[2]) || 0;
+      const targetTime = new Date(year, month - 1, day, hour, minute, second);
+      function updateCountdown() {
+        const now = new Date();
+        let diff = targetTime - now;
+        if (diff < 0) diff = 0;
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+        document.getElementById('modalCountdown').textContent = `${hours}h ${minutes}m ${seconds}s`;
+      }
+      updateCountdown();
+      clearInterval(countdownInterval);
+      countdownInterval = setInterval(updateCountdown, 1000);
+    }
+
+    async function joinToMatchModal() {
+      if (!currentMatch || !loggedUser) {
+        alert('No hay partido o usuario logueado.');
+        return;
+      }
+      const { data, error } = await supabaseClient
+        .from('participants')
+        .insert([{ match_id: currentMatch.id, user_id: loggedUser.id }])
+        .select('*');
+      if (error) {
+        console.error('Error al inscribirse:', error);
+        alert('Hubo un error al unirse al partido. Revisa la consola para más detalles.');
+        return;
+      }
+      alert('Te has unido al partido.');
+      openMatchModal(currentMatch);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => { checkProfile(); });
+  </script>
+</body>
+</html>
