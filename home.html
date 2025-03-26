@@ -13,16 +13,29 @@
 
     /* MENÚ DE NAVEGACIÓN */
     nav {
-      width: 100%; background-color: #fff; padding: 1rem 2rem;
+      width: 100%;
+      background-color: #fff;
+      padding: 1rem 2rem;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
     .menu-container {
-      display: flex; justify-content: space-evenly; align-items: center; flex-wrap: wrap; gap: 1rem;
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
     }
     .menu-item {
-      padding: 0.5rem 1rem; border: 2px solid #ff9500; border-radius: 8px;
-      color: #ff9500; text-transform: uppercase; font-weight: 600; letter-spacing: 1px;
-      transition: background-color 0.3s, color 0.3s; cursor: pointer; text-decoration: none;
+      padding: 0.5rem 1rem;
+      border: 2px solid #ff9500;
+      border-radius: 8px;
+      color: #ff9500;
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 1px;
+      transition: background-color 0.3s, color 0.3s;
+      cursor: pointer;
+      text-decoration: none;
     }
     .menu-item:hover { background-color: #ff9500; color: #fff; }
     .menu-item.logout { border-color: #e74c3c; color: #e74c3c; }
@@ -30,20 +43,38 @@
 
     /* SECCIÓN HERO */
     .hero {
-      position: relative; padding: 3rem 1rem; text-align: center;
+      position: relative;
+      padding: 3rem 1rem;
+      text-align: center;
       background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)),
                   url('https://images.unsplash.com/photo-1593341646581-529f6c49c5d1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80');
-      background-size: cover; background-position: center; color: #fff; min-height: 60vh;
+      background-size: cover;
+      background-position: center;
+      color: #fff;
+      min-height: 60vh;
     }
     .hero h1 { font-size: 3rem; font-weight: 700; margin-bottom: 1rem; color: #fff; }
     .hero p { font-size: 1.2rem; margin-bottom: 2rem; max-width: 700px; margin: 0 auto; line-height: 1.6; }
 
     /* TARJETAS FLOTANTES */
-    .cards-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-top: 2rem; }
+    .cards-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
     .floating-card {
-      background-color: rgba(255,255,255,0.9); backdrop-filter: blur(4px); border-radius: 8px;
-      padding: 1rem; width: 220px; text-align: center; color: #333;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2); transition: transform 0.3s; cursor: pointer;
+      background-color: rgba(255,255,255,0.9);
+      backdrop-filter: blur(4px);
+      border-radius: 8px;
+      padding: 1rem;
+      width: 220px;
+      text-align: center;
+      color: #333;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transition: transform 0.3s;
+      cursor: pointer;
     }
     .floating-card:hover { transform: translateY(-5px); }
     .floating-card h3 { font-size: 1rem; margin-bottom: 0.5rem; color: #2c3e50; }
@@ -51,131 +82,239 @@
 
     /* SECCIÓN BUSCAR CANCHAS */
     .search-cancha {
-      display: none; max-width: 800px; margin: 2rem auto; padding: 1.5rem 2rem;
-      background-color: #fff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      display: none;
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 1.5rem 2rem;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
       position: relative;
     }
     .search-cancha h2 { font-size: 1.8rem; margin-bottom: 1rem; color: #2c3e50; text-align: center; }
     .search-field { margin-bottom: 1rem; position: relative; }
     .search-field label { display: block; font-weight: 600; margin-bottom: 0.5rem; }
     .search-field input {
-      width: 100%; padding: 0.75rem 1rem; border: 1px solid #ddd;
-      border-radius: 5px; font-size: 1rem; background-color: #f9f9f9;
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1rem;
+      background-color: #f9f9f9;
     }
     .suggestions-box {
-      position: absolute; background-color: #fff; border: 1px solid #ddd;
-      border-radius: 5px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); margin-top: 0.5rem;
-      z-index: 999; width: 240px; max-height: 200px; overflow-y: auto; display: none;
+      position: absolute;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      margin-top: 0.5rem;
+      z-index: 999;
+      width: 240px;
+      max-height: 200px;
+      overflow-y: auto;
+      display: none;
     }
     .suggestion-item { padding: 0.5rem; cursor: pointer; }
     .suggestion-item:hover { background-color: #f0f0f0; }
     .search-cancha button {
-      padding: 0.75rem 1.5rem; border: none; border-radius: 5px;
-      background-color: #ff9500; color: #fff; font-size: 1rem; font-weight: 600;
-      transition: background-color 0.3s ease; cursor: pointer; margin-top: 1rem;
-      display: block; margin-left: auto; margin-right: auto;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 5px;
+      background-color: #ff9500;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+      cursor: pointer;
+      margin-top: 1rem;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
     }
     .search-cancha button:hover { background-color: #e07e00; }
     .close-btn-cancha {
-      position: absolute; top: 10px; right: 10px; /* A la derecha */
-      background: none; border: none; font-size: 1.2rem; color: #999;
-      cursor: pointer; transition: color 0.3s ease;
+      position: absolute;
+      top: 10px;
+      right: 10px; /* Botón de cerrar a la derecha */
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      color: #999;
+      cursor: pointer;
+      transition: color 0.3s ease;
     }
     .close-btn-cancha:hover { color: #333; }
 
     /* SECCIÓN CONOCE JUGADORES */
     .search-container {
-      display: none; max-width: 800px; margin: 2rem auto; padding: 1.5rem 2rem;
-      background-color: #fff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      text-align: center; position: relative;
+      display: none;
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 1.5rem 2rem;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      text-align: center;
+      position: relative;
     }
     .search-container h2 { font-size: 1.8rem; margin-bottom: 1rem; color: #2c3e50; }
     .search-form {
-      display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-bottom: 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
     }
     .search-form input, .search-form select {
-      padding: 0.75rem 1rem; border: 1px solid #ddd; border-radius: 5px;
-      font-size: 1rem; background-color: #f9f9f9; transition: box-shadow 0.3s;
+      padding: 0.75rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1rem;
+      background-color: #f9f9f9;
+      transition: box-shadow 0.3s;
       width: 240px;
     }
     .search-form input:focus, .search-form select:focus { box-shadow: 0 0 5px rgba(0,0,0,0.1); }
     .search-form button {
-      padding: 0.75rem 1.5rem; border: none; border-radius: 5px;
-      background-color: #ff9500; color: #fff; font-size: 1rem; font-weight: 600;
-      transition: background-color 0.3s ease; cursor: pointer;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 5px;
+      background-color: #ff9500;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+      cursor: pointer;
     }
     .search-form button:hover { background-color: #e07e00; }
     .close-btn-jugadores {
-      position: absolute; top: 10px; right: 10px; /* A la derecha */
-      background: none; border: none; font-size: 1.2rem; color: #999;
-      cursor: pointer; transition: color 0.3s ease;
+      position: absolute;
+      top: 10px;
+      right: 10px; /* Botón de cerrar a la derecha */
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      color: #999;
+      cursor: pointer;
+      transition: color 0.3s ease;
     }
     .close-btn-jugadores:hover { color: #333; }
     #searchResults {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 1rem; padding: 0 1rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem;
+      padding: 0 1rem;
     }
     .profile-card {
-      background: #fff; border-radius: 8px; padding: 1rem; text-align: center;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: transform 0.3s ease;
+      background: #fff;
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
       cursor: pointer;
     }
     .profile-card:hover { transform: translateY(-5px); }
     .profile-card img {
-      width: 100%; height: 150px; object-fit: cover; border-radius: 8px; margin-bottom: 0.75rem;
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 0.75rem;
     }
     .profile-card h3 { font-size: 1.1rem; margin-bottom: 0.5rem; color: #2c3e50; }
     .profile-card p { font-size: 0.85rem; color: #555; }
 
     /* SECCIÓN PARTIDOS ABIERTOS */
     .search-partidos {
-      display: none; max-width: 800px; margin: 2rem auto; padding: 1.5rem 2rem;
-      background-color: #fff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      text-align: center; position: relative;
+      display: none;
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 1.5rem 2rem;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      text-align: center;
+      position: relative;
     }
     .search-partidos h2 { font-size: 1.8rem; margin-bottom: 1rem; color: #2c3e50; }
     .filter-container {
-      display: flex; gap: 1rem; margin-bottom: 1rem; align-items: center;
-      justify-content: center; flex-wrap: wrap;
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
     }
     .filter-container label { font-weight: 600; color: #2c3e50; }
     .filter-container input {
-      padding: 0.5rem; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem;
+      padding: 0.5rem;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1rem;
       width: 200px;
     }
     .search-partidos button {
-      padding: 0.75rem 1.5rem; border: none; border-radius: 5px;
-      background-color: #ff9500; color: #fff; font-size: 1rem; font-weight: 600;
-      transition: background-color 0.3s ease; cursor: pointer;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 5px;
+      background-color: #ff9500;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+      cursor: pointer;
     }
     .search-partidos button:hover { background-color: #e07e00; }
     .close-btn-partidos {
-      position: absolute; top: 10px; right: 10px; /* A la derecha */
-      background: none; border: none; font-size: 1.2rem; color: #999;
-      cursor: pointer; transition: color 0.3s ease;
+      position: absolute;
+      top: 10px;
+      right: 10px; /* Botón de cerrar a la derecha */
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      color: #999;
+      cursor: pointer;
+      transition: color 0.3s ease;
     }
     .close-btn-partidos:hover { color: #333; }
     /* Tarjetas de partidos abiertos */
     #partidosResults {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 1rem; padding: 0 1rem;
+      gap: 1rem;
+      padding: 0 1rem;
     }
     .partido-card {
-      background: #fff; border-radius: 8px; padding: 1rem; text-align: left;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: transform 0.3s ease;
-      cursor: default; display: flex; flex-direction: column; justify-content: space-between;
+      background: #fff;
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: left; /* Alineado a la izquierda para mayor legibilidad */
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+      cursor: default;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
     .partido-card:hover { transform: translateY(-5px); }
     .partido-card h3 { font-size: 1.1rem; margin-bottom: 0.5rem; color: #2c3e50; }
     .partido-card p { font-size: 0.85rem; color: #555; margin: 0.3rem 0; }
     .partido-card .players-info {
-      font-weight: 600; margin-top: 0.5rem;
+      font-weight: 600;
+      margin-top: 0.5rem;
     }
     .btn-view-partido {
-      margin-top: 1rem; padding: 0.5rem 1rem;
-      background-color: #3498db; color: #fff; border: none; border-radius: 5px;
-      cursor: pointer; font-size: 0.9rem; align-self: flex-start;
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      background-color: #3498db;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      align-self: flex-start;
     }
     .btn-view-partido:hover { background-color: #2980b9; }
     .incomplete { animation: blink 1s infinite; }
@@ -187,47 +326,83 @@
 
     /* MODAL DETALLE DEL PARTIDO */
     .modal-overlay {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background-color: rgba(0,0,0,0.5); display: none;
-      justify-content: center; align-items: center; z-index: 2000;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
     }
     .modal-content {
       background: linear-gradient(135deg, #f3f3f3 0%, #e0e0e0 100%);
-      border-radius: 10px; max-width: 600px; width: 90%; padding: 1.5rem;
-      position: relative; box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      border-radius: 10px;
+      max-width: 600px;
+      width: 90%;
+      padding: 1.5rem;
+      position: relative;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
       border: 2px solid #ff9500;
     }
     .modal-close {
-      position: absolute; top: 10px; right: 10px;
-      background: none; border: none; font-size: 1.2rem;
-      cursor: pointer; color: #999; transition: color 0.3s;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: #999;
+      transition: color 0.3s;
     }
     .modal-close:hover { color: #333; }
     .modal-header { margin-bottom: 1rem; text-align: center; color: #333; }
     .modal-header h2 { font-size: 1.8rem; color: #2c3e50; margin-bottom: 0.5rem; }
     .modal-body p { margin-bottom: 0.75rem; color: #333; }
     .players-grid {
-      background-color: #f9f9f9; border-radius: 8px; padding: 1rem; margin-top: 1rem;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-top: 1rem;
     }
     .player-slot {
-      display: flex; align-items: center; background-color: #fff;
-      margin-bottom: 0.5rem; border-left: 5px solid #ff9500;
-      padding: 0.5rem; border-radius: 4px; justify-content: space-between;
+      display: flex;
+      align-items: center;
+      background-color: #fff;
+      margin-bottom: 0.5rem;
+      border-left: 5px solid #ff9500;
+      padding: 0.5rem;
+      border-radius: 4px;
+      justify-content: space-between;
     }
-    .player-info { display: flex; align-items: center; gap: 0.5rem; }
+    .player-info {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
     .player-slot span { font-weight: 600; color: #2c3e50; }
     .player-slot p { margin: 0; font-weight: 500; color: #555; }
     .btn-join-slot {
-      background-color: #27ae60; color: #fff; border: none;
-      padding: 0.3rem 0.6rem; border-radius: 4px; cursor: pointer;
-      font-size: 0.8rem; transition: background-color 0.3s;
+      background-color: #27ae60;
+      color: #fff;
+      border: none;
+      padding: 0.3rem 0.6rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      transition: background-color 0.3s;
     }
     .btn-join-slot:hover { background-color: #219150; }
 
     /* FOOTER */
     footer {
-      text-align: center; padding: 1rem; font-size: 0.9rem;
-      color: #777; background-color: #fff; border-top: 1px solid #eaeaea; margin-top: 2rem;
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: #777;
+      background-color: #fff;
+      border-top: 1px solid #eaeaea;
+      margin-top: 2rem;
     }
 
     /* RESPONSIVE */
@@ -418,7 +593,6 @@
       const filterLocality = document.getElementById('filterLocality').value.trim();
       loadOpenPartidos(filterLocality);
     });
-
     async function loadOpenPartidos(localityFilter = "") {
       const partidosResults = document.getElementById('partidosResults');
       partidosResults.innerHTML = '';
@@ -664,7 +838,9 @@
       const playersList = document.getElementById('modalPlayersList');
       playersList.innerHTML = '';
       let joinedCount = 0;
-      if (error) { console.error("Error al obtener participantes:", error); }
+      if (error) {
+        console.error("Error al obtener participantes:", error);
+      }
       if (participantsData && participantsData.length > 0) {
         participantsData.forEach((participant, index) => {
           const slotDiv = document.createElement('div');
@@ -753,7 +929,7 @@
       loadParticipants(currentMatch.id);
     }
 
-    // Al cargar la página, chequeamos la sesión y, si hay usuario, mostramos la sección de partidos abiertos
+    // Al cargar la página, chequeamos la sesión y si hay usuario, mostramos la sección de partidos abiertos
     document.addEventListener('DOMContentLoaded', async () => {
       await checkProfile();
       if (loggedUser) {
