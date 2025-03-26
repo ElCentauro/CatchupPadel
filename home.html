@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Catch Up Padel - Home</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Fuente moderna -->
+  <!-- Fuente Moderna -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
     /* RESET Y ESTILOS GLOBALES */
@@ -545,6 +545,15 @@
     .btn-join-slot:hover {
       background-color: #219150;
     }
+    /* Animación para partidos incompletos */
+    @keyframes blink {
+      0% { background-color: #d4edda; }
+      50% { background-color: #c3e6cb; }
+      100% { background-color: #d4edda; }
+    }
+    .incomplete {
+      animation: blink 1s infinite;
+    }
     /* FOOTER */
     footer {
       text-align: center;
@@ -1050,6 +1059,10 @@
           data.forEach(partido => {
             const card = document.createElement('div');
             card.className = 'partido-card';
+            // Si el partido no está completo, agregar clase para parpadeo verde
+            if (partido.completitud !== 'Completo') {
+              card.classList.add('incomplete');
+            }
             card.innerHTML = `
               <h3>${partido.match_name}</h3>
               <p>Fecha: ${partido.match_date}</p>
@@ -1080,7 +1093,7 @@
         <strong>Localidad:</strong> ${match.establishments?.locality || 'N/A'} <br>
         <strong>Nivel:</strong> ${match.match_level} | <strong>Parejas:</strong> ${match.team_type}
       `;
-      // Se consulta la tabla participants y se obtiene el full_name desde profiles para cada participante
+      // Consultar participantes con el full_name de profiles
       const { data: participantsData, error } = await supabaseClient
         .from('participants')
         .select('user_id, profiles(full_name)')
@@ -1090,19 +1103,17 @@
       if (error) {
         console.error("Error al obtener participantes:", error);
       }
-      // Mostrar cada participante (sin importar si es el usuario logueado o no)
+      // Mostrar cada participante
       if (participantsData && participantsData.length > 0) {
         participantsData.forEach((participant, index) => {
           const slotDiv = document.createElement('div');
           slotDiv.className = 'player-slot';
           const infoDiv = document.createElement('div');
           infoDiv.className = 'player-info';
-          // Usar el full_name obtenido; si no existe, se mostrará "Jugador sin nombre"
           const participantName = (participant.profiles && participant.profiles.full_name) ? participant.profiles.full_name : 'Jugador sin nombre';
           infoDiv.innerHTML = `<span>Jugador ${index + 1}:</span> <p>${participantName}</p>`;
           const viewBtn = document.createElement('button');
           viewBtn.textContent = 'Ver';
-          // Importante: utilizar el user_id del participante para ver su perfil
           viewBtn.onclick = () => {
             window.location.href = `perfil.html?userId=${participant.user_id}&readonly=1`;
           };
@@ -1113,7 +1124,7 @@
       } else {
         playersList.innerHTML = '<p>No hay jugadores inscritos.</p>';
       }
-      // Mostrar slots vacíos en caso de que el total de jugadores sea mayor que los inscritos
+      // Mostrar slots vacíos en caso de que total_players sea mayor
       const totalPlayers = currentMatch.total_players || 4;
       const joinedCount = participantsData ? participantsData.length : 0;
       const emptySlots = totalPlayers - joinedCount;
@@ -1123,7 +1134,6 @@
           const infoDiv = document.createElement('div');
           infoDiv.className = 'player-info';
           infoDiv.innerHTML = `<span>Jugador ${joinedCount + i + 1}:</span> <p>Slot Libre</p>`;
-          // Si el usuario logueado aún no se ha unido, se muestra el botón "Unirse"
           if (loggedUser && (!participantsData || !participantsData.some(row => row.user_id === loggedUser.id))) {
               const joinBtn = document.createElement('button');
               joinBtn.className = 'btn-join-slot';
@@ -1137,7 +1147,6 @@
           playersList.appendChild(slotDiv);
       }
       document.getElementById('modalPlayersStatus').textContent = `Faltan ${emptySlots} jugadores de ${totalPlayers}`;
-      // Actualizar botón "Unirse" según si el usuario logueado ya está inscrito
       if (loggedUser && participantsData && participantsData.some(row => row.user_id === loggedUser.id)) {
           document.getElementById('modalJoinBtn').style.display = 'none';
       } else {
