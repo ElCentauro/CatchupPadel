@@ -778,7 +778,7 @@
       document.getElementById('localitySuggestions').style.display = 'none';
       document.getElementById('canchaResults').innerHTML = '';
     }
-    // Se limpia y se muestra la sección de búsqueda de partidos
+    // Limpiar y mostrar la sección de búsqueda de partidos
     function showPartidosSearch() {
       const section = document.getElementById('searchPartidosSection');
       document.getElementById('partidosLocality').value = '';
@@ -1081,24 +1081,25 @@
         <strong>Localidad:</strong> ${match.establishments?.locality || 'N/A'} <br>
         <strong>Nivel:</strong> ${match.match_level} | <strong>Parejas:</strong> ${match.team_type}
       `;
-      // Se fuerza la relación inner para obtener el full_name de cada participante
+      // Consultar todos los participantes del partido, sin filtrar solo el del usuario logueado
       const { data: participantsData, error } = await supabaseClient
         .from('participants')
-        .select('user_id, profiles!inner(full_name)')
+        .select('user_id, profiles(full_name)')
         .eq('match_id', currentMatch.id);
       const playersList = document.getElementById('modalPlayersList');
       playersList.innerHTML = '';
       if (error) {
         console.error("Error al obtener participantes:", error);
       }
-      // Mostrar cada participante con su nombre obtenido del perfil y el botón "Ver"
+      // Si existen participantes, se muestran todos
       if (participantsData && participantsData.length > 0) {
         participantsData.forEach((participant, index) => {
           const slotDiv = document.createElement('div');
           slotDiv.className = 'player-slot';
           const infoDiv = document.createElement('div');
           infoDiv.className = 'player-info';
-          const participantName = participant.profiles.full_name || 'Jugador sin nombre';
+          // Se usa el full_name del perfil si existe; de lo contrario, se usa un texto alternativo
+          const participantName = (participant.profiles && participant.profiles.full_name) ? participant.profiles.full_name : 'Jugador sin nombre';
           infoDiv.innerHTML = `<span>Jugador ${index + 1}:</span> <p>${participantName}</p>`;
           const viewBtn = document.createElement('button');
           viewBtn.textContent = 'Ver';
@@ -1112,7 +1113,7 @@
       } else {
         playersList.innerHTML = '<p>No hay jugadores inscritos.</p>';
       }
-      // Calcular y mostrar slots vacíos si es que hay
+      // Mostrar slots vacíos (si el total de jugadores es mayor que los inscritos)
       const totalPlayers = currentMatch.total_players || 4;
       const joinedCount = participantsData ? participantsData.length : 0;
       const emptySlots = totalPlayers - joinedCount;
