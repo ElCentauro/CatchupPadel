@@ -102,9 +102,7 @@
       color: var(--color-hover);
     }
     
-    /* Imagen decorativa: silueta de jugadores de pádel */
-    <img src="paletas.png" alt="Silueta de jugadores de pádel" class="header-img">
-
+    /* Imagen local: "paletas.png" en la carpeta principal del repositorio */
     .header-img {
       max-height: 60px;
       margin-left: 1rem;
@@ -350,8 +348,9 @@
   <!-- CABECERA -->
   <header>
     <div class="logo">Catch Up Padel</div>
-    <!-- Imagen decorativa: reemplaza la URL por la imagen real -->
-    <img src="https://via.placeholder.com/150x60?text=Padel+Silhouette" alt="Silueta de jugadores de pádel" class="header-img">
+    <!-- Reemplaza "paletas.png" con el nombre correcto si usas otro archivo -->
+    <img src="paletas.png" alt="Silueta de jugadores de pádel" class="header-img">
+    
     <nav>
       <a href="home.html" id="profileLink">Home</a>
       <a href="perfil.html">Mi Perfil</a>
@@ -377,7 +376,7 @@
         </div>
         <div class="form-group">
           <label for="startTime">Hora de Inicio</label>
-          <!-- Campo de Hora de Inicio con MDTimePicker (Formato 24h: "HH:mm") -->
+          <!-- Campo de Hora de Inicio con mdtimepicker en formato 24h (ej: "18:30") -->
           <input type="text" id="startTime" placeholder="Selecciona la hora" required>
         </div>
         <!-- Control de Duración -->
@@ -507,17 +506,18 @@
   
   <script>
     // ============================================
-    // INICIALIZAR MDTimePicker PARA "Hora de Inicio" en formato 24h
+    // INICIALIZAR MDTimePicker PARA "Hora de Inicio" en formato 24 horas
     // ============================================
     $(document).ready(function() {
       $('#startTime').mdtimepicker({
-        format: 'HH:mm',   // Formato 24 horas: por ejemplo "18:30"
+        is24hour: true,    // Activa el formato 24h
+        format: 'hh:mm',   // Usa 'hh:mm' con is24hour = true para obtener "18:30"
         theme: 'blue',
         hourPadding: true,
-        readOnly: true  // Forzamos a usar el dial
+        readOnly: true     // Forzamos a usar el dial, no se ingresa manualmente
       });
       
-      // Cada vez que se cambia la hora de inicio, recalcular la hora de fin
+      // Cada vez que se cambie la hora de inicio, recalcular la hora de fin
       $('#startTime').on('change', function() {
         recalcEndTime();
       });
@@ -540,7 +540,7 @@
       return Math.floor(10000 + Math.random() * 90000).toString();
     }
     
-    // Cargar datos del organizador
+    // Cargar el nombre del organizador
     async function loadOrganizer() {
       const { data: { session }, error } = await supabaseClient.auth.getSession();
       if (error) {
@@ -561,7 +561,7 @@
     }
     loadOrganizer();
     
-    // Cargar canchas en el selector
+    // Cargar las canchas en el selector
     async function loadCanchas() {
       const { data, error } = await supabaseClient
         .from('establishments')
@@ -580,7 +580,7 @@
     }
     loadCanchas();
     
-    // Cargar pistas según la cancha seleccionada
+    // Al cambiar la cancha, cargar las pistas correspondientes
     document.getElementById('canchaSelect').addEventListener('change', async function() {
       const canchaId = this.value;
       const pistaSelect = document.getElementById('pistaSelect');
@@ -621,14 +621,18 @@
           document.getElementById('matchDate').value = data.match_date;
           $('#startTime').val(data.start_time);
           $('#endTime').val(data.end_time);
+          
           const radio = document.querySelector(`input[name="playerCount"][value="${data.player_count}"]`);
           if (radio) radio.checked = true;
+          
           document.getElementById('canchaSelect').value = data.cancha_id;
           const event = new Event('change');
           document.getElementById('canchaSelect').dispatchEvent(event);
+          
           setTimeout(() => {
             document.getElementById('pistaSelect').value = data.pista_id;
           }, 500);
+          
           document.getElementById('matchLevel').value = data.match_level;
           document.getElementById('teamType').value = data.team_type;
           document.getElementById('completitud').value = data.completitud;
@@ -639,7 +643,7 @@
     }
     loadMatch();
     
-    // Envío del formulario para crear/modificar el partido
+    // Crear o modificar el partido al hacer submit
     document.getElementById('match-form').addEventListener('submit', async function(e) {
       e.preventDefault();
       let matchId = currentMatchId;
@@ -649,9 +653,8 @@
       
       const matchName = document.getElementById('matchName').value.trim();
       const matchDate = document.getElementById('matchDate').value;
-      // Convertir hora de inicio a formato "HH:mm" ya que el input ya lo trae en ese formato
-      const startTime = document.getElementById('startTime').value;
-      const endTime = document.getElementById('endTime').value;
+      const startTime = document.getElementById('startTime').value;  // Ej: "18:30"
+      const endTime = document.getElementById('endTime').value;      // Ej: "19:30"
       const organizer = document.getElementById('organizer').value;
       const playerCount = parseInt(document.querySelector('input[name="playerCount"]:checked')?.value, 10);
       const cancha = document.getElementById('canchaSelect').value;
@@ -669,8 +672,8 @@
         id: matchId,
         match_name: matchName,
         match_date: matchDate,
-        start_time: startTime,
-        end_time: endTime,
+        start_time: startTime,  // Se guarda en formato "HH:mm"
+        end_time: endTime,      // También en "HH:mm"
         organizer: organizer,
         player_count: playerCount,
         cancha_id: cancha,
@@ -708,7 +711,7 @@
       updateJoinUI();
     });
     
-    // Programar partidos repetidos semanalmente
+    // Programar Partidos (semanal)
     document.getElementById('btn-schedule').addEventListener('click', function() {
       const repeatWeeks = parseInt(document.getElementById('repeatWeeks').value, 10);
       const matchDateInput = document.getElementById('matchDate').value;
@@ -737,7 +740,7 @@
       }
     });
     
-    // Botón "Unirse al Partido"
+    // Unirse al Partido
     document.getElementById('btn-join').addEventListener('click', async function() {
       const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
       if (sessionError || !session) {
@@ -801,13 +804,13 @@
       joinInfo.textContent = `${joinedCount} jugadores unidos / ${playerCount} necesarios`;
     }
     
-    // Función para recalcular la Hora de Fin basándose en la Hora de Inicio y la Duración
+    // Recalcular la Hora de Fin al modificar la duración o la hora de inicio
     function recalcEndTime() {
       const startVal = $('#startTime').val();  // Ej: "18:30"
-      let dur = parseInt(document.getElementById('durationMinutes').value, 10) || 0;
+      const dur = parseInt(document.getElementById('durationMinutes').value, 10) || 0;
       if (!startVal || dur <= 0) return;
       
-      // Parsear la hora de inicio
+      // Parsear la hora de inicio "HH:mm"
       const [hourStr, minuteStr] = startVal.split(':');
       let hour = parseInt(hourStr, 10);
       let minute = parseInt(minuteStr, 10);
@@ -821,7 +824,7 @@
       $('#endTime').val(endTime);
     }
     
-    // Actualizar display de la duración y recalcular la hora de fin cuando cambie la duración
+    // Cambios en la duración => recalcula la hora de fin
     document.getElementById('durationMinutes').addEventListener('input', function() {
       let dur = parseInt(this.value, 10) || 0;
       if (dur > 180) {
