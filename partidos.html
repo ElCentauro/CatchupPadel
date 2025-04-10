@@ -89,22 +89,24 @@
       transform: scale(1.05);
     }
     
+    /* Nuevo botón de navegación: "Volver a Home" */
     header nav a {
       font-size: 1rem;
-      margin-left: 1.5rem;
-      text-transform: uppercase;
+      padding: 0.5rem 1rem;
+      background-color: var(--color-secundario);
+      color: #fff;
+      border-radius: 5px;
       font-weight: 500;
-      color: var(--color-texto);
-      transition: color 0.3s;
+      transition: background-color 0.3s;
     }
     
     header nav a:hover {
-      color: var(--color-hover);
+      background-color: var(--color-primario);
     }
     
-    /* Imagen local: "paletas.png" en la carpeta principal del repositorio */
+    /* Imagen local "paletas.png" ampliada un 40% (de 60px a 84px) */
     .header-img {
-      max-height: 60px;
+      max-height: 84px;
       margin-left: 1rem;
     }
     
@@ -218,7 +220,7 @@
       box-shadow: 0 0 4px var(--color-input-focus);
     }
     
-    /* Grupo para duración con valores sugeridos */
+    /* Grupo para la duración con valores sugeridos */
     .duration-group {
       display: flex;
       flex-direction: column;
@@ -348,13 +350,11 @@
   <!-- CABECERA -->
   <header>
     <div class="logo">Catch Up Padel</div>
-    <!-- Reemplaza "paletas.png" con el nombre correcto si usas otro archivo -->
+    <!-- La imagen "paletas.png" se encuentra en la carpeta principal -->
     <img src="paletas.png" alt="Silueta de jugadores de pádel" class="header-img">
-    
     <nav>
-      <a href="home.html" id="profileLink">Home</a>
-      <a href="perfil.html">Mi Perfil</a>
-      <a href="partidos.html">Partidos</a>
+      <!-- Único botón para volver a Home -->
+      <a href="home.html">Volver a Home</a>
     </nav>
   </header>
   
@@ -376,7 +376,7 @@
         </div>
         <div class="form-group">
           <label for="startTime">Hora de Inicio</label>
-          <!-- Campo de Hora de Inicio con mdtimepicker en formato 24h (ej: "18:30") -->
+          <!-- Campo de Hora de Inicio con MDTimePicker en formato 24h ("HH:mm") -->
           <input type="text" id="startTime" placeholder="Selecciona la hora" required>
         </div>
         <!-- Control de Duración -->
@@ -506,18 +506,18 @@
   
   <script>
     // ============================================
-    // INICIALIZAR MDTimePicker PARA "Hora de Inicio" en formato 24 horas
+    // INICIALIZAR MDTimePicker PARA "Hora de Inicio" en formato 24h
     // ============================================
     $(document).ready(function() {
       $('#startTime').mdtimepicker({
-        is24hour: true,    // Activa el formato 24h
-        format: 'hh:mm',   // Usa 'hh:mm' con is24hour = true para obtener "18:30"
+        is24hour: true,    // Activar formato 24h
+        format: 'hh:mm',   // Con is24hour=true obtiene "18:30"
         theme: 'blue',
         hourPadding: true,
-        readOnly: true     // Forzamos a usar el dial, no se ingresa manualmente
+        readOnly: true     // Se fuerza el uso del dial
       });
       
-      // Cada vez que se cambie la hora de inicio, recalcular la hora de fin
+      // Recalcular la hora de fin cada vez que se cambie la hora de inicio
       $('#startTime').on('change', function() {
         recalcEndTime();
       });
@@ -540,7 +540,7 @@
       return Math.floor(10000 + Math.random() * 90000).toString();
     }
     
-    // Cargar el nombre del organizador
+    // Cargar datos del organizador
     async function loadOrganizer() {
       const { data: { session }, error } = await supabaseClient.auth.getSession();
       if (error) {
@@ -643,7 +643,7 @@
     }
     loadMatch();
     
-    // Crear o modificar el partido al hacer submit
+    // Envío del formulario para crear/modificar el partido
     document.getElementById('match-form').addEventListener('submit', async function(e) {
       e.preventDefault();
       let matchId = currentMatchId;
@@ -711,7 +711,7 @@
       updateJoinUI();
     });
     
-    // Programar Partidos (semanal)
+    // Programar partidos repetidos semanalmente
     document.getElementById('btn-schedule').addEventListener('click', function() {
       const repeatWeeks = parseInt(document.getElementById('repeatWeeks').value, 10);
       const matchDateInput = document.getElementById('matchDate').value;
@@ -740,7 +740,7 @@
       }
     });
     
-    // Unirse al Partido
+    // Botón "Unirse al Partido"
     document.getElementById('btn-join').addEventListener('click', async function() {
       const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
       if (sessionError || !session) {
@@ -804,7 +804,7 @@
       joinInfo.textContent = `${joinedCount} jugadores unidos / ${playerCount} necesarios`;
     }
     
-    // Recalcular la Hora de Fin al modificar la duración o la hora de inicio
+    // Función para recalcular la Hora de Fin en formato "HH:mm"
     function recalcEndTime() {
       const startVal = $('#startTime').val();  // Ej: "18:30"
       const dur = parseInt(document.getElementById('durationMinutes').value, 10) || 0;
@@ -819,12 +819,12 @@
       let endHour = Math.floor(totalMinutes / 60) % 24;
       let endMinute = totalMinutes % 60;
       
-      // Formatear el resultado en "HH:mm"
+      // Formatear resultado en "HH:mm"
       const endTime = String(endHour).padStart(2, '0') + ':' + String(endMinute).padStart(2, '0');
       $('#endTime').val(endTime);
     }
     
-    // Cambios en la duración => recalcula la hora de fin
+    // Cuando se cambia la duración, se actualiza el display y se recalcula la hora de fin
     document.getElementById('durationMinutes').addEventListener('input', function() {
       let dur = parseInt(this.value, 10) || 0;
       if (dur > 180) {
@@ -835,7 +835,7 @@
       recalcEndTime();
     });
     
-    // Ajuste para cambiar el texto del enlace de perfil
+    // Ajuste para cambiar el texto del enlace de perfil (ya no se muestra, pero se deja para otros usos)
     async function checkProfile() {
       const profileLink = document.getElementById("profileLink");
       if (!profileLink) return;
