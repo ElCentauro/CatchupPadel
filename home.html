@@ -8,7 +8,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <!-- Íconos (Font Awesome) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
   <style>
     /* RESET Y ESTILOS GLOBALES */
     * {
@@ -21,7 +20,6 @@
       background-color: #f8f8f8;
       color: #333;
     }
-
     /* MENÚ DE NAVEGACIÓN */
     nav {
       width: 100%;
@@ -60,7 +58,6 @@
       background-color: #e74c3c;
       color: #fff;
     }
-
     /* SECCIÓN HERO */
     .hero {
       position: relative;
@@ -86,7 +83,6 @@
       margin: 0 auto;
       line-height: 1.6;
     }
-
     /* TARJETAS FLOTANTES (opciones principales) */
     .cards-container {
       display: flex;
@@ -119,7 +115,6 @@
       font-size: 0.85rem;
       color: #555;
     }
-
     /* SECCIÓN PARTIDOS ABIERTOS */
     .search-partidos {
       display: none;
@@ -235,7 +230,6 @@
     .btn-view-partido:hover {
       background-color: #2980b9;
     }
-
     /* SECCIÓN BUSCAR CANCHAS */
     .search-canchas {
       display: none;
@@ -334,7 +328,6 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-
     /* Ajustes Responsivos */
     @media (max-width: 768px) {
       .floating-card {
@@ -364,7 +357,7 @@
       <a href="#" class="menu-item logout" onclick="logout()">Cerrar Sesión</a>
     </div>
   </nav>
-
+  
   <!-- SECCIÓN HERO -->
   <section class="hero">
     <h1>Bienvenido a Catch Up Padel</h1>
@@ -392,7 +385,7 @@
       </div>
     </div>
   </section>
-
+  
   <!-- SECCIÓN PARTIDOS ABIERTOS -->
   <div class="search-partidos" id="searchPartidosSection">
     <button class="close-btn-partidos" onclick="closePartidosSearch()">X</button>
@@ -403,7 +396,7 @@
     </div>
     <div id="partidosResults"></div>
   </div>
-
+  
   <!-- SECCIÓN BUSCAR CANCHAS -->
   <div class="search-canchas" id="searchCanchasSection">
     <button class="close-btn" onclick="closeCanchaSearch()">X</button>
@@ -415,26 +408,26 @@
     <div id="canchasFeedback"></div>
     <div class="results-container" id="canchasResults"></div>
   </div>
-
+  
   <!-- FOOTER -->
   <footer style="text-align:center; padding:1rem 0; background:#fff; margin-top:2rem;">
     © 2025 Catch Up Padel. Todos los derechos reservados.
   </footer>
-
+  
   <!-- SUPABASE -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <script>
     const SUPABASE_URL = 'https://idlvxinjfbsujpvxncbr.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig'; // Sustituye con tu clave real
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig'; // REEMPLAZA CON TU CLAVE REAL
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
+  
     let loggedUser = null;
-
+  
     async function logout() {
       await supabaseClient.auth.signOut();
       window.location.href = 'index.html';
     }
-
+  
     async function checkProfile() {
       const profileLink = document.getElementById('profileLink');
       const { data: { session } } = await supabaseClient.auth.getSession();
@@ -457,7 +450,7 @@
         profileLink.textContent = (pData && pData.length > 0) ? 'Modificar Perfil' : 'Crear Perfil';
       }
     }
-
+  
     // Sección Partidos Abiertos
     function showPartidosSearch() {
       document.getElementById('searchPartidosSection').style.display = 'block';
@@ -477,7 +470,7 @@
       const partidosResults = document.getElementById('partidosResults');
       partidosResults.innerHTML = '';
       const todayISO = new Date().toISOString().slice(0, 10);
-
+  
       let query = supabaseClient
         .from('partidos')
         .select(`
@@ -487,7 +480,7 @@
         `)
         .gte('match_date', todayISO)
         .neq('completitud', 'Completo');
-
+  
       if (localityFilter) {
         query = query.ilike('establishments.locality', `%${localityFilter}%`);
       }
@@ -501,20 +494,20 @@
         partidosResults.innerHTML = '<p>No se encontraron partidos abiertos.</p>';
         return;
       }
-
+  
       const matchesMap = {};
       data.forEach(partido => {
         matchesMap[partido.id] = partido;
       });
-
+  
       Object.values(matchesMap).forEach(partido => {
         const joinedCount = partido.participants ? partido.participants.length : 0;
         const totalPlayers = partido.total_players || 4;
         const missing = totalPlayers - joinedCount;
-
+  
         const card = document.createElement('div');
         card.className = 'partido-card';
-
+  
         card.innerHTML = `
           <h3>${partido.match_name}</h3>
           <div class="icon-text">
@@ -538,7 +531,7 @@
         partidosResults.appendChild(card);
       });
     }
-
+  
     // Sección Buscar Canchas
     function showCanchaSearch() {
       document.getElementById('searchCanchasSection').style.display = 'block';
@@ -563,12 +556,14 @@
       canchasFeedback.innerHTML = '';
       showCanchasLoader();
       
+      // Asegúrate de que el nombre de la tabla corresponde a la configuración de tu base de datos.
       let query = supabaseClient
-        .from('establecimientos')
-        .select('*'); // Se espera que cada registro tenga: nombre, localidad, direccion, cantidad, mapa
-
+        .from('establecimientos')  // Si tu tabla tiene otro nombre, actualízalo aquí
+        .select('*');
+  
       if (localityFilter) {
-        query = query.ilike('localidad', `%${localityFilter}%`);
+        // Filtro que busca coincidencias en el campo "localidad" o "nombre"
+        query = query.or(`localidad.ilike.%${localityFilter}%,nombre.ilike.%${localityFilter}%`);
       }
       const { data, error } = await query;
       clearCanchasLoader();
@@ -577,20 +572,20 @@
         return;
       }
       if (!data || data.length === 0) {
-        canchasResults.innerHTML = '<p style="text-align:center; width:100%;">No se encontraron canchas para esa localidad.</p>';
+        canchasResults.innerHTML = '<p style="text-align:center; width:100%;">No se encontraron canchas para esa localidad o nombre.</p>';
         return;
       }
-
+  
       data.forEach(c => {
         const card = document.createElement('div');
         card.className = 'card';
-
+  
         // Cabecera con el nombre
         const header = document.createElement('div');
         header.className = 'card-header';
         header.textContent = c.nombre;
         card.appendChild(header);
-
+  
         // Contenido con Localidad, Dirección y Cantidad
         const content = document.createElement('div');
         content.className = 'card-content';
@@ -600,13 +595,13 @@
           <p><strong>Cantidad de Canchas:</strong> ${c.cantidad}</p>
         `;
         card.appendChild(content);
-
+  
         // Mapa integrado
         const mapContainer = document.createElement('div');
         mapContainer.className = 'map-container';
         mapContainer.innerHTML = `<iframe src="${c.mapa}" width="100%" height="100%" frameborder="0" style="border:0" allowfullscreen></iframe>`;
         card.appendChild(mapContainer);
-
+  
         canchasResults.appendChild(card);
       });
     }
@@ -616,14 +611,12 @@
     function clearCanchasLoader() {
       document.getElementById('canchasFeedback').innerHTML = '';
     }
-
+  
     // Función para "Conoce Jugadores" (Funcionalidad pendiente)
     function showPlayersSection() {
-      // Aquí puedes implementar la lógica para mostrar la sección de jugadores.
-      // Por ahora muestra un mensaje de alerta.
       alert('La función "Conoce Jugadores" aún no ha sido implementada.');
     }
-
+  
     document.addEventListener('DOMContentLoaded', async () => {
       await checkProfile();
       if (loggedUser) {
