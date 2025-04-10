@@ -528,7 +528,8 @@
         if (perfil.establishment_number !== null) {
           window.location.href = "establecimiento.html?id=" + encodeURIComponent(perfil.establishment_number);
         } else {
-          window.location.href = "perfil.html";
+          // Cambio realizado: redirigir a home.html en vez de perfil.html
+          window.location.href = "home.html";
         }
       }
     });
