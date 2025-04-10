@@ -513,14 +513,14 @@
           return;
         }
 
-        // Consultar la tabla "perfiles" usando el UID del usuario
+        // Consultar la tabla "perfiles" usando el UID del usuarios
         const { data: perfil, error: perfilError } = await supabaseClient
           .from('perfiles')
           .select("user_id, establishment_number")
           .eq('user_id', currentUser.id)
           .single();
         if (perfilError) {
-          window.location.href = "perfil.html";
+          window.location.href = "home.html";
           return;
         }
 
