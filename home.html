@@ -122,7 +122,7 @@
 
     /* SECCIÓN PARTIDOS ABIERTOS */
     .search-partidos {
-      display: none; /* Se muestra al hacer clic en 'Buscar Partidos Abiertos' */
+      display: none; /* Se mostrará cuando haya usuario logueado o se dé clic en 'Buscar Partidos Abiertos'. */
       max-width: 1200px;
       margin: 2rem auto;
       padding: 1.5rem 2rem;
@@ -236,105 +236,6 @@
       background-color: #2980b9;
     }
 
-    /* SECCIÓN BUSCAR CANCHAS */
-    .search-canchas {
-      display: none;
-      max-width: 1000px;
-      margin: 2rem auto;
-      padding: 2rem;
-      background-color: #fff;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      position: relative;
-    }
-    .search-canchas h2 {
-      text-align: center;
-      margin-bottom: 1rem;
-      color: #2c3e50;
-    }
-    .search-canchas .filter-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 1rem;
-    }
-    .search-canchas .filter-container input {
-      padding: 0.75rem;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      font-size: 1rem;
-      width: 250px;
-    }
-    .search-canchas .filter-container button {
-      padding: 0.75rem 1.5rem;
-      background-color: #ff9500;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-    .search-canchas .filter-container button:hover {
-      background-color: #e07e00;
-    }
-    .search-canchas .results-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
-    }
-    .close-btn {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: none;
-      border: none;
-      font-size: 1.2rem;
-      color: #999;
-      cursor: pointer;
-    }
-    /* Tarjetas de búsqueda de canchas */
-    .card {
-      background: #fff;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-      overflow: hidden;
-    }
-    .card-header {
-      background: #007BFF;
-      color: #fff;
-      padding: 10px 15px;
-      font-size: 20px;
-    }
-    .card-content {
-      padding: 15px;
-      color: #333;
-    }
-    .card-content p {
-      margin: 8px 0;
-    }
-    .map-container {
-      width: 100%;
-      height: 200px;
-      border-top: 1px solid #ddd;
-    }
-    .loader {
-      border: 4px solid #f3f3f3;
-      border-top: 4px solid #007BFF;
-      border-radius: 50%;
-      width: 30px;
-      height: 30px;
-      animation: spin 1s linear infinite;
-      margin: 20px auto;
-    }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
     /* Ajustes Responsivos Generales */
     @media (max-width: 768px) {
       .floating-card {
@@ -350,6 +251,7 @@
         font-size: 0.9rem;
       }
     }
+
   </style>
 </head>
 <body>
@@ -404,20 +306,8 @@
     <div id="partidosResults"></div>
   </div>
 
-  <!-- SECCIÓN BUSCAR CANCHAS -->
-  <div class="search-canchas" id="searchCanchasSection">
-    <button class="close-btn" onclick="closeCanchaSearch()">X</button>
-    <h2>Buscar Canchas</h2>
-    <div class="filter-container">
-      <input type="text" id="filterCanchasLocality" placeholder="Ej. Buenos Aires">
-      <button id="btn-filter-canchas">Buscar Canchas</button>
-    </div>
-    <div id="canchasFeedback"></div>
-    <div class="results-container" id="canchasResults"></div>
-  </div>
-
   <!-- FOOTER -->
-  <footer style="text-align:center; padding:1rem 0; background:#fff; margin-top:2rem;">
+  <footer>
     © 2025 Catch Up Padel. Todos los derechos reservados.
   </footer>
 
@@ -425,7 +315,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <script>
     const SUPABASE_URL = 'https://idlvxinjfbsujpvxncbr.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig';
+    const SUPABASE_ANON_KEY = 'eyJ...'; // Sustituye con tu clave real
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     let loggedUser = null;
@@ -458,7 +348,7 @@
       }
     }
 
-    // Sección Partidos Abiertos
+    // Mostrar / Cerrar la sección de Partidos
     function showPartidosSearch() {
       document.getElementById('searchPartidosSection').style.display = 'block';
       document.getElementById('filterLocality').value = '';
@@ -469,15 +359,20 @@
       document.getElementById('filterLocality').value = '';
       document.getElementById('partidosResults').innerHTML = '';
     }
+
+    // Filtrar Partidos
     document.getElementById('btn-filter-partidos').addEventListener('click', () => {
       const filterLocality = document.getElementById('filterLocality').value.trim();
       loadOpenPartidos(filterLocality);
     });
+
+    // Cargar Partidos Abiertos
     async function loadOpenPartidos(localityFilter = '') {
       const partidosResults = document.getElementById('partidosResults');
       partidosResults.innerHTML = '';
       const todayISO = new Date().toISOString().slice(0, 10);
 
+      // Embebiendo la FK participants_match_id_fkey
       let query = supabaseClient
         .from('partidos')
         .select(`
@@ -537,84 +432,6 @@
         `;
         partidosResults.appendChild(card);
       });
-    }
-
-    // Sección Buscar Canchas
-    function showCanchaSearch() {
-      document.getElementById('searchCanchasSection').style.display = 'block';
-      document.getElementById('filterCanchasLocality').value = '';
-      document.getElementById('canchasResults').innerHTML = '';
-      document.getElementById('canchasFeedback').innerHTML = '';
-    }
-    function closeCanchaSearch() {
-      document.getElementById('searchCanchasSection').style.display = 'none';
-      document.getElementById('filterCanchasLocality').value = '';
-      document.getElementById('canchasResults').innerHTML = '';
-      document.getElementById('canchasFeedback').innerHTML = '';
-    }
-    document.getElementById('btn-filter-canchas').addEventListener('click', () => {
-      const filterValue = document.getElementById('filterCanchasLocality').value.trim();
-      loadCanchas(filterValue);
-    });
-    async function loadCanchas(localityFilter = '') {
-      const canchasResults = document.getElementById('canchasResults');
-      const canchasFeedback = document.getElementById('canchasFeedback');
-      canchasResults.innerHTML = '';
-      canchasFeedback.innerHTML = '';
-      showCanchasLoader();
-      
-      let query = supabaseClient
-        .from('establecimientos')
-        .select('*'); // Se espera que cada registro tenga: nombre, localidad, direccion, cantidad, mapa
-
-      if (localityFilter) {
-        query = query.ilike('localidad', `%${localityFilter}%`);
-      }
-      const { data, error } = await query;
-      clearCanchasLoader();
-      if (error) {
-        canchasFeedback.innerHTML = `<p style="color:red;">Error: ${error.message}</p>`;
-        return;
-      }
-      if (!data || data.length === 0) {
-        canchasResults.innerHTML = '<p style="text-align:center; width:100%;">No se encontraron canchas para esa localidad.</p>';
-        return;
-      }
-
-      data.forEach(c => {
-        const card = document.createElement('div');
-        card.className = 'card';
-
-        // Cabecera con el nombre
-        const header = document.createElement('div');
-        header.className = 'card-header';
-        header.textContent = c.nombre;
-        card.appendChild(header);
-
-        // Contenido con Localidad, Dirección y Cantidad
-        const content = document.createElement('div');
-        content.className = 'card-content';
-        content.innerHTML = `
-          <p><strong>Localidad:</strong> ${c.localidad}</p>
-          <p><strong>Dirección:</strong> ${c.direccion}</p>
-          <p><strong>Cantidad de Canchas:</strong> ${c.cantidad}</p>
-        `;
-        card.appendChild(content);
-
-        // Mapa integrado
-        const mapContainer = document.createElement('div');
-        mapContainer.className = 'map-container';
-        mapContainer.innerHTML = `<iframe src="${c.mapa}" width="100%" height="100%" frameborder="0" style="border:0" allowfullscreen></iframe>`;
-        card.appendChild(mapContainer);
-
-        canchasResults.appendChild(card);
-      });
-    }
-    function showCanchasLoader() {
-      document.getElementById('canchasFeedback').innerHTML = '<div class="loader"></div>';
-    }
-    function clearCanchasLoader() {
-      document.getElementById('canchasFeedback').innerHTML = '';
     }
 
     document.addEventListener('DOMContentLoaded', async () => {
