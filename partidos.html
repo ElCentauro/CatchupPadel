@@ -8,8 +8,14 @@
   <!-- Fuentes -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
   
-  <!-- Flatpickr (time‑picker) -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <!-- MDTimePicker CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/dmuy/MDTimePicker/mdtimepicker.css">
+  
+  <!-- jQuery (requerido para MDTimePicker) -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  
+  <!-- MDTimePicker JS -->
+  <script src="https://cdn.jsdelivr.net/gh/dmuy/MDTimePicker/mdtimepicker.js"></script>
   
   <style>
     /* ============================================
@@ -182,7 +188,6 @@
     
     input[type="text"],
     input[type="date"],
-    input[type="time"],
     input[type="number"],
     select {
       width: 100%;
@@ -192,6 +197,12 @@
       font-size: 1rem;
       transition: border-color 0.3s, box-shadow 0.3s;
       background-color: #fff;
+    }
+    
+    /* Campo deshabilitado (para la hora de fin) */
+    input:disabled {
+      background-color: #eee;
+      cursor: not-allowed;
     }
     
     /* Efecto hover y transición en los campos */
@@ -207,7 +218,7 @@
       box-shadow: 0 0 4px var(--color-input-focus);
     }
     
-    /* Lista para duración con valores sugeridos */
+    /* Grupo para la duración con valores sugeridos */
     .duration-group {
       display: flex;
       flex-direction: column;
@@ -337,7 +348,7 @@
   <!-- CABECERA -->
   <header>
     <div class="logo">Catch Up Padel</div>
-    <!-- Imagen decorativa: sustituye la URL por la imagen real -->
+    <!-- Imagen decorativa: reemplaza la URL por la imagen real -->
     <img src="https://via.placeholder.com/150x60?text=Padel+Silhouette" alt="Silueta de jugadores de pádel" class="header-img">
     <nav>
       <a href="home.html" id="profileLink">Home</a>
@@ -364,10 +375,10 @@
         </div>
         <div class="form-group">
           <label for="startTime">Hora de Inicio</label>
-          <!-- Time‑picker Flatpickr en formato 12 horas -->
-          <input type="text" id="startTime" placeholder="Selecciona hora" required>
+          <!-- Campo de Hora de Inicio con MDTimePicker -->
+          <input type="text" id="startTime" placeholder="Selecciona la hora" required>
         </div>
-        <!-- Control de duración: input de número con datalist -->
+        <!-- Control de Duración -->
         <div class="form-group duration-group">
           <label for="durationMinutes">Duración (minutos)</label>
           <input type="number" id="durationMinutes" placeholder="Ej. 90" min="0" max="180" step="1" list="durationOptions">
@@ -383,7 +394,8 @@
         </div>
         <div class="form-group">
           <label for="endTime">Hora de Fin</label>
-          <input type="time" id="endTime" required>
+          <!-- Campo calculado automáticamente y deshabilitado -->
+          <input type="text" id="endTime" placeholder="Calculado automáticamente" disabled>
         </div>
       </fieldset>
       
@@ -488,23 +500,24 @@
     </div>
   </div>
   
-  <!-- Librerías JS externas -->
-  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+  <!-- Librería Supabase JS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   
   <script>
     // ============================================
-    // INICIALIZAR FLATPICKR PARA "Hora de Inicio" en 12h y con intervalos de 10 minutos
+    // INICIALIZAR MDTimePicker PARA "Hora de Inicio" en 12h con dial
     // ============================================
-    document.addEventListener('DOMContentLoaded', function () {
-      flatpickr("#startTime", {
-        enableTime: true,
-        noCalendar: true,
-        dateFormat: "h:i K",
-        time_24hr: false,
-        minuteIncrement: 10,
-        locale: "es"
+    $(document).ready(function() {
+      $('#startTime').mdtimepicker({
+        format: 'hh:mm AA',   // Formato 12 horas con AM/PM
+        theme: 'blue',
+        hourPadding: true,
+        readOnly: true  // Forzamos a usar el dial, no se ingresa manualmente
+      });
+      
+      // Cuando el usuario seleccione la hora de inicio, recalcular la hora de fin
+      $('#startTime').on('change', function() {
+        recalcEndTime();
       });
     });
     
@@ -517,7 +530,7 @@
     
     // Variables globales
     let currentMatchId = null;
-    let joinedPlayers = []; // Array de objetos: { id, name }
+    let joinedPlayers = [];
     let loggedUser = null;
     
     // Genera un ID único de 5 dígitos para el partido
@@ -525,7 +538,7 @@
       return Math.floor(10000 + Math.random() * 90000).toString();
     }
     
-    // Cargar el nombre del organizador desde el perfil del usuario logueado
+    // Cargar datos del organizador
     async function loadOrganizer() {
       const { data: { session }, error } = await supabaseClient.auth.getSession();
       if (error) {
@@ -546,7 +559,7 @@
     }
     loadOrganizer();
     
-    // Cargar las canchas en el selector
+    // Cargar canchas en el selector
     async function loadCanchas() {
       const { data, error } = await supabaseClient
         .from('establishments')
@@ -565,7 +578,7 @@
     }
     loadCanchas();
     
-    // Al seleccionar una cancha, cargar las pistas correspondientes
+    // Cargar pistas según cancha seleccionada
     document.getElementById('canchaSelect').addEventListener('change', async function() {
       const canchaId = this.value;
       const pistaSelect = document.getElementById('pistaSelect');
@@ -588,7 +601,7 @@
       }
     });
     
-    // Cargar partido existente (si hay uno) del usuario logueado
+    // Cargar partido existente del usuario logueado
     async function loadMatch() {
       const { data: { session }, error } = await supabaseClient.auth.getSession();
       if (session && session.user) {
@@ -604,8 +617,8 @@
           currentMatchId = data.id;
           document.getElementById('matchName').value = data.match_name;
           document.getElementById('matchDate').value = data.match_date;
-          document.getElementById('startTime').value = data.start_time;
-          document.getElementById('endTime').value = data.end_time;
+          $('#startTime').val(data.start_time);
+          $('#endTime').val(data.end_time);
           const radio = document.querySelector(`input[name="playerCount"][value="${data.player_count}"]`);
           if (radio) radio.checked = true;
           document.getElementById('canchaSelect').value = data.cancha_id;
@@ -624,7 +637,7 @@
     }
     loadMatch();
     
-    // Manejo del envío del formulario para crear o modificar el partido
+    // Envío del formulario para crear/modificar el partido
     document.getElementById('match-form').addEventListener('submit', async function(e) {
       e.preventDefault();
       let matchId = currentMatchId;
@@ -692,7 +705,7 @@
       updateJoinUI();
     });
     
-    // Programar Partidos: genera partidos repetidos semanalmente
+    // Programar partidos repetidos semanalmente
     document.getElementById('btn-schedule').addEventListener('click', function() {
       const repeatWeeks = parseInt(document.getElementById('repeatWeeks').value, 10);
       const matchDateInput = document.getElementById('matchDate').value;
@@ -764,14 +777,13 @@
       alert('Te has unido al partido.');
     });
     
-    // Actualiza el estado del partido (lista de jugadores unidos, barra de progreso y contador)
+    // Actualiza el estado del partido (jugadores unidos, barra de progreso y contador)
     function updateJoinUI() {
       const playerCount = parseInt(document.querySelector('input[name="playerCount"]:checked')?.value || "0", 10);
       const completitudInput = document.getElementById('completitud');
       const joinProgress = document.getElementById('joinProgress');
       const joinInfo = document.getElementById('joinInfo');
       
-      // Actualiza contador de completitud
       if (playerCount === 0) {
         completitudInput.value = 'Parcial (faltan 0)';
         joinProgress.value = 0;
@@ -781,54 +793,58 @@
       
       const joinedCount = joinedPlayers.length;
       const remaining = playerCount - joinedCount;
-      if (remaining > 0) {
-        completitudInput.value = `Parcial (faltan ${remaining})`;
-      } else {
-        completitudInput.value = 'Completo';
-      }
-      
-      // Actualiza barra de progreso (valor entre 0 y 1)
+      completitudInput.value = remaining > 0 ? `Parcial (faltan ${remaining})` : 'Completo';
       joinProgress.value = joinedCount / playerCount;
       joinInfo.textContent = `${joinedCount} jugadores unidos / ${playerCount} necesarios`;
     }
     
-    // Calcular automáticamente la hora de fin al cambiar la duración
-    // Actualiza el display de la duración y calcula la hora de fin basado en la hora de inicio y minutos ingresados.
+    // Función para recalcucar la hora de fin
+    function recalcEndTime() {
+      const startVal = $('#startTime').val();  // Ej: "03:10 AM"
+      let minutes = parseInt(document.getElementById('durationMinutes').value, 10) || 0;
+      if (!startVal || minutes <= 0) return;
+      
+      // Parsear la hora de inicio
+      const parts = startVal.split(' ');
+      const timeParts = parts[0].split(':');
+      let hour = parseInt(timeParts[0], 10);
+      let minute = parseInt(timeParts[1], 10);
+      const meridian = parts[1];
+      
+      // Convertir a 24 horas
+      if (meridian === 'PM' && hour < 12) {
+        hour += 12;
+      }
+      if (meridian === 'AM' && hour === 12) {
+        hour = 0;
+      }
+      
+      let totalStartMinutes = hour * 60 + minute;
+      let totalEndMinutes = totalStartMinutes + minutes;
+      
+      // Calcular en formato 24 horas (para propósitos del cálculo)
+      let endHour24 = Math.floor(totalEndMinutes / 60) % 24;
+      let endMinute = totalEndMinutes % 60;
+      
+      // Convertir a formato 12 horas
+      let displayHour = endHour24 % 12;
+      displayHour = displayHour === 0 ? 12 : displayHour;
+      let displayMinute = endMinute.toString().padStart(2, '0');
+      let displayMeridian = endHour24 >= 12 ? 'PM' : 'AM';
+      
+      // Asignar el valor calculado al campo de Hora de Fin (deshabilitado)
+      $('#endTime').val(`${String(displayHour).padStart(2, '0')}:${displayMinute} ${displayMeridian}`);
+    }
+    
+    // Actualizar display de duración y recalcultar hora de fin cuando cambie la duración
     document.getElementById('durationMinutes').addEventListener('input', function() {
       let minutes = parseInt(this.value, 10) || 0;
-      // Limitar a 180 minutos si se ingresa manualmente un valor mayor
       if (minutes > 180) {
         minutes = 180;
         this.value = minutes;
       }
       document.getElementById('durationDisplay').textContent = minutes + " minutos";
-      const startTime = document.getElementById('startTime').value;
-      if (startTime && minutes > 0) {
-        // Convertir hora de inicio a formato de 24h para facilitar el cálculo
-        let timeParts = startTime.split(' ');
-        let timeHM = timeParts[0].split(':');
-        let hour = parseInt(timeHM[0], 10);
-        const minute = parseInt(timeHM[1], 10);
-        const ampm = timeParts[1];
-        if (ampm === 'PM' && hour < 12) {
-          hour += 12;
-        }
-        if (ampm === 'AM' && hour === 12) {
-          hour = 0;
-        }
-        let endHour = hour;
-        let endMinute = minute + minutes;
-        endHour += Math.floor(endMinute / 60);
-        endMinute = endMinute % 60;
-        // Convertir de vuelta a 12 horas para mostrar en el input de fin
-        let displayHour = endHour % 12;
-        displayHour = displayHour === 0 ? 12 : displayHour;
-        const displayMinute = endMinute.toString().padStart(2, '0');
-        const displayAMPM = endHour >= 12 ? 'PM' : 'AM';
-        const endTimeFormatted = displayHour + ":" + displayMinute;
-        // Establecer el valor en el input de fin, se deja el AM/PM para que el usuario lo vea
-        document.getElementById('endTime').value = endTimeFormatted;
-      }
+      recalcEndTime();
     });
     
     // Ajuste para cambiar el texto del enlace de perfil
