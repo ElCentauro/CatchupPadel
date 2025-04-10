@@ -558,7 +558,7 @@
       
       // Asegúrate de que el nombre de la tabla corresponde a la configuración de tu base de datos.
       let query = supabaseClient
-        .from('establecimientos')  // Si tu tabla tiene otro nombre, actualízalo aquí
+        .from('establishments')  // Si tu tabla tiene otro nombre, actualízalo aquí
         .select('*');
   
       if (localityFilter) {
