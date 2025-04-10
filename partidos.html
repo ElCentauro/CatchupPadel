@@ -8,6 +8,9 @@
   <!-- Fuente principal -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
 
+  <!-- Flatpickr (time‑picker) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
   <style>
     /* 
       ============================================
@@ -328,7 +331,8 @@
         </div>
         <div class="form-group">
           <label for="startTime">Hora de Inicio</label>
-          <input type="time" id="startTime" required>
+          <!-- Time‑picker Flatpickr -->
+          <input type="text" id="startTime" placeholder="Selecciona hora" required>
         </div>
         <!-- Nueva etiqueta Duración (minutos) -->
         <div class="form-group">
@@ -439,10 +443,29 @@
     </div>
   </div>
   
-  <!-- SUPABASE -->
+  <!-- Librerías JS externas -->
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
   <script>
+    // ============================================
+    // INICIALIZAR FLATPICKR PARA "Hora de Inicio"
+    // ============================================
+    document.addEventListener('DOMContentLoaded', function () {
+      flatpickr("#startTime", {
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: "H:i",
+        time_24hr: true,
+        minuteIncrement: 5,
+        locale: "es"
+      });
+    });
+
+    // ============================================
     // CONFIGURACIÓN DE SUPABASE – Reemplaza con tus credenciales reales
+    // ============================================
     const SUPABASE_URL = 'https://idlvxinjfbsujpvxncbr.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
