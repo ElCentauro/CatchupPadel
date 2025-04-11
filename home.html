@@ -120,7 +120,8 @@
       margin: 20px auto;
     }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    /* Modal Styles */
+
+    /* MODAL ESTILOS */
     #matchModal {
       display: none;
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -131,10 +132,35 @@
     #matchModal .modal-content {
       background: #fff; padding: 20px; border-radius: 12px;
       max-width: 500px; width: 90%; position: relative;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
     }
     #matchModal .close-modal {
       position: absolute; top: 10px; right: 10px;
       background: none; border: none; font-size: 1.2rem; cursor: pointer;
+    }
+    /* Estilos para la lista de participantes */
+    #modalContent ul {
+      list-style: none;
+      padding: 0;
+    }
+    #modalContent li {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    #modalContent li img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+    #modalContent h2 {
+      margin-bottom: 12px;
+      font-size: 1.8rem;
+      color: #2980b9;
+    }
+    #modalContent p {
+      margin-bottom: 10px;
     }
   </style>
 </head>
@@ -246,7 +272,7 @@
       window.location.href = 'index.html';
     }
   
-    // Lógica para verificar si el usuario tiene registro en profiles usando la columna "id"
+    // Verificar si el usuario tiene registro en profiles (usando "id")
     async function checkProfile() {
       const profileLink = document.getElementById('profileLink');
       const { data: { session } } = await supabaseClient.auth.getSession();
@@ -258,12 +284,12 @@
           .eq('id', userId);
   
         if (!error && profileData && profileData.length > 0) {
-          // Usuario registrado en profiles: se actualiza el texto y se ocultan "Canchas" y "Pistas"
+          // Usuario registrado: se actualiza el texto y se ocultan "Canchas" y "Pistas"
           profileLink.textContent = 'Modificar Perfil';
           document.getElementById('canchasButton').style.display = 'none';
           document.getElementById('pistasButton').style.display = 'none';
         } else {
-          // Usuario sin registro en profiles: se ocultan "Partidos" y "Conoce Jugadores"
+          // Usuario sin registro: se ocultan "Partidos" y "Conoce Jugadores"
           profileLink.style.display = 'none';
           document.getElementById('partidosButton').style.display = 'none';
           document.getElementById('jugadoresButton').style.display = 'none';
@@ -283,8 +309,8 @@
       const namesSet = new Set();
       const localitiesSet = new Set();
       data.forEach(item => {
-        if(item.name) namesSet.add(item.name);
-        if(item.locality) localitiesSet.add(item.locality);
+        if (item.name) namesSet.add(item.name);
+        if (item.locality) localitiesSet.add(item.locality);
       });
       const namesList = document.getElementById('namesList');
       namesList.innerHTML = '';
@@ -312,9 +338,9 @@
       const gameLevelsSet = new Set();
       const localitiesSet = new Set();
       data.forEach(player => {
-        if(player.full_name) namesSet.add(player.full_name);
-        if(player.game_level) gameLevelsSet.add(player.game_level);
-        if(player.locality) localitiesSet.add(player.locality);
+        if (player.full_name) namesSet.add(player.full_name);
+        if (player.game_level) gameLevelsSet.add(player.game_level);
+        if (player.locality) localitiesSet.add(player.locality);
       });
       const namesListPlayers = document.getElementById('namesListPlayers');
       namesListPlayers.innerHTML = '';
@@ -339,7 +365,7 @@
       });
     }
     
-    // Oculta todas las secciones de búsqueda
+    // Ocultar todas las secciones de búsqueda
     function hideAllSections() {
       document.getElementById('searchPartidosSection').style.display = 'none';
       document.getElementById('searchCanchasSection').style.display = 'none';
@@ -422,7 +448,7 @@
           <button class="btn-view-partido">Ver el Partido</button>
         `;
   
-        // Agregar el listener para abrir el modal con los detalles del partido
+        // Agregar listener para mostrar modal con detalles y lista de jugadores
         const viewButton = card.querySelector('.btn-view-partido');
         viewButton.addEventListener('click', () => {
           showModal(partido);
@@ -432,18 +458,51 @@
       });
     }
   
-    // Función para mostrar el modal con los detalles del partido
-    function showModal(partido) {
+    // Función para mostrar el modal con detalles del partido y lista de participantes
+    async function showModal(partido) {
       const modal = document.getElementById('matchModal');
       const modalContent = document.getElementById('modalContent');
-  
-      // Determinar si el usuario logueado ya es participante
-      let isParticipant = false;
-      if (partido.participants && loggedUser) {
-        isParticipant = partido.participants.some(p => p.user_id === loggedUser.id);
+      
+      // Calcular cantidad de participantes y faltantes
+      const joinedCount = partido.participants ? partido.participants.length : 0;
+      const totalPlayers = partido.total_players || 4;
+      const missing = totalPlayers - joinedCount;
+      
+      // Obtener IDs de los participantes
+      let participantIds = [];
+      if (partido.participants) {
+        participantIds = partido.participants.map(p => p.user_id);
       }
+      
+      // Consulta para obtener detalles (nombre, foto) de los participantes
+      let participantDetails = [];
+      if (participantIds.length > 0) {
+        const { data: players, error } = await supabaseClient
+          .from('profiles')
+          .select('full_name, profile_pic')
+          .in('id', participantIds);
+        if (!error && players) {
+          participantDetails = players;
+        }
+      }
+      
+      // Construir la lista HTML de participantes
+      let participantListHTML = '<ul>';
+      if (participantDetails.length > 0) {
+        participantDetails.forEach(player => {
+          participantListHTML += `
+            <li style="display: flex; align-items: center; margin-bottom: 8px;">
+              <img src="${player.profile_pic || 'https://via.placeholder.com/40'}" alt="Foto de ${player.full_name}" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
+              <span>${player.full_name}</span>
+            </li>
+          `;
+        });
+      } else {
+        participantListHTML += '<li>No hay jugadores apuntados.</li>';
+      }
+      participantListHTML += '</ul>';
   
-      // Rellenar el contenido del modal con los datos del partido
+      // Armar el contenido del modal
       modalContent.innerHTML = `
         <h2>${partido.match_name}</h2>
         <p><strong>Fecha:</strong> ${partido.match_date}</p>
@@ -451,10 +510,18 @@
         <p><strong>Cancha:</strong> ${partido.establishments?.name || ''}</p>
         <p><strong>Localidad:</strong> ${partido.establishments?.locality || ''}</p>
         <p><strong>Nivel:</strong> ${partido.match_level}</p>
-        <p><strong>Jugadores Apuntados:</strong> ${partido.participants ? partido.participants.length : 0}</p>
+        <h3>Jugadores Apuntados:</h3>
+        ${participantListHTML}
+        <p><strong>Faltan ${missing} jugadores de ${totalPlayers} totales</strong></p>
       `;
+      
+      // Determinar si el usuario ya forma parte del partido
+      let isParticipant = false;
+      if (partido.participants && loggedUser) {
+        isParticipant = partido.participants.some(p => p.user_id === loggedUser.id);
+      }
   
-      // Si el usuario aún NO es participante, se agrega un botón de "Unirse"
+      // Si el usuario no está apuntado, agregar el botón "Unirse"
       if (!isParticipant && loggedUser) {
         const joinButton = document.createElement('button');
         joinButton.className = 'btn-join';
@@ -462,10 +529,11 @@
         joinButton.id = 'joinButton';
         joinButton.addEventListener('click', async () => {
           await joinMatch(partido.id);
+          // Luego de unirse, actualizar el modal
+          showModal(partido);
         });
         modalContent.appendChild(joinButton);
       } else if (loggedUser) {
-        // Si ya es participante, mostrar un mensaje o inhabilitar el botón
         const joinedMsg = document.createElement('p');
         joinedMsg.textContent = 'Ya estás apuntado a este partido.';
         modalContent.appendChild(joinedMsg);
@@ -478,9 +546,8 @@
       document.getElementById('matchModal').style.display = 'none';
     }
   
-    // Función para unirse a un partido (insertar en la tabla participants)
+    // Función para unirse a un partido (inserción en la tabla "participants")
     async function joinMatch(matchId) {
-      // Inserta un registro en la tabla "participants"
       const { data, error } = await supabaseClient
         .from('participants')
         .insert([{ match_id: matchId, user_id: loggedUser.id }]);
@@ -489,13 +556,7 @@
         alert("Error al unirse: " + error.message);
       } else {
         alert("Te has unido al partido");
-        // Actualiza la vista del modal:
-        const joinButton = document.getElementById('joinButton');
-        if (joinButton) {
-          joinButton.style.display = 'none';
-        }
-        // Opcionalmente, puedes actualizar el conteo de participantes en el modal
-        // O recargar los partidos abiertos para reflejar el cambio
+        // Opcional: recargar los datos de partidos
       }
     }
   
