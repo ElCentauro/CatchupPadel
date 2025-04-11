@@ -5,376 +5,135 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Catch Up Padel - Home</title>
   <!-- Fuente Moderna -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
-    rel="stylesheet"
-  />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
   <!-- Íconos (Font Awesome) -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-  />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
   <style>
     /* RESET Y ESTILOS GLOBALES */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      font-family: "Poppins", sans-serif;
-      background-color: #f8f8f8;
-      color: #333;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: "Poppins", sans-serif; background-color: #f8f8f8; color: #333; }
 
     /* MENÚ DE NAVEGACIÓN */
     nav {
-      width: 100%;
-      background-color: #fff;
-      padding: 1rem 2rem;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      width: 100%; background-color: #fff; padding: 1rem 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
     .menu-container {
-      display: flex;
-      justify-content: space-evenly;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 1rem;
+      display: flex; justify-content: space-evenly; align-items: center; flex-wrap: wrap; gap: 1rem;
     }
     .menu-item {
-      padding: 0.5rem 1rem;
-      border: 2px solid #ff9500;
-      border-radius: 8px;
-      color: #ff9500;
-      text-transform: uppercase;
-      font-weight: 600;
-      letter-spacing: 1px;
-      transition: background-color 0.3s, color 0.3s;
-      cursor: pointer;
-      text-decoration: none;
+      padding: 0.5rem 1rem; border: 2px solid #ff9500; border-radius: 8px; color: #ff9500;
+      text-transform: uppercase; font-weight: 600; letter-spacing: 1px; transition: background-color 0.3s, color 0.3s;
+      cursor: pointer; text-decoration: none;
     }
-    .menu-item:hover {
-      background-color: #ff9500;
-      color: #fff;
-    }
-    .menu-item.logout {
-      border-color: #e74c3c;
-      color: #e74c3c;
-    }
-    .menu-item.logout:hover {
-      background-color: #e74c3c;
-      color: #fff;
-    }
+    .menu-item:hover { background-color: #ff9500; color: #fff; }
+    .menu-item.logout { border-color: #e74c3c; color: #e74c3c; }
+    .menu-item.logout:hover { background-color: #e74c3c; color: #fff; }
 
     /* SECCIÓN HERO */
     .hero {
-      position: relative;
-      padding: 3rem 1rem;
-      text-align: center;
-      background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)),
-        url("https://images.unsplash.com/photo-1593341646581-529f6c49c5d1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80");
-      background-size: cover;
-      background-position: center;
-      color: #fff;
-      min-height: 60vh;
+      position: relative; padding: 3rem 1rem; text-align: center;
+      background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)),
+                  url("https://images.unsplash.com/photo-1593341646581-529f6c49c5d1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80");
+      background-size: cover; background-position: center; color: #fff; min-height: 60vh;
     }
-    .hero h1 {
-      font-size: 3rem;
-      font-weight: 700;
-      margin-bottom: 1rem;
-      color: #fff;
-    }
-    .hero p {
-      font-size: 1.2rem;
-      margin-bottom: 2rem;
-      max-width: 700px;
-      margin: 0 auto;
-      line-height: 1.6;
-    }
+    .hero h1 { font-size: 3rem; font-weight: 700; margin-bottom: 1rem; color: #fff; }
+    .hero p { font-size: 1.2rem; margin-bottom: 2rem; max-width: 700px; margin: 0 auto; line-height: 1.6; }
 
     /* TARJETAS FLOTANTES (opciones principales) */
     .cards-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 1rem;
-      margin-top: 2rem;
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-top: 2rem;
     }
     .floating-card {
-      background-color: rgba(255, 255, 255, 0.9);
-      backdrop-filter: blur(4px);
-      border-radius: 8px;
-      padding: 1rem;
-      width: 220px;
-      text-align: center;
-      color: #333;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      transition: transform 0.3s;
-      cursor: pointer;
+      background-color: rgba(255,255,255,0.9); backdrop-filter: blur(4px); border-radius: 8px;
+      padding: 1rem; width: 220px; text-align: center; color: #333;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2); transition: transform 0.3s; cursor: pointer;
     }
-    .floating-card:hover {
-      transform: translateY(-5px);
-    }
-    .floating-card h3 {
-      font-size: 1rem;
-      margin-bottom: 0.5rem;
-      color: #2c3e50;
-    }
-    .floating-card p {
-      font-size: 0.85rem;
-      color: #555;
-    }
+    .floating-card:hover { transform: translateY(-5px); }
+    .floating-card h3 { font-size: 1rem; margin-bottom: 0.5rem; color: #2c3e50; }
+    .floating-card p { font-size: 0.85rem; color: #555; }
 
     /* SECCIONES DE BÚSQUEDA */
-    .search-partidos,
-    .search-canchas,
-    .search-players {
-      display: none;
-      max-width: 1200px;
-      margin: 2rem auto;
-      padding: 1.5rem 2rem;
-      background-color: #fff;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-      position: relative;
+    .search-partidos, .search-canchas, .search-players {
+      display: none; max-width: 1200px; margin: 2rem auto; padding: 1.5rem 2rem;
+      background-color: #fff; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); position: relative;
     }
-    .search-partidos h2,
-    .search-canchas h2,
-    .search-players h2 {
-      font-size: 1.8rem;
-      margin-bottom: 1rem;
-      color: #2c3e50;
-      text-align: center;
+    .search-partidos h2, .search-canchas h2, .search-players h2 {
+      font-size: 1.8rem; margin-bottom: 1rem; color: #2c3e50; text-align: center;
     }
     .filter-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 1rem;
+      display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 1rem; margin-bottom: 1rem;
     }
     .filter-container input {
-      padding: 0.75rem;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      font-size: 1rem;
-      width: 250px;
+      padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; width: 250px;
     }
     .filter-container button {
-      padding: 0.75rem 1.5rem;
-      background-color: #ff9500;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
+      padding: 0.75rem 1.5rem; background-color: #ff9500; color: #fff; border: none;
+      border-radius: 8px; font-size: 1rem; cursor: pointer; transition: background-color 0.3s ease;
     }
-    .filter-container button:hover {
-      background-color: #e07e00;
-    }
-    .close-btn,
-    .close-btn-partidos,
-    .close-btn-players {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: none;
-      border: none;
-      font-size: 1.2rem;
-      color: #999;
-      cursor: pointer;
+    .filter-container button:hover { background-color: #e07e00; }
+    .close-btn, .close-btn-partidos, .close-btn-players {
+      position: absolute; top: 10px; right: 10px; background: none; border: none; font-size: 1.2rem; color: #999; cursor: pointer;
     }
     /* Resultados en grid */
-    #partidosResults,
-    .results-container,
-    #playersResults {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-      padding: 1rem;
+    #partidosResults, .results-container, #playersResults {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; padding: 1rem;
     }
     /* Tarjetas para partidos, canchas y jugadores */
-    .partido-card,
-    .card,
-    .player-card {
-      background: linear-gradient(to bottom, #fffdf8, #ffe5cc);
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      padding: 1.5rem;
-      transition: transform 0.3s ease;
+    .partido-card, .card, .player-card {
+      background: linear-gradient(to bottom, #fffdf8, #ffe5cc); border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1); padding: 1.5rem; transition: transform 0.3s ease;
     }
-    .partido-card:hover,
-    .card:hover,
-    .player-card:hover {
-      transform: scale(1.02);
+    .partido-card:hover, .card:hover, .player-card:hover { transform: scale(1.02); }
+    .partido-card h3, .card-header, .player-card h3 { font-size: 1.3rem; color: #2c3e50; margin-bottom: 0.75rem; }
+    .partido-card p, .card-content p, .player-card p { font-size: 0.95rem; color: #555; margin: 0.4rem 0; }
+    .card { overflow: hidden; }
+    .card-header { background: #007bff; color: #fff; padding: 10px 15px; font-size: 20px; }
+    .card-content { padding: 15px; color: #333; }
+    .map-container { width: 100%; height: 200px; border-top: 1px solid #ddd; }
+    .btn-view-partido, .btn-join, .btn-leave {
+      margin-top: 1rem; background-color: #3498db; color: #fff; border: none;
+      padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-size: 0.9rem;
     }
-    .partido-card h3,
-    .card-header,
-    .player-card h3 {
-      font-size: 1.3rem;
-      color: #2c3e50;
-      margin-bottom: 0.75rem;
-    }
-    .partido-card p,
-    .card-content p,
-    .player-card p {
-      font-size: 0.95rem;
-      color: #555;
-      margin: 0.4rem 0;
-    }
-    .card {
-      overflow: hidden;
-    }
-    .card-header {
-      background: #007bff;
-      color: #fff;
-      padding: 10px 15px;
-      font-size: 20px;
-    }
-    .card-content {
-      padding: 15px;
-      color: #333;
-    }
-    .map-container {
-      width: 100%;
-      height: 200px;
-      border-top: 1px solid #ddd;
-    }
-    .btn-view-partido,
-    .btn-join {
-      margin-top: 1rem;
-      background-color: #3498db;
-      color: #fff;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.9rem;
-    }
-    .btn-view-partido:hover,
-    .btn-join:hover {
-      background-color: #2980b9;
-    }
-    .loader {
-      border: 4px solid #f3f3f3;
-      border-top: 4px solid #007bff;
-      border-radius: 50%;
-      width: 30px;
-      height: 30px;
-      animation: spin 1s linear infinite;
-      margin: 20px auto;
-    }
-    @keyframes spin {
-      0% {
-        transform: rotate(0deg);
-      }
-      100% {
-        transform: rotate(360deg);
-      }
-    }
+    .btn-view-partido:hover, .btn-join:hover, .btn-leave:hover { background-color: #2980b9; }
+    .loader { border: 4px solid #f3f3f3; border-top: 4px solid #007bff; border-radius: 50%;
+      width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 20px auto; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
     /* MODAL ESTILOS y ANIMACIONES ADICIONALES */
     #matchModal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.5); justify-content: center; align-items: center; z-index: 1000;
     }
     #matchModal .modal-content {
       background: linear-gradient(to bottom right, #ffffff, #f0f9ff);
-      border-radius: 12px;
-      color: #333;
-      max-width: 550px;
-      width: 90%;
-      position: relative;
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-      padding: 20px;
-      animation: modalFade 0.4s ease-out;
+      border-radius: 12px; color: #333; max-width: 550px; width: 90%; position: relative;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2); padding: 20px; animation: modalFade 0.4s ease-out;
     }
     @keyframes modalFade {
-      from {
-        transform: translateY(-20px);
-        opacity: 0;
-      }
-      to {
-        transform: translateY(0);
-        opacity: 1;
-      }
+      from { transform: translateY(-20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
     }
     #matchModal .close-modal {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: none;
-      border: none;
-      font-size: 1.4rem;
-      cursor: pointer;
-      color: #999;
+      position: absolute; top: 10px; right: 10px; background: none; border: none;
+      font-size: 1.4rem; cursor: pointer; color: #999;
     }
-    #matchModal .close-modal:hover {
-      color: #555;
-    }
+    #matchModal .close-modal:hover { color: #555; }
 
     /* Lista de participantes con iconos e imágenes */
-    #modalContent ul {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-    }
-    #modalContent li {
-      margin-bottom: 10px;
-      display: flex;
-      align-items: center;
-    }
-    #modalContent li .fa-user-circle {
-      margin-right: 8px;
-      color: #3498db;
-      font-size: 1.2rem;
-    }
+    #modalContent ul { list-style: none; margin: 0; padding: 0; }
+    #modalContent li { margin-bottom: 10px; display: flex; align-items: center; }
     #modalContent li img {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      margin-right: 10px;
-      object-fit: cover;
-      border: 2px solid #ddd;
+      width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;
+      object-fit: cover; border: 2px solid #ddd;
     }
-    #modalContent h2 {
-      margin-bottom: 12px;
-      font-size: 1.8rem;
-      color: #2980b9;
-      text-align: center;
-    }
-    #modalContent p {
-      margin-bottom: 10px;
-      font-size: 1rem;
-      color: #555;
-    }
-    #modalContent h3 {
-      margin-top: 14px;
-      font-size: 1.2rem;
-      color: #2c3e50;
-      margin-bottom: 8px;
-    }
+    #modalContent h2 { margin-bottom: 12px; font-size: 1.8rem; color: #2980b9; text-align: center; }
+    #modalContent p { margin-bottom: 10px; font-size: 1rem; color: #555; }
+    #modalContent h3 { margin-top: 14px; font-size: 1.2rem; color: #2c3e50; margin-bottom: 8px; }
     .participants-list-container {
-      background: #fafafa;
-      border-radius: 8px;
-      padding: 10px;
-      margin-bottom: 10px;
-      border: 1px solid #eee;
+      background: #fafafa; border-radius: 8px; padding: 10px; margin-bottom: 10px; border: 1px solid #eee;
     }
-    .missing-players {
-      font-weight: 600;
-      color: #e74c3c;
-    }
+    .missing-players { font-weight: 600; color: #e74c3c; text-align: center; }
   </style>
 </head>
 <body>
@@ -383,9 +142,7 @@
     <div class="menu-container">
       <a href="perfil.html" class="menu-item" id="profileLink">Crear Perfil</a>
       <a href="#" class="menu-item" id="partidosButton">Partidos</a>
-      <a href="#" class="menu-item" id="canchasButton" ondblclick="window.location.href='establecimiento.html'">
-        Canchas
-      </a>
+      <a href="#" class="menu-item" id="canchasButton" ondblclick="window.location.href='establecimiento.html'">Canchas</a>
       <a href="#" class="menu-item" id="pistasButton" ondblclick="window.location.href='pistas.html'">Pistas</a>
       <a href="#" class="menu-item" id="jugadoresButton" onclick="showPlayersSection()">Conoce Jugadores</a>
       <a href="#" class="menu-item logout" id="logoutButton" onclick="logout()">Cerrar Sesión</a>
@@ -447,26 +204,11 @@
     <button class="close-btn-players" onclick="closePlayersSection()">X</button>
     <h2>Buscar Jugadores</h2>
     <div class="filter-container">
-      <input
-        type="text"
-        id="filterPlayersName"
-        placeholder="Nombre y Apellido"
-        list="namesListPlayers"
-      />
+      <input type="text" id="filterPlayersName" placeholder="Nombre y Apellido" list="namesListPlayers" />
       <datalist id="namesListPlayers"></datalist>
-      <input
-        type="text"
-        id="filterPlayersGameLevel"
-        placeholder="Nivel de juego"
-        list="gameLevelListPlayers"
-      />
+      <input type="text" id="filterPlayersGameLevel" placeholder="Nivel de juego" list="gameLevelListPlayers" />
       <datalist id="gameLevelListPlayers"></datalist>
-      <input
-        type="text"
-        id="filterPlayersLocality"
-        placeholder="Localidad"
-        list="localityListPlayers"
-      />
+      <input type="text" id="filterPlayersLocality" placeholder="Localidad" list="localityListPlayers" />
       <datalist id="localityListPlayers"></datalist>
       <button id="btn-filter-players">Buscar Jugadores</button>
     </div>
@@ -483,7 +225,7 @@
   </div>
 
   <!-- FOOTER -->
-  <footer style="text-align: center; padding: 1rem 0; background: #fff; margin-top: 2rem">
+  <footer style="text-align:center; padding:1rem 0; background:#fff; margin-top:2rem;">
     © 2025 Catch Up Padel. Todos los derechos reservados.
   </footer>
 
@@ -491,8 +233,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <script>
     const SUPABASE_URL = "https://idlvxinjfbsujpvxncbr.supabase.co";
-    const SUPABASE_ANON_KEY =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig";
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     let loggedUser = null;
@@ -506,9 +247,7 @@
     // Verificar si el usuario tiene registro en profiles (usando "id")
     async function checkProfile() {
       const profileLink = document.getElementById("profileLink");
-      const {
-        data: { session },
-      } = await supabaseClient.auth.getSession();
+      const { data: { session } } = await supabaseClient.auth.getSession();
       if (session && session.user) {
         const userId = session.user.id;
         const { data: profileData, error } = await supabaseClient
@@ -517,12 +256,12 @@
           .eq("id", userId);
 
         if (!error && profileData && profileData.length > 0) {
-          // Usuario registrado: se actualiza el texto y se ocultan "Canchas" y "Pistas"
+          // Usuario registrado: actualizar el texto y ocultar "Canchas" y "Pistas"
           profileLink.textContent = "Modificar Perfil";
           document.getElementById("canchasButton").style.display = "none";
           document.getElementById("pistasButton").style.display = "none";
         } else {
-          // Usuario sin registro: se ocultan "Partidos" y "Conoce Jugadores"
+          // Usuario sin registro: ocultar "Partidos" y "Conoce Jugadores"
           profileLink.style.display = "none";
           document.getElementById("partidosButton").style.display = "none";
           document.getElementById("jugadoresButton").style.display = "none";
@@ -537,69 +276,59 @@
       const { data, error } = await supabaseClient
         .from("establishments")
         .select("*");
-      if (error) {
-        console.error("Error cargando establecimientos: ", error.message);
-        return;
-      }
+      if (error) { console.error("Error cargando establecimientos: ", error.message); return; }
       allEstablishments = data;
       const namesSet = new Set();
       const localitiesSet = new Set();
-      data.forEach((item) => {
-        if (item.name) namesSet.add(item.name);
-        if (item.locality) localitiesSet.add(item.locality);
+      data.forEach(item => {
+        if(item.name) namesSet.add(item.name);
+        if(item.locality) localitiesSet.add(item.locality);
       });
       const namesList = document.getElementById("namesList");
       namesList.innerHTML = "";
-      namesSet.forEach((name) => {
+      namesSet.forEach(name => {
         const option = document.createElement("option");
         option.value = name;
         namesList.appendChild(option);
       });
       const localityList = document.getElementById("localityList");
       localityList.innerHTML = "";
-      localitiesSet.forEach((loc) => {
+      localitiesSet.forEach(loc => {
         const option = document.createElement("option");
         option.value = loc;
         localityList.appendChild(option);
       });
     }
 
-    // Precarga de sugerencias para jugadores (nombre, nivel de juego y localidad)
+    // Precarga de sugerencias para jugadores (nombre, nivel de juego, localidad)
     async function preloadPlayersData() {
       const { data, error } = await supabaseClient.from("profiles").select("*");
-      if (error) {
-        console.error("Error cargando jugadores: ", error.message);
-        return;
-      }
+      if (error) { console.error("Error cargando jugadores: ", error.message); return; }
       const namesSet = new Set();
       const gameLevelsSet = new Set();
       const localitiesSet = new Set();
-      data.forEach((player) => {
-        if (player.full_name) namesSet.add(player.full_name);
-        if (player.game_level) gameLevelsSet.add(player.game_level);
-        if (player.locality) localitiesSet.add(player.locality);
+      data.forEach(player => {
+        if(player.full_name) namesSet.add(player.full_name);
+        if(player.game_level) gameLevelsSet.add(player.game_level);
+        if(player.locality) localitiesSet.add(player.locality);
       });
       const namesListPlayers = document.getElementById("namesListPlayers");
       namesListPlayers.innerHTML = "";
-      namesSet.forEach((name) => {
+      namesSet.forEach(name => {
         const option = document.createElement("option");
         option.value = name;
         namesListPlayers.appendChild(option);
       });
-      const gameLevelListPlayers = document.getElementById(
-        "gameLevelListPlayers"
-      );
+      const gameLevelListPlayers = document.getElementById("gameLevelListPlayers");
       gameLevelListPlayers.innerHTML = "";
-      gameLevelsSet.forEach((level) => {
+      gameLevelsSet.forEach(level => {
         const option = document.createElement("option");
         option.value = level;
         gameLevelListPlayers.appendChild(option);
       });
-      const localityListPlayers = document.getElementById(
-        "localityListPlayers"
-      );
+      const localityListPlayers = document.getElementById("localityListPlayers");
       localityListPlayers.innerHTML = "";
-      localitiesSet.forEach((loc) => {
+      localitiesSet.forEach(loc => {
         const option = document.createElement("option");
         option.value = loc;
         localityListPlayers.appendChild(option);
@@ -625,31 +354,25 @@
       document.getElementById("filterLocality").value = "";
       document.getElementById("partidosResults").innerHTML = "";
     }
-    document
-      .getElementById("btn-filter-partidos")
-      .addEventListener("click", () => {
-        const filterLocality = document
-          .getElementById("filterLocality")
-          .value.trim();
-        loadOpenPartidos(filterLocality);
-      });
+    document.getElementById("btn-filter-partidos").addEventListener("click", () => {
+      const filterLocality = document.getElementById("filterLocality").value.trim();
+      loadOpenPartidos(filterLocality);
+    });
     async function loadOpenPartidos(localityFilter = "") {
       const partidosResults = document.getElementById("partidosResults");
       partidosResults.innerHTML = "";
       const todayISO = new Date().toISOString().slice(0, 10);
-
+      
       let query = supabaseClient
         .from("partidos")
-        .select(
-          `
+        .select(`
           *,
           participants:participants!participants_match_id_fkey(user_id),
           establishments!inner(name, locality)
-        `
-        )
+        `)
         .gte("match_date", todayISO)
         .neq("completitud", "Completo");
-
+      
       if (localityFilter) {
         query = query.ilike("establishments.locality", `%${localityFilter}%`);
       }
@@ -663,21 +386,17 @@
         partidosResults.innerHTML = "<p>No se encontraron partidos abiertos.</p>";
         return;
       }
-
+      
       const matchesMap = {};
-      data.forEach((partido) => {
-        matchesMap[partido.id] = partido;
-      });
-      Object.values(matchesMap).forEach((partido) => {
-        const joinedCount = partido.participants
-          ? partido.participants.length
-          : 0;
+      data.forEach(partido => { matchesMap[partido.id] = partido; });
+      Object.values(matchesMap).forEach(partido => {
+        const joinedCount = partido.participants ? partido.participants.length : 0;
         const totalPlayers = partido.total_players || 4;
         const missing = totalPlayers - joinedCount;
-
+        
         const card = document.createElement("div");
         card.className = "partido-card";
-
+        
         card.innerHTML = `
           <h3>${partido.match_name}</h3>
           <div class="icon-text">
@@ -693,20 +412,18 @@
           <div class="divider"></div>
           <div class="icon-text">
             <i class="fas fa-table-tennis-paddle-ball"></i>
-            <p><span class="highlight">Nivel:</span> ${
-              partido.match_level
-            }</p>
+            <p><span class="highlight">Nivel:</span> ${partido.match_level}</p>
           </div>
           <p class="highlight">Faltan ${missing} jugadores de ${totalPlayers}</p>
           <button class="btn-view-partido">Ver el Partido</button>
         `;
-
-        // Agregar listener para mostrar modal con detalles y lista de jugadores
+        
+        // Listener para mostrar el modal con detalles y lista de jugadores
         const viewButton = card.querySelector(".btn-view-partido");
         viewButton.addEventListener("click", () => {
           showModal(partido);
         });
-
+        
         partidosResults.appendChild(card);
       });
     }
@@ -715,18 +432,18 @@
     async function showModal(partido) {
       const modal = document.getElementById("matchModal");
       const modalContent = document.getElementById("modalContent");
-
+      
       // Calcular cantidad de participantes y faltantes
       const joinedCount = partido.participants ? partido.participants.length : 0;
       const totalPlayers = partido.total_players || 4;
       const missing = totalPlayers - joinedCount;
-
+      
       // Obtener IDs de los participantes
       let participantIds = [];
       if (partido.participants) {
-        participantIds = partido.participants.map((p) => p.user_id);
+        participantIds = partido.participants.map(p => p.user_id);
       }
-
+      
       // Consulta para obtener detalles (nombre, foto) de los participantes
       let participantDetails = [];
       if (participantIds.length > 0) {
@@ -734,23 +451,16 @@
           .from("profiles")
           .select("full_name, profile_pic, id")
           .in("id", participantIds);
-        if (!error && players) {
-          participantDetails = players;
-        }
+        if (!error && players) { participantDetails = players; }
       }
-
+      
       // Construir la lista HTML de participantes
       let participantListHTML = `<div class="participants-list-container"><ul>`;
       if (participantDetails.length > 0) {
-        participantDetails.forEach((player) => {
+        participantDetails.forEach(player => {
           participantListHTML += `
             <li>
-              <img
-                src="${
-                  player.profile_pic || "https://via.placeholder.com/40"
-                }"
-                alt="Foto de ${player.full_name}"
-              />
+              <img src="${player.profile_pic || "https://via.placeholder.com/40"}" alt="Foto de ${player.full_name}" />
               <span>${player.full_name}</span>
             </li>
           `;
@@ -759,8 +469,8 @@
         participantListHTML += "<li>No hay jugadores apuntados.</li>";
       }
       participantListHTML += "</ul></div>";
-
-      // Armar el contenido del modal
+      
+      // Armar el contenido principal del modal
       modalContent.innerHTML = `
         <h2>${partido.match_name}</h2>
         <p><strong>Fecha:</strong> ${partido.match_date}</p>
@@ -772,33 +482,46 @@
         ${participantListHTML}
         <p class="missing-players">Faltan ${missing} jugadores de ${totalPlayers} totales</p>
       `;
-
+      
       // Determinar si el usuario ya forma parte del partido
       let isParticipant = false;
       if (partido.participants && loggedUser) {
-        isParticipant = partido.participants.some(
-          (p) => p.user_id === loggedUser.id
-        );
+        isParticipant = partido.participants.some(p => p.user_id === loggedUser.id);
       }
-
-      // Si el usuario no está apuntado, agregar el botón "Unirse"
+      
+      // Si el usuario no está apuntado, mostrar botón "Unirse"
+      // Si ya está apuntado, ofrecer opción de "Darse de baja"
       if (!isParticipant && loggedUser) {
         const joinButton = document.createElement("button");
         joinButton.className = "btn-join";
         joinButton.textContent = "Unirse";
-        joinButton.id = "joinButton";
         joinButton.addEventListener("click", async () => {
           await joinMatch(partido.id);
-          // Luego de unirse, recarga los partidos o refresca el modal
+          // Refrescar el modal tras unirse
           showModal(partido);
         });
         modalContent.appendChild(joinButton);
-      } else if (loggedUser) {
-        const joinedMsg = document.createElement("p");
-        joinedMsg.textContent = "Ya estás apuntado a este partido.";
-        modalContent.appendChild(joinedMsg);
+      } else if (isParticipant && loggedUser) {
+        // Mostrar mensaje y botón de darse de baja
+        const participantInfo = document.createElement("p");
+        participantInfo.textContent = "Ya estás apuntado a este partido.";
+        modalContent.appendChild(participantInfo);
+        
+        const leaveButton = document.createElement("button");
+        leaveButton.className = "btn-leave";
+        leaveButton.textContent = "Darse de baja";
+        leaveButton.addEventListener("click", async () => {
+          // Confirmación para dejar el partido
+          const confirmLeave = confirm("¿Estás seguro de que deseas darte de baja de este partido?");
+          if (confirmLeave) {
+            await leaveMatch(partido.id);
+            // Refrescar el modal tras darse de baja
+            showModal(partido);
+          }
+        });
+        modalContent.appendChild(leaveButton);
       }
-
+      
       modal.style.display = "flex";
     }
 
@@ -811,11 +534,23 @@
       const { data, error } = await supabaseClient
         .from("participants")
         .insert([{ match_id: matchId, user_id: loggedUser.id }]);
-
       if (error) {
         alert("Error al unirse: " + error.message);
       } else {
         alert("Te has unido al partido");
+      }
+    }
+    
+    // Función para darse de baja de un partido (borrar el registro de "participants")
+    async function leaveMatch(matchId) {
+      const { data, error } = await supabaseClient
+        .from("participants")
+        .delete()
+        .match({ match_id: matchId, user_id: loggedUser.id });
+      if (error) {
+        alert("Error al darse de baja: " + error.message);
+      } else {
+        alert("Has cancelado tu participación en el partido");
       }
     }
 
@@ -835,33 +570,27 @@
       document.getElementById("canchasResults").innerHTML = "";
       document.getElementById("canchasFeedback").innerHTML = "";
     }
-    document
-      .getElementById("btn-filter-canchas")
-      .addEventListener("click", () => {
-        const nameFilter = document
-          .getElementById("filterCanchasName")
-          .value.trim();
-        const localityFilter = document
-          .getElementById("filterCanchasLocality")
-          .value.trim();
-        loadCanchas(nameFilter, localityFilter);
-      });
+    document.getElementById("btn-filter-canchas").addEventListener("click", () => {
+      const nameFilter = document.getElementById("filterCanchasName").value.trim();
+      const localityFilter = document.getElementById("filterCanchasLocality").value.trim();
+      loadCanchas(nameFilter, localityFilter);
+    });
     async function loadCanchas(nameFilter = "", localityFilter = "") {
       const canchasResults = document.getElementById("canchasResults");
       const canchasFeedback = document.getElementById("canchasFeedback");
       canchasResults.innerHTML = "";
       canchasFeedback.innerHTML = "";
       showCanchasLoader();
-
+      
       let query = supabaseClient.from("establishments").select("*");
-
+      
       if (nameFilter) {
         query = query.ilike("name", `%${nameFilter}%`);
       }
       if (localityFilter) {
         query = query.ilike("locality", `%${localityFilter}%`);
       }
-
+      
       const { data, error } = await query;
       clearCanchasLoader();
       if (error) {
@@ -869,20 +598,19 @@
         return;
       }
       if (!data || data.length === 0) {
-        canchasResults.innerHTML =
-          '<p style="text-align:center; width:100%;">No se encontraron canchas para los criterios ingresados.</p>';
+        canchasResults.innerHTML = '<p style="text-align:center; width:100%;">No se encontraron canchas para los criterios ingresados.</p>';
         return;
       }
-
-      data.forEach((c) => {
+      
+      data.forEach(c => {
         const card = document.createElement("div");
         card.className = "card";
-
+        
         const header = document.createElement("div");
         header.className = "card-header";
         header.textContent = c.name;
         card.appendChild(header);
-
+        
         const content = document.createElement("div");
         content.className = "card-content";
         content.innerHTML = `
@@ -891,19 +619,18 @@
           <p><strong>Cantidad de Canchas:</strong> ${c.court_count}</p>
         `;
         card.appendChild(content);
-
+        
         const mapContainer = document.createElement("div");
         mapContainer.className = "map-container";
         const mapURL = `https://maps.google.com/maps?q=${c.latitude},${c.longitude}&hl=es;&z=14&output=embed`;
         mapContainer.innerHTML = `<iframe src="${mapURL}" width="100%" height="100%" frameborder="0" style="border:0" allowfullscreen></iframe>`;
         card.appendChild(mapContainer);
-
+        
         canchasResults.appendChild(card);
       });
     }
     function showCanchasLoader() {
-      document.getElementById("canchasFeedback").innerHTML =
-        '<div class="loader"></div>';
+      document.getElementById("canchasFeedback").innerHTML = '<div class="loader"></div>';
     }
     function clearCanchasLoader() {
       document.getElementById("canchasFeedback").innerHTML = "";
@@ -927,32 +654,20 @@
       document.getElementById("playersResults").innerHTML = "";
       document.getElementById("playersFeedback").innerHTML = "";
     }
-    document
-      .getElementById("btn-filter-players")
-      .addEventListener("click", () => {
-        const nameFilter = document
-          .getElementById("filterPlayersName")
-          .value.trim();
-        const gameLevelFilter = document
-          .getElementById("filterPlayersGameLevel")
-          .value.trim();
-        const localityFilter = document
-          .getElementById("filterPlayersLocality")
-          .value.trim();
-        loadPlayers(nameFilter, gameLevelFilter, localityFilter);
-      });
-    async function loadPlayers(
-      nameFilter = "",
-      gameLevelFilter = "",
-      localityFilter = ""
-    ) {
+    document.getElementById("btn-filter-players").addEventListener("click", () => {
+      const nameFilter = document.getElementById("filterPlayersName").value.trim();
+      const gameLevelFilter = document.getElementById("filterPlayersGameLevel").value.trim();
+      const localityFilter = document.getElementById("filterPlayersLocality").value.trim();
+      loadPlayers(nameFilter, gameLevelFilter, localityFilter);
+    });
+    async function loadPlayers(nameFilter = "", gameLevelFilter = "", localityFilter = "") {
       const playersResults = document.getElementById("playersResults");
       const playersFeedback = document.getElementById("playersFeedback");
       playersResults.innerHTML = "";
       playersFeedback.innerHTML = "";
-
+      
       let query = supabaseClient.from("profiles").select("*");
-
+      
       if (nameFilter) {
         query = query.ilike("full_name", `%${nameFilter}%`);
       }
@@ -962,37 +677,28 @@
       if (localityFilter) {
         query = query.ilike("locality", `%${localityFilter}%`);
       }
-
+      
       const { data, error } = await query;
       if (error) {
         playersFeedback.innerHTML = `<p style="color:red;">Error: ${error.message}</p>`;
         return;
       }
       if (!data || data.length === 0) {
-        playersResults.innerHTML =
-          '<p style="text-align:center; width:100%;">No se encontraron jugadores.</p>';
+        playersResults.innerHTML = '<p style="text-align:center; width:100%;">No se encontraron jugadores.</p>';
         return;
       }
-
-      data.forEach((player) => {
+      
+      data.forEach(player => {
         const card = document.createElement("div");
         card.className = "player-card";
         card.innerHTML = `
           <div style="display:flex; align-items:center; gap:1rem;">
-            <img
-              src="${
-                player.profile_pic || "https://via.placeholder.com/100"
-              }"
-              alt="Foto de perfil"
-              style="width:100px; height:100px; border-radius:50%; object-fit: cover;"
-            />
+            <img src="${player.profile_pic || "https://via.placeholder.com/100"}" alt="Foto de perfil" style="width:100px; height:100px; border-radius:50%; object-fit: cover;" />
             <div>
               <h3>${player.full_name}</h3>
               <p><strong>Edad:</strong> ${player.age || "N/D"}</p>
               <p><strong>Sexo:</strong> ${player.gender || "N/D"}</p>
-              <p><strong>Nivel de juego:</strong> ${
-                player.game_level || "N/D"
-              }</p>
+              <p><strong>Nivel de juego:</strong> ${player.game_level || "N/D"}</p>
               <p><strong>Localidad:</strong> ${player.locality || "N/D"}</p>
               <p><strong>Teléfono:</strong> ${player.phone || "N/D"}</p>
             </div>
@@ -1001,16 +707,13 @@
         playersResults.appendChild(card);
       });
     }
-
+    
     document.addEventListener("DOMContentLoaded", async () => {
       await checkProfile();
       await preloadEstablishments();
       await preloadPlayersData();
       // Si el usuario está registrado (por lo tanto se muestran Partidos) se carga la sección de Partidos Abiertos
-      if (
-        loggedUser &&
-        document.getElementById("partidosButton").style.display !== "none"
-      ) {
+      if (loggedUser && document.getElementById("partidosButton").style.display !== "none") {
         document.getElementById("searchPartidosSection").style.display = "block";
         loadOpenPartidos();
       }
