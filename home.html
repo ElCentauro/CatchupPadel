@@ -12,7 +12,7 @@
     /* RESET Y ESTILOS GLOBALES */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Poppins', sans-serif; background-color: #f8f8f8; color: #333; }
-    
+
     /* MENÚ DE NAVEGACIÓN */
     nav {
       width: 100%; background-color: #fff; padding: 1rem 2rem;
@@ -29,17 +29,17 @@
     .menu-item:hover { background-color: #ff9500; color: #fff; }
     .menu-item.logout { border-color: #e74c3c; color: #e74c3c; }
     .menu-item.logout:hover { background-color: #e74c3c; color: #fff; }
-    
+
     /* SECCIÓN HERO */
     .hero {
       position: relative; padding: 3rem 1rem; text-align: center;
       background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)),
-              url("https://images.unsplash.com/photo-1593341646581-529f6c49c5d1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80");
+      url("https://images.unsplash.com/photo-1593341646581-529f6c49c5d1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80");
       background-size: cover; background-position: center; color: #fff; min-height: 60vh;
     }
     .hero h1 { font-size: 3rem; font-weight: 700; margin-bottom: 1rem; color: #fff; }
     .hero p { font-size: 1.2rem; margin-bottom: 2rem; max-width: 700px; margin: 0 auto; line-height: 1.6; }
-    
+
     /* TARJETAS FLOTANTES */
     .cards-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-top: 2rem; }
     .floating-card {
@@ -50,6 +50,16 @@
     .floating-card:hover { transform: translateY(-5px); }
     .floating-card h3 { font-size: 1rem; margin-bottom: 0.5rem; color: #2c3e50; }
     .floating-card p { font-size: 0.85rem; color: #555; }
+
+    /* Animación de titileo para el título de los partidos abiertos */
+    @keyframes flashGreen {
+      0% { color: #2ecc71; }
+      50% { color: #a2d9ce; }
+      100% { color: #2ecc71; }
+    }
+    .blinking-title {
+      animation: flashGreen 1s infinite;
+    }
     
     /* SECCIONES DE BÚSQUEDA */
     .search-partidos, .search-canchas, .search-players {
@@ -101,9 +111,7 @@
       font-size: 0.95rem; color: #555; margin: 0.4rem 0;
     }
     .card { overflow: hidden; }
-    .card-header {
-      background: #007bff; color: #fff; padding: 10px 15px; font-size: 20px;
-    }
+    .card-header { background: #007bff; color: #fff; padding: 10px 15px; font-size: 20px; }
     .card-content { padding: 15px; color: #333; }
     .map-container { width: 100%; height: 200px; border-top: 1px solid #ddd; }
     .btn-view-partido, .btn-join, .btn-leave {
@@ -257,7 +265,9 @@
   <!-- MODAL PARA DETALLES DEL PARTIDO -->
   <div id="matchModal">
     <div class="modal-content">
-      <button class="close-modal" onclick="closeModal()"><i class="fas fa-times"></i></button>
+      <button class="close-modal" onclick="closeModal()">
+        <i class="fas fa-times"></i>
+      </button>
       <!-- Botón para refrescar el modal -->
       <button class="btn-refresh" onclick="refreshModal()">Refrescar</button>
       <div id="modalContent"></div>
@@ -389,12 +399,11 @@
       const partidosResults = document.getElementById("partidosResults");
       partidosResults.innerHTML = "";
       const todayISO = new Date().toISOString().slice(0, 10);
-      let query = supabaseClient.from("partidos").select("*, establishments(name, locality), participants(user_id, cancelled, leave_reason)")
+      let query = supabaseClient.from("partidos")
+        .select("*, establishments(name, locality), participants(user_id, cancelled, leave_reason)")
         .gte("match_date", todayISO)
         .neq("completitud", "Completo");
-      if (localityFilter) {
-        query = query.ilike("establishments.locality", `%${localityFilter}%`);
-      }
+      if (localityFilter) { query = query.ilike("establishments.locality", `%${localityFilter}%`); }
       const { data, error } = await query;
       if (error) {
         console.error("Error buscando partidos abiertos:", error.message);
@@ -407,42 +416,41 @@
       }
       const matchesMap = {};
       data.forEach(partido => { matchesMap[partido.id] = partido; });
-      // Para cada partido, mostrar la tarjeta
+      
+      // Para cada partido, se construye la tarjeta y se añaden las miniaturas de los participantes activos.
       for (let partido of Object.values(matchesMap)) {
-        // Filtrar participantes activos
         const activeParticipants = partido.participants ? partido.participants.filter(p => !p.cancelled) : [];
         const joinedCount = activeParticipants.length;
         const totalPlayers = partido.total_players || 4;
         const missing = totalPlayers - joinedCount;
     
-        // Construir miniaturas de participantes activos (fotos)
+        // Construir miniaturas de participantes activos
         let avatarsHTML = "";
         if (activeParticipants.length > 0) {
-          // Extraer user_ids activos
           const userIds = activeParticipants.map(p => p.user_id);
-          // Consultar fotos
           const { data: userProfiles } = await supabaseClient
             .from("profiles")
             .select("id, profile_pic")
             .in("id", userIds);
           if (userProfiles && userProfiles.length > 0) {
-            const maxShow = 4;
-            const profilesToShow = userProfiles.slice(0, maxShow);
-            profilesToShow.forEach(profile => {
+            const maxToShow = 4;
+            const partialProfiles = userProfiles.slice(0, maxToShow);
+            partialProfiles.forEach(profile => {
               const pic = profile.profile_pic || "https://via.placeholder.com/32";
               avatarsHTML += `<img src="${pic}" alt="Foto" />`;
             });
-            if (userProfiles.length > maxShow) {
-              const extra = userProfiles.length - maxShow;
-              avatarsHTML += `<span style="font-size:0.85rem; color:#666;">+${extra} más</span>`;
+            if (userProfiles.length > maxToShow) {
+              const extraCount = userProfiles.length - maxToShow;
+              avatarsHTML += `<span style="font-size:0.85rem; color:#666;">+${extraCount} más</span>`;
             }
           }
         }
     
+        // La modificación: el título ahora lleva la clase "blinking-title" para animar su color.
         const card = document.createElement("div");
         card.className = "partido-card";
         card.innerHTML = `
-          <h3>${partido.match_name}</h3>
+          <h3 class="blinking-title">${partido.match_name}</h3>
           <div class="icon-text">
             <i class="fas fa-calendar-alt"></i>
             <p class="highlight">${partido.match_date}</p>
@@ -468,7 +476,7 @@
       }
     }
     
-    // Función para refrescar el partido (y sus relaciones) desde Supabase
+    // Función para refrescar la información del partido
     async function refreshMatch(matchId) {
       const { data, error } = await supabaseClient
         .from("partidos")
@@ -494,29 +502,27 @@
       showModal(refreshed);
     }
     
-    // Pequeña función de espera
+    // Función de espera
     function wait(ms) {
       return new Promise(resolve => setTimeout(resolve, ms));
     }
     
-    // Función para mostrar el modal con los datos actualizados
+    // Función para mostrar el modal con información actualizada del partido
     async function showModal(partido) {
       await wait(300);
       const updatedPartido = await refreshMatch(partido.id);
       if (!updatedPartido) return;
-      
+    
       const modal = document.getElementById("matchModal");
       const modalContent = document.getElementById("modalContent");
-      // Guardar el id para refrescar
       modalContent.setAttribute("data-match-id", updatedPartido.id);
-      
-      // Calcular participantes activos (sin cancelación)
+    
       const activeParticipants = updatedPartido.participants ? updatedPartido.participants.filter(p => !p.cancelled) : [];
       const joinedCount = activeParticipants.length;
       const totalPlayers = updatedPartido.total_players || 4;
       const missing = totalPlayers - joinedCount;
-      
-      // Obtener detalles de participantes (todos)
+    
+      // Obtención de detalles de participantes (todos)
       let userIds = [];
       if (updatedPartido.participants) {
         userIds = updatedPartido.participants.map(p => p.user_id);
@@ -552,7 +558,7 @@
         participantListHTML += "<li>No hay jugadores apuntados.</li>";
       }
       participantListHTML += "</ul></div>";
-      
+    
       modalContent.innerHTML = `
         <h2>${updatedPartido.match_name}</h2>
         <p><strong>Fecha:</strong> ${updatedPartido.match_date}</p>
@@ -564,11 +570,11 @@
         ${participantListHTML}
         <p class="missing-players">Faltan ${missing} jugadores de ${totalPlayers} totales</p>
       `;
-      
-      // Determinar si el usuario ya está registrado en el partido
-      const userRecord = updatedPartido.participants && loggedUser ?
-        updatedPartido.participants.find(p => p.user_id === loggedUser.id) : null;
-      
+    
+      const userRecord = updatedPartido.participants && loggedUser
+        ? updatedPartido.participants.find(p => p.user_id === loggedUser.id)
+        : null;
+    
       if (!userRecord) {
         const joinButton = document.createElement("button");
         joinButton.className = "btn-join";
@@ -605,7 +611,7 @@
         info.textContent = "Ya te has dado de baja de este partido.";
         modalContent.appendChild(info);
       }
-      
+    
       modal.style.display = "flex";
     }
     
@@ -664,7 +670,6 @@
       canchasResults.innerHTML = "";
       canchasFeedback.innerHTML = "";
       showCanchasLoader();
-    
       let query = supabaseClient.from("establishments").select("*");
       if (nameFilter) { query = query.ilike("name", `%${nameFilter}%`); }
       if (localityFilter) { query = query.ilike("locality", `%${localityFilter}%`); }
@@ -695,11 +700,9 @@
         card.appendChild(content);
         const mapContainer = document.createElement("div");
         mapContainer.className = "map-container";
-        // CORRECCIÓN: eliminar el ; extra en hl=es; y usar hl=es&z=14&output=embed
         const mapURL = `https://maps.google.com/maps?q=${c.latitude},${c.longitude}&hl=es&z=14&output=embed`;
         mapContainer.innerHTML = `<iframe src="${mapURL}" width="100%" height="100%" frameborder="0" style="border:0" allowfullscreen></iframe>`;
         card.appendChild(mapContainer);
-    
         canchasResults.appendChild(card);
       });
     }
