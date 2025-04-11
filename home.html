@@ -134,12 +134,11 @@
   <nav>
     <div class="menu-container">
       <a href="perfil.html" class="menu-item" id="profileLink">Crear Perfil</a>
-      <a href="#" class="menu-item">Partidos</a>
-      <a href="#" class="menu-item" ondblclick="window.location.href='establecimiento.html'">Canchas</a>
-      <a href="#" class="menu-item" ondblclick="window.location.href='pistas.html'">Pistas</a>
-      <!-- Se utiliza onclick para usuarios -->
-      <a href="#" class="menu-item" onclick="showPlayersSection()">Conoce Jugadores</a>
-      <a href="#" class="menu-item logout" onclick="logout()">Cerrar Sesión</a>
+      <a href="#" class="menu-item" id="partidosButton">Partidos</a>
+      <a href="#" class="menu-item" id="canchasButton" ondblclick="window.location.href='establecimiento.html'">Canchas</a>
+      <a href="#" class="menu-item" id="pistasButton" ondblclick="window.location.href='pistas.html'">Pistas</a>
+      <a href="#" class="menu-item" id="jugadoresButton" onclick="showPlayersSection()">Conoce Jugadores</a>
+      <a href="#" class="menu-item logout" id="logoutButton" onclick="logout()">Cerrar Sesión</a>
     </div>
   </nav>
   
@@ -237,21 +236,29 @@
       const { data: { session } } = await supabaseClient.auth.getSession();
       if (session && session.user) {
         const userId = session.user.id;
+        // Consulta a la tabla profiles para verificar registro
         const { data: profileData, error } = await supabaseClient
-          .from('profiles')
-          .select('full_name')
-          .eq('id', userId)
-          .single();
-        let userName = session.user.email;
-        if (!error && profileData && profileData.full_name) {
-          userName = profileData.full_name;
-        }
-        loggedUser = { id: userId, name: userName };
-        const { data: pData } = await supabaseClient
           .from('profiles')
           .select('*')
           .eq('id', userId);
-        profileLink.textContent = (pData && pData.length > 0) ? 'Modificar Perfil' : 'Crear Perfil';
+  
+        if (!error && profileData && profileData.length > 0) {
+          // Si el usuario está registrado en profiles:
+          // Se actualiza el texto del botón y se ocultan "Canchas" y "Pistas"
+          profileLink.textContent = 'Modificar Perfil';
+          document.getElementById('canchasButton').style.display = 'none';
+          document.getElementById('pistasButton').style.display = 'none';
+        } else {
+          // Si el usuario no está registrado en profiles:
+          // Se ocultan los botones de "Partidos" y "Conoce Jugadores"
+          profileLink.style.display = 'none';
+          document.getElementById('partidosButton').style.display = 'none';
+          document.getElementById('jugadoresButton').style.display = 'none';
+          // El botón de "Cerrar Sesión" se mantiene visible en ambos casos
+        }
+  
+        // Guardamos el usuario logueado para otros procesos
+        loggedUser = { id: userId, email: session.user.email };
       }
     }
     
@@ -575,8 +582,8 @@
       await checkProfile();
       await preloadEstablishments();
       await preloadPlayersData();
-      // Por defecto, si hay usuario logueado, muestra la sección de Partidos Abiertos
-      if (loggedUser) {
+      // Si el usuario está logueado y tiene registro en profiles (se muestran Partidos), se carga la sección de Partidos Abiertos
+      if (loggedUser && document.getElementById('partidosButton').style.display !== 'none') {
         document.getElementById('searchPartidosSection').style.display = 'block';
         loadOpenPartidos();
       }
