@@ -109,23 +109,32 @@
     .card-header { background: #007BFF; color: #fff; padding: 10px 15px; font-size: 20px; }
     .card-content { padding: 15px; color: #333; }
     .map-container { width: 100%; height: 200px; border-top: 1px solid #ddd; }
-    .btn-view-partido {
+    .btn-view-partido, .btn-join {
       margin-top: 1rem; background-color: #3498db; color: #fff;
       border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-size: 0.9rem;
     }
-    .btn-view-partido:hover { background-color: #2980b9; }
+    .btn-view-partido:hover, .btn-join:hover { background-color: #2980b9; }
     .loader {
       border: 4px solid #f3f3f3; border-top: 4px solid #007BFF;
       border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite;
       margin: 20px auto;
     }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    /* Ajustes Responsivos */
-    @media (max-width: 768px) {
-      .floating-card { width: 180px; }
-      .partido-card, .card, .player-card { padding: 1rem; }
-      .partido-card h3 { font-size: 1.1rem; }
-      .partido-card p { font-size: 0.9rem; }
+    /* Modal Styles */
+    #matchModal {
+      display: none;
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      justify-content: center; align-items: center;
+      z-index: 1000;
+    }
+    #matchModal .modal-content {
+      background: #fff; padding: 20px; border-radius: 12px;
+      max-width: 500px; width: 90%; position: relative;
+    }
+    #matchModal .close-modal {
+      position: absolute; top: 10px; right: 10px;
+      background: none; border: none; font-size: 1.2rem; cursor: pointer;
     }
   </style>
 </head>
@@ -207,6 +216,14 @@
     </div>
     <div id="playersFeedback"></div>
     <div id="playersResults"></div>
+  </div>
+  
+  <!-- MODAL PARA VER DETALLES DEL PARTIDO -->
+  <div id="matchModal">
+    <div class="modal-content">
+      <button class="close-modal" onclick="closeModal()">X</button>
+      <div id="modalContent"></div>
+    </div>
   </div>
   
   <!-- FOOTER -->
@@ -404,8 +421,82 @@
           <p class="highlight">Faltan ${missing} jugadores de ${totalPlayers}</p>
           <button class="btn-view-partido">Ver el Partido</button>
         `;
+  
+        // Agregar el listener para abrir el modal con los detalles del partido
+        const viewButton = card.querySelector('.btn-view-partido');
+        viewButton.addEventListener('click', () => {
+          showModal(partido);
+        });
+  
         partidosResults.appendChild(card);
       });
+    }
+  
+    // Función para mostrar el modal con los detalles del partido
+    function showModal(partido) {
+      const modal = document.getElementById('matchModal');
+      const modalContent = document.getElementById('modalContent');
+  
+      // Determinar si el usuario logueado ya es participante
+      let isParticipant = false;
+      if (partido.participants && loggedUser) {
+        isParticipant = partido.participants.some(p => p.user_id === loggedUser.id);
+      }
+  
+      // Rellenar el contenido del modal con los datos del partido
+      modalContent.innerHTML = `
+        <h2>${partido.match_name}</h2>
+        <p><strong>Fecha:</strong> ${partido.match_date}</p>
+        <p><strong>Hora:</strong> ${partido.start_time} - ${partido.end_time}</p>
+        <p><strong>Cancha:</strong> ${partido.establishments?.name || ''}</p>
+        <p><strong>Localidad:</strong> ${partido.establishments?.locality || ''}</p>
+        <p><strong>Nivel:</strong> ${partido.match_level}</p>
+        <p><strong>Jugadores Apuntados:</strong> ${partido.participants ? partido.participants.length : 0}</p>
+      `;
+  
+      // Si el usuario aún NO es participante, se agrega un botón de "Unirse"
+      if (!isParticipant && loggedUser) {
+        const joinButton = document.createElement('button');
+        joinButton.className = 'btn-join';
+        joinButton.textContent = 'Unirse';
+        joinButton.id = 'joinButton';
+        joinButton.addEventListener('click', async () => {
+          await joinMatch(partido.id);
+        });
+        modalContent.appendChild(joinButton);
+      } else if (loggedUser) {
+        // Si ya es participante, mostrar un mensaje o inhabilitar el botón
+        const joinedMsg = document.createElement('p');
+        joinedMsg.textContent = 'Ya estás apuntado a este partido.';
+        modalContent.appendChild(joinedMsg);
+      }
+  
+      modal.style.display = 'flex';
+    }
+  
+    function closeModal() {
+      document.getElementById('matchModal').style.display = 'none';
+    }
+  
+    // Función para unirse a un partido (insertar en la tabla participants)
+    async function joinMatch(matchId) {
+      // Inserta un registro en la tabla "participants"
+      const { data, error } = await supabaseClient
+        .from('participants')
+        .insert([{ match_id: matchId, user_id: loggedUser.id }]);
+  
+      if (error) {
+        alert("Error al unirse: " + error.message);
+      } else {
+        alert("Te has unido al partido");
+        // Actualiza la vista del modal:
+        const joinButton = document.getElementById('joinButton');
+        if (joinButton) {
+          joinButton.style.display = 'none';
+        }
+        // Opcionalmente, puedes actualizar el conteo de participantes en el modal
+        // O recargar los partidos abiertos para reflejar el cambio
+      }
     }
   
     // SECCIÓN BUSCAR CANCHAS
