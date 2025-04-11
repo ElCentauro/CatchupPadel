@@ -11,14 +11,16 @@
   <style>
     /* RESET Y ESTILOS GLOBALES */
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: "Poppins", sans-serif; background-color: #f8f8f8; color: #333; }
-
+    body { font-family: 'Poppins', sans-serif; background-color: #f8f8f8; color: #333; }
+    
     /* MENÚ DE NAVEGACIÓN */
     nav {
       width: 100%; background-color: #fff; padding: 1rem 2rem;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
-    .menu-container { display: flex; justify-content: space-evenly; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    .menu-container {
+      display: flex; justify-content: space-evenly; align-items: center; flex-wrap: wrap; gap: 1rem;
+    }
     .menu-item {
       padding: 0.5rem 1rem; border: 2px solid #ff9500; border-radius: 8px; color: #ff9500;
       text-transform: uppercase; font-weight: 600; letter-spacing: 1px;
@@ -27,7 +29,7 @@
     .menu-item:hover { background-color: #ff9500; color: #fff; }
     .menu-item.logout { border-color: #e74c3c; color: #e74c3c; }
     .menu-item.logout:hover { background-color: #e74c3c; color: #fff; }
-
+    
     /* SECCIÓN HERO */
     .hero {
       position: relative; padding: 3rem 1rem; text-align: center;
@@ -37,7 +39,7 @@
     }
     .hero h1 { font-size: 3rem; font-weight: 700; margin-bottom: 1rem; color: #fff; }
     .hero p { font-size: 1.2rem; margin-bottom: 2rem; max-width: 700px; margin: 0 auto; line-height: 1.6; }
-
+    
     /* TARJETAS FLOTANTES */
     .cards-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-top: 2rem; }
     .floating-card {
@@ -48,7 +50,7 @@
     .floating-card:hover { transform: translateY(-5px); }
     .floating-card h3 { font-size: 1rem; margin-bottom: 0.5rem; color: #2c3e50; }
     .floating-card p { font-size: 0.85rem; color: #555; }
-
+    
     /* SECCIONES DE BÚSQUEDA */
     .search-partidos, .search-canchas, .search-players {
       display: none; max-width: 1200px; margin: 2rem auto; padding: 1.5rem 2rem;
@@ -244,10 +246,8 @@
   <!-- MODAL PARA DETALLES DEL PARTIDO -->
   <div id="matchModal">
     <div class="modal-content">
-      <button class="close-modal" onclick="closeModal()">
-        <i class="fas fa-times"></i>
-      </button>
-      <!-- Botón para refrescar manualmente el modal -->
+      <button class="close-modal" onclick="closeModal()"><i class="fas fa-times"></i></button>
+      <!-- Botón para refrescar el modal -->
       <button class="btn-refresh" onclick="refreshModal()">Refrescar</button>
       <div id="modalContent"></div>
     </div>
@@ -377,13 +377,7 @@
       const partidosResults = document.getElementById("partidosResults");
       partidosResults.innerHTML = "";
       const todayISO = new Date().toISOString().slice(0, 10);
-      let query = supabaseClient.from("partidos").select(`
-          *,
-          participants:participants!participants_match_id_fkey(user_id)(
-            user_id, cancelled, leave_reason
-          ),
-          establishments!inner(name, locality)
-        `)
+      let query = supabaseClient.from("partidos").select("*, establishments(name, locality), participants(user_id, cancelled, leave_reason)")
         .gte("match_date", todayISO)
         .neq("completitud", "Completo");
       if (localityFilter) { query = query.ilike("establishments.locality", `%${localityFilter}%`); }
@@ -416,8 +410,8 @@
             <i class="fas fa-clock"></i>
             <p>${partido.start_time} - ${partido.end_time}</p>
           </div>
-          <p>Cancha: ${partido.establishments?.name || ""}</p>
-          <p>Localidad: ${partido.establishments?.locality || ""}</p>
+          <p>Cancha: ${partido.establishments ? partido.establishments.name : ""}</p>
+          <p>Localidad: ${partido.establishments ? partido.establishments.locality : ""}</p>
           <div class="divider"></div>
           <div class="icon-text">
             <i class="fas fa-table-tennis-paddle-ball"></i>
@@ -432,17 +426,11 @@
       });
     }
     
-    // Función para refrescar el partido (asegurando traer los nuevos campos)
+    // Función para refrescar el partido con datos actualizados
     async function refreshMatch(matchId) {
       const { data, error } = await supabaseClient
         .from("partidos")
-        .select(`
-          *,
-          participants:participants!participants_match_id_fkey(user_id)(
-            user_id, cancelled, leave_reason
-          ),
-          establishments!inner(name, locality)
-        `)
+        .select("*, establishments(name, locality), participants(user_id, cancelled, leave_reason)")
         .eq("id", matchId)
         .single();
       if (error) {
@@ -464,31 +452,30 @@
       showModal(refreshed);
     }
     
-    // Función para esperar un poco (300ms) antes de refrescar para asegurarse de actualizar datos
-    async function wait(milliseconds) {
-      return new Promise(resolve => setTimeout(resolve, milliseconds));
+    // Espera breve para dar tiempo a que Supabase actualice
+    async function wait(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
     }
     
     // Función para mostrar el modal con datos actualizados
     async function showModal(partido) {
-      // Se espera brevemente para asegurar la actualización
-      await wait(300);
+      await wait(300);  // Esperamos 300ms antes de refrescar
       const updatedPartido = await refreshMatch(partido.id);
       if (!updatedPartido) return;
       
       const modal = document.getElementById("matchModal");
       const modalContent = document.getElementById("modalContent");
       
-      // Guardar el id del partido en el modal (para refrescar)
+      // Guardar el id del partido en el atributo data-match-id del modal
       modalContent.setAttribute("data-match-id", updatedPartido.id);
       
-      // Calcular la cantidad de participantes activos
+      // Calcular participantes activos (excluyendo los cancelados)
       const activeParticipants = updatedPartido.participants ? updatedPartido.participants.filter(p => !p.cancelled) : [];
       const joinedCount = activeParticipants.length;
       const totalPlayers = updatedPartido.total_players || 4;
       const missing = totalPlayers - joinedCount;
       
-      // Obtener detalles de participantes (todos, incluidos cancelados)
+      // Obtener detalles de participantes (todos)
       let participantIds = [];
       if (updatedPartido.participants) {
         participantIds = updatedPartido.participants.map(p => p.user_id);
@@ -502,14 +489,13 @@
         if (!error && players) { participantDetails = players; }
       }
       
-      // Construir la lista HTML de participantes
+      // Construir la lista HTML de participantes, tachando los cancelados y mostrando el motivo
       let participantListHTML = `<div class="participants-list-container"><ul>`;
       if (participantDetails.length > 0) {
         participantDetails.forEach(player => {
           const participantRecord = updatedPartido.participants.find(p => p.user_id === player.id);
           let styleName = "";
           let reasonText = "";
-          // Si el campo "cancelled" es truthy, se considera cancelado
           if (participantRecord && participantRecord.cancelled) {
             styleName = "cancelled";
             if (participantRecord.leave_reason) {
@@ -528,25 +514,24 @@
       }
       participantListHTML += "</ul></div>";
       
-      // Armar el contenido del modal
       modalContent.innerHTML = `
         <h2>${updatedPartido.match_name}</h2>
         <p><strong>Fecha:</strong> ${updatedPartido.match_date}</p>
         <p><strong>Hora:</strong> ${updatedPartido.start_time} - ${updatedPartido.end_time}</p>
-        <p><strong>Cancha:</strong> ${updatedPartido.establishments?.name || ""}</p>
-        <p><strong>Localidad:</strong> ${updatedPartido.establishments?.locality || ""}</p>
+        <p><strong>Cancha:</strong> ${updatedPartido.establishments ? updatedPartido.establishments.name : ""}</p>
+        <p><strong>Localidad:</strong> ${updatedPartido.establishments ? updatedPartido.establishments.locality : ""}</p>
         <p><strong>Nivel:</strong> ${updatedPartido.match_level}</p>
         <h3>Jugadores Apuntados:</h3>
         ${participantListHTML}
         <p class="missing-players">Faltan ${missing} jugadores de ${totalPlayers} totales</p>
       `;
       
-      // Buscar el registro del usuario en el partido (si existe)
+      // Determinar si el usuario ya está inscrito en el partido
       const userRecord = updatedPartido.participants && loggedUser ?
-        updatedPartido.participants.find(p => p.user_id === loggedUser.id) : null;
+            updatedPartido.participants.find(p => p.user_id === loggedUser.id) : null;
       
-      // Si el usuario no tiene registro, se muestra el botón "Unirse"
       if (!userRecord) {
+        // Si el usuario no está, mostramos el botón "Unirse"
         const joinButton = document.createElement("button");
         joinButton.className = "btn-join";
         joinButton.textContent = "Unirse";
@@ -557,11 +542,11 @@
         });
         modalContent.appendChild(joinButton);
       }
-      // Si el usuario está registrado y activo, se muestra el botón "Darse de baja"
       else if (userRecord && !userRecord.cancelled) {
-        const participantInfo = document.createElement("p");
-        participantInfo.textContent = "Ya estás apuntado a este partido.";
-        modalContent.appendChild(participantInfo);
+        // Si el usuario está inscrito y activo, mostramos el botón "Darse de baja"
+        const info = document.createElement("p");
+        info.textContent = "Ya estás apuntado a este partido.";
+        modalContent.appendChild(info);
         const leaveButton = document.createElement("button");
         leaveButton.className = "btn-leave";
         leaveButton.textContent = "Darse de baja";
@@ -575,8 +560,8 @@
         });
         modalContent.appendChild(leaveButton);
       }
-      // Si el usuario ya se dio de baja, se muestra un mensaje
       else if (userRecord && userRecord.cancelled) {
+        // Si ya se dio de baja, mostramos un mensaje sin botón
         const info = document.createElement("p");
         info.textContent = "Ya te has dado de baja de este partido.";
         modalContent.appendChild(info);
@@ -590,7 +575,6 @@
     }
     
     async function joinMatch(matchId) {
-      // Pequeña espera para asegurarnos de que la inserción se procese
       await new Promise(resolve => setTimeout(resolve, 300));
       const { data, error } = await supabaseClient
         .from("participants")
@@ -600,7 +584,6 @@
     }
     
     async function leaveMatch(matchId, explanation) {
-      // Espera breve para que la actualización se procese
       await new Promise(resolve => setTimeout(resolve, 300));
       const { data, error } = await supabaseClient
         .from("participants")
