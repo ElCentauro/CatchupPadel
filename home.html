@@ -53,7 +53,7 @@
     .floating-card h3 { font-size: 1rem; margin-bottom: 0.5rem; color: #2c3e50; }
     .floating-card p { font-size: 0.85rem; color: #555; }
 
-    /* SECCIÓN PARTIDOS ABIERTOS */
+    /* SECCIONES DE BÚSQUEDA */
     .search-partidos, .search-canchas, .search-players {
       display: none;
       max-width: 1200px;
@@ -137,7 +137,8 @@
       <a href="#" class="menu-item">Partidos</a>
       <a href="#" class="menu-item" ondblclick="window.location.href='establecimiento.html'">Canchas</a>
       <a href="#" class="menu-item" ondblclick="window.location.href='pistas.html'">Pistas</a>
-      <a href="#" class="menu-item" ondblclick="showPlayersSection()">Conoce Jugadores</a>
+      <!-- Se cambió a onclick para que funcione con un solo clic -->
+      <a href="#" class="menu-item" onclick="showPlayersSection()">Conoce Jugadores</a>
       <a href="#" class="menu-item logout" onclick="logout()">Cerrar Sesión</a>
     </div>
   </nav>
@@ -155,9 +156,9 @@
         <h3>Programa Partidos</h3>
         <p>Crea y únete a juegos</p>
       </div>
-      <div class="floating-card" ondblclick="showPlayersSection()">
+      <div class="floating-card" onclick="showPlayersSection()">
         <h3>Conoce Jugadores</h3>
-        <p>Doble clic para buscar</p>
+        <p>Haz clic para buscar</p>
       </div>
       <div class="floating-card" onclick="showPartidosSearch()">
         <h3>Buscar Partidos Abiertos</h3>
@@ -249,7 +250,7 @@
       }
     }
     
-    // Función para precargar sugerencias de canchas (nombre y localidad)
+    // Precarga de sugerencias para establecimientos (nombre y localidad)
     async function preloadEstablishments() {
       const { data, error } = await supabaseClient
         .from('establishments')
@@ -262,7 +263,7 @@
         if(item.name) namesSet.add(item.name);
         if(item.locality) localitiesSet.add(item.locality);
       });
-      // Agregar las opciones a los datalist
+      // Agregar opciones a los datalist
       const namesList = document.getElementById('namesList');
       namesList.innerHTML = '';
       namesSet.forEach(name => {
@@ -279,6 +280,13 @@
       });
     }
     
+    // Oculta todas las secciones de búsqueda
+    function hideAllSections() {
+      document.getElementById('searchPartidosSection').style.display = 'none';
+      document.getElementById('searchCanchasSection').style.display = 'none';
+      document.getElementById('searchPlayersSection').style.display = 'none';
+    }
+  
     // SECCIÓN PARTIDOS ABIERTOS
     function showPartidosSearch() {
       hideAllSections();
@@ -325,10 +333,7 @@
       }
   
       const matchesMap = {};
-      data.forEach(partido => {
-        matchesMap[partido.id] = partido;
-      });
-  
+      data.forEach(partido => { matchesMap[partido.id] = partido; });
       Object.values(matchesMap).forEach(partido => {
         const joinedCount = partido.participants ? partido.participants.length : 0;
         const totalPlayers = partido.total_players || 4;
@@ -393,7 +398,7 @@
         .from('establishments')
         .select('*');
   
-      // Si se ingresó filtro en Name y/o Locality se aplican ambos condicionalmente.
+      // Se aplican ambos filtros si se ingresan
       if (nameFilter) {
         query = query.ilike('name', `%${nameFilter}%`);
       }
@@ -502,17 +507,10 @@
       });
     }
     
-    // Función para ocultar todas las secciones de búsqueda
-    function hideAllSections() {
-      document.getElementById('searchPartidosSection').style.display = 'none';
-      document.getElementById('searchCanchasSection').style.display = 'none';
-      document.getElementById('searchPlayersSection').style.display = 'none';
-    }
-  
     document.addEventListener('DOMContentLoaded', async () => {
       await checkProfile();
       await preloadEstablishments();
-      // Por defecto muestra la sección de Partidos Abiertos si hay usuario logueado
+      // Por defecto, si hay usuario logueado, muestra la sección de Partidos Abiertos
       if (loggedUser) {
         document.getElementById('searchPartidosSection').style.display = 'block';
         loadOpenPartidos();
