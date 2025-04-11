@@ -137,7 +137,7 @@
       <a href="#" class="menu-item">Partidos</a>
       <a href="#" class="menu-item" ondblclick="window.location.href='establecimiento.html'">Canchas</a>
       <a href="#" class="menu-item" ondblclick="window.location.href='pistas.html'">Pistas</a>
-      <!-- Se cambió a onclick para que funcione con un solo clic -->
+      <!-- Se utiliza onclick para usuarios -->
       <a href="#" class="menu-item" onclick="showPlayersSection()">Conoce Jugadores</a>
       <a href="#" class="menu-item logout" onclick="logout()">Cerrar Sesión</a>
     </div>
@@ -183,10 +183,9 @@
     <button class="close-btn" onclick="closeCanchaSearch()">X</button>
     <h2>Buscar Canchas</h2>
     <div class="filter-container">
-      <!-- Campo para buscar por Nombre con datalist -->
+      <!-- Filtros para Nombre y Localidad con datalist -->
       <input type="text" id="filterCanchasName" placeholder="Nombre" list="namesList">
       <datalist id="namesList"></datalist>
-      <!-- Campo para buscar por Localidad con datalist -->
       <input type="text" id="filterCanchasLocality" placeholder="Localidad" list="localityList">
       <datalist id="localityList"></datalist>
       <button id="btn-filter-canchas">Buscar Canchas</button>
@@ -200,7 +199,13 @@
     <button class="close-btn-players" onclick="closePlayersSection()">X</button>
     <h2>Buscar Jugadores</h2>
     <div class="filter-container">
-      <input type="text" id="filterPlayersName" placeholder="Nombre">
+      <!-- Filtros para jugadores: Nombre y Apellido, Nivel de juego y Localidad -->
+      <input type="text" id="filterPlayersName" placeholder="Nombre y Apellido" list="namesListPlayers">
+      <datalist id="namesListPlayers"></datalist>
+      <input type="text" id="filterPlayersGameLevel" placeholder="Nivel de juego" list="gameLevelListPlayers">
+      <datalist id="gameLevelListPlayers"></datalist>
+      <input type="text" id="filterPlayersLocality" placeholder="Localidad" list="localityListPlayers">
+      <datalist id="localityListPlayers"></datalist>
       <button id="btn-filter-players">Buscar Jugadores</button>
     </div>
     <div id="playersFeedback"></div>
@@ -250,7 +255,7 @@
       }
     }
     
-    // Precarga de sugerencias para establecimientos (nombre y localidad)
+    // Precarga de sugerencias para canchas (nombre y localidad)
     async function preloadEstablishments() {
       const { data, error } = await supabaseClient
         .from('establishments')
@@ -263,7 +268,7 @@
         if(item.name) namesSet.add(item.name);
         if(item.locality) localitiesSet.add(item.locality);
       });
-      // Agregar opciones a los datalist
+      // Agregar opciones a los datalist para canchas
       const namesList = document.getElementById('namesList');
       namesList.innerHTML = '';
       namesSet.forEach(name => {
@@ -277,6 +282,44 @@
         const option = document.createElement('option');
         option.value = loc;
         localityList.appendChild(option);
+      });
+    }
+    
+    // Precarga de sugerencias para jugadores (nombre, nivel de juego y localidad)
+    async function preloadPlayersData() {
+      const { data, error } = await supabaseClient
+        .from('profiles')
+        .select('*');
+      if (error) { console.error('Error cargando jugadores: ', error.message); return; }
+      // Para nombres, niveles y localidades
+      const namesSet = new Set();
+      const gameLevelsSet = new Set();
+      const localitiesSet = new Set();
+      data.forEach(player => {
+        if(player.full_name) namesSet.add(player.full_name);
+        if(player.game_level) gameLevelsSet.add(player.game_level);
+        if(player.locality) localitiesSet.add(player.locality);
+      });
+      const namesListPlayers = document.getElementById('namesListPlayers');
+      namesListPlayers.innerHTML = '';
+      namesSet.forEach(name => {
+        const option = document.createElement('option');
+        option.value = name;
+        namesListPlayers.appendChild(option);
+      });
+      const gameLevelListPlayers = document.getElementById('gameLevelListPlayers');
+      gameLevelListPlayers.innerHTML = '';
+      gameLevelsSet.forEach(level => {
+        const option = document.createElement('option');
+        option.value = level;
+        gameLevelListPlayers.appendChild(option);
+      });
+      const localityListPlayers = document.getElementById('localityListPlayers');
+      localityListPlayers.innerHTML = '';
+      localitiesSet.forEach(loc => {
+        const option = document.createElement('option');
+        option.value = loc;
+        localityListPlayers.appendChild(option);
       });
     }
     
@@ -398,7 +441,6 @@
         .from('establishments')
         .select('*');
   
-      // Se aplican ambos filtros si se ingresan
       if (nameFilter) {
         query = query.ilike('name', `%${nameFilter}%`);
       }
@@ -437,7 +479,7 @@
         `;
         card.appendChild(content);
   
-        // Mapa integrado usando latitude y longitude para armar la URL del embed de Google Maps
+        // Mapa integrado usando latitude y longitude
         const mapContainer = document.createElement('div');
         mapContainer.className = 'map-container';
         const mapURL = `https://maps.google.com/maps?q=${c.latitude},${c.longitude}&hl=es;&z=14&output=embed`;
@@ -458,21 +500,28 @@
     function showPlayersSection() {
       hideAllSections();
       document.getElementById('searchPlayersSection').style.display = 'block';
+      // Limpiar filtros y resultados
       document.getElementById('filterPlayersName').value = '';
+      document.getElementById('filterPlayersGameLevel').value = '';
+      document.getElementById('filterPlayersLocality').value = '';
       document.getElementById('playersResults').innerHTML = '';
       document.getElementById('playersFeedback').innerHTML = '';
     }
     function closePlayersSection() {
       document.getElementById('searchPlayersSection').style.display = 'none';
       document.getElementById('filterPlayersName').value = '';
+      document.getElementById('filterPlayersGameLevel').value = '';
+      document.getElementById('filterPlayersLocality').value = '';
       document.getElementById('playersResults').innerHTML = '';
       document.getElementById('playersFeedback').innerHTML = '';
     }
     document.getElementById('btn-filter-players').addEventListener('click', () => {
       const nameFilter = document.getElementById('filterPlayersName').value.trim();
-      loadPlayers(nameFilter);
+      const gameLevelFilter = document.getElementById('filterPlayersGameLevel').value.trim();
+      const localityFilter = document.getElementById('filterPlayersLocality').value.trim();
+      loadPlayers(nameFilter, gameLevelFilter, localityFilter);
     });
-    async function loadPlayers(nameFilter = '') {
+    async function loadPlayers(nameFilter = '', gameLevelFilter = '', localityFilter = '') {
       const playersResults = document.getElementById('playersResults');
       const playersFeedback = document.getElementById('playersFeedback');
       playersResults.innerHTML = '';
@@ -484,6 +533,12 @@
   
       if (nameFilter) {
         query = query.ilike('full_name', `%${nameFilter}%`);
+      }
+      if (gameLevelFilter) {
+        query = query.ilike('game_level', `%${gameLevelFilter}%`);
+      }
+      if (localityFilter) {
+        query = query.ilike('locality', `%${localityFilter}%`);
       }
   
       const { data, error } = await query;
@@ -500,8 +555,17 @@
         const card = document.createElement('div');
         card.className = 'player-card';
         card.innerHTML = `
-          <h3>${player.full_name || player.email}</h3>
-          <p><strong>Email:</strong> ${player.email}</p>
+          <div style="display:flex; align-items:center; gap:1rem;">
+            <img src="${player.profile_pic || 'https://via.placeholder.com/100'}" alt="Foto de perfil" style="width:100px; height:100px; border-radius:50%;">
+            <div>
+              <h3>${player.full_name}</h3>
+              <p><strong>Edad:</strong> ${player.age || 'N/D'}</p>
+              <p><strong>Sexo:</strong> ${player.gender || 'N/D'}</p>
+              <p><strong>Nivel de juego:</strong> ${player.game_level || 'N/D'}</p>
+              <p><strong>Localidad:</strong> ${player.locality || 'N/D'}</p>
+              <p><strong>Teléfono:</strong> ${player.phone || 'N/D'}</p>
+            </div>
+          </div>
         `;
         playersResults.appendChild(card);
       });
@@ -510,6 +574,7 @@
     document.addEventListener('DOMContentLoaded', async () => {
       await checkProfile();
       await preloadEstablishments();
+      await preloadPlayersData();
       // Por defecto, si hay usuario logueado, muestra la sección de Partidos Abiertos
       if (loggedUser) {
         document.getElementById('searchPartidosSection').style.display = 'block';
