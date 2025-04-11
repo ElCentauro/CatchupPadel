@@ -296,6 +296,7 @@
       border-radius: 5px;
       box-shadow: 0 1px 3px rgba(0,0,0,0.1);
       overflow: hidden;
+      margin-bottom: 1rem;
     }
     .card-header {
       background: #007BFF;
@@ -556,14 +557,14 @@
       canchasFeedback.innerHTML = '';
       showCanchasLoader();
       
-      // Asegúrate de que el nombre de la tabla corresponde a la configuración de tu base de datos.
+      // Se consulta la tabla 'establishments' usando los nombres de campos correctos
       let query = supabaseClient
-        .from('establishments')  // Si tu tabla tiene otro nombre, actualízalo aquí
+        .from('establishments')
         .select('*');
   
       if (localityFilter) {
-        // Filtro que busca coincidencias en el campo "localidad" o "nombre"
-        query = query.or(`localidad.ilike.%${localityFilter}%,nombre.ilike.%${localityFilter}%`);
+        // Filtramos por los campos "locality" o "name"
+        query = query.or(`locality.ilike.%${localityFilter}%,name.ilike.%${localityFilter}%`);
       }
       const { data, error } = await query;
       clearCanchasLoader();
@@ -583,23 +584,24 @@
         // Cabecera con el nombre
         const header = document.createElement('div');
         header.className = 'card-header';
-        header.textContent = c.nombre;
+        header.textContent = c.name;
         card.appendChild(header);
   
-        // Contenido con Localidad, Dirección y Cantidad
+        // Contenido: Localidad, Dirección y Cantidad de Canchas
         const content = document.createElement('div');
         content.className = 'card-content';
         content.innerHTML = `
-          <p><strong>Localidad:</strong> ${c.localidad}</p>
-          <p><strong>Dirección:</strong> ${c.direccion}</p>
-          <p><strong>Cantidad de Canchas:</strong> ${c.cantidad}</p>
+          <p><strong>Localidad:</strong> ${c.locality}</p>
+          <p><strong>Dirección:</strong> ${c.address}</p>
+          <p><strong>Cantidad de Canchas:</strong> ${c.court_count}</p>
         `;
         card.appendChild(content);
   
-        // Mapa integrado
+        // Mapa integrado usando latitude y longitude para armar la URL del embed de Google Maps
         const mapContainer = document.createElement('div');
         mapContainer.className = 'map-container';
-        mapContainer.innerHTML = `<iframe src="${c.mapa}" width="100%" height="100%" frameborder="0" style="border:0" allowfullscreen></iframe>`;
+        const mapURL = `https://maps.google.com/maps?q=${c.latitude},${c.longitude}&hl=es;&z=14&output=embed`;
+        mapContainer.innerHTML = `<iframe src="${mapURL}" width="100%" height="100%" frameborder="0" style="border:0" allowfullscreen></iframe>`;
         card.appendChild(mapContainer);
   
         canchasResults.appendChild(card);
