@@ -182,7 +182,6 @@
     <button class="close-btn" onclick="closeCanchaSearch()">X</button>
     <h2>Buscar Canchas</h2>
     <div class="filter-container">
-      <!-- Filtros para Nombre y Localidad con datalist -->
       <input type="text" id="filterCanchasName" placeholder="Nombre" list="namesList">
       <datalist id="namesList"></datalist>
       <input type="text" id="filterCanchasLocality" placeholder="Localidad" list="localityList">
@@ -198,7 +197,6 @@
     <button class="close-btn-players" onclick="closePlayersSection()">X</button>
     <h2>Buscar Jugadores</h2>
     <div class="filter-container">
-      <!-- Filtros para jugadores: Nombre y Apellido, Nivel de juego y Localidad -->
       <input type="text" id="filterPlayersName" placeholder="Nombre y Apellido" list="namesListPlayers">
       <datalist id="namesListPlayers"></datalist>
       <input type="text" id="filterPlayersGameLevel" placeholder="Nivel de juego" list="gameLevelListPlayers">
@@ -231,33 +229,29 @@
       window.location.href = 'index.html';
     }
   
+    // Lógica para verificar si el usuario tiene registro en profiles usando la columna "id"
     async function checkProfile() {
       const profileLink = document.getElementById('profileLink');
       const { data: { session } } = await supabaseClient.auth.getSession();
       if (session && session.user) {
         const userId = session.user.id;
-        // Consulta a la tabla profiles para verificar registro
         const { data: profileData, error } = await supabaseClient
           .from('profiles')
           .select('*')
           .eq('id', userId);
   
         if (!error && profileData && profileData.length > 0) {
-          // Si el usuario está registrado en profiles:
-          // Se actualiza el texto del botón y se ocultan "Canchas" y "Pistas"
+          // Usuario registrado en profiles: se actualiza el texto y se ocultan "Canchas" y "Pistas"
           profileLink.textContent = 'Modificar Perfil';
           document.getElementById('canchasButton').style.display = 'none';
           document.getElementById('pistasButton').style.display = 'none';
         } else {
-          // Si el usuario no está registrado en profiles:
-          // Se ocultan los botones de "Partidos" y "Conoce Jugadores"
+          // Usuario sin registro en profiles: se ocultan "Partidos" y "Conoce Jugadores"
           profileLink.style.display = 'none';
           document.getElementById('partidosButton').style.display = 'none';
           document.getElementById('jugadoresButton').style.display = 'none';
-          // El botón de "Cerrar Sesión" se mantiene visible en ambos casos
         }
   
-        // Guardamos el usuario logueado para otros procesos
         loggedUser = { id: userId, email: session.user.email };
       }
     }
@@ -275,7 +269,6 @@
         if(item.name) namesSet.add(item.name);
         if(item.locality) localitiesSet.add(item.locality);
       });
-      // Agregar opciones a los datalist para canchas
       const namesList = document.getElementById('namesList');
       namesList.innerHTML = '';
       namesSet.forEach(name => {
@@ -298,7 +291,6 @@
         .from('profiles')
         .select('*');
       if (error) { console.error('Error cargando jugadores: ', error.message); return; }
-      // Para nombres, niveles y localidades
       const namesSet = new Set();
       const gameLevelsSet = new Set();
       const localitiesSet = new Set();
@@ -470,13 +462,11 @@
         const card = document.createElement('div');
         card.className = 'card';
   
-        // Cabecera con el nombre
         const header = document.createElement('div');
         header.className = 'card-header';
         header.textContent = c.name;
         card.appendChild(header);
   
-        // Contenido: Localidad, Dirección y Cantidad de Canchas
         const content = document.createElement('div');
         content.className = 'card-content';
         content.innerHTML = `
@@ -486,7 +476,6 @@
         `;
         card.appendChild(content);
   
-        // Mapa integrado usando latitude y longitude
         const mapContainer = document.createElement('div');
         mapContainer.className = 'map-container';
         const mapURL = `https://maps.google.com/maps?q=${c.latitude},${c.longitude}&hl=es;&z=14&output=embed`;
@@ -507,7 +496,6 @@
     function showPlayersSection() {
       hideAllSections();
       document.getElementById('searchPlayersSection').style.display = 'block';
-      // Limpiar filtros y resultados
       document.getElementById('filterPlayersName').value = '';
       document.getElementById('filterPlayersGameLevel').value = '';
       document.getElementById('filterPlayersLocality').value = '';
@@ -582,7 +570,7 @@
       await checkProfile();
       await preloadEstablishments();
       await preloadPlayersData();
-      // Si el usuario está logueado y tiene registro en profiles (se muestran Partidos), se carga la sección de Partidos Abiertos
+      // Si el usuario está registrado (por lo tanto se muestran Partidos) se carga la sección de Partidos Abiertos
       if (loggedUser && document.getElementById('partidosButton').style.display !== 'none') {
         document.getElementById('searchPartidosSection').style.display = 'block';
         loadOpenPartidos();
