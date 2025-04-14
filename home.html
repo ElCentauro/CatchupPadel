@@ -4,781 +4,1574 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Catch Up Padel - Home</title>
-  <!-- Fuente Moderna -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
-  <!-- Íconos (Font Awesome) -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
   <style>
     /* RESET Y ESTILOS GLOBALES */
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Poppins', sans-serif; background-color: #f8f8f8; color: #333; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f8f9fa; /* Ligeramente más suave */
+      color: #343a40; /* Gris oscuro más estándar */
+      line-height: 1.6;
+    }
+    main { display: block; /* Asegura que <main> funcione como bloque en navegadores antiguos */ }
+
+    /* VARIABLES DE COLOR Y TEMAS */
+    :root {
+      --primary-color: #E68A00; /* Naranja más oscuro para mejor contraste AA */
+      --primary-color-hover: #D97706; /* Naranja más oscuro para hover */
+      --secondary-color: #007bff; /* Azul (ej. para info adicional o links) */
+      --danger-color: #dc3545; /* Rojo para logout/cancelar */
+      --danger-color-hover: #c82333;
+      --success-color: #28a745; /* Verde (ej. refresh button) */
+      --success-color-hover: #218838;
+      --light-bg: #ffffff;
+      --medium-bg: #f8f9fa;
+      --dark-text: #343a40;
+      --medium-text: #555e68;
+      --light-text: #ffffff;
+      --card-bg: linear-gradient(to bottom, #fffdf8, #ffe5cc);
+      --card-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      --card-hover-shadow: 0 6px 16px rgba(0,0,0,0.12);
+      --border-radius-sm: 4px;
+      --border-radius-md: 8px;
+      --border-radius-lg: 12px;
+    }
+
+    /* UTILIDADES */
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      padding: 0;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
+
+    /* ESTADO DE FOCO GLOBAL (MEJORA ACCESIBILIDAD) */
+    :focus-visible {
+      outline: 3px solid var(--secondary-color);
+      outline-offset: 2px;
+      box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.25);
+      border-radius: var(--border-radius-sm);
+    }
+    /* Quitar outline solo si no es focus-visible para mantener el default en otros casos */
+    :focus:not(:focus-visible) {
+      outline: none;
+    }
+
+    /* ESTILOS DE BOTONES REUTILIZABLES */
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: var(--border-radius-md);
+      font-size: 1rem;
+      font-weight: 600;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: var(--light-text);
+    }
+    .btn-primary:hover { background-color: var(--primary-color-hover); color: var(--light-text); }
+
+    .btn-secondary {
+      background-color: var(--secondary-color);
+      color: var(--light-text);
+    }
+    .btn-secondary:hover { background-color: #0056b3; color: var(--light-text); }
+
+    .btn-success {
+      background-color: var(--success-color);
+      color: var(--light-text);
+    }
+    .btn-success:hover { background-color: var(--success-color-hover); color: var(--light-text); }
+
+    .btn-danger {
+      background-color: var(--danger-color);
+      color: var(--light-text);
+    }
+    .btn-danger:hover { background-color: var(--danger-color-hover); color: var(--light-text); }
+
+    .btn-outline-primary {
+      background-color: transparent;
+      color: var(--primary-color);
+      border: 2px solid var(--primary-color);
+    }
+    .btn-outline-primary:hover { background-color: var(--primary-color); color: var(--light-text); }
+
+    .btn-outline-danger {
+      background-color: transparent;
+      color: var(--danger-color);
+      border: 2px solid var(--danger-color);
+    }
+    .btn-outline-danger:hover { background-color: var(--danger-color); color: var(--light-text); }
+
+    .btn-sm { padding: 0.5rem 1rem; font-size: 0.9rem; }
 
     /* MENÚ DE NAVEGACIÓN */
     nav {
-      width: 100%; background-color: #fff; padding: 1rem 2rem;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      width: 100%;
+      background-color: var(--light-bg);
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.07);
+      position: sticky;
+      top: 0;
+      z-index: 100; /* Asegura que esté por encima */
     }
     .menu-container {
-      display: flex; justify-content: space-evenly; align-items: center; flex-wrap: wrap; gap: 1rem;
+      display: flex;
+      justify-content: center; /* Centrado para mejor apariencia */
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      max-width: 1200px; /* Limita el ancho */
+      margin: 0 auto; /* Centra el contenedor */
     }
-    .menu-item {
-      padding: 0.5rem 1rem; border: 2px solid #ff9500; border-radius: 8px; color: #ff9500;
-      text-transform: uppercase; font-weight: 600; letter-spacing: 1px;
-      transition: background-color 0.3s, color 0.3s; cursor: pointer; text-decoration: none;
+    .menu-item { /* Usando btn-outline como base */
+      padding: 0.6rem 1.2rem;
+      border: 2px solid var(--primary-color);
+      border-radius: var(--border-radius-md);
+      color: var(--primary-color);
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 1px;
+      transition: background-color 0.3s, color 0.3s, transform 0.2s;
+      cursor: pointer;
+      text-decoration: none;
+      font-size: 0.9rem; /* Ligeramente más pequeño */
     }
-    .menu-item:hover { background-color: #ff9500; color: #fff; }
-    .menu-item.logout { border-color: #e74c3c; color: #e74c3c; }
-    .menu-item.logout:hover { background-color: #e74c3c; color: #fff; }
+    .menu-item:hover, .menu-item.active { /* Estado activo y hover iguales */
+      background-color: var(--primary-color);
+      color: var(--light-text);
+      transform: scale(1.03);
+    }
+    .menu-item.logout {
+      border-color: var(--danger-color);
+      color: var(--danger-color);
+    }
+    .menu-item.logout:hover {
+      background-color: var(--danger-color);
+      color: var(--light-text);
+    }
+    .menu-item.disabled { /* Estilo para deshabilitado */
+      border-color: #adb5bd;
+      color: #adb5bd;
+      opacity: 0.6;
+      cursor: not-allowed;
+      pointer-events: none; /* Evita clics */
+    }
+    .menu-item.disabled:hover { /* Sin efecto hover */
+      background-color: transparent;
+      transform: none;
+    }
 
     /* SECCIÓN HERO */
     .hero {
-      position: relative; padding: 3rem 1rem; text-align: center;
-      background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)),
-      url("https://images.unsplash.com/photo-1593341646581-529f6c49c5d1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80");
-      background-size: cover; background-position: center; color: #fff; min-height: 60vh;
+      position: relative;
+      padding: 4rem 1rem 3rem 1rem; /* Más padding superior */
+      text-align: center;
+      background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.65)), /* Oscurecido un poco más */
+      url("https://images.unsplash.com/photo-1593341646581-529f6c49c5d1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80") center/cover no-repeat;
+      color: var(--light-text);
+      min-height: 60vh;
+      display: flex; /* Centra verticalmente */
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
-    .hero h1 { font-size: 3rem; font-weight: 700; margin-bottom: 1rem; color: #fff; }
-    .hero p { font-size: 1.2rem; margin-bottom: 2rem; max-width: 700px; margin: 0 auto; line-height: 1.6; }
+    .hero h1 {
+      font-size: clamp(2.5rem, 5vw, 3.5rem); /* Tamaño de fuente responsivo */
+      font-weight: 700;
+      margin-bottom: 1rem;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    }
+    .hero p {
+      font-size: clamp(1rem, 2.5vw, 1.2rem); /* Tamaño de fuente responsivo */
+      margin-bottom: 2.5rem; /* Más espacio */
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.7; /* Mayor interlineado */
+      opacity: 0.9;
+    }
 
     /* TARJETAS FLOTANTES */
-    .cards-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-top: 2rem; }
+    .cards-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem; /* Más espacio */
+      margin-top: 2rem;
+    }
     .floating-card {
-      background-color: rgba(255,255,255,0.9); backdrop-filter: blur(4px); border-radius: 8px;
-      padding: 1rem; width: 220px; text-align: center; color: #333;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2); transition: transform 0.3s; cursor: pointer;
+      background-color: rgba(255,255,255,0.95); /* Menos transparencia */
+      backdrop-filter: blur(5px);
+      border-radius: var(--border-radius-lg);
+      padding: 1.5rem;
+      width: clamp(200px, 22vw, 240px); /* Tamaño responsivo */
+      text-align: center;
+      color: var(--dark-text);
+      box-shadow: 0 5px 10px rgba(0,0,0,0.15);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+      text-decoration: none; /* Para si se usa como <a> */
+      border: 1px solid rgba(0,0,0,0.05); /* Borde sutil */
     }
-    .floating-card:hover { transform: translateY(-5px); }
-    .floating-card h3 { font-size: 1rem; margin-bottom: 0.5rem; color: #2c3e50; }
-    .floating-card p { font-size: 0.85rem; color: #555; }
+    .floating-card:hover {
+      transform: translateY(-8px); /* Efecto más pronunciado */
+      box-shadow: var(--card-hover-shadow);
+    }
+    .floating-card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.75rem;
+      color: var(--primary-color-hover); /* Naranja oscuro */
+    }
+    .floating-card p {
+      font-size: 0.9rem;
+      color: var(--medium-text);
+    }
 
-    /* Animación de titileo para el título de los partidos abiertos */
-    @keyframes flashGreen {
-      0% { color: #2ecc71; }
-      50% { color: #a2d9ce; }
-      100% { color: #2ecc71; }
+    /* SECCIONES DE BÚSQUEDA (Contenedor general) */
+    .search-section {
+      max-width: 1200px;
+      margin: 3rem auto; /* Más margen vertical */
+      padding: 2rem;
+      background-color: var(--light-bg);
+      border-radius: var(--border-radius-lg);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+      position: relative;
+      /* Estilos para transición */
+      opacity: 0;
+      visibility: hidden;
+      max-height: 0; /* Truco para animar altura */
+      overflow: hidden;
+      transition: opacity 0.5s ease, max-height 0.6s ease, visibility 0.5s ease, padding 0.5s ease, margin 0.5s ease;
     }
-    .blinking-title {
-      animation: flashGreen 1s infinite;
+    .search-section.is-visible { /* Clase para mostrar la sección */
+      opacity: 1;
+      visibility: visible;
+      max-height: 5000px; /* Altura máxima suficientemente grande */
+      padding: 2rem; /* Restaurar padding */
+      margin: 3rem auto; /* Restaurar margen */
     }
-    
-    /* SECCIONES DE BÚSQUEDA */
-    .search-partidos, .search-canchas, .search-players {
-      display: none; max-width: 1200px; margin: 2rem auto; padding: 1.5rem 2rem;
-      background-color: #fff; border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05); position: relative;
+    .search-section h2 {
+      font-size: clamp(1.5rem, 4vw, 2rem); /* Responsivo */
+      margin-bottom: 1.5rem;
+      color: #2c3e50; /* Azul oscuro */
+      text-align: center;
     }
-    .search-partidos h2, .search-canchas h2, .search-players h2 {
-      font-size: 1.8rem; margin-bottom: 1rem; color: #2c3e50; text-align: center;
+
+    /* Botón de cierre estandarizado */
+    .close-section-btn {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: transparent;
+      border: none;
+      font-size: 1.5rem; /* Más grande */
+      color: #999;
+      cursor: pointer;
+      padding: 5px; /* Área de clic más grande */
+      line-height: 1;
+      transition: color 0.3s ease, transform 0.3s ease;
     }
+    .close-section-btn:hover {
+      color: var(--danger-color);
+      transform: scale(1.1);
+    }
+
+    /* Contenedor de filtros */
     .filter-container {
-      display: flex; flex-wrap: wrap; justify-content: center; align-items: center;
-      gap: 1rem; margin-bottom: 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
     }
-    .filter-container input {
-      padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px;
-      font-size: 1rem; width: 250px;
+    .filter-container input[type="text"],
+    .filter-container input[type="date"] /* Si usas fechas */ {
+      padding: 0.75rem 1rem;
+      border: 1px solid #ced4da;
+      border-radius: var(--border-radius-md);
+      font-size: 1rem;
+      min-width: 200px;
+      flex-grow: 1; /* Permite que crezcan */
+      max-width: 280px; /* Pero con un límite */
     }
-    .filter-container button {
-      padding: 0.75rem 1.5rem; background-color: #ff9500;
-      color: #fff; border: none; border-radius: 8px;
-      font-size: 1rem; cursor: pointer; transition: background-color 0.3s ease;
+    .filter-container input[type="text"]:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 0.2rem rgba(230, 138, 0, 0.25); /* Sombra de foco naranja */
+      outline: none;
     }
-    .filter-container button:hover { background-color: #e07e00; }
-    .close-btn, .close-btn-partidos, .close-btn-players {
-      position: absolute; top: 10px; right: 10px;
-      background: none; border: none; font-size: 1.2rem;
-      color: #999; cursor: pointer;
+    .filter-container button { /* Usa la clase .btn .btn-primary */
+        flex-shrink: 0; /* Evita que se achique */
     }
-    
-    /* GRID DE RESULTADOS */
-    #partidosResults, .results-container, #playersResults {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem; padding: 1rem;
+
+    /* Feedback y Loader */
+    .feedback-container {
+      text-align: center;
+      margin: 1rem 0;
+      min-height: 40px; /* Espacio para el loader */
     }
-    
-    /* TARJETAS */
-    .partido-card, .card, .player-card {
-      background: linear-gradient(to bottom, #fffdf8, #ffe5cc);
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1); padding: 1.5rem;
-      transition: transform 0.3s ease;
-    }
-    .partido-card:hover, .card:hover, .player-card:hover { transform: scale(1.02); }
-    .partido-card h3, .card-header, .player-card h3 {
-      font-size: 1.3rem; color: #2c3e50; margin-bottom: 0.75rem;
-    }
-    .partido-card p, .card-content p, .player-card p {
-      font-size: 0.95rem; color: #555; margin: 0.4rem 0;
-    }
-    .card { overflow: hidden; }
-    .card-header { background: #007bff; color: #fff; padding: 10px 15px; font-size: 20px; }
-    .card-content { padding: 15px; color: #333; }
-    .map-container { width: 100%; height: 200px; border-top: 1px solid #ddd; }
-    .btn-view-partido, .btn-join, .btn-leave {
-      margin-top: 1rem; background-color: #3498db; color: #fff;
-      border: none; padding: 0.5rem 1rem; border-radius: 6px;
-      cursor: pointer; font-size: 0.9rem;
-    }
-    .btn-view-partido:hover, .btn-join:hover, .btn-leave:hover { background-color: #2980b9; }
     .loader {
-      border: 4px solid #f3f3f3; border-top: 4px solid #007bff;
-      border-radius: 50%; width: 30px; height: 30px;
-      animation: spin 1s linear infinite; margin: 20px auto;
+      border: 5px solid #f3f3f3; /* Borde más grueso */
+      border-top: 5px solid var(--primary-color); /* Naranja */
+      border-radius: 50%;
+      width: 40px; /* Más grande */
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+      display: block; /* Asegura que ocupe su espacio */
     }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    
-    /* MODAL y ANIMACIONES */
-    #matchModal {
-      display: none; position: fixed; top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.5); justify-content: center;
-      align-items: center; z-index: 1000;
+
+    /* GRID DE RESULTADOS */
+    .results-grid {
+      display: grid;
+      /* Columnas responsivas: mínimo 280px, máximo 1fr. Se ajustan automáticamente */
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      padding: 1rem 0; /* Padding vertical */
     }
-    #matchModal .modal-content {
-      background: linear-gradient(to bottom right, #ffffff, #f0f9ff);
-      border-radius: 12px; color: #333; max-width: 550px; width: 90%;
-      position: relative; box-shadow: 0 8px 16px rgba(0,0,0,0.2); padding: 20px;
-      animation: modalFade 0.4s ease-out;
+
+    /* TARJETAS DE RESULTADOS (Partidos, Canchas, Jugadores) - Estilo Base */
+    .result-card {
+      background: var(--card-bg);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--card-shadow);
+      padding: 1.5rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex; /* Flexbox para control interno */
+      flex-direction: column;
+      overflow: hidden; /* Asegura que el contenido respete el borde redondeado */
     }
-    @keyframes modalFade { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-    #matchModal .close-modal {
-      position: absolute; top: 10px; right: 10px;
-      background: none; border: none; font-size: 1.4rem;
-      cursor: pointer; color: #999;
+    .result-card:hover {
+      transform: translateY(-5px) scale(1.01); /* Sutil elevación y escala */
+      box-shadow: var(--card-hover-shadow);
     }
-    #matchModal .close-modal:hover { color: #555; }
-    /* Botón de refrescar en el Modal */
-    #matchModal .btn-refresh {
-      margin-top: 1rem; background-color: #2ecc71; color: #fff;
-      border: none; padding: 0.5rem 1rem; border-radius: 6px;
-      cursor: pointer; font-size: 0.9rem;
+    .result-card h3 {
+      font-size: 1.3rem;
+      color: #2c3e50; /* Azul oscuro */
+      margin-bottom: 0.75rem;
     }
-    #matchModal .btn-refresh:hover { background-color: #27ae60; }
-    
-    /* LISTA DE PARTICIPANTES */
-    #modalContent ul { list-style: none; margin: 0; padding: 0; }
-    #modalContent li { margin-bottom: 10px; display: flex; align-items: center; }
-    #modalContent li img {
-      width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;
-      object-fit: cover; border: 2px solid #ddd;
+    .result-card p {
+      font-size: 0.95rem;
+      color: var(--medium-text);
+      margin: 0.4rem 0;
+      line-height: 1.5;
     }
-    #modalContent h2 { margin-bottom: 12px; font-size: 1.8rem; color: #2980b9; text-align: center; }
-    #modalContent p { margin-bottom: 10px; font-size: 1rem; color: #555; }
-    #modalContent h3 { margin-top: 14px; font-size: 1.2rem; color: #2c3e50; margin-bottom: 8px; }
-    .participants-list-container {
-      background: #fafafa; border-radius: 8px; padding: 10px;
-      margin-bottom: 10px; border: 1px solid #eee;
+    .result-card .highlight { /* Para info destacada */
+      color: var(--primary-color-hover);
+      font-weight: 600;
     }
-    .missing-players { font-weight: 600; color: #e74c3c; text-align: center; }
-    .cancelled { text-decoration: line-through; color: #888; }
-    
-    /* Miniaturas de participantes en la tarjeta */
+    .result-card .icon-text { /* Para icono + texto */
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0.3rem 0;
+    }
+    .result-card .icon-text i {
+      color: var(--primary-color);
+      width: 16px; /* Ancho fijo para alinear */
+      text-align: center;
+    }
+    .result-card .divider {
+      border-top: 1px solid rgba(0,0,0,0.1);
+      margin: 1rem 0;
+    }
+
+    /* Estilos específicos Tarjeta Partido */
+    .partido-card h3.blinking-title { /* Título partido abierto - NO PARPADEA */
+      color: var(--success-color); /* Verde estático */
+      font-weight: bold; /* Más énfasis */
+      /* Eliminamos la animación parpadeante */
+    }
     .participants-avatars {
-      display: flex; gap: 5px; margin-top: 10px; flex-wrap: wrap;
+      display: flex;
+      gap: -8px; /* Avatares superpuestos */
+      margin-top: 10px;
+      flex-wrap: wrap; /* Si hay muchos */
+      align-items: center; /* Centrar verticalmente */
     }
     .participants-avatars img {
-      width: 32px; height: 32px; border-radius: 50%;
-      border: 1px solid #ddd; object-fit: cover;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 2px solid var(--light-bg); /* Borde blanco para separar */
+      object-fit: cover;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.2);
     }
+    .participants-avatars .extra-count { /* Para el "+X más" */
+        display: inline-block;
+        background-color: #e9ecef;
+        color: var(--medium-text);
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        line-height: 30px; /* Centrar texto */
+        text-align: center;
+        font-size: 0.8rem;
+        font-weight: 600;
+        margin-left: 2px;
+        border: 2px solid var(--light-bg);
+        box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    }
+    .partido-card .btn-view-partido { /* Usando clases btn */
+       margin-top: 1rem;
+       align-self: flex-start; /* Alinear botón a la izquierda */
+    }
+
+    /* Estilos específicos Tarjeta Cancha */
+    .cancha-card .card-header {
+      background: var(--primary-color);
+      color: var(--light-text);
+      padding: 10px 15px;
+      margin: -1.5rem -1.5rem 1rem -1.5rem; /* Extender al borde */
+      font-size: 1.2rem;
+      border-top-left-radius: var(--border-radius-lg);
+      border-top-right-radius: var(--border-radius-lg);
+    }
+    .cancha-card .map-container {
+      width: calc(100% + 3rem); /* Extender mapa a los bordes */
+      margin: 1rem -1.5rem -1.5rem -1.5rem; /* Pegar abajo */
+      height: 200px;
+      border-bottom-left-radius: var(--border-radius-lg);
+      border-bottom-right-radius: var(--border-radius-lg);
+      overflow: hidden; /* Asegurar que el iframe respete bordes */
+      border-top: 1px solid #eee;
+    }
+    .cancha-card .map-container iframe {
+      border: none; /* Quitar borde del iframe */
+    }
+
+    /* Estilos específicos Tarjeta Jugador */
+    .player-card .player-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+    .player-card .player-avatar {
+        width: 80px; /* Avatar más pequeño */
+        height: 80px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid var(--primary-color); /* Borde naranja */
+        flex-shrink: 0; /* Evita que se encoja */
+    }
+    .player-card h3 { margin-bottom: 0.25rem; } /* Menos espacio debajo del nombre */
+    .player-card .player-details p {
+        margin: 0.2rem 0; /* Menos espacio entre detalles */
+        font-size: 0.9rem;
+    }
+
+    /* MODAL y ANIMACIONES */
+    #matchModal {
+      display: none; /* Oculto por defecto */
+      position: fixed;
+      inset: 0; /* Igual a top, right, bottom, left = 0 */
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.6); /* Overlay más oscuro */
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      padding: 1rem; /* Espacio por si el contenido es muy alto */
+      overflow-y: auto; /* Scroll si es necesario */
+    }
+    #matchModal.is-visible { /* Clase para mostrar el modal */
+      display: flex;
+    }
+    #matchModal .modal-content {
+      background: linear-gradient(to bottom right, #ffffff, #f8f9fa); /* Degradado sutil */
+      border-radius: var(--border-radius-lg);
+      color: var(--dark-text);
+      max-width: 600px; /* Un poco más ancho */
+      width: 95%;
+      position: relative;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      padding: 2rem; /* Más padding */
+      animation: modalFadeSlide 0.4s ease-out;
+      margin: auto; /* Centrado vertical y horizontal */
+    }
+    @keyframes modalFadeSlide {
+      from { transform: translateY(-30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    #matchModal .close-modal { /* Botón cierre modal */
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      font-size: 1.8rem; /* Más grande */
+      cursor: pointer;
+      color: #aaa;
+      padding: 8px;
+      line-height: 1;
+      transition: color 0.3s ease, transform 0.3s ease;
+    }
+    #matchModal .close-modal:hover { color: var(--dark-text); transform: rotate(90deg); }
+
+    /* Contenido del Modal */
+    #modalContent h2 {
+      margin-bottom: 1.5rem;
+      font-size: 1.8rem;
+      color: var(--primary-color-hover);
+      text-align: center;
+    }
+    #modalContent p { margin-bottom: 0.8rem; font-size: 1rem; color: var(--medium-text); }
+    #modalContent h3 { /* Título "Jugadores Apuntados" */
+      margin-top: 1.5rem;
+      font-size: 1.3rem;
+      color: #2c3e50;
+      margin-bottom: 0.8rem;
+      border-bottom: 1px solid #eee; /* Separador */
+      padding-bottom: 0.5rem;
+    }
+    #modalContent .participants-list-container {
+      background: #f1f3f5; /* Fondo ligeramente diferente */
+      border-radius: var(--border-radius-md);
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border: 1px solid #e9ecef;
+      max-height: 250px; /* Altura máxima con scroll */
+      overflow-y: auto;
+    }
+    #modalContent ul { list-style: none; margin: 0; padding: 0; }
+    #modalContent li {
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid #e0e0e0; /* Separador entre jugadores */
+    }
+     #modalContent li:last-child { border-bottom: none; }
+    #modalContent li img {
+      width: 45px; /* Avatares más grandes en modal */
+      height: 45px;
+      border-radius: 50%;
+      margin-right: 15px;
+      object-fit: cover;
+      border: 2px solid #ccc; /* Borde gris */
+    }
+    #modalContent li span { flex-grow: 1; font-weight: 500;} /* Nombre ocupa espacio */
+    #modalContent li .cancelled { /* Jugador cancelado */
+      text-decoration: line-through;
+      color: #888;
+      font-style: italic;
+    }
+     #modalContent li .leave-reason {
+        font-size: 0.85rem;
+        color: #777;
+        margin-left: 5px;
+     }
+    #modalContent .missing-players {
+      font-weight: 600;
+      color: var(--danger-color);
+      text-align: center;
+      margin-top: 1rem;
+      font-size: 1.1rem;
+    }
+    #modalContent .modal-actions { /* Contenedor para botones del modal */
+        display: flex;
+        justify-content: space-between; /* Botones a los lados */
+        align-items: center;
+        margin-top: 1.5rem;
+        gap: 1rem;
+        flex-wrap: wrap; /* Por si no caben */
+    }
+    #modalContent .modal-actions .btn-refresh { /* Usa clase .btn */
+        margin-right: auto; /* Empuja otros botones a la derecha */
+    }
+    #modalContent .modal-actions .leave-input-group {
+        display: flex;
+        flex-direction: column; /* Input encima del botón */
+        width: 100%; /* Ocupa todo el ancho si está solo */
+        gap: 0.5rem;
+        margin-top: 1rem;
+    }
+     #modalContent .modal-actions .leave-input-group input {
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: var(--border-radius-sm);
+        font-size: 0.9rem;
+     }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 1.5rem 1rem;
+      background: #e9ecef; /* Fondo gris claro */
+      margin-top: 3rem;
+      color: var(--medium-text);
+      font-size: 0.9rem;
+      border-top: 1px solid #dee2e6;
+    }
+
+    /* MEDIA QUERIES (Ejemplo para ajustar en pantallas pequeñas) */
+    @media (max-width: 768px) {
+      nav { padding: 0.8rem 1rem; }
+      .menu-container { justify-content: space-around; gap: 0.5rem; }
+      .menu-item { padding: 0.5rem 0.8rem; font-size: 0.8rem; }
+
+      .hero { padding: 3rem 1rem 2rem 1rem; min-height: 50vh; }
+      .hero h1 { font-size: clamp(2rem, 6vw, 2.8rem); }
+      .hero p { font-size: clamp(0.9rem, 3vw, 1.1rem); margin-bottom: 1.5rem;}
+
+      .cards-container { gap: 1rem; }
+      .floating-card { width: clamp(150px, 40vw, 180px); padding: 1rem; }
+      .floating-card h3 { font-size: 1rem; }
+      .floating-card p { font-size: 0.8rem; }
+
+      .search-section { padding: 1.5rem; margin: 2rem auto; }
+      .filter-container { flex-direction: column; align-items: stretch; }
+      .filter-container input[type="text"] { min-width: auto; width: 100%; }
+
+      .results-grid { grid-template-columns: 1fr; /* Una columna en móviles */ gap: 1rem;}
+
+      #matchModal .modal-content { padding: 1.5rem; width: 95%; }
+      #modalContent h2 { font-size: 1.5rem; }
+      #modalContent h3 { font-size: 1.1rem; }
+    }
+
   </style>
 </head>
 <body>
-  <!-- MENÚ DE NAVEGACIÓN -->
+
   <nav>
     <div class="menu-container">
       <a href="perfil.html" class="menu-item" id="profileLink">Crear Perfil</a>
-      <a href="#" class="menu-item" id="partidosButton">Partidos</a>
-      <a href="#" class="menu-item" id="canchasButton" ondblclick="window.location.href='establecimiento.html'">Canchas</a>
-      <a href="#" class="menu-item" id="pistasButton" ondblclick="window.location.href='pistas.html'">Pistas</a>
-      <a href="#" class="menu-item" id="jugadoresButton" onclick="showPlayersSection()">Conoce Jugadores</a>
-      <a href="#" class="menu-item logout" id="logoutButton" onclick="logout()">Cerrar Sesión</a>
+      <a href="#partidos" class="menu-item" id="partidosButton">Partidos</a>
+      <a href="establecimiento.html" class="menu-item" id="canchasButton" style="display: none;">Canchas</a>
+      <a href="pistas.html" class="menu-item" id="pistasButton" style="display: none;">Pistas</a>
+      <a href="#jugadores" class="menu-item" id="jugadoresButton">Jugadores</a>
+      <a href="#" class="menu-item logout" id="logoutButton">Cerrar Sesión</a>
     </div>
   </nav>
-  
-  <!-- SECCIÓN HERO -->
-  <section class="hero">
-    <h1>Bienvenido a Catch Up Padel</h1>
-    <p>Conecta con jugadores de pádel cerca de ti y disfruta del mejor deporte en comunidad.</p>
-    <div class="cards-container">
-      <div class="floating-card" onclick="showCanchaSearch()">
-        <h3>Buscar Canchas</h3>
-        <p>Descubre canchas cercanas</p>
+
+  <main>
+    <section class="hero" id="hero">
+      <h1>Bienvenido a Catch Up Padel</h1>
+      <p>Conecta con jugadores de pádel cerca de ti, encuentra canchas y organiza partidos fácilmente.</p>
+      <div class="cards-container">
+        <div class="floating-card" data-action="showCanchaSearch">
+          <h3>Buscar Canchas</h3>
+          <p>Descubre establecimientos y canchas</p>
+        </div>
+        <a href="partidos.html" class="floating-card">
+           <h3>Programar Partidos</h3>
+           <p>Crea tus propios juegos</p>
+        </a>
+        <div class="floating-card" data-action="showPlayersSearch">
+          <h3>Conoce Jugadores</h3>
+          <p>Encuentra compañeros de juego</p>
+        </div>
+        <div class="floating-card" data-action="showPartidosSearch">
+          <h3>Buscar Partidos Abiertos</h3>
+          <p>Únete a partidos con cupos</p>
+        </div>
       </div>
-      <div class="floating-card" ondblclick="window.location.href='partidos.html'">
-        <h3>Programa Partidos</h3>
-        <p>Crea y únete a juegos</p>
+    </section>
+
+    <section class="search-section" id="searchPartidosSection">
+      <button class="close-section-btn" aria-label="Cerrar búsqueda de partidos" data-action="closePartidosSearch">×</button>
+      <h2>Partidos Abiertos</h2>
+      <div class="filter-container">
+        <input type="text" id="filterLocalityPartidos" placeholder="Filtrar por Localidad (Ej. Buenos Aires)" />
+        <button id="btn-filter-partidos" class="btn btn-primary">Filtrar Partidos</button>
       </div>
-      <div class="floating-card" onclick="showPlayersSection()">
-        <h3>Conoce Jugadores</h3>
-        <p>Haz clic para buscar</p>
+      <div class="feedback-container" id="partidosFeedback"></div> <div class="results-grid" id="partidosResults">
+          </div>
+    </section>
+
+    <section class="search-section" id="searchCanchasSection">
+      <button class="close-section-btn" aria-label="Cerrar búsqueda de canchas" data-action="closeCanchaSearch">×</button>
+      <h2>Buscar Canchas</h2>
+      <div class="filter-container">
+        <input type="text" id="filterCanchasName" placeholder="Nombre Establecimiento" list="namesList" />
+        <datalist id="namesList"></datalist>
+        <input type="text" id="filterCanchasLocality" placeholder="Localidad" list="localityList" />
+        <datalist id="localityList"></datalist>
+        <button id="btn-filter-canchas" class="btn btn-primary">Buscar Canchas</button>
       </div>
-      <div class="floating-card" onclick="showPartidosSearch()">
-        <h3>Buscar Partidos Abiertos</h3>
-        <p>Partidos futuros con cupos disponibles</p>
+      <div class="feedback-container" id="canchasFeedback"></div> <div class="results-grid" id="canchasResults">
+          </div>
+    </section>
+
+    <section class="search-section" id="searchPlayersSection">
+      <button class="close-section-btn" aria-label="Cerrar búsqueda de jugadores" data-action="closePlayersSearch">×</button>
+      <h2>Buscar Jugadores</h2>
+      <div class="filter-container">
+        <input type="text" id="filterPlayersName" placeholder="Nombre y Apellido" list="namesListPlayers" />
+        <datalist id="namesListPlayers"></datalist>
+        <input type="text" id="filterPlayersGameLevel" placeholder="Nivel de juego" list="gameLevelListPlayers" />
+        <datalist id="gameLevelListPlayers"></datalist>
+        <input type="text" id="filterPlayersLocality" placeholder="Localidad" list="localityListPlayers" />
+        <datalist id="localityListPlayers"></datalist>
+        <button id="btn-filter-players" class="btn btn-primary">Buscar Jugadores</button>
       </div>
-    </div>
-  </section>
-  
-  <!-- SECCIÓN PARTIDOS ABIERTOS -->
-  <div class="search-partidos" id="searchPartidosSection">
-    <button class="close-btn-partidos" onclick="closePartidosSearch()">X</button>
-    <h2>Partidos Abiertos</h2>
-    <div class="filter-container">
-      <input type="text" id="filterLocality" placeholder="Ej. Buenos Aires" />
-      <button id="btn-filter-partidos">Filtrar</button>
-    </div>
-    <div id="partidosResults"></div>
-  </div>
-  
-  <!-- SECCIÓN BUSCAR CANCHAS -->
-  <div class="search-canchas" id="searchCanchasSection">
-    <button class="close-btn" onclick="closeCanchaSearch()">X</button>
-    <h2>Buscar Canchas</h2>
-    <div class="filter-container">
-      <input type="text" id="filterCanchasName" placeholder="Nombre" list="namesList" />
-      <datalist id="namesList"></datalist>
-      <input type="text" id="filterCanchasLocality" placeholder="Localidad" list="localityList" />
-      <datalist id="localityList"></datalist>
-      <button id="btn-filter-canchas">Buscar Canchas</button>
-    </div>
-    <div id="canchasFeedback"></div>
-    <div class="results-container" id="canchasResults"></div>
-  </div>
-  
-  <!-- SECCIÓN BUSCAR JUGADORES -->
-  <div class="search-players" id="searchPlayersSection">
-    <button class="close-btn-players" onclick="closePlayersSection()">X</button>
-    <h2>Buscar Jugadores</h2>
-    <div class="filter-container">
-      <input type="text" id="filterPlayersName" placeholder="Nombre y Apellido" list="namesListPlayers" />
-      <datalist id="namesListPlayers"></datalist>
-      <input type="text" id="filterPlayersGameLevel" placeholder="Nivel de juego" list="gameLevelListPlayers" />
-      <datalist id="gameLevelListPlayers"></datalist>
-      <input type="text" id="filterPlayersLocality" placeholder="Localidad" list="localityListPlayers" />
-      <datalist id="localityListPlayers"></datalist>
-      <button id="btn-filter-players">Buscar Jugadores</button>
-    </div>
-    <div id="playersFeedback"></div>
-    <div id="playersResults"></div>
-  </div>
-  
-  <!-- MODAL PARA DETALLES DEL PARTIDO -->
-  <div id="matchModal">
+      <div class="feedback-container" id="playersFeedback"></div> <div class="results-grid" id="playersResults">
+          </div>
+    </section>
+
+  </main> <div id="matchModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" style="display: none;">
     <div class="modal-content">
-      <button class="close-modal" onclick="closeModal()">
-        <i class="fas fa-times"></i>
-      </button>
-      <!-- Botón para refrescar el modal -->
-      <button class="btn-refresh" onclick="refreshModal()">Refrescar</button>
-      <div id="modalContent"></div>
+      <button class="close-modal" aria-label="Cerrar modal">
+        <i class="fas fa-times" aria-hidden="true"></i> </button>
+      <div id="modalContent">
+          </div>
+       <div class="modal-actions">
+           <button id="modalRefreshButton" class="btn btn-sm btn-success">
+             <i class="fas fa-sync-alt"></i> Refrescar
+           </button>
+           <div id="modalActionButtons"></div>
+      </div>
     </div>
   </div>
-  
-  <!-- FOOTER -->
-  <footer style="text-align:center; padding:1rem 0; background:#fff; margin-top:2rem;">
-    © 2025 Catch Up Padel. Todos los derechos reservados.
+
+  <footer>
+    © <span id="currentYear"></span> Catch Up Padel. Todos los derechos reservados.
   </footer>
-  
-  <!-- SUPABASE -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-  <script>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script> <script>
     const SUPABASE_URL = "https://idlvxinjfbsujpvxncbr.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig";
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    
+
+    // --- Variables Globales ---
     let loggedUser = null;
-    let allEstablishments = [];
-    
-    async function logout() {
-      await supabaseClient.auth.signOut();
-      window.location.href = "index.html";
+    let userProfile = null; // Almacenará el perfil completo del usuario logueado
+    let allEstablishments = []; // Cache de establecimientos
+    let currentOpenModalMatchId = null; // ID del partido en el modal abierto
+    let elementThatOpenedModal = null; // Para devolver el foco al cerrar modal
+
+    // --- Selectores de Elementos Comunes ---
+    const profileLink = document.getElementById("profileLink");
+    const partidosButton = document.getElementById("partidosButton");
+    const canchasButton = document.getElementById("canchasButton"); // Aunque oculto, puede mostrarse para admin
+    const pistasButton = document.getElementById("pistasButton");   // Aunque oculto, puede mostrarse para admin
+    const jugadoresButton = document.getElementById("jugadoresButton");
+    const logoutButton = document.getElementById("logoutButton");
+
+    const heroSection = document.getElementById("hero");
+    const searchPartidosSection = document.getElementById("searchPartidosSection");
+    const searchCanchasSection = document.getElementById("searchCanchasSection");
+    const searchPlayersSection = document.getElementById("searchPlayersSection");
+    const allSearchSections = [searchPartidosSection, searchCanchasSection, searchPlayersSection];
+
+    const partidosResults = document.getElementById("partidosResults");
+    const canchasResults = document.getElementById("canchasResults");
+    const playersResults = document.getElementById("playersResults");
+    const partidosFeedback = document.getElementById("partidosFeedback");
+    const canchasFeedback = document.getElementById("canchasFeedback");
+    const playersFeedback = document.getElementById("playersFeedback");
+
+    const matchModal = document.getElementById('matchModal');
+    const modalContent = document.getElementById('modalContent');
+    const modalCloseButton = matchModal.querySelector('.close-modal');
+    const modalRefreshButton = document.getElementById('modalRefreshButton');
+    const modalActionButtonsContainer = document.getElementById('modalActionButtons');
+
+
+    // --- Funciones de Utilidad ---
+
+    // Muestra un loader en un contenedor de feedback
+    function showLoader(feedbackContainer) {
+      feedbackContainer.innerHTML = '<div class="loader" aria-hidden="true"></div><p class="visually-hidden">Cargando...</p>';
     }
-    
-    async function checkProfile() {
-      const profileLink = document.getElementById("profileLink");
-      const { data: { session } } = await supabaseClient.auth.getSession();
-      if (session && session.user) {
-        const userId = session.user.id;
-        const { data: profileData, error } = await supabaseClient
-          .from("profiles")
-          .select("*")
-          .eq("id", userId);
-        if (!error && profileData && profileData.length > 0) {
-          profileLink.textContent = "Modificar Perfil";
-          document.getElementById("canchasButton").style.display = "none";
-          document.getElementById("pistasButton").style.display = "none";
+
+    // Limpia el contenedor de feedback
+    function clearFeedback(feedbackContainer) {
+      feedbackContainer.innerHTML = "";
+    }
+
+    // Muestra un mensaje de error en un contenedor de feedback
+    function showError(feedbackContainer, message) {
+      feedbackContainer.innerHTML = `<p style="color: var(--danger-color);">${message}</p>`;
+    }
+
+    // Muestra un mensaje informativo
+    function showInfo(feedbackContainer, message) {
+        feedbackContainer.innerHTML = `<p style="color: var(--medium-text);">${message}</p>`;
+    }
+
+    // Alterna la visibilidad de una sección con transición
+    function toggleSection(sectionElement, show) {
+        if (show) {
+            // Oculta otras secciones antes de mostrar esta
+            allSearchSections.forEach(sec => {
+                if (sec !== sectionElement) {
+                    sec.classList.remove('is-visible');
+                }
+            });
+            sectionElement.classList.add('is-visible');
+            // Opcional: Scroll hacia la sección
+            sectionElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
         } else {
-          profileLink.style.display = "none";
-          document.getElementById("partidosButton").style.display = "none";
-          document.getElementById("jugadoresButton").style.display = "none";
+            sectionElement.classList.remove('is-visible');
         }
-        loggedUser = { id: userId, email: session.user.email };
+    }
+
+    // --- Lógica de Autenticación y Perfil ---
+
+    async function logout() {
+      showLoader(document.body); // Mostrar loader general
+      await supabaseClient.auth.signOut();
+      // No limpiar `loggedUser` aquí, `checkAuth` lo hará en el redirect
+      window.location.href = "index.html"; // Redirige a la página de login/principal
+    }
+
+    // Actualiza el estado de la UI (menú, etc.) basado en el usuario y perfil
+    function updateUIBasedOnAuth() {
+      if (loggedUser && userProfile) {
+        // Usuario logueado CON perfil
+        profileLink.textContent = "Modificar Perfil";
+        profileLink.href = "perfil.html"; // Asumiendo que existe la página
+        profileLink.classList.remove('disabled');
+
+        partidosButton.classList.remove('disabled');
+        jugadoresButton.classList.remove('disabled');
+        logoutButton.classList.remove('disabled');
+
+        // Lógica para mostrar/ocultar Canchas/Pistas según tipo de perfil (si aplica)
+        // Ejemplo: if (userProfile.type === 'establishment') { ... }
+        // Por ahora, mantenemos ocultos Canchas/Pistas como en el original si hay perfil
+        canchasButton.style.display = 'none';
+        pistasButton.style.display = 'none';
+
+        // Activa las tarjetas flotantes que dependen de estar logueado
+        document.querySelectorAll('.floating-card[data-action]').forEach(card => card.style.pointerEvents = 'auto');
+
+
+      } else if (loggedUser && !userProfile) {
+        // Usuario logueado SIN perfil
+        profileLink.textContent = "Crear Perfil";
+        profileLink.href = "perfil.html";
+        profileLink.classList.remove('disabled');
+
+        // Deshabilitar acciones que requieren perfil
+        partidosButton.classList.add('disabled');
+        jugadoresButton.classList.add('disabled');
+        canchasButton.style.display = 'none'; // Ocultar si no aplica
+        pistasButton.style.display = 'none';  // Ocultar si no aplica
+        logoutButton.classList.remove('disabled');
+
+        // Desactivar click en tarjetas flotantes que requieren perfil
+         document.querySelectorAll('.floating-card[data-action]').forEach(card => {
+             // Permitir buscar canchas/partidos/jugadores sin perfil? Depende de requisitos.
+             // Por ahora, las deshabilitamos si requieren perfil para interactuar (ej. unirse a partido)
+             // card.style.pointerEvents = 'none'; // O considerar lógica más fina
+         });
+         // Mostrar quizás un mensaje en Hero pidiendo crear perfil
+
+
+      } else {
+        // Usuario NO logueado (Redirigido a index.html usualmente)
+        // En teoría, esta página no debería ser accesible sin login
+        // Pero si lo fuera, deshabilitar todo excepto quizás login/registro
+        profileLink.textContent = "Iniciar Sesión"; // O redirigir
+        profileLink.href = "index.html";
+        profileLink.classList.add('disabled'); // Asumiendo que no puede modificar perfil
+        partidosButton.classList.add('disabled');
+        jugadoresButton.classList.add('disabled');
+        canchasButton.style.display = 'none';
+        pistasButton.style.display = 'none';
+        logoutButton.classList.add('disabled'); // No puede hacer logout si no está logueado
       }
     }
-    
-    async function preloadEstablishments() {
-      const { data, error } = await supabaseClient.from("establishments").select("*");
+
+    // Verifica sesión y perfil del usuario
+    async function checkAuthAndProfile() {
+      const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
+
+      if (sessionError) {
+          console.error("Error getting session:", sessionError);
+          loggedUser = null;
+          userProfile = null;
+          updateUIBasedOnAuth();
+          // Considerar redirigir a login si hay error de sesión
+          // window.location.href = "index.html";
+          return;
+      }
+
+      if (session && session.user) {
+        loggedUser = { id: session.user.id, email: session.user.email };
+
+        // Intentar obtener el perfil
+        const { data: profileData, error: profileError } = await supabaseClient
+          .from("profiles")
+          .select("*")
+          .eq("id", loggedUser.id)
+          .single(); // Asume que ID es único, usar single()
+
+        if (profileError && profileError.code !== 'PGRST116') { // PGRST116: 0 rows found (no es un error real si el perfil no existe)
+            console.error("Error fetching profile:", profileError);
+            // Mantener loggedUser, pero userProfile null. UI mostrará "Crear Perfil"
+            userProfile = null;
+        } else {
+            userProfile = profileData; // Puede ser null si no se encontró perfil (PGRST116)
+        }
+
+      } else {
+        // No hay sesión activa
+        loggedUser = null;
+        userProfile = null;
+        // Redirigir a login si no hay sesión activa
+        // Descomentar si esta página requiere login obligatorio
+        // window.location.href = "index.html";
+        // return;
+      }
+      updateUIBasedOnAuth(); // Actualiza la UI después de verificar todo
+    }
+
+    // --- Precarga de Datos para Filtros ---
+
+    async function preloadEstablishmentsData() {
+      const { data, error } = await supabaseClient.from("establishments").select("name, locality");
       if (error) { console.error("Error cargando establecimientos:", error.message); return; }
-      allEstablishments = data;
-      const namesSet = new Set(), localitiesSet = new Set();
+
+      allEstablishments = data; // Guardar para posible uso futuro
+      const namesSet = new Set();
+      const localitiesSet = new Set();
       data.forEach(item => {
         if(item.name) namesSet.add(item.name);
         if(item.locality) localitiesSet.add(item.locality);
       });
-      const namesList = document.getElementById("namesList");
-      namesList.innerHTML = "";
-      namesSet.forEach(name => {
-        const option = document.createElement("option");
-        option.value = name;
-        namesList.appendChild(option);
-      });
-      const localityList = document.getElementById("localityList");
-      localityList.innerHTML = "";
-      localitiesSet.forEach(loc => {
-        const option = document.createElement("option");
-        option.value = loc;
-        localityList.appendChild(option);
-      });
+
+      // Llenar datalists
+      fillDatalist("namesList", namesSet);
+      fillDatalist("localityList", localitiesSet);
     }
-    
+
     async function preloadPlayersData() {
-      const { data, error } = await supabaseClient.from("profiles").select("*");
-      if (error) { console.error("Error cargando jugadores:", error.message); return; }
-      const namesSet = new Set(), gameLevelsSet = new Set(), localitiesSet = new Set();
-      data.forEach(player => {
-        if(player.full_name) namesSet.add(player.full_name);
-        if(player.game_level) gameLevelsSet.add(player.game_level);
-        if(player.locality) localitiesSet.add(player.locality);
-      });
-      const namesListPlayers = document.getElementById("namesListPlayers");
-      namesListPlayers.innerHTML = "";
-      namesSet.forEach(name => {
-        const option = document.createElement("option");
-        option.value = name;
-        namesListPlayers.appendChild(option);
-      });
-      const gameLevelListPlayers = document.getElementById("gameLevelListPlayers");
-      gameLevelListPlayers.innerHTML = "";
-      gameLevelsSet.forEach(level => {
-        const option = document.createElement("option");
-        option.value = level;
-        gameLevelListPlayers.appendChild(option);
-      });
-      const localityListPlayers = document.getElementById("localityListPlayers");
-      localityListPlayers.innerHTML = "";
-      localitiesSet.forEach(loc => {
-        const option = document.createElement("option");
-        option.value = loc;
-        localityListPlayers.appendChild(option);
-      });
+        const { data, error } = await supabaseClient.from("profiles").select("full_name, game_level, locality");
+        if (error) { console.error("Error cargando datos de jugadores:", error.message); return; }
+
+        const namesSet = new Set();
+        const gameLevelsSet = new Set();
+        const localitiesSet = new Set();
+        data.forEach(player => {
+            if(player.full_name) namesSet.add(player.full_name);
+            if(player.game_level) gameLevelsSet.add(player.game_level);
+            if(player.locality) localitiesSet.add(player.locality);
+        });
+
+        fillDatalist("namesListPlayers", namesSet);
+        fillDatalist("gameLevelListPlayers", gameLevelsSet);
+        fillDatalist("localityListPlayers", localitiesSet);
     }
-    
-    function hideAllSections() {
-      document.getElementById("searchPartidosSection").style.display = "none";
-      document.getElementById("searchCanchasSection").style.display = "none";
-      document.getElementById("searchPlayersSection").style.display = "none";
+
+    function fillDatalist(datalistId, dataSet) {
+        const datalist = document.getElementById(datalistId);
+        if (!datalist) return;
+        datalist.innerHTML = ""; // Limpiar opciones anteriores
+        dataSet.forEach(value => {
+            const option = document.createElement("option");
+            option.value = value;
+            datalist.appendChild(option);
+        });
     }
-    
-    function showPartidosSearch() {
-      hideAllSections();
-      document.getElementById("searchPartidosSection").style.display = "block";
-      document.getElementById("filterLocality").value = "";
-      document.getElementById("partidosResults").innerHTML = "";
+
+    // --- Lógica de Búsqueda y Visualización ---
+
+    // -- Partidos Abiertos --
+    function handleShowPartidosSearch() {
+        toggleSection(searchPartidosSection, true);
+        document.getElementById("filterLocalityPartidos").value = "";
+        partidosResults.innerHTML = ""; // Limpiar resultados anteriores
+        clearFeedback(partidosFeedback);
+        // Cargar partidos iniciales sin filtro? O esperar al botón? Esperaremos al botón.
+        // loadOpenPartidos(); // Descomentar si quieres carga inicial
     }
-    function closePartidosSearch() {
-      document.getElementById("searchPartidosSection").style.display = "none";
-      document.getElementById("filterLocality").value = "";
-      document.getElementById("partidosResults").innerHTML = "";
+    function handleClosePartidosSearch() {
+        toggleSection(searchPartidosSection, false);
     }
-    document.getElementById("btn-filter-partidos").addEventListener("click", () => {
-      const filterLocality = document.getElementById("filterLocality").value.trim();
-      loadOpenPartidos(filterLocality);
-    });
-    
     async function loadOpenPartidos(localityFilter = "") {
-      const partidosResults = document.getElementById("partidosResults");
-      partidosResults.innerHTML = "";
-      const todayISO = new Date().toISOString().slice(0, 10);
-      let query = supabaseClient.from("partidos")
-        .select("*, establishments(name, locality), participants(user_id, cancelled, leave_reason)")
-        .gte("match_date", todayISO)
-        .neq("completitud", "Completo");
-      if (localityFilter) { query = query.ilike("establishments.locality", `%${localityFilter}%`); }
-      const { data, error } = await query;
-      if (error) {
-        console.error("Error buscando partidos abiertos:", error.message);
-        partidosResults.innerHTML = `<p style="color:red;">Error: ${error.message}</p>`;
-        return;
-      }
-      if (!data || data.length === 0) {
-        partidosResults.innerHTML = "<p>No se encontraron partidos abiertos.</p>";
-        return;
-      }
-      const matchesMap = {};
-      data.forEach(partido => { matchesMap[partido.id] = partido; });
-      
-      // Para cada partido, se construye la tarjeta y se añaden las miniaturas de los participantes activos.
-      for (let partido of Object.values(matchesMap)) {
+        if (!loggedUser) {
+             showInfo(partidosFeedback, "Debes iniciar sesión para ver partidos.");
+             return;
+        }
+        showLoader(partidosFeedback);
+        partidosResults.innerHTML = "";
+        const todayISO = new Date().toISOString().slice(0, 10);
+
+        let query = supabaseClient.from("partidos")
+          .select(`
+            id, match_name, match_date, start_time, end_time, match_level, total_players, completitud, establishment_id,
+            establishments ( name, locality ),
+            participants ( user_id, cancelled, leave_reason, profiles ( id, profile_pic ) )
+          `) // Seleccionar profile_pic del participante directamente
+          .gte("match_date", todayISO)
+          .neq("completitud", "Completo")
+          .order('match_date', { ascending: true })
+          .order('start_time', { ascending: true });
+
+        if (localityFilter) {
+           // Filtrar por localidad requiere un join implícito o buscar IDs de establecimientos primero
+           // Simplificación: Filtramos después de obtener los datos si no es fácil en la query
+           // O, si es posible con RLS/Views o RPC. Asumamos filtro post-fetch por ahora.
+           // Alternativa: query = query.ilike("establishments.locality", `%${localityFilter}%`); // Puede fallar si RLS lo impide
+        }
+
+        const { data, error } = await query;
+        clearFeedback(partidosFeedback);
+
+        if (error) {
+            console.error("Error buscando partidos abiertos:", error.message);
+            showError(partidosFeedback, `Error al buscar partidos: ${error.message}`);
+            return;
+        }
+
+        // Filtrado post-fetch por localidad (si la query directa no funcionó)
+        const filteredData = localityFilter
+            ? data.filter(partido => partido.establishments && partido.establishments.locality.toLowerCase().includes(localityFilter.toLowerCase()))
+            : data;
+
+        if (!filteredData || filteredData.length === 0) {
+            showInfo(partidosFeedback, "No se encontraron partidos abiertos" + (localityFilter ? ` en ${localityFilter}` : "."));
+            return;
+        }
+
+        // Procesar y mostrar cada partido
+        filteredData.forEach(partido => {
+            partidosResults.appendChild(createPartidoCard(partido));
+        });
+    }
+
+    function createPartidoCard(partido) {
+        const card = document.createElement("div");
+        card.className = "result-card partido-card";
+        card.setAttribute('data-match-id', partido.id); // Guardar ID para el modal
+
         const activeParticipants = partido.participants ? partido.participants.filter(p => !p.cancelled) : [];
         const joinedCount = activeParticipants.length;
         const totalPlayers = partido.total_players || 4;
         const missing = totalPlayers - joinedCount;
-    
-        // Construir miniaturas de participantes activos
+
         let avatarsHTML = "";
         if (activeParticipants.length > 0) {
-          const userIds = activeParticipants.map(p => p.user_id);
-          const { data: userProfiles } = await supabaseClient
-            .from("profiles")
-            .select("id, profile_pic")
-            .in("id", userIds);
-          if (userProfiles && userProfiles.length > 0) {
-            const maxToShow = 4;
-            const partialProfiles = userProfiles.slice(0, maxToShow);
-            partialProfiles.forEach(profile => {
-              const pic = profile.profile_pic || "https://via.placeholder.com/32";
-              avatarsHTML += `<img src="${pic}" alt="Foto" />`;
+            const maxToShow = 4; // Mostrar max 4 avatares + contador
+            const participantsToShow = activeParticipants.slice(0, maxToShow);
+
+            participantsToShow.forEach(p => {
+                 // Usamos la info del perfil anidada si está disponible
+                const pic = p.profiles?.profile_pic || "https://via.placeholder.com/32";
+                // Añadir alt text!
+                avatarsHTML += `<img src="${pic}" alt="" loading="lazy" />`; // Alt vacío si son decorativos o no tenemos nombre aquí
             });
-            if (userProfiles.length > maxToShow) {
-              const extraCount = userProfiles.length - maxToShow;
-              avatarsHTML += `<span style="font-size:0.85rem; color:#666;">+${extraCount} más</span>`;
+
+            if (activeParticipants.length > maxToShow) {
+                const extraCount = activeParticipants.length - maxToShow;
+                avatarsHTML += `<span class="extra-count">+${extraCount}</span>`;
             }
-          }
+        } else {
+             avatarsHTML = "<p style='font-size:0.85em; color: var(--medium-text);'>¡Sé el primero en unirte!</p>";
         }
-    
-        // La modificación: el título ahora lleva la clase "blinking-title" para animar su color.
-        const card = document.createElement("div");
-        card.className = "partido-card";
+
+
+        // Usar clases para título destacado en lugar de 'blinking'
         card.innerHTML = `
-          <h3 class="blinking-title">${partido.match_name}</h3>
+          <h3 class="${missing > 0 ? 'highlight' : ''}">${partido.match_name}</h3>
           <div class="icon-text">
-            <i class="fas fa-calendar-alt"></i>
-            <p class="highlight">${partido.match_date}</p>
+            <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+            <p><span class="highlight">${partido.match_date}</span></p>
           </div>
           <div class="icon-text">
-            <i class="fas fa-clock"></i>
-            <p>${partido.start_time} - ${partido.end_time}</p>
+            <i class="fas fa-clock" aria-hidden="true"></i>
+            <p>${partido.start_time || 'Hora TBC'} - ${partido.end_time || ''}</p>
           </div>
-          <p>Cancha: ${partido.establishments ? partido.establishments.name : ""}</p>
-          <p>Localidad: ${partido.establishments ? partido.establishments.locality : ""}</p>
+          <div class="icon-text">
+            <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+            <p>${partido.establishments ? partido.establishments.name : "Establecimiento TBC"} (${partido.establishments ? partido.establishments.locality : "Localidad TBC"})</p>
+          </div>
           <div class="divider"></div>
           <div class="icon-text">
-            <i class="fas fa-table-tennis-paddle-ball"></i>
-            <p><span class="highlight">Nivel:</span> ${partido.match_level}</p>
+            <i class="fas fa-layer-group" aria-hidden="true"></i>
+            <p><span class="highlight">Nivel:</span> ${partido.match_level || 'Mixto'}</p>
           </div>
-          <p class="highlight">Faltan ${missing} jugadores de ${totalPlayers}</p>
+          <p class="highlight"> ${missing > 0 ? `Faltan ${missing} de ${totalPlayers}` : '¡Partido Completo!'}</p>
           <div class="participants-avatars">${avatarsHTML}</div>
-          <button class="btn-view-partido">Ver el Partido</button>
+          <button class="btn btn-sm btn-secondary btn-view-partido" data-match-id="${partido.id}">Ver Detalles</button>
         `;
+
+        // Añadir event listener al botón Ver Detalles
         const viewButton = card.querySelector(".btn-view-partido");
-        viewButton.addEventListener("click", () => { showModal(partido); });
-        partidosResults.appendChild(card);
-      }
-    }
-    
-    // Función para refrescar la información del partido
-    async function refreshMatch(matchId) {
-      const { data, error } = await supabaseClient
-        .from("partidos")
-        .select("*, establishments(name, locality), participants(user_id, cancelled, leave_reason)")
-        .eq("id", matchId)
-        .single();
-      if (error) {
-        alert("Error actualizando partido: " + error.message);
-        return null;
-      }
-      return data;
-    }
-    
-    // Botón "Refrescar" en el modal
-    async function refreshModal() {
-      const modalContent = document.getElementById("modalContent");
-      const currentMatchId = modalContent.getAttribute("data-match-id");
-      if (!currentMatchId) {
-        alert("No se pudo refrescar, intente nuevamente.");
-        return;
-      }
-      const refreshed = await refreshMatch(currentMatchId);
-      showModal(refreshed);
-    }
-    
-    // Función de espera
-    function wait(ms) {
-      return new Promise(resolve => setTimeout(resolve, ms));
-    }
-    
-    // Función para mostrar el modal con información actualizada del partido
-    async function showModal(partido) {
-      await wait(300);
-      const updatedPartido = await refreshMatch(partido.id);
-      if (!updatedPartido) return;
-    
-      const modal = document.getElementById("matchModal");
-      const modalContent = document.getElementById("modalContent");
-      modalContent.setAttribute("data-match-id", updatedPartido.id);
-    
-      const activeParticipants = updatedPartido.participants ? updatedPartido.participants.filter(p => !p.cancelled) : [];
-      const joinedCount = activeParticipants.length;
-      const totalPlayers = updatedPartido.total_players || 4;
-      const missing = totalPlayers - joinedCount;
-    
-      // Obtención de detalles de participantes (todos)
-      let userIds = [];
-      if (updatedPartido.participants) {
-        userIds = updatedPartido.participants.map(p => p.user_id);
-      }
-      let participantListHTML = `<div class="participants-list-container"><ul>`;
-      if (userIds.length > 0) {
-        const { data: userProfiles } = await supabaseClient
-          .from("profiles")
-          .select("id, full_name, profile_pic")
-          .in("id", userIds);
-        if (userProfiles && userProfiles.length > 0) {
-          userProfiles.forEach(usr => {
-            const rec = updatedPartido.participants.find(r => r.user_id === usr.id);
-            let styleName = "";
-            let reasonText = "";
-            if (rec && rec.cancelled) {
-              styleName = "cancelled";
-              if (rec.leave_reason) {
-                reasonText = ` - (${rec.leave_reason})`;
-              }
-            }
-            participantListHTML += `
-              <li>
-                <img src="${usr.profile_pic || "https://via.placeholder.com/40"}" alt="Foto de ${usr.full_name}" />
-                <span class="${styleName}">${usr.full_name}${reasonText}</span>
-              </li>
-            `;
-          });
-        } else {
-          participantListHTML += "<li>No hay jugadores apuntados.</li>";
-        }
-      } else {
-        participantListHTML += "<li>No hay jugadores apuntados.</li>";
-      }
-      participantListHTML += "</ul></div>";
-    
-      modalContent.innerHTML = `
-        <h2>${updatedPartido.match_name}</h2>
-        <p><strong>Fecha:</strong> ${updatedPartido.match_date}</p>
-        <p><strong>Hora:</strong> ${updatedPartido.start_time} - ${updatedPartido.end_time}</p>
-        <p><strong>Cancha:</strong> ${updatedPartido.establishments ? updatedPartido.establishments.name : ""}</p>
-        <p><strong>Localidad:</strong> ${updatedPartido.establishments ? updatedPartido.establishments.locality : ""}</p>
-        <p><strong>Nivel:</strong> ${updatedPartido.match_level}</p>
-        <h3>Jugadores Apuntados:</h3>
-        ${participantListHTML}
-        <p class="missing-players">Faltan ${missing} jugadores de ${totalPlayers} totales</p>
-      `;
-    
-      const userRecord = updatedPartido.participants && loggedUser
-        ? updatedPartido.participants.find(p => p.user_id === loggedUser.id)
-        : null;
-    
-      if (!userRecord) {
-        const joinButton = document.createElement("button");
-        joinButton.className = "btn-join";
-        joinButton.textContent = "Unirse";
-        joinButton.addEventListener("click", async () => {
-          await joinMatch(updatedPartido.id);
-          const refreshed = await refreshMatch(updatedPartido.id);
-          showModal(refreshed);
+        viewButton.addEventListener("click", (event) => {
+            elementThatOpenedModal = event.currentTarget; // Guardar botón para devolver foco
+            handleShowMatchModal(partido.id);
         });
-        modalContent.appendChild(joinButton);
-      }
-      else if (userRecord && !userRecord.cancelled) {
-        const info = document.createElement("p");
-        info.textContent = "Ya estás apuntado a este partido.";
-        modalContent.appendChild(info);
-        const leaveButton = document.createElement("button");
-        leaveButton.className = "btn-leave";
-        leaveButton.textContent = "Darse de baja";
-        leaveButton.addEventListener("click", async () => {
-          let explanation = prompt("Ingresa un motivo (máx. 50 caracteres):");
-          if (explanation === null) return;
-          if (explanation.length > 50) {
-            alert("El motivo debe tener 50 caracteres o menos.");
-            return;
-          }
-          await leaveMatch(updatedPartido.id, explanation);
-          const refreshed = await refreshMatch(updatedPartido.id);
-          showModal(refreshed);
-        });
-        modalContent.appendChild(leaveButton);
-      }
-      else if (userRecord && userRecord.cancelled) {
-        const info = document.createElement("p");
-        info.textContent = "Ya te has dado de baja de este partido.";
-        modalContent.appendChild(info);
-      }
-    
-      modal.style.display = "flex";
+
+        return card;
     }
-    
-    function closeModal() {
-      document.getElementById("matchModal").style.display = "none";
+
+    // -- Buscar Canchas --
+    function handleShowCanchaSearch() {
+        toggleSection(searchCanchasSection, true);
+        document.getElementById("filterCanchasName").value = "";
+        document.getElementById("filterCanchasLocality").value = "";
+        canchasResults.innerHTML = "";
+        clearFeedback(canchasFeedback);
     }
-    
-    async function joinMatch(matchId) {
-      await new Promise(resolve => setTimeout(resolve, 300));
-      const { data, error } = await supabaseClient
-        .from("participants")
-        .insert([{ match_id: matchId, user_id: loggedUser.id }]);
-      if (error) {
-        alert("Error al unirse: " + error.message);
-      } else {
-        alert("Te has unido al partido");
-      }
+     function handleCloseCanchaSearch() {
+        toggleSection(searchCanchasSection, false);
     }
-    
-    async function leaveMatch(matchId, explanation) {
-      await new Promise(resolve => setTimeout(resolve, 300));
-      const { data, error } = await supabaseClient
-        .from("participants")
-        .update({ cancelled: true, leave_reason: explanation })
-        .match({ match_id: matchId, user_id: loggedUser.id });
-      if (error) {
-        alert("Error al darse de baja: " + error.message);
-      } else {
-        alert("Has cancelado tu participación en el partido");
-      }
-    }
-    
-    function showCanchaSearch() {
-      hideAllSections();
-      document.getElementById("searchCanchasSection").style.display = "block";
-      document.getElementById("filterCanchasName").value = "";
-      document.getElementById("filterCanchasLocality").value = "";
-      document.getElementById("canchasResults").innerHTML = "";
-      document.getElementById("canchasFeedback").innerHTML = "";
-    }
-    function closeCanchaSearch() {
-      document.getElementById("searchCanchasSection").style.display = "none";
-      document.getElementById("filterCanchasName").value = "";
-      document.getElementById("filterCanchasLocality").value = "";
-      document.getElementById("canchasResults").innerHTML = "";
-      document.getElementById("canchasFeedback").innerHTML = "";
-    }
-    document.getElementById("btn-filter-canchas").addEventListener("click", () => {
-      const nameFilter = document.getElementById("filterCanchasName").value.trim();
-      const localityFilter = document.getElementById("filterCanchasLocality").value.trim();
-      loadCanchas(nameFilter, localityFilter);
-    });
     async function loadCanchas(nameFilter = "", localityFilter = "") {
-      const canchasResults = document.getElementById("canchasResults");
-      const canchasFeedback = document.getElementById("canchasFeedback");
-      canchasResults.innerHTML = "";
-      canchasFeedback.innerHTML = "";
-      showCanchasLoader();
-      let query = supabaseClient.from("establishments").select("*");
-      if (nameFilter) { query = query.ilike("name", `%${nameFilter}%`); }
-      if (localityFilter) { query = query.ilike("locality", `%${localityFilter}%`); }
-      const { data, error } = await query;
-      clearCanchasLoader();
-      if (error) {
-        canchasFeedback.innerHTML = `<p style="color:red;">Error: ${error.message}</p>`;
-        return;
-      }
-      if (!data || data.length === 0) {
-        canchasResults.innerHTML = '<p style="text-align:center; width:100%;">No se encontraron canchas para los criterios ingresados.</p>';
-        return;
-      }
-      data.forEach(c => {
+        showLoader(canchasFeedback);
+        canchasResults.innerHTML = "";
+
+        let query = supabaseClient.from("establishments").select("*");
+        if (nameFilter) { query = query.ilike("name", `%${nameFilter}%`); }
+        if (localityFilter) { query = query.ilike("locality", `%${localityFilter}%`); }
+
+        const { data, error } = await query;
+        clearFeedback(canchasFeedback);
+
+        if (error) {
+            showError(canchasFeedback, `Error al buscar canchas: ${error.message}`);
+            return;
+        }
+        if (!data || data.length === 0) {
+            showInfo(canchasFeedback, "No se encontraron canchas con esos criterios.");
+            return;
+        }
+
+        data.forEach(cancha => {
+            canchasResults.appendChild(createCanchaCard(cancha));
+        });
+    }
+
+    function createCanchaCard(cancha) {
         const card = document.createElement("div");
-        card.className = "card";
-        const header = document.createElement("div");
-        header.className = "card-header";
-        header.textContent = c.name;
-        card.appendChild(header);
-        const content = document.createElement("div");
-        content.className = "card-content";
-        content.innerHTML = `
-          <p><strong>Localidad:</strong> ${c.locality}</p>
-          <p><strong>Dirección:</strong> ${c.address}</p>
-          <p><strong>Cantidad de Canchas:</strong> ${c.court_count}</p>
-        `;
-        card.appendChild(content);
-        const mapContainer = document.createElement("div");
-        mapContainer.className = "map-container";
-        const mapURL = `https://maps.google.com/maps?q=${c.latitude},${c.longitude}&hl=es&z=14&output=embed`;
-        mapContainer.innerHTML = `<iframe src="${mapURL}" width="100%" height="100%" frameborder="0" style="border:0" allowfullscreen></iframe>`;
-        card.appendChild(mapContainer);
-        canchasResults.appendChild(card);
-      });
-    }
-    function showCanchasLoader() { document.getElementById("canchasFeedback").innerHTML = '<div class="loader"></div>'; }
-    function clearCanchasLoader() { document.getElementById("canchasFeedback").innerHTML = ""; }
-    
-    function showPlayersSection() {
-      hideAllSections();
-      document.getElementById("searchPlayersSection").style.display = "block";
-      document.getElementById("filterPlayersName").value = "";
-      document.getElementById("filterPlayersGameLevel").value = "";
-      document.getElementById("filterPlayersLocality").value = "";
-      document.getElementById("playersResults").innerHTML = "";
-      document.getElementById("playersFeedback").innerHTML = "";
-    }
-    function closePlayersSection() {
-      document.getElementById("searchPlayersSection").style.display = "none";
-      document.getElementById("filterPlayersName").value = "";
-      document.getElementById("filterPlayersGameLevel").value = "";
-      document.getElementById("filterPlayersLocality").value = "";
-      document.getElementById("playersResults").innerHTML = "";
-      document.getElementById("playersFeedback").innerHTML = "";
-    }
-    document.getElementById("btn-filter-players").addEventListener("click", () => {
-      const nameFilter = document.getElementById("filterPlayersName").value.trim();
-      const gameLevelFilter = document.getElementById("filterPlayersGameLevel").value.trim();
-      const localityFilter = document.getElementById("filterPlayersLocality").value.trim();
-      loadPlayers(nameFilter, gameLevelFilter, localityFilter);
-    });
-    async function loadPlayers(nameFilter = "", gameLevelFilter = "", localityFilter = "") {
-      const playersResults = document.getElementById("playersResults");
-      const playersFeedback = document.getElementById("playersFeedback");
-      playersResults.innerHTML = "";
-      playersFeedback.innerHTML = "";
-      let query = supabaseClient.from("profiles").select("*");
-      if (nameFilter) { query = query.ilike("full_name", `%${nameFilter}%`); }
-      if (gameLevelFilter) { query = query.ilike("game_level", `%${gameLevelFilter}%`); }
-      if (localityFilter) { query = query.ilike("locality", `%${localityFilter}%`); }
-      const { data, error } = await query;
-      if (error) {
-        playersFeedback.innerHTML = `<p style="color:red;">Error: ${error.message}</p>`;
-        return;
-      }
-      if (!data || data.length === 0) {
-        playersResults.innerHTML = '<p style="text-align:center; width:100%;">No se encontraron jugadores.</p>';
-        return;
-      }
-      data.forEach(player => {
-        const card = document.createElement("div");
-        card.className = "player-card";
+        card.className = "result-card cancha-card";
+        // Usar `aria-label` o `aria-labelledby` si el header no es suficiente contexto
         card.innerHTML = `
-          <div style="display:flex; align-items:center; gap:1rem;">
-            <img src="${player.profile_pic || "https://via.placeholder.com/100"}" alt="Foto de perfil" style="width:100px; height:100px; border-radius:50%; object-fit: cover;" />
-            <div>
-              <h3>${player.full_name}</h3>
-              <p><strong>Edad:</strong> ${player.age || "N/D"}</p>
-              <p><strong>Sexo:</strong> ${player.gender || "N/D"}</p>
-              <p><strong>Nivel de juego:</strong> ${player.game_level || "N/D"}</p>
+            <div class="card-header">${cancha.name}</div>
+            <div class="card-content">
+              <p><strong>Localidad:</strong> ${cancha.locality || "No especificada"}</p>
+              <p><strong>Dirección:</strong> ${cancha.address || "No especificada"}</p>
+              <p><strong>Canchas:</strong> ${cancha.court_count || "N/D"}</p>
+              </div>
+            ${(cancha.latitude && cancha.longitude) ? `
+            <div class="map-container">
+              <iframe
+                src="https://maps.google.com/maps?q=${cancha.latitude},${cancha.longitude}&hl=es&z=14&amp;output=embed"
+                width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+                title="Mapa de ubicación de ${cancha.name}">
+              </iframe>
+            </div>` : '<p style="padding: 1rem; text-align: center; color: var(--medium-text);">Ubicación no disponible</p>'}
+        `;
+        return card;
+    }
+
+
+    // -- Buscar Jugadores --
+    function handleShowPlayersSearch() {
+        toggleSection(searchPlayersSection, true);
+        document.getElementById("filterPlayersName").value = "";
+        document.getElementById("filterPlayersGameLevel").value = "";
+        document.getElementById("filterPlayersLocality").value = "";
+        playersResults.innerHTML = "";
+        clearFeedback(playersFeedback);
+    }
+     function handleClosePlayersSearch() {
+        toggleSection(searchPlayersSection, false);
+    }
+    async function loadPlayers(nameFilter = "", gameLevelFilter = "", localityFilter = "") {
+        showLoader(playersFeedback);
+        playersResults.innerHTML = "";
+
+        let query = supabaseClient.from("profiles").select("*");
+        if (nameFilter) { query = query.ilike("full_name", `%${nameFilter}%`); }
+        if (gameLevelFilter) { query = query.ilike("game_level", `%${gameLevelFilter}%`); }
+        if (localityFilter) { query = query.ilike("locality", `%${localityFilter}%`); }
+        // Excluir al propio usuario de los resultados?
+        // if (loggedUser) { query = query.neq('id', loggedUser.id); }
+
+        const { data, error } = await query;
+        clearFeedback(playersFeedback);
+
+        if (error) {
+            showError(playersFeedback, `Error al buscar jugadores: ${error.message}`);
+            return;
+        }
+        if (!data || data.length === 0) {
+            showInfo(playersFeedback, "No se encontraron jugadores con esos criterios.");
+            return;
+        }
+
+        data.forEach(player => {
+            playersResults.appendChild(createPlayerCard(player));
+        });
+    }
+
+    function createPlayerCard(player) {
+        const card = document.createElement("div");
+        card.className = "result-card player-card";
+        const profilePic = player.profile_pic || "https://via.placeholder.com/80";
+        // Añadir alt text!
+        const altText = player.full_name ? `Foto de perfil de ${player.full_name}` : "Foto de perfil";
+        card.innerHTML = `
+          <div class="player-header">
+            <img src="${profilePic}" alt="${altText}" class="player-avatar" loading="lazy" />
+            <div class="player-info">
+              <h3>${player.full_name || "Nombre no disponible"}</h3>
+              <p><strong>Nivel:</strong> ${player.game_level || "N/D"}</p>
               <p><strong>Localidad:</strong> ${player.locality || "N/D"}</p>
-              <p><strong>Teléfono:</strong> ${player.phone || "N/D"}</p>
             </div>
           </div>
+          <div class="player-details">
+              <p><strong>Edad:</strong> ${player.age || "N/D"}</p>
+              <p><strong>Sexo:</strong> ${player.gender || "N/D"}</p>
+              <p><strong>Teléfono:</strong> ${player.phone || "Privado"}</p>
+              </div>
         `;
-        playersResults.appendChild(card);
-      });
+        return card;
     }
-    
-    document.addEventListener("DOMContentLoaded", async () => {
-      await checkProfile();
-      await preloadEstablishments();
-      await preloadPlayersData();
-      if (loggedUser && document.getElementById("partidosButton").style.display !== "none") {
-        document.getElementById("searchPartidosSection").style.display = "block";
-        loadOpenPartidos();
+
+    // --- Lógica del Modal de Partidos ---
+
+    // Muestra el modal y carga los datos del partido
+    async function handleShowMatchModal(matchId) {
+        if (!loggedUser) {
+            alert("Debes iniciar sesión para ver los detalles del partido.");
+            return;
+        }
+        currentOpenModalMatchId = matchId; // Guardar ID actual
+        matchModal.classList.add('is-visible'); // Mostrar modal (CSS se encarga de la animación)
+        modalContent.innerHTML = '<div class="loader"></div>'; // Mostrar loader dentro del modal
+        modalActionButtonsContainer.innerHTML = ''; // Limpiar botones de acción
+
+        // Enfocar el botón de cerrar al abrir (accesibilidad)
+        modalCloseButton.focus();
+
+        await loadMatchDetailsIntoModal(matchId);
+    }
+
+    // Cierra el modal
+    function handleCloseMatchModal() {
+        matchModal.classList.remove('is-visible');
+        currentOpenModalMatchId = null;
+        modalContent.innerHTML = ''; // Limpiar contenido
+        modalActionButtonsContainer.innerHTML = '';
+
+        // Devolver el foco al elemento que abrió el modal (accesibilidad)
+        if (elementThatOpenedModal) {
+            elementThatOpenedModal.focus();
+            elementThatOpenedModal = null; // Resetear
+        }
+    }
+
+    // Carga/Recarga los detalles del partido en el modal
+    async function loadMatchDetailsIntoModal(matchId) {
+        const { data: partido, error } = await supabaseClient
+            .from("partidos")
+            .select(`
+                *,
+                establishments ( name, locality ),
+                participants ( *, profiles ( id, full_name, profile_pic ) )
+            `)
+            .eq("id", matchId)
+            .single();
+
+        if (error || !partido) {
+            console.error("Error fetching match details:", error?.message);
+            modalContent.innerHTML = `<p style="color:var(--danger-color)">Error al cargar los detalles del partido.</p>`;
+            // No limpiar botones de acción aquí, puede haber error pero queremos que se puedan refrescar
+            return;
+        }
+
+        // Renderizar contenido principal del modal
+        renderModalContent(partido);
+
+        // Renderizar botones de acción (Unirse/Baja)
+        renderModalActionButtons(partido);
+    }
+
+    // Refresca el contenido del modal actual
+    async function handleRefreshModal() {
+        if (currentOpenModalMatchId) {
+            // Añadir feedback visual de refresco? (ej. icono girando)
+            modalRefreshButton.disabled = true;
+            modalRefreshButton.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i> Refrescando...';
+            await loadMatchDetailsIntoModal(currentOpenModalMatchId);
+            modalRefreshButton.disabled = false;
+            modalRefreshButton.innerHTML = '<i class="fas fa-sync-alt"></i> Refrescar';
+        }
+    }
+
+    // Renderiza la información principal dentro del modal
+    function renderModalContent(partido) {
+        const activeParticipants = partido.participants ? partido.participants.filter(p => !p.cancelled) : [];
+        const joinedCount = activeParticipants.length;
+        const totalPlayers = partido.total_players || 4;
+        const missing = totalPlayers - joinedCount;
+
+        let participantListHTML = '<ul>';
+        if (partido.participants && partido.participants.length > 0) {
+            partido.participants.forEach(p => {
+                const profile = p.profiles; // Obtenido del join
+                const pic = profile?.profile_pic || "https://via.placeholder.com/45";
+                // Añadir alt text!
+                const altText = profile?.full_name ? `Foto de ${profile.full_name}` : "Avatar de jugador";
+                const name = profile?.full_name || "Jugador (Error perfil)";
+                const isCancelled = p.cancelled;
+                const reason = p.leave_reason ? `<span class="leave-reason">(${p.leave_reason})</span>` : "";
+
+                participantListHTML += `
+                  <li>
+                    <img src="${pic}" alt="${altText}" loading="lazy" />
+                    <span class="${isCancelled ? 'cancelled' : ''}">${name} ${isCancelled ? reason : ''}</span>
+                  </li>
+                `;
+            });
+        } else {
+            participantListHTML += "<li>Aún no hay jugadores apuntados.</li>";
+        }
+        participantListHTML += "</ul>";
+
+        modalContent.innerHTML = `
+          <h2 id="modalTitle">${partido.match_name}</h2>
+          <p><strong>Fecha:</strong> ${partido.match_date}</p>
+          <p><strong>Hora:</strong> ${partido.start_time || 'N/D'} - ${partido.end_time || 'N/D'}</p>
+          <p><strong>Lugar:</strong> ${partido.establishments?.name || 'N/D'} (${partido.establishments?.locality || 'N/D'})</p>
+          <p><strong>Nivel:</strong> ${partido.match_level || 'N/D'}</p>
+          <h3>Jugadores Apuntados (${joinedCount}/${totalPlayers}):</h3>
+          <div class="participants-list-container">
+            ${participantListHTML}
+          </div>
+          ${missing > 0 ? `<p class="missing-players">¡Faltan ${missing} jugadores!</p>` : '<p style="text-align:center; color:var(--success-color); font-weight:bold;">¡Partido Completo!</p>'}
+        `;
+    }
+
+    // Renderiza los botones de Unirse/Darse de baja en el modal
+    function renderModalActionButtons(partido) {
+        modalActionButtonsContainer.innerHTML = ''; // Limpiar botones anteriores
+
+        const userRecord = partido.participants?.find(p => p.user_id === loggedUser.id);
+        const canJoin = !userRecord && (partido.participants.filter(p => !p.cancelled).length < (partido.total_players || 4));
+        const canLeave = userRecord && !userRecord.cancelled;
+        const hasLeft = userRecord && userRecord.cancelled;
+
+        if (canJoin) {
+            const joinButton = document.createElement("button");
+            joinButton.className = "btn btn-primary";
+            joinButton.textContent = "Unirse al Partido";
+            joinButton.addEventListener("click", async () => {
+                joinButton.disabled = true;
+                joinButton.textContent = "Uniéndose...";
+                await handleJoinMatch(partido.id);
+                await handleRefreshModal(); // Recargar modal para ver el cambio
+            });
+            modalActionButtonsContainer.appendChild(joinButton);
+        } else if (canLeave) {
+            const leaveGroup = document.createElement("div");
+            leaveGroup.className = "leave-input-group";
+
+            const reasonInput = document.createElement("input");
+            reasonInput.type = "text";
+            reasonInput.placeholder = "Motivo de baja (opcional, máx 50 car.)";
+            reasonInput.maxLength = 50;
+            leaveGroup.appendChild(reasonInput);
+
+            const leaveButton = document.createElement("button");
+            leaveButton.className = "btn btn-danger";
+            leaveButton.textContent = "Darse de Baja";
+            leaveButton.addEventListener("click", async () => {
+                const reason = reasonInput.value.trim();
+                leaveButton.disabled = true;
+                leaveButton.textContent = "Dando de baja...";
+                await handleLeaveMatch(partido.id, reason);
+                await handleRefreshModal(); // Recargar modal
+            });
+            leaveGroup.appendChild(leaveButton);
+            modalActionButtonsContainer.appendChild(leaveGroup);
+
+            const alreadyJoinedInfo = document.createElement("p");
+            alreadyJoinedInfo.textContent = "Ya estás apuntado.";
+            alreadyJoinedInfo.style.textAlign = 'center';
+            alreadyJoinedInfo.style.marginTop = '0.5rem';
+             modalActionButtonsContainer.appendChild(alreadyJoinedInfo);
+
+
+        } else if (hasLeft) {
+            const info = document.createElement("p");
+            info.textContent = `Te diste de baja de este partido. ${userRecord.leave_reason ? `(Motivo: ${userRecord.leave_reason})` : ''}`;
+            info.style.color = 'var(--medium-text)';
+            info.style.textAlign = 'center';
+            modalActionButtonsContainer.appendChild(info);
+        } else if (!canJoin && !canLeave && !hasLeft) {
+             // Partido completo y el usuario no está apuntado
+             const info = document.createElement("p");
+             info.textContent = "Este partido ya está completo.";
+             info.style.color = 'var(--medium-text)';
+             info.style.textAlign = 'center';
+             modalActionButtonsContainer.appendChild(info);
+        }
+    }
+
+    // --- Acciones de Partido (Unirse/Baja) ---
+
+    async function handleJoinMatch(matchId) {
+        if (!loggedUser) return; // Doble chequeo
+        const { error } = await supabaseClient
+            .from("participants")
+            .insert([{ match_id: matchId, user_id: loggedUser.id }]);
+
+        if (error) {
+            console.error("Error joining match:", error);
+            alert(`Error al unirse: ${error.message}`);
+            // Re-habilitar botón si falló (manejado en el listener del botón)
+        } else {
+            // Éxito (no necesita alert, el modal se refrescará)
+            // Refrescar la lista de partidos abiertos también?
+            loadOpenPartidos(document.getElementById("filterLocalityPartidos").value.trim());
+        }
+    }
+
+    async function handleLeaveMatch(matchId, reason = "") {
+      if (!loggedUser) return;
+      const { error } = await supabaseClient
+        .from("participants")
+        .update({ cancelled: true, leave_reason: reason || null }) // Usar null si no hay razón
+        .match({ match_id: matchId, user_id: loggedUser.id, cancelled: false }); // Solo cancelar si no estaba cancelado
+
+      if (error) {
+        console.error("Error leaving match:", error);
+        alert(`Error al darse de baja: ${error.message}`);
+         // Re-habilitar botón si falló (manejado en el listener del botón)
+      } else {
+        // Éxito
+         loadOpenPartidos(document.getElementById("filterLocalityPartidos").value.trim());
       }
+    }
+
+
+    // --- Inicialización y Event Listeners ---
+
+    function setupEventListeners() {
+      // Navegación Principal
+      logoutButton.addEventListener('click', logout);
+      partidosButton.addEventListener('click', (e) => {
+          if (!partidosButton.classList.contains('disabled')) {
+              e.preventDefault(); // Prevenir salto a #partidos si es link
+              handleShowPartidosSearch();
+              // Marcar como activo (opcional)
+              document.querySelectorAll('.menu-item.active').forEach(item => item.classList.remove('active'));
+              partidosButton.classList.add('active');
+          }
+      });
+       jugadoresButton.addEventListener('click', (e) => {
+          if (!jugadoresButton.classList.contains('disabled')) {
+              e.preventDefault();
+              handleShowPlayersSearch();
+              document.querySelectorAll('.menu-item.active').forEach(item => item.classList.remove('active'));
+              jugadoresButton.classList.add('active');
+          }
+      });
+       // Listener para Canchas/Pistas si se habilitan
+       // canchasButton.addEventListener(...)
+       // pistasButton.addEventListener(...)
+
+      // Tarjetas Flotantes
+      document.querySelectorAll('.floating-card[data-action]').forEach(card => {
+          card.addEventListener('click', () => {
+              const action = card.getAttribute('data-action');
+              if (action === 'showCanchaSearch') handleShowCanchaSearch();
+              else if (action === 'showPlayersSearch') handleShowPlayersSearch();
+              else if (action === 'showPartidosSearch') handleShowPartidosSearch();
+          });
+           // Añadir soporte teclado (Enter/Space) si son divs
+           card.setAttribute('role', 'button');
+           card.setAttribute('tabindex', '0');
+           card.addEventListener('keydown', (e) => {
+               if (e.key === 'Enter' || e.key === ' ') {
+                   e.preventDefault();
+                   card.click();
+               }
+           });
+      });
+
+      // Botones de Cierre de Secciones
+      document.querySelectorAll('.close-section-btn[data-action]').forEach(button => {
+          button.addEventListener('click', () => {
+              const action = button.getAttribute('data-action');
+              if (action === 'closePartidosSearch') handleClosePartidosSearch();
+              else if (action === 'closeCanchaSearch') handleCloseCanchaSearch();
+              else if (action === 'closePlayersSearch') handleClosePlayersSearch();
+          });
+      });
+
+      // Botones de Filtro
+      document.getElementById("btn-filter-partidos").addEventListener("click", () => {
+          const filterLocality = document.getElementById("filterLocalityPartidos").value.trim();
+          loadOpenPartidos(filterLocality);
+      });
+      document.getElementById("btn-filter-canchas").addEventListener("click", () => {
+          const nameFilter = document.getElementById("filterCanchasName").value.trim();
+          const localityFilter = document.getElementById("filterCanchasLocality").value.trim();
+          loadCanchas(nameFilter, localityFilter);
+      });
+       document.getElementById("btn-filter-players").addEventListener("click", () => {
+          const nameFilter = document.getElementById("filterPlayersName").value.trim();
+          const gameLevelFilter = document.getElementById("filterPlayersGameLevel").value.trim();
+          const localityFilter = document.getElementById("filterPlayersLocality").value.trim();
+          loadPlayers(nameFilter, gameLevelFilter, localityFilter);
+      });
+
+      // Modal
+      modalCloseButton.addEventListener('click', handleCloseMatchModal);
+      modalRefreshButton.addEventListener('click', handleRefreshModal);
+      // Cerrar modal haciendo clic fuera del contenido
+      matchModal.addEventListener('click', (event) => {
+          if (event.target === matchModal) { // Si el clic es en el fondo (overlay)
+              handleCloseMatchModal();
+          }
+      });
+      // Cerrar modal con tecla Escape
+      document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape' && matchModal.classList.contains('is-visible')) {
+              handleCloseMatchModal();
+          }
+      });
+
+      // Footer Year
+      document.getElementById('currentYear').textContent = new Date().getFullYear();
+    }
+
+    // --- Punto de Entrada Principal ---
+    document.addEventListener("DOMContentLoaded", async () => {
+      setupEventListeners(); // Configurar listeners primero
+      await checkAuthAndProfile(); // Verificar auth y perfil, actualiza UI
+      await preloadEstablishmentsData(); // Precargar datos para filtros
+      await preloadPlayersData();
+
+      // Carga inicial de partidos si el usuario está logueado y tiene perfil?
+      if (loggedUser && userProfile) {
+           // Podrías mostrar la sección de partidos por defecto
+           // handleShowPartidosSearch();
+           // loadOpenPartidos();
+      }
+
+      // Recordatorio importante sobre Seguridad
+      console.warn("IMPORTANTE: Asegúrate de que Row Level Security (RLS) esté habilitado y correctamente configurado en tu base de datos Supabase para proteger los datos.");
     });
+
   </script>
+
 </body>
 </html>
