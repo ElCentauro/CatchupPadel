@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Catch Up Padel - Inicio (Corregido y Mejorado)</title>
+  <title>Catch Up Padel - Inicio (Registro con Redirección)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -90,19 +90,15 @@
     /* === Sección principal (hero) === */
     .hero {
       padding: 3rem 1rem; text-align: center;
-      /* Imagen de fondo CSS (como en el original) */
       background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)),
                   url('https://images.unsplash.com/photo-1593341646581-529f6c49c5d1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80');
       background-size: cover; background-position: center; color: var(--text-light);
     }
     .hero h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem; max-width: 90%; margin-left: auto; margin-right: auto; }
     .hero p { font-size: 1rem; font-weight: 400; max-width: 90%; margin: 0 auto 2rem auto; line-height: 1.6; }
-    /* Imagen frontal IMG (restaurada) */
     .hero-image {
-      margin: 2rem auto; max-width: 600px; /* Máximo como en el original */
-      width: 80%; /* Ancho relativo para responsividad */
+      margin: 2rem auto; max-width: 600px; width: 80%;
       border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-      /* Asegúrate que padel.png esté en la misma carpeta o ruta correcta */
     }
     .hero-buttons { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
     .hero-button { padding: 0.75rem 1.5rem; border-radius: var(--border-radius); border: 1px solid transparent; font-weight: 500; font-size: 1rem; }
@@ -189,7 +185,9 @@
   </nav>
 
   <section class="hero">
-    <h1>Catch Up Padel</h1> <p>Conecta con jugadores y establecimientos de pádel y disfruta del mejor deporte en comunidad.</p> <img src="padel.png" alt="Imagen de pádel" class="hero-image">
+    <h1>Catch Up Padel</h1>
+    <p>Conecta con jugadores y establecimientos de pádel y disfruta del mejor deporte en comunidad.</p>
+    <img src="padel.png" alt="Imagen de pádel" class="hero-image">
     <div class="hero-buttons">
       <button class="hero-button hero-button-primary" onclick="showAuthSection('signup')">¡Regístrate Ahora!</button>
       <button class="hero-button hero-button-secondary" onclick="showAuthSection('login')">Iniciar Sesión</button>
@@ -263,7 +261,7 @@
     const emailInput = document.getElementById('email');
     const passwordInput = document.getElementById('password');
     const messageDiv = document.getElementById('message');
-    const authContainer = document.querySelector('.auth-container'); // Para animación shake
+    const authContainer = document.querySelector('.auth-container');
     const navAuthButtons = document.getElementById('nav-auth-buttons');
     const roleSelectionDiv = document.getElementById('role-selection');
     const roleJugadorRadio = document.getElementById('role-jugador');
@@ -296,7 +294,6 @@
       authContainer.style.opacity = 0;
       messageDiv.textContent = '';
       authForm.reset();
-      // Resetear estado del botón por si se cierra durante 'Procesando...'
       isSubmitting = false;
       submitButton.disabled = false;
       submitButton.textContent = (mode === 'login') ? 'Iniciar sesión' : 'Registrarse';
@@ -305,8 +302,8 @@
     function setMode(newMode) {
       mode = newMode;
       messageDiv.textContent = '';
-      authForm.reset(); // Limpia campos al cambiar modo
-      generatedEstablishmentID = null; // Limpia ID generado al cambiar
+      authForm.reset();
+      generatedEstablishmentID = null;
 
       const isLogin = mode === 'login';
       formTitle.textContent = isLogin ? 'Iniciar sesión' : 'Registro';
@@ -314,7 +311,7 @@
       toggleSignupSpan.style.display = isLogin ? 'inline' : 'none';
       toggleSigninSpan.style.display = isLogin ? 'none' : 'inline';
       roleSelectionDiv.style.display = isLogin ? 'none' : 'flex';
-      establishmentField.style.display = 'none'; // Siempre oculto al cambiar, se muestra en handleRoleChange si es necesario
+      establishmentField.style.display = 'none';
 
       if (isLogin) {
         roleJugadorRadio.removeAttribute('required');
@@ -325,22 +322,18 @@
         roleJugadorRadio.setAttribute('required', true);
         roleEstablecimientoRadio.setAttribute('required', true);
         passwordInput.setAttribute('autocomplete', 'new-password');
-        handleRoleChange(); // Llamar para ajustar la visibilidad inicial de los campos de establecimiento
+        handleRoleChange();
       }
-
-      // Resetear estado del botón
       isSubmitting = false;
       submitButton.disabled = false;
     }
 
     function handleRoleChange() {
-      // Solo afecta en modo signup
       if (mode === 'signup') {
         if (roleEstablecimientoRadio.checked) {
           establishmentField.style.display = 'flex';
           establishmentNameInput.setAttribute('required', true);
-          // ADVERTENCIA: Generación de ID en cliente NO RECOMENDADA para producción.
-          if (!generatedEstablishmentID) { // Generar solo la primera vez que se selecciona
+          if (!generatedEstablishmentID) {
             generatedEstablishmentID = "EST-" + Math.floor(100000 + Math.random() * 900000);
           }
           establishmentInput.value = generatedEstablishmentID;
@@ -349,7 +342,6 @@
           establishmentNameInput.removeAttribute('required');
           establishmentInput.value = '';
           establishmentNameInput.value = '';
-          // No limpiamos generatedEstablishmentID aquí intencionalmente
         }
       }
     }
@@ -361,7 +353,7 @@
         authContainer.classList.add('shake');
         setTimeout(() => authContainer.classList.remove('shake'), 500);
       } else {
-         authContainer.classList.remove('shake'); // Quitar shake si no es error
+         authContainer.classList.remove('shake');
       }
     }
 
@@ -374,7 +366,7 @@
       submitButton.disabled = true;
       submitButton.textContent = 'Procesando...';
       messageDiv.textContent = '';
-      authContainer.classList.remove('shake'); // Quitar shake al iniciar
+      authContainer.classList.remove('shake');
 
       const emailVal = emailInput.value.trim();
       const passVal = passwordInput.value.trim();
@@ -383,58 +375,49 @@
       try {
         // --- MODO LOGIN ---
         if (mode === 'login') {
+          // ... (Lógica de login sin cambios, se mantiene igual que en la versión anterior) ...
           if (!emailVal || !passVal) throw new Error("Correo y contraseña son requeridos.");
 
           const { data: signInData, error: signInError } = await supabaseClient.auth.signInWithPassword({
-            email: emailVal,
-            password: passVal
+            email: emailVal, password: passVal
           });
           if (signInError) throw signInError;
 
-          // Obtener usuario - Usar datos de signInData si están disponibles
           const currentUser = signInData?.user || (await supabaseClient.auth.getUser())?.data?.user;
           if (!currentUser) throw new Error('No se pudo verificar la sesión del usuario.');
 
           showMessage('Inicio de sesión exitoso. Verificando perfil...', false);
-          console.log("Usuario logueado:", currentUser.id); // Log para depuración
+          console.log("[Login] Usuario logueado:", currentUser.id);
 
-          // Consultar perfil (como en el original)
-          // IMPORTANTE: Asegúrate que la tabla 'perfiles' y las columnas 'user_id', 'establishment_number' existan.
           const { data: perfil, error: perfilError } = await supabaseClient
             .from('perfiles')
-            .select("user_id, establishment_number") // Solo lo necesario para redirigir
+            .select("user_id, establishment_number")
             .eq('user_id', currentUser.id)
-            .single(); // Esperamos un solo perfil
+            .single();
 
-          // Manejo de error/perfil no encontrado (redirige a home como en original modificado)
           if (perfilError) {
-            console.error("Error al buscar perfil:", perfilError);
-            // Considerar si mostrar error o redirigir. El original redirigía.
-            // showMessage("Error al buscar tu perfil. Contacta soporte.", true);
-             showMessage("Perfil no encontrado o error, redirigiendo a inicio...");
-             await new Promise(resolve => setTimeout(resolve, 1000)); // Pausa breve
-             window.location.href = "home.html"; // Redirigir a home
-             didRedirect = true;
-             return; // Salir
+            console.error("[Login] Error al buscar perfil:", perfilError);
+            showMessage("Perfil no encontrado o error, redirigiendo a inicio...");
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            window.location.href = "home.html";
+            didRedirect = true; return;
           }
-           if (!perfil) {
-                console.warn("Perfil no encontrado para usuario:", currentUser.id);
-                showMessage("Perfil no encontrado, redirigiendo a inicio...");
-                await new Promise(resolve => setTimeout(resolve, 1000)); // Pausa breve
-                window.location.href = "home.html"; // Redirigir a home
-                didRedirect = true;
-                return; // Salir
-           }
+          if (!perfil) {
+             console.warn("[Login] Perfil no encontrado para usuario:", currentUser.id);
+             showMessage("Perfil no encontrado, redirigiendo a inicio...");
+             await new Promise(resolve => setTimeout(resolve, 1000));
+             window.location.href = "home.html";
+             didRedirect = true; return;
+          }
 
-          console.log("Perfil encontrado:", perfil); // Log para depuración
+          console.log("[Login] Perfil encontrado:", perfil);
 
-          // Redirección (lógica original modificada)
           if (perfil.establishment_number !== null) {
-            console.log("Redirigiendo a establecimiento:", perfil.establishment_number); // Log
+            console.log("[Login] Redirigiendo a establecimiento:", perfil.establishment_number);
             window.location.href = `establecimiento.html?id=${encodeURIComponent(perfil.establishment_number)}`;
             didRedirect = true;
           } else {
-            console.log("Redirigiendo a home.html"); // Log
+            console.log("[Login] Redirigiendo a home.html");
             window.location.href = "home.html";
             didRedirect = true;
           }
@@ -447,11 +430,11 @@
 
             const selectedRole = selectedRoleElem.value;
             let establishmentName = null;
-            let currentEstablishmentId = null;
+            let currentEstablishmentId = null; // Usará el ID generado si es establecimiento
 
             if (selectedRole === 'establecimiento') {
                 establishmentName = establishmentNameInput.value.trim();
-                currentEstablishmentId = generatedEstablishmentID; // Usar el ID generado y validado
+                currentEstablishmentId = generatedEstablishmentID;
                 if (!establishmentName) throw new Error("El nombre del establecimiento es requerido.");
                 if (!currentEstablishmentId) throw new Error("Error interno: ID de establecimiento no generado.");
             }
@@ -463,15 +446,17 @@
             if (signUpError) throw signUpError;
             const userId = signUpData.user?.id;
             if (!userId) throw new Error('Registro fallido: No se obtuvo ID de usuario.');
+            console.log("[Signup] Usuario creado en Auth:", userId);
 
             // 2. Insertar perfil
             const { error: perfilError } = await supabaseClient
                 .from('perfiles')
                 .insert([{ user_id: userId, role: selectedRole, establishment_number: currentEstablishmentId }]);
             if (perfilError) {
-                console.error("Error insertando perfil, considerar rollback manual:", perfilError);
+                console.error("[Signup] Error insertando perfil:", perfilError);
                 throw new Error(`Error al guardar perfil: ${perfilError.message}.`);
             }
+            console.log("[Signup] Perfil insertado para:", userId);
 
             // 3. Insertar establecimiento (si aplica)
             if (selectedRole === 'establecimiento') {
@@ -479,14 +464,28 @@
                     .from('establishments')
                     .insert([{ id: currentEstablishmentId, name: establishmentName }]);
                 if (estabError) {
-                    console.error("Error insertando establecimiento, considerar rollback manual:", estabError);
+                    console.error("[Signup] Error insertando establecimiento:", estabError);
                     throw new Error(`Error al guardar establecimiento: ${estabError.message}.`);
                 }
+                 console.log("[Signup] Establecimiento insertado:", currentEstablishmentId);
             }
 
-            showMessage('Registro exitoso. Revisa tu correo para confirmar (si es necesario) y luego inicia sesión.', false);
-            // Cambiar a modo login para que el usuario inicie sesión
-            setTimeout(() => setMode('login'), 2000); // Esperar un poco antes de cambiar
+            // --- ¡NUEVA LÓGICA DE REDIRECCIÓN POST-REGISTRO! ---
+            showMessage('Registro exitoso. Redirigiendo...', false);
+            await new Promise(resolve => setTimeout(resolve, 1500)); // Breve pausa para mostrar mensaje
+
+            if (selectedRole === 'establecimiento') {
+                console.log("[Signup] Redirigiendo a establecimiento:", currentEstablishmentId);
+                window.location.href = `establecimiento.html?id=${encodeURIComponent(currentEstablishmentId)}`;
+                didRedirect = true;
+            } else { // selectedRole === 'jugador'
+                console.log("[Signup] Redirigiendo a perfil.html");
+                window.location.href = 'perfil.html'; // Redirigir jugador a perfil.html
+                didRedirect = true;
+            }
+            // Nota: Si la confirmación por correo está activa en Supabase, el usuario
+            // necesitará confirmar antes de poder iniciar sesión en las páginas de destino.
+            // Esta redirección asume que las páginas de destino pueden manejar eso.
         }
 
       } catch (error) {
@@ -496,6 +495,8 @@
             if (error.message.includes("Invalid login credentials")) userMessage = "Correo o contraseña incorrectos.";
             else if (error.message.includes("User already registered")) userMessage = "Este correo electrónico ya está registrado.";
             else if (error.message.includes("Password should be at least 6 characters")) userMessage = "La contraseña debe tener al menos 6 caracteres.";
+             // Añadir manejo para error de confirmación si es relevante
+             else if (error.message.includes("Email not confirmed")) userMessage = "Por favor, confirma tu correo electrónico antes de iniciar sesión.";
             else userMessage += error.message;
           } else {
             userMessage += "Ocurrió un error inesperado.";
@@ -503,8 +504,7 @@
           showMessage(userMessage, true);
 
       } finally {
-          // Solo rehabilitar si NO hubo redirección
-          if (!didRedirect) {
+          if (!didRedirect) { // Solo rehabilitar si NO hubo redirección
               isSubmitting = false;
               submitButton.disabled = false;
               submitButton.textContent = (mode === 'login') ? 'Iniciar sesión' : 'Registrarse';
@@ -512,6 +512,7 @@
       }
     });
 
+    // --- Otros Listeners (sin cambios) ---
     roleJugadorRadio.addEventListener('change', handleRoleChange);
     roleEstablecimientoRadio.addEventListener('change', handleRoleChange);
     closeModalButton.addEventListener('click', hideAuthSection);
@@ -541,7 +542,7 @@
         console.error("Error al verificar sesión:", error);
         if (navAuthButtons) navAuthButtons.style.display = 'flex';
       }
-      setMode('signup'); // Iniciar en modo registro por defecto
+      setMode('signup');
     });
 
   </script>
