@@ -2,22 +2,56 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Catch Up Padel - Inicio</title>
+  <title>Catch Up Padel - Inicio Mejorado</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- Fuente moderna -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
   <style>
-    /* RESET y estilos generales */
+    /* === VARIABLES CSS === */
+    :root {
+      --primary-color: #ff9500;
+      --primary-hover-color: #e07e00;
+      --secondary-color: #2c3e50;
+      --text-color: #333;
+      --text-light: #fff;
+      --text-muted: #777;
+      --background-light: #f8f8f8;
+      --background-white: #fff;
+      --success-color: #27ae60;
+      --success-hover-color: #219150;
+      --error-color: #ff4d4d;
+      --border-color: #eaeaea;
+      --shadow-color: rgba(0,0,0,0.1);
+      --modal-overlay-color: rgba(0,0,0,0.5);
+      --modal-bg-color: rgba(255, 255, 255, 0.15);
+      --modal-border-color: rgba(255, 255, 255, 0.3);
+      --modal-input-bg: rgba(255, 255, 255, 0.25);
+      --modal-input-focus-bg: rgba(255, 255, 255, 0.35);
+      --modal-placeholder-color: rgba(255, 255, 255, 0.8);
+      --modal-link-color: #f1c40f;
+
+      --font-family: 'Poppins', sans-serif;
+      --base-font-size: 16px; /* Ajustar según necesidad */
+      --border-radius: 0.5rem;
+      --transition-speed: 0.3s;
+    }
+
+    /* === RESET y estilos generales === */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
+    html {
+      font-size: var(--base-font-size);
+    }
     body {
-      font-family: 'Poppins', sans-serif;
-      color: #333;
-      background-color: #f8f8f8;
-      overflow-x: hidden;
+      font-family: var(--font-family);
+      color: var(--text-color);
+      background-color: var(--background-light);
+      overflow-x: hidden; /* Previene scroll horizontal accidental */
+      line-height: 1.6;
     }
     a {
       text-decoration: none;
@@ -25,68 +59,125 @@
     }
     button {
       cursor: pointer;
-      font-family: 'Poppins', sans-serif;
+      font-family: var(--font-family);
+      border: none;
+      border-radius: var(--border-radius);
+      transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease, opacity var(--transition-speed) ease;
     }
-    /* Barra de navegación */
+    button:disabled {
+       opacity: 0.7;
+       cursor: not-allowed;
+    }
+    img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+    }
+    /* Clase para ocultar elementos visualmente pero mantenerlos accesibles */
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* === Barra de navegación === */
     nav {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 1rem 2rem;
-      background-color: #fff;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      padding: 1rem 1.5rem; /* Ajustado padding */
+      background-color: var(--background-white);
+      box-shadow: 0 2px 4px var(--shadow-color);
+      position: relative; /* Para el menú móvil */
     }
     .logo {
       font-size: 1.6rem;
       font-weight: 600;
-      color: #2c3e50;
+      color: var(--secondary-color);
     }
     .nav-right {
-      display: flex;
+      display: none; /* Oculto por defecto en móvil */
       align-items: center;
-      gap: 1.5rem;
+      gap: 1rem; /* Espacio reducido para móvil si se muestra inline */
     }
     .nav-button {
       padding: 0.5rem 1rem;
-      border-radius: 0.5rem;
-      border: 1px solid transparent;
-      background-color: #ff9500;
-      color: #fff;
+      background-color: var(--primary-color);
+      color: var(--text-light);
       font-weight: 500;
-      transition: background-color 0.3s ease;
+      white-space: nowrap; /* Evita que el texto se rompa */
     }
-    .nav-button:hover {
-      background-color: #e07e00;
+    .nav-button:hover:not(:disabled) {
+      background-color: var(--primary-hover-color);
     }
-    /* Sección principal (hero) */
+
+    /* Botón Hamburguesa (visible solo en móvil) */
+    .hamburger-button {
+        display: block; /* Visible por defecto en móvil */
+        background: none;
+        border: none;
+        font-size: 1.8rem; /* Tamaño del icono */
+        cursor: pointer;
+        padding: 0.5rem;
+        line-height: 1;
+        color: var(--secondary-color);
+    }
+
+    /* Estilos para el menú desplegable móvil */
+    .nav-right.mobile-nav-active {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 100%; /* Justo debajo del nav */
+        right: 0;
+        background-color: var(--background-white);
+        width: 200px; /* O el ancho deseado */
+        padding: 1rem;
+        box-shadow: 0 4px 8px var(--shadow-color);
+        z-index: 1000;
+        gap: 1rem; /* Espacio entre botones en el menú */
+        align-items: stretch; /* Estirar botones */
+    }
+    .nav-right.mobile-nav-active .nav-button {
+        text-align: center;
+    }
+
+
+    /* === Sección principal (hero) === */
     .hero {
-      padding: 3rem 1rem;
+      padding: 3rem 1rem; /* Padding ajustado */
       text-align: center;
       background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)),
                   url('https://images.unsplash.com/photo-1593341646581-529f6c49c5d1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80');
       background-size: cover;
       background-position: center;
-      color: #fff;
+      color: var(--text-light);
     }
     .hero h1 {
-      font-size: 3rem;
+      font-size: 2.5rem; /* Tamaño base para móvil */
       font-weight: 700;
       margin-bottom: 1rem;
-      max-width: 800px;
-      margin: 0 auto 1rem auto;
+      max-width: 90%; /* Evitar que toque los bordes */
+      margin-left: auto;
+      margin-right: auto;
     }
     .hero p {
-      font-size: 1.15rem;
+      font-size: 1rem; /* Tamaño base para móvil */
       font-weight: 400;
-      max-width: 700px;
+      max-width: 90%; /* Evitar que toque los bordes */
       margin: 0 auto 2rem auto;
       line-height: 1.6;
     }
     .hero-image {
-      display: block;
-      margin: 30px auto;
-      max-width: 600px;
-      width: 100%;
+      margin: 2rem auto; /* Espaciado ajustado */
+      max-width: 500px; /* Límite máximo */
+      width: 80%; /* Ancho relativo */
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
@@ -94,119 +185,128 @@
       display: flex;
       justify-content: center;
       gap: 1rem;
-      flex-wrap: wrap;
+      flex-wrap: wrap; /* Permite que los botones pasen a la siguiente línea */
     }
     .hero-button {
       padding: 0.75rem 1.5rem;
-      border-radius: 0.5rem;
+      border-radius: var(--border-radius);
       border: 1px solid transparent;
       font-weight: 500;
       font-size: 1rem;
-      transition: background-color 0.3s ease, color 0.3s ease;
     }
     .hero-button-primary {
-      background-color: #ff9500;
-      color: #fff;
+      background-color: var(--primary-color);
+      color: var(--text-light);
     }
-    .hero-button-primary:hover {
-      background-color: #e07e00;
+    .hero-button-primary:hover:not(:disabled) {
+      background-color: var(--primary-hover-color);
     }
     .hero-button-secondary {
       background-color: transparent;
-      color: #ff9500;
-      border: 1px solid #ff9500;
+      color: var(--primary-color);
+      border: 1px solid var(--primary-color);
     }
-    .hero-button-secondary:hover {
-      background-color: #ff9500;
-      color: #fff;
+    .hero-button-secondary:hover:not(:disabled) {
+      background-color: var(--primary-color);
+      color: var(--text-light);
     }
-    /* Footer */
+
+    /* === Footer === */
     footer {
       text-align: center;
-      padding: 1rem;
+      padding: 1.5rem 1rem;
       font-size: 0.9rem;
-      color: #777;
-      background-color: #fff;
-      border-top: 1px solid #eaeaea;
-      margin-top: 2rem;
+      color: var(--text-muted);
+      background-color: var(--background-white);
+      border-top: 1px solid var(--border-color);
+      margin-top: 3rem; /* Espaciado superior */
     }
-    /* Modal de autenticación */
+
+    /* === Modal de autenticación === */
+    /*
+      NOTA: Considera usar el elemento HTML <dialog> para semántica
+      y accesibilidad mejoradas en el futuro. Requeriría ajustar el JS.
+    */
     #auth-section {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      display: none;
+      inset: 0; /* Equivalente a top/left/right/bottom: 0 */
+      display: none; /* Oculto por defecto */
       justify-content: center;
       align-items: center;
-      background: rgba(0,0,0,0.5);
+      background: var(--modal-overlay-color);
       z-index: 9999;
+      padding: 1rem; /* Padding para evitar que el modal toque los bordes en pantallas pequeñas */
     }
     .auth-container {
-      background: rgba(255, 255, 255, 0.15);
+      background: var(--modal-bg-color);
       backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
+      border: 1px solid var(--modal-border-color);
       border-radius: 15px;
-      padding: 40px;
-      width: 380px;
+      padding: 25px; /* Padding reducido */
+      width: 95%; /* Ancho flexible */
+      max-width: 400px; /* Ancho máximo */
       text-align: center;
-      color: #ffffff;
+      color: var(--text-light);
       box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-      animation: fadeIn 0.7s ease;
+      animation: fadeIn 0.5s ease forwards; /* 'forwards' mantiene el estado final */
       position: relative;
+      overflow-y: auto; /* Permitir scroll si el contenido es muy alto */
+      max-height: 90vh; /* Evitar que sea más alto que la ventana */
     }
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; transform: translateY(-20px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
     }
     .auth-container h2 {
-      margin-bottom: 25px;
-      font-size: 28px;
+      margin-bottom: 20px; /* Espaciado reducido */
+      font-size: 1.8rem; /* Tamaño ajustado */
       font-weight: 600;
       letter-spacing: 1px;
     }
-    form {
+    #auth-form { /* Cambiado de 'form' a '#auth-form' para especificidad */
       display: flex;
       flex-direction: column;
       gap: 15px;
     }
-    form input {
+    #auth-form input[type="email"],
+    #auth-form input[type="password"],
+    #auth-form input[type="text"] {
       width: 100%;
       padding: 12px 15px;
       border: none;
       border-radius: 8px;
-      background: rgba(255, 255, 255, 0.25);
-      color: #ffffff;
-      font-size: 15px;
+      background: var(--modal-input-bg);
+      color: var(--text-light);
+      font-size: 1rem; /* Tamaño ajustado */
       outline: none;
-      transition: background 0.3s ease;
+      transition: background var(--transition-speed) ease;
     }
-    form input:focus {
-      background: rgba(255, 255, 255, 0.35);
+    #auth-form input:focus {
+      background: var(--modal-input-focus-bg);
     }
-    form input::placeholder {
-      color: rgba(255, 255, 255, 0.8);
+    #auth-form input::placeholder {
+      color: var(--modal-placeholder-color);
+      opacity: 1; /* Asegurar visibilidad */
     }
-    form button {
+    #auth-form button[type="submit"] {
       padding: 12px;
       border: none;
       border-radius: 8px;
-      background: #27ae60;
-      color: #fff;
-      font-size: 16px;
+      background: var(--success-color);
+      color: var(--text-light);
+      font-size: 1.1rem; /* Tamaño ajustado */
       font-weight: 600;
-      transition: background 0.3s ease;
+      margin-top: 10px; /* Espacio antes del botón */
     }
-    form button:hover {
-      background: #219150;
+    #auth-form button[type="submit"]:hover:not(:disabled) {
+      background: var(--success-hover-color);
     }
     .toggle-link {
       margin-top: 20px;
-      font-size: 14px;
+      font-size: 0.9rem; /* Tamaño ajustado */
     }
     .toggle-link a {
-      color: #f1c40f;
+      color: var(--modal-link-color);
       text-decoration: none;
       font-weight: 600;
       cursor: pointer;
@@ -216,57 +316,129 @@
     }
     .message {
       margin-top: 15px;
-      font-size: 15px;
-      min-height: 20px;
+      font-size: 0.95rem; /* Tamaño ajustado */
+      min-height: 20px; /* Para evitar saltos de layout */
+      font-weight: 500;
+      /* El color se establece dinámicamente con JS */
     }
     /* Selección de Rol (Jugador/Establecimiento) */
     #role-selection {
       display: flex;
       justify-content: space-around;
-      margin-top: 10px;
+      margin-top: 5px; /* Espaciado reducido */
+      margin-bottom: 5px;
+      flex-wrap: wrap; /* Permitir wrap en pantallas pequeñas */
+      gap: 10px;
     }
     .role-option {
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 8px; /* Espacio entre radio y label */
+      cursor: pointer; /* Hacer toda el area clickeable */
+    }
+    .role-option label {
+        cursor: pointer;
     }
     #establishment-field {
-      display: none;
+      display: none; /* Oculto por defecto */
       flex-direction: column;
       gap: 10px;
       margin-top: 10px;
     }
     .close-modal {
       position: absolute;
-      top: 5px;
-      right: 5px;
-      background: #ff9500;
+      top: 10px; /* Ajustado */
+      right: 10px; /* Ajustado */
+      background: var(--primary-color);
       border: none;
       border-radius: 50%;
       width: 30px;
       height: 30px;
-      color: #fff;
-      font-size: 16px;
+      color: var(--text-light);
+      font-size: 1.1rem; /* Ajustado */
+      line-height: 30px; /* Centrar la X */
+      text-align: center;
       cursor: pointer;
+      padding: 0; /* Quitar padding extra */
+      z-index: 10; /* Asegurar que esté encima */
     }
+     .close-modal:hover {
+         background-color: var(--primary-hover-color);
+     }
+
+
+    /* === Media Queries para Responsividad === */
+
+    /* Tablets y pantallas medianas */
+    @media (min-width: 768px) {
+      nav {
+          padding: 1rem 2rem; /* Más padding horizontal */
+      }
+      .hamburger-button {
+          display: none; /* Ocultar hamburguesa */
+      }
+      .nav-right {
+          display: flex; /* Mostrar botones de nav */
+          position: static; /* Resetear posición */
+          flex-direction: row;
+          width: auto;
+          background: none;
+          box-shadow: none;
+          padding: 0;
+          gap: 1.5rem; /* Restaurar gap original */
+      }
+      .hero {
+          padding: 4rem 2rem; /* Más padding */
+      }
+      .hero h1 {
+          font-size: 3rem; /* Restaurar tamaño original */
+          max-width: 800px;
+      }
+      .hero p {
+          font-size: 1.15rem; /* Restaurar tamaño original */
+          max-width: 700px;
+      }
+      .auth-container {
+          padding: 40px; /* Restaurar padding original */
+      }
+      .auth-container h2 {
+          font-size: 2rem; /* Ligeramente más grande en desktop */
+      }
+    }
+
+     /* Pantallas más grandes (opcional) */
+    @media (min-width: 1024px) {
+        .hero {
+            padding: 5rem 2rem;
+        }
+        .hero h1 {
+            font-size: 3.5rem;
+        }
+         .hero p {
+            font-size: 1.25rem;
+        }
+    }
+
   </style>
 </head>
 <body>
-  <!-- Barra de navegación -->
+
   <nav>
-    <span class="logo">Catch Up Padel</span>
-    <!-- Botones de login/registro (solo si no hay sesión) -->
-    <div class="nav-right" id="nav-auth-buttons">
-      <button class="nav-button" onclick="showAuthSection('login')">Iniciar Sesión</button>
-      <button class="nav-button" onclick="showAuthSection('signup')">Registrarse</button>
-    </div>
+    <a href="/" class="logo">Catch Up Padel</a>
+
+    <button class="hamburger-button" id="hamburger-btn" aria-label="Abrir menú de navegación" aria-expanded="false">☰</button>
+
+    <div class="nav-right" id="nav-right-container">
+      <div id="nav-auth-buttons" style="display: flex; gap: inherit; flex-direction: inherit;"> <button class="nav-button" onclick="showAuthSection('login')">Iniciar Sesión</button>
+        <button class="nav-button" onclick="showAuthSection('signup')">Registrarse</button>
+      </div>
+      </div>
   </nav>
 
-  <!-- Sección principal (hero) -->
   <section class="hero">
-    <h1>Catch Up Padel</h1>
-    <p>Conecta con jugadores y establecimientos de pádel y disfruta del mejor deporte en comunidad.</p>
-    <img src="padel.png" alt="Imagen de pádel" class="hero-image">
+    <h1>Bienvenido a Catch Up Padel</h1>
+    <p>Conecta con jugadores y establecimientos de pádel cerca de ti. Organiza partidos, únete a grupos y disfruta del mejor deporte en comunidad.</p>
+    <img src="https://plus.unsplash.com/premium_photo-1681140021763-56446481eb51?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Jugadores disfrutando de un partido de pádel en una pista moderna" class="hero-image">
     <div class="hero-buttons">
       <button class="hero-button hero-button-primary" onclick="showAuthSection('signup')">¡Regístrate Ahora!</button>
       <button class="hero-button hero-button-secondary" onclick="showAuthSection('login')">Iniciar Sesión</button>
@@ -274,18 +446,22 @@
   </section>
 
   <footer>
-    © 2025 Catch Up Padel. Todos los derechos reservados.
+    © <span id="current-year"></span> Catch Up Padel. Todos los derechos reservados.
   </footer>
 
-  <!-- Modal de Autenticación -->
   <div id="auth-section">
     <div class="auth-container">
-      <button class="close-modal" onclick="hideAuthSection()">×</button>
+      <button class="close-modal" id="close-modal-btn" aria-label="Cerrar modal">×</button>
       <h2 id="form-title">Registro</h2>
-      <form id="auth-form">
-        <input type="email" id="email" placeholder="Correo electrónico" required>
-        <input type="password" id="password" placeholder="Contraseña" required>
-        <!-- Selección de Rol -->
+      <form id="auth-form" novalidate> <div>
+            <label for="email" class="visually-hidden">Correo electrónico</label>
+            <input type="email" id="email" placeholder="Correo electrónico" required autocomplete="email">
+        </div>
+        <div>
+            <label for="password" class="visually-hidden">Contraseña</label>
+            <input type="password" id="password" placeholder="Contraseña" required autocomplete="current-password">
+        </div>
+
         <div id="role-selection">
           <div class="role-option">
             <input type="radio" name="user-role" id="role-jugador" value="jugador" required>
@@ -296,34 +472,42 @@
             <label for="role-establecimiento">Establecimiento</label>
           </div>
         </div>
-        <!-- Campos para Establecimiento -->
+
         <div id="establishment-field">
-          <input type="text" id="establishment-number" placeholder="ID de Establecimiento" readonly>
-          <input type="text" id="establishment-name" placeholder="Nombre del Establecimiento" required>
+           <div>
+               <label for="establishment-number" class="visually-hidden">ID de Establecimiento (Generado)</label>
+               <input type="text" id="establishment-number" placeholder="ID de Establecimiento (Generado)" readonly>
+           </div>
+            <div>
+                <label for="establishment-name" class="visually-hidden">Nombre del Establecimiento</label>
+                <input type="text" id="establishment-name" placeholder="Nombre del Establecimiento" required>
+            </div>
         </div>
+
         <button type="submit" id="submit-button">Registrarse</button>
       </form>
       <div class="toggle-link">
         <span id="toggle-signup" style="display: none;">¿Ya tienes cuenta?
-          <a id="signin-link" href="#" onclick="setMode('login')">Inicia sesión</a>
+          <a id="signin-link" href="#" onclick="event.preventDefault(); setMode('login');">Inicia sesión</a>
         </span>
         <span id="toggle-signin">¿No tienes cuenta?
-          <a id="signup-link" href="#" onclick="setMode('signup')">Regístrate</a>
+          <a id="signup-link" href="#" onclick="event.preventDefault(); setMode('signup');">Regístrate</a>
         </span>
       </div>
-      <div class="message" id="message"></div>
+      <div class="message" id="message" aria-live="polite"></div>
     </div>
   </div>
 
-  <!-- Supabase JS -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-  <script>
-    // CONFIGURACIÓN DE SUPABASE – REEMPLAZA CON TUS DATOS REALES
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script> <script>
+    // === CONFIGURACIÓN DE SUPABASE – REEMPLAZA CON TUS DATOS REALES ===
+    // ¡ASEGÚRATE DE TENER Row Level Security (RLS) HABILITADO Y CONFIGURADO EN SUPABASE!
     const SUPABASE_URL = 'https://idlvxinjfbsujpvxncbr.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig';
+    // Asegúrate de que la versión de la librería coincida con la usada (v1 o v2)
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Variables
+    // === Selección de Elementos del DOM ===
+    const authSection = document.getElementById('auth-section');
     const authForm = document.getElementById('auth-form');
     const formTitle = document.getElementById('form-title');
     const submitButton = document.getElementById('submit-button');
@@ -331,216 +515,377 @@
     const passwordInput = document.getElementById('password');
     const messageDiv = document.getElementById('message');
     const navAuthButtons = document.getElementById('nav-auth-buttons');
+    const roleSelectionDiv = document.getElementById('role-selection');
     const roleJugadorRadio = document.getElementById('role-jugador');
     const roleEstablecimientoRadio = document.getElementById('role-establecimiento');
     const establishmentField = document.getElementById('establishment-field');
     const establishmentInput = document.getElementById('establishment-number');
     const establishmentNameInput = document.getElementById('establishment-name');
+    const toggleSignupSpan = document.getElementById('toggle-signup');
+    const toggleSigninSpan = document.getElementById('toggle-signin');
+    const closeModalButton = document.getElementById('close-modal-btn');
+    const hamburgerBtn = document.getElementById('hamburger-btn');
+    const navRightContainer = document.getElementById('nav-right-container');
+    const currentYearSpan = document.getElementById('current-year');
 
-    let mode = 'signup';
-    let generatedEstablishmentID = null;
+    // === Estado de la Aplicación ===
+    let mode = 'signup'; // 'signup' o 'login'
+    let generatedEstablishmentID = null; // Almacena el ID generado temporalmente
+    let isSubmitting = false; // Para prevenir doble submit
 
-    // Generar ID de establecimiento
-    function generateEstablishmentID() {
-      const randomNumber = Math.floor(100000 + Math.random() * 900000);
-      return "EST-" + randomNumber;
-    }
+    // === Funciones ===
 
-    // Mostrar/Ocultar modal y cambiar modo (login/signup)
+    /**
+     * Muestra el modal de autenticación y establece el modo (login/signup).
+     * @param {string} newMode - 'login' o 'signup'.
+     */
     function showAuthSection(newMode) {
-      document.getElementById('auth-section').style.display = 'flex';
+      authSection.style.display = 'flex';
+      // Pequeño retraso para asegurar que la animación funcione al cambiar display
+      setTimeout(() => {
+          authSection.querySelector('.auth-container').style.opacity = 1;
+          authSection.querySelector('.auth-container').style.transform = 'translateY(0) scale(1)';
+      }, 10);
       setMode(newMode);
+      // Opcional: Enfocar el primer campo del formulario
+      emailInput.focus();
     }
+
+    /**
+     * Oculta el modal de autenticación.
+     */
     function hideAuthSection() {
-      document.getElementById('auth-section').style.display = 'none';
+      authSection.style.display = 'none';
+      authSection.querySelector('.auth-container').style.opacity = 0; // Resetear para próxima animación
+      messageDiv.textContent = ''; // Limpiar mensajes al cerrar
+      authForm.reset(); // Resetear el formulario
     }
 
-    // Cambiar modo del formulario
+    /**
+     * Cambia el modo del formulario entre 'login' y 'signup'.
+     * @param {string} newMode - 'login' o 'signup'.
+     */
     function setMode(newMode) {
-      mode = newMode;
-      if (mode === 'login') {
-        formTitle.textContent = 'Iniciar sesión';
-        submitButton.textContent = 'Iniciar sesión';
-        document.getElementById('toggle-signup').style.display = 'inline';
-        document.getElementById('toggle-signin').style.display = 'none';
-        document.getElementById('role-selection').style.display = 'none';
-        establishmentField.style.display = 'none';
-        roleJugadorRadio.removeAttribute('required');
-        roleEstablecimientoRadio.removeAttribute('required');
-        establishmentNameInput.removeAttribute('required');
-        messageDiv.textContent = '';
-      } else {
-        formTitle.textContent = 'Registro';
-        submitButton.textContent = 'Registrarse';
-        document.getElementById('toggle-signup').style.display = 'none';
-        document.getElementById('toggle-signin').style.display = 'inline';
-        document.getElementById('role-selection').style.display = 'flex';
-        roleJugadorRadio.setAttribute('required', true);
-        roleEstablecimientoRadio.setAttribute('required', true);
-        if (roleEstablecimientoRadio.checked) {
-          establishmentField.style.display = 'flex';
-          establishmentNameInput.setAttribute('required', true);
-        } else {
-          establishmentField.style.display = 'none';
-          establishmentNameInput.removeAttribute('required');
+        mode = newMode;
+        messageDiv.textContent = ''; // Limpiar mensajes al cambiar de modo
+        authForm.reset(); // Limpiar campos
+
+        if (mode === 'login') {
+            formTitle.textContent = 'Iniciar sesión';
+            submitButton.textContent = 'Iniciar sesión';
+            toggleSignupSpan.style.display = 'inline';
+            toggleSigninSpan.style.display = 'none';
+            roleSelectionDiv.style.display = 'none'; // Ocultar selección de rol
+            establishmentField.style.display = 'none'; // Ocultar campos de establecimiento
+
+            // Quitar 'required' de campos no necesarios en login
+            roleJugadorRadio.removeAttribute('required');
+            roleEstablecimientoRadio.removeAttribute('required');
+            establishmentNameInput.removeAttribute('required');
+            passwordInput.setAttribute('autocomplete', 'current-password');
+
+        } else { // Modo Signup
+            formTitle.textContent = 'Registro';
+            submitButton.textContent = 'Registrarse';
+            toggleSignupSpan.style.display = 'none';
+            toggleSigninSpan.style.display = 'inline';
+            roleSelectionDiv.style.display = 'flex'; // Mostrar selección de rol
+
+            // Asegurar que los radios de rol sean requeridos
+            roleJugadorRadio.setAttribute('required', true);
+            roleEstablecimientoRadio.setAttribute('required', true);
+
+            // Mostrar/ocultar campos de establecimiento según selección previa (si existe)
+            handleRoleChange();
+            passwordInput.setAttribute('autocomplete', 'new-password');
         }
-        messageDiv.textContent = '';
-      }
+        // Asegurarse de que el botón esté habilitado al cambiar de modo
+        submitButton.disabled = false;
+        isSubmitting = false;
     }
 
-    // Listener para cambiar la vista si se elige "establecimiento"
-    document.querySelectorAll('input[name="user-role"]').forEach(radio => {
-      radio.addEventListener('change', () => {
-        if (roleEstablecimientoRadio.checked) {
-          generatedEstablishmentID = generateEstablishmentID();
-          establishmentInput.value = generatedEstablishmentID;
-          establishmentField.style.display = 'flex';
-          establishmentNameInput.setAttribute('required', true);
+    /**
+     * Maneja el cambio de selección de rol (Jugador/Establecimiento).
+     * Muestra u oculta los campos específicos del establecimiento.
+     */
+    function handleRoleChange() {
+        if (mode === 'signup' && roleEstablecimientoRadio.checked) {
+            establishmentField.style.display = 'flex';
+            establishmentNameInput.setAttribute('required', true);
+            // ADVERTENCIA IMPORTANTE: Generar IDs únicos en el cliente es INSEGURO
+            // y propenso a colisiones. Esto debería hacerse en el backend (Supabase/DB).
+            // Esto es solo un placeholder demostrativo. NO USAR EN PRODUCCIÓN REAL.
+            if (!generatedEstablishmentID) { // Generar solo si no existe aún
+                 generatedEstablishmentID = "EST-" + Math.floor(100000 + Math.random() * 900000);
+            }
+            establishmentInput.value = generatedEstablishmentID;
         } else {
-          establishmentField.style.display = 'none';
-          establishmentInput.value = '';
-          establishmentNameInput.value = '';
-          establishmentNameInput.removeAttribute('required');
-          generatedEstablishmentID = null;
+            establishmentField.style.display = 'none';
+            establishmentNameInput.removeAttribute('required');
+            establishmentInput.value = ''; // Limpiar campo ID
+            establishmentNameInput.value = ''; // Limpiar campo nombre
+            // No limpiar generatedEstablishmentID aquí para evitar regenerar si cambia de radio y vuelve
         }
-      });
-    });
+    }
 
-    // Evento de submit del formulario
+    /**
+     * Muestra un mensaje de feedback al usuario.
+     * @param {string} text - El mensaje a mostrar.
+     * @param {boolean} isError - True si es un mensaje de error, false si es de éxito/informativo.
+     */
+    function showMessage(text, isError = false) {
+        messageDiv.textContent = text;
+        messageDiv.style.color = isError ? 'var(--error-color)' : 'var(--success-color)';
+         if (isError) {
+             // Opcional: Hacer shake animation para errores
+            authContainer.classList.add('shake');
+            setTimeout(() => authContainer.classList.remove('shake'), 500);
+         }
+    }
+     /* CSS para shake (opcional) */
+     const styleSheet = document.styleSheets[0];
+     styleSheet.insertRule(`
+        @keyframes shake {
+          10%, 90% { transform: translate3d(-1px, 0, 0); }
+          20%, 80% { transform: translate3d(2px, 0, 0); }
+          30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+          40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+     `, styleSheet.cssRules.length);
+      styleSheet.insertRule(`
+        .shake { animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both; transform: translate3d(0, 0, 0); backface-visibility: hidden; perspective: 1000px; }
+     `, styleSheet.cssRules.length);
+      const authContainer = document.querySelector('.auth-container'); // Mover selector aquí
+
+
+    // === Event Listeners ===
+
+    // Listener para el formulario de autenticación
     authForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      messageDiv.textContent = '';
+      e.preventDefault(); // Prevenir envío normal
+      if (isSubmitting) return; // Evitar doble submit
+
+      isSubmitting = true;
+      submitButton.disabled = true;
+      submitButton.textContent = 'Procesando...';
+      messageDiv.textContent = ''; // Limpiar mensaje previo
 
       const emailVal = emailInput.value.trim();
       const passVal = passwordInput.value.trim();
 
-      if (!emailVal || !passVal) {
-        messageDiv.textContent = 'Por favor, completa todos los campos.';
-        messageDiv.style.color = '#ff4d4d';
-        return;
+      // Validación básica (se puede mejorar)
+      if (!emailVal || !passVal || (mode === 'signup' && !document.querySelector('input[name="user-role"]:checked')) ) {
+          showMessage('Por favor, completa todos los campos requeridos.', true);
+          submitButton.disabled = false;
+          submitButton.textContent = (mode === 'login') ? 'Iniciar sesión' : 'Registrarse';
+          isSubmitting = false;
+          return;
       }
-
-      if (mode === 'signup') {
-        // Registro
-        const selectedRoleElem = document.querySelector('input[name="user-role"]:checked');
-        if (!selectedRoleElem) {
-          messageDiv.textContent = 'Por favor, selecciona un rol (Jugador o Establecimiento).';
-          messageDiv.style.color = '#ff4d4d';
-          return;
-        }
-        const selectedRole = selectedRoleElem.value;
-        let establishmentName = null;
-        if (selectedRole === 'establecimiento') {
-          if (!generatedEstablishmentID) {
-            messageDiv.textContent = 'Error al generar el ID de establecimiento.';
-            messageDiv.style.color = '#ff4d4d';
+       if (mode === 'signup' && roleEstablecimientoRadio.checked && !establishmentNameInput.value.trim()){
+            showMessage('Por favor, ingresa el nombre del establecimiento.', true);
+            submitButton.disabled = false;
+            submitButton.textContent = 'Registrarse';
+            isSubmitting = false;
             return;
+       }
+
+
+      try {
+        if (mode === 'signup') {
+          // --- MODO REGISTRO ---
+          const selectedRole = document.querySelector('input[name="user-role"]:checked').value;
+          let establishmentName = null;
+          let currentEstablishmentId = null; // Usar el ID generado
+
+          if (selectedRole === 'establecimiento') {
+            establishmentName = establishmentNameInput.value.trim();
+            currentEstablishmentId = generatedEstablishmentID; // Usar el ID ya generado
+             if (!establishmentName) {
+                throw new Error("Nombre de establecimiento requerido."); // Lanzar error si falta nombre
+             }
+             if (!currentEstablishmentId) {
+                 // Esto no debería pasar si la lógica de handleRoleChange es correcta
+                 throw new Error("Error interno: No se pudo generar ID de establecimiento.");
+             }
           }
-          establishmentName = establishmentNameInput.value.trim();
-          if (!establishmentName) {
-            messageDiv.textContent = 'Por favor, ingresa el nombre del establecimiento.';
-            messageDiv.style.color = '#ff4d4d';
-            return;
-          }
-        }
 
-        // Crear usuario en Supabase Auth
-        const { data: signUpData, error: signUpError } = await supabaseClient.auth.signUp({
-          email: emailVal,
-          password: passVal
-        });
-        if (signUpError) {
-          messageDiv.textContent = 'Error: ' + signUpError.message;
-          messageDiv.style.color = '#ff4d4d';
-          return;
-        }
-        const userId = signUpData.user ? signUpData.user.id : null;
-        if (!userId) {
-          messageDiv.textContent = 'Error al registrar el usuario en Auth.';
-          messageDiv.style.color = '#ff4d4d';
-          return;
-        }
+          // 1. Crear usuario en Supabase Auth
+          const { data: signUpData, error: signUpError } = await supabaseClient.auth.signUp({
+            email: emailVal,
+            password: passVal
+          });
+          if (signUpError) throw signUpError; // Lanzar error para el catch
+          const userId = signUpData.user ? signUpData.user.id : null;
+          if (!userId) throw new Error('No se pudo obtener el ID del usuario tras el registro.');
 
-        // Insertar en la tabla "perfiles"
-        const { error: perfilError } = await supabaseClient
-          .from('perfiles')
-          .insert([{
-            user_id: userId,
-            role: selectedRole,
-            establishment_number: (selectedRole === 'establecimiento') ? generatedEstablishmentID : null
-          }]);
-        if (perfilError) {
-          messageDiv.textContent = 'Error al crear registro en "perfiles": ' + perfilError.message;
-          messageDiv.style.color = '#ff4d4d';
-          return;
-        }
-
-        // Si es establecimiento, crear registro en "establishments"
-        if (selectedRole === 'establecimiento') {
-          const { error: estabError } = await supabaseClient
-            .from('establishments')
+          // 2. Insertar en la tabla "perfiles"
+          const { error: perfilError } = await supabaseClient
+            .from('perfiles')
             .insert([{
-              id: generatedEstablishmentID,
-              name: establishmentName
+              user_id: userId,
+              role: selectedRole,
+              establishment_number: currentEstablishmentId // Guardar el ID generado si es establecimiento
             }]);
-          if (estabError) {
-            messageDiv.textContent = 'Error al crear establecimiento: ' + estabError.message;
-            messageDiv.style.color = '#ff4d4d';
-            return;
+          if (perfilError) {
+              // Podríamos intentar borrar el usuario de Auth aquí si falla el perfil
+              // await supabaseClient.auth.admin.deleteUser(userId); // ¡Requiere clave de admin! No hacer en cliente.
+              throw new Error(`Error al crear perfil: ${perfilError.message}. Contacta soporte si el problema persiste.`);
           }
-        }
-        messageDiv.textContent = 'Registro exitoso. Revisa tu correo y luego inicia sesión.';
-        messageDiv.style.color = '#27ae60';
 
-      } else {
-        // MODO LOGIN
-        const { data: signInData, error: signInError } = await supabaseClient.auth.signInWithPassword({
-          email: emailVal,
-          password: passVal
-        });
-        if (signInError) {
-          messageDiv.textContent = 'Error: ' + signInError.message;
-          messageDiv.style.color = '#ff4d4d';
-          return;
-        }
-        messageDiv.textContent = 'Inicio de sesión exitoso. Verificando perfil...';
-        messageDiv.style.color = '#27ae60';
+          // 3. Si es establecimiento, crear registro en "establishments"
+          //    ADVERTENCIA: Usando el ID generado en cliente (NO RECOMENDADO)
+          if (selectedRole === 'establecimiento') {
+            const { error: estabError } = await supabaseClient
+              .from('establishments')
+              .insert([{
+                id: currentEstablishmentId, // El ID generado
+                name: establishmentName,
+                // Podrías añadir más campos aquí, como owner_user_id = userId
+              }]);
+            if (estabError) {
+                 // Intentar rollback manual (borrar perfil y usuario auth) sería complejo y mejor hacerlo server-side
+                 throw new Error(`Error al crear establecimiento: ${estabError.message}. Contacta soporte.`);
+            }
+          }
 
-        // Obtener usuario a partir del UID de Supabase
-        const currentUser = signInData.user || (await supabaseClient.auth.getUser()).data.user;
-        if (!currentUser) {
-          messageDiv.textContent = 'No se pudo obtener la información del usuario.';
-          return;
-        }
+          showMessage('Registro exitoso. Revisa tu correo para confirmar y luego inicia sesión.');
+          // No redirigir, el usuario debe confirmar email primero (si está habilitado)
+          setMode('login'); // Cambiar a modo login después del registro exitoso
 
-        // Consultar la tabla "perfiles" usando el UID del usuarios
-        const { data: perfil, error: perfilError } = await supabaseClient
-          .from('perfiles')
-          .select("user_id, establishment_number")
-          .eq('user_id', currentUser.id)
-          .single();
-        if (perfilError) {
-          window.location.href = "home.html";
-          return;
-        }
-
-        // Si establishment_number no es nulo, es un establecimiento
-        if (perfil.establishment_number !== null) {
-          window.location.href = "establecimiento.html?id=" + encodeURIComponent(perfil.establishment_number);
         } else {
-          // Cambio realizado: redirigir a home.html en vez de perfil.html
-          window.location.href = "home.html";
-        }
+          // --- MODO LOGIN ---
+          const { data: signInData, error: signInError } = await supabaseClient.auth.signInWithPassword({
+            email: emailVal,
+            password: passVal
+          });
+          if (signInError) throw signInError; // Lanzar error para el catch
+
+          showMessage('Inicio de sesión exitoso. Verificando perfil...', false);
+
+          // Obtener usuario actual (asegurarse de tenerlo)
+          const { data: { user: currentUser } } = await supabaseClient.auth.getUser();
+          if (!currentUser) throw new Error('No se pudo obtener la información del usuario tras iniciar sesión.');
+
+          // Consultar la tabla "perfiles" para determinar redirección
+          const { data: perfil, error: perfilError } = await supabaseClient
+            .from('perfiles')
+            .select("user_id, role, establishment_number") // Seleccionar role también
+            .eq('user_id', currentUser.id)
+            .single(); // Esperamos un solo perfil por usuario
+
+          if (perfilError || !perfil) {
+              // Si no se encuentra perfil, ¿qué hacer? ¿Redirigir a una página de creación de perfil?
+              // Por ahora, redirigimos a home genérico, pero esto podría ser un error.
+              console.warn("No se encontró perfil para el usuario:", currentUser.id, "Error:", perfilError);
+              // throw new Error("No se encontró un perfil asociado a esta cuenta."); // O lanzar error
+               showMessage("Perfil no encontrado, redirigiendo a inicio...");
+               await new Promise(resolve => setTimeout(resolve, 1500)); // Pequeña pausa
+               window.location.href = "home.html"; // O una página de error/setup
+               return; // Salir para evitar el finally antes de redirigir
+          }
+
+          // Redirigir según el rol/establishment_number
+          if (perfil.role === 'establecimiento' && perfil.establishment_number) {
+            // Si es establecimiento Y tiene número, redirigir a página de establecimiento
+            window.location.href = `establecimiento.html?id=${encodeURIComponent(perfil.establishment_number)}`;
+          } else {
+            // Si es jugador o un establecimiento sin número (caso raro), redirigir a home general
+            window.location.href = "home.html";
+          }
+           // Salir para evitar el finally antes de redirigir
+          return;
+
+        } // Fin if/else mode
+
+      } catch (error) {
+          console.error(`Error en modo ${mode}:`, error);
+          // Mostrar mensaje de error genérico o específico si es posible
+          let userMessage = `Error en ${mode === 'login' ? 'inicio de sesión' : 'registro'}: `;
+          if (error.message) {
+              // Intentar traducir errores comunes de Supabase
+              if (error.message.includes("Invalid login credentials")) {
+                  userMessage = "Correo o contraseña incorrectos.";
+              } else if (error.message.includes("User already registered")) {
+                   userMessage = "Este correo electrónico ya está registrado.";
+              } else if (error.message.includes("Password should be at least 6 characters")) {
+                   userMessage = "La contraseña debe tener al menos 6 caracteres.";
+              } else {
+                  userMessage += error.message; // Mostrar mensaje de Supabase si no es conocido
+              }
+          } else {
+              userMessage += "Ocurrió un error inesperado.";
+          }
+          showMessage(userMessage, true);
+
+      } finally {
+          // Este bloque se ejecutará siempre que no haya una redirección (return) antes
+           isSubmitting = false;
+           submitButton.disabled = false;
+           // Restaurar texto del botón solo si no hubo redirección exitosa
+           if (mode === 'login' && !window.location.href.includes("home.html") && !window.location.href.includes("establecimiento.html")) {
+              submitButton.textContent = 'Iniciar sesión';
+           } else if (mode === 'signup') { // En signup, siempre restaurar si no hubo error fatal o redirección
+               submitButton.textContent = 'Registrarse';
+           }
+           // Limpiar ID generado si estamos en modo signup para la próxima vez
+           if (mode === 'signup') {
+               generatedEstablishmentID = null;
+           }
       }
     });
 
-    // Al cargar la página, verificar si ya hay usuario logueado y ocultar botones de login
-    window.addEventListener('DOMContentLoaded', async () => {
-      const { data: currentUserData } = await supabaseClient.auth.getUser();
-      if (currentUserData && currentUserData.user) {
-        navAuthButtons.classList.add('hidden');
-      }
+    // Listener para cambios en la selección de rol
+    roleJugadorRadio.addEventListener('change', handleRoleChange);
+    roleEstablecimientoRadio.addEventListener('change', handleRoleChange);
+
+    // Listener para el botón de cerrar modal (ejemplo de listener "unobtrusive")
+    closeModalButton.addEventListener('click', hideAuthSection);
+
+    // Listener para el botón hamburguesa
+    hamburgerBtn.addEventListener('click', () => {
+        const isExpanded = hamburgerBtn.getAttribute('aria-expanded') === 'true';
+        hamburgerBtn.setAttribute('aria-expanded', !isExpanded);
+        navRightContainer.classList.toggle('mobile-nav-active');
+        // Opcional: Cambiar icono hamburguesa a 'X' cuando está abierto
+        hamburgerBtn.textContent = !isExpanded ? '✕' : '☰';
     });
+
+    // Listener para cerrar menú móvil si se hace clic fuera (opcional)
+    document.addEventListener('click', (event) => {
+        const isClickInsideNav = navRightContainer.contains(event.target) || hamburgerBtn.contains(event.target);
+        if (navRightContainer.classList.contains('mobile-nav-active') && !isClickInsideNav) {
+            hamburgerBtn.setAttribute('aria-expanded', 'false');
+            navRightContainer.classList.remove('mobile-nav-active');
+            hamburgerBtn.textContent = '☰';
+        }
+    });
+
+
+    // === Inicialización al Cargar la Página ===
+    window.addEventListener('DOMContentLoaded', async () => {
+      // Poner año actual en el footer
+      if (currentYearSpan) {
+        currentYearSpan.textContent = new Date().getFullYear();
+      }
+
+      // Verificar si hay usuario logueado para ocultar botones nav
+      try {
+          const { data: { session } } = await supabaseClient.auth.getSession();
+          if (session && navAuthButtons) {
+              navAuthButtons.style.display = 'none'; // Ocultar botones si hay sesión
+               // Aquí podrías añadir un botón de "Logout" o "Mi Perfil"
+          } else if (navAuthButtons) {
+              navAuthButtons.style.display = 'flex'; // Asegurarse de que se muestren si no hay sesión
+          }
+      } catch (error) {
+           console.error("Error al verificar sesión:", error);
+           if (navAuthButtons) navAuthButtons.style.display = 'flex'; // Mostrar por defecto si hay error
+      }
+
+      // Establecer modo inicial (por defecto signup, pero podría cambiarse)
+      setMode('signup');
+    });
+
   </script>
 </body>
 </html>
