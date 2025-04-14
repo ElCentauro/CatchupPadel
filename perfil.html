@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>Catch Up Padel - Mi Perfil</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Fuente Moderna -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
     /* RESET Y ESTILOS GLOBALES */
@@ -106,6 +105,7 @@
     }
     input[disabled] {
       background-color: #e9ecef;
+      cursor: not-allowed; /* Añadido para indicar que no se puede editar */
     }
     input[type="file"] {
       padding: 0.5rem 0;
@@ -118,8 +118,11 @@
     }
     .radio-group label {
       font-weight: 400;
-      margin-right: 1rem;
+      margin-right: 1rem; /* Ajustado para espaciado */
     }
+     .radio-group input[type="radio"] { /* Estilo para los radio buttons */
+       margin-right: 0.3rem;
+     }
     /* Teléfono con prefijo */
     .phone-group {
       display: flex;
@@ -131,16 +134,21 @@
       align-items: center;
       padding: 0.75rem;
       border: 1px solid #ddd;
-      border-radius: 5px;
+      border-radius: 5px 0 0 5px; /* Ajustado para unir visualmente */
       background-color: #e9ecef;
       font-size: 1rem;
+      border-right: none; /* Para unir visualmente con el input */
     }
+    .phone-group input[type="tel"] { /* Ajuste para el input de teléfono */
+       border-radius: 0 5px 5px 0;
+    }
+
     /* Sección para la foto de perfil */
     .photo-section {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start;
+      justify-content: flex-start; /* Alineado al inicio */
       border-left: 1px solid #ddd;
       padding-left: 2rem;
     }
@@ -148,32 +156,43 @@
       font-size: 1.3rem;
       margin-bottom: 0.5rem;
       color: #2c3e50;
-      align-self: flex-start;
+      align-self: flex-start; /* Alineado a la izquierda */
     }
     .photo-section p {
       font-size: 0.95rem;
       color: #555;
       margin-bottom: 1rem;
-      align-self: flex-start;
+      align-self: flex-start; /* Alineado a la izquierda */
     }
     #profilePic {
       margin-bottom: 1rem;
+      align-self: flex-start; /* Input de archivo alineado a la izquierda */
+      width: 100%; /* Ocupa el ancho disponible */
     }
     #photoActions {
-      width: 100%;
+        width: 100%;
+        display: flex;         /* Para centrar contenido si es necesario */
+        flex-direction: column; /* Elementos en columna */
+        align-items: center;   /* Centrar elementos horizontalmente */
     }
     #profilePicPreview {
-      max-width: 100%;
+      max-width: 150px; /* Tamaño máximo para la previsualización */
+      max-height: 150px;
       display: block;
       margin-top: 10px;
-      border-radius: 5px;
+      margin-bottom: 10px; /* Espacio antes del botón */
+      border-radius: 50%; /* Hacerla redonda */
+      object-fit: cover; /* Para que la imagen cubra sin deformarse */
+      border: 2px solid #ddd; /* Borde opcional */
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
+
     /* Botones */
     .buttons-row {
       display: flex;
       gap: 1rem;
       margin-top: 1.5rem;
+      grid-column: 1 / -1; /* Ocupa todo el ancho del grid */
     }
     button {
       padding: 0.75rem;
@@ -194,7 +213,7 @@
     }
     .btn-delete {
       background-color: #e74c3c;
-      width: 150px;
+      width: 150px; /* Ancho fijo */
     }
     .btn-delete:hover {
       background-color: #c0392b;
@@ -204,37 +223,74 @@
       margin-top: 0.5rem;
       padding: 0.4rem 0.8rem;
       font-size: 0.9rem;
+      width: auto; /* Ancho automático */
+      align-self: center; /* Centrado debajo de la foto */
     }
     .btn-delete-photo:hover {
       background-color: #c0392b;
     }
+
     /* RESPONSIVE */
     @media (max-width: 800px) {
       .profile-grid {
         grid-template-columns: 1fr;
-        gap: 1rem;
+        gap: 1.5rem; /* Reducir gap */
       }
       .photo-section {
         border-left: none;
         padding-left: 0;
+        margin-top: 1rem; /* Espacio cuando pasa a una columna */
+        align-items: center; /* Centrar el contenido */
       }
+      .photo-section h2, .photo-section p, #profilePic {
+        align-self: center; /* Centrar texto e input */
+        text-align: center; /* Centrar texto */
+      }
+      .buttons-row {
+         flex-direction: column; /* Botones uno debajo del otro */
+      }
+       .btn-delete {
+         width: 100%; /* Ocupar todo el ancho */
+       }
     }
     @media (max-width: 600px) {
       header {
         flex-direction: column;
+        padding: 1rem; /* Menos padding */
       }
       header .logo {
-        margin-bottom: 1rem;
+        margin-bottom: 0.5rem; /* Menos margen */
+        font-size: 1.5rem; /* Más pequeño */
+      }
+       header nav a {
+        font-size: 0.9rem;
       }
       .container {
         margin: 1rem;
-        padding: 1rem;
+        padding: 1.5rem; /* Ajustar padding */
       }
+       .form-header h1 {
+         font-size: 1.6rem; /* Título más pequeño */
+       }
+       .phone-group {
+          flex-direction: column; /* Prefijo arriba del número */
+          align-items: stretch; /* Que ocupen todo el ancho */
+       }
+       .phone-prefix {
+          border-radius: 5px 5px 0 0; /* Ajustar bordes */
+          border-right: 1px solid #ddd; /* Restaurar borde derecho */
+          border-bottom: none; /* Quitar borde inferior */
+          justify-content: center; /* Centrar prefijo */
+          width: 100%;
+       }
+       .phone-group input[type="tel"] {
+          border-radius: 0 0 5px 5px; /* Ajustar bordes */
+          width: 100%;
+       }
     }
   </style>
 </head>
 <body>
-  <!-- CABECERA -->
   <header>
     <div class="logo">Catch Up Padel</div>
     <nav>
@@ -242,7 +298,6 @@
     </nav>
   </header>
 
-  <!-- CONTENEDOR PRINCIPAL DEL FORMULARIO -->
   <div class="container">
     <div class="form-header">
       <h1>Mi Perfil</h1>
@@ -250,7 +305,6 @@
 
     <form id="profile-form">
       <div class="profile-grid">
-        <!-- Sección Izquierda: Datos Personales -->
         <div class="form-section">
           <div class="form-group">
             <label for="fullName">Nombre y Apellido</label>
@@ -262,8 +316,7 @@
           </div>
           <div class="form-group">
             <label for="age">Edad</label>
-            <input type="number" id="age" name="age" placeholder="Ingresa tu edad" required>
-          </div>
+            <input type="number" id="age" name="age" placeholder="Ingresa tu edad" min="1" required> </div>
           <div class="form-group">
             <label>Sexo</label>
             <div class="radio-group">
@@ -274,8 +327,7 @@
           <div class="form-group">
             <label for="gameLevel">Nivel de juego</label>
             <select id="gameLevel" name="gameLevel" required>
-              <option value="">Selecciona tu nivel</option>
-              <option value="principiante">Principiante</option>
+              <option value="" disabled selected>Selecciona tu nivel</option> <option value="principiante">Principiante</option>
               <option value="intermedio">Intermedio</option>
               <option value="avanzado">Avanzado</option>
             </select>
@@ -296,82 +348,137 @@
             <label for="phone">Número de Teléfono</label>
             <div class="phone-group">
               <div class="phone-prefix">🇦🇷 +54</div>
-              <input type="tel" id="phone" name="phone" placeholder="Ej. 9XXXXXXXX" required>
+              <input type="tel" id="phone" name="phone" placeholder="Ej. 91122334455" pattern="[0-9]{9,15}" title="Ingresa solo números, entre 9 y 15 dígitos (sin el +54)" required>
             </div>
           </div>
         </div>
-        <!-- Sección Derecha: Foto de Perfil -->
         <div class="photo-section">
           <h2>Foto de Perfil</h2>
           <p>Sube tu imagen para que te reconozcan</p>
-          <input type="file" id="profilePic" name="profilePic" accept="image/*">
-          <div id="photoActions"></div>
+          <input type="file" id="profilePic" name="profilePic" accept="image/png, image/jpeg, image/gif"> <div id="photoActions">
+             </div>
         </div>
       </div>
-      <!-- Fila de Botones -->
       <div class="buttons-row">
         <button type="submit" class="btn-save" id="saveBtn">Guardar Cambios</button>
-        <button type="button" class="btn-delete" onclick="deleteProfile()">Borrar Perfil</button>
+        <button type="button" class="btn-delete" id="deleteProfileBtn" onclick="deleteProfile()">Borrar Perfil</button>
       </div>
     </form>
   </div>
 
-  <!-- SUPABASE -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-  <script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script> <script>
     // Configuración de Supabase
     const SUPABASE_URL = 'https://idlvxinjfbsujpvxncbr.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+    // Elementos del DOM reutilizables
+    const profileForm = document.getElementById('profile-form');
+    const emailInput = document.getElementById('emailProfile');
+    const saveBtn = document.getElementById('saveBtn');
+    const deleteProfileBtn = document.getElementById('deleteProfileBtn');
+    const photoActionsDiv = document.getElementById('photoActions');
+    const profilePicInput = document.getElementById('profilePic');
+
+    let currentUserId = null; // Para almacenar el ID del usuario cuyo perfil se está viendo/editando
+    let loggedInUserId = null; // Para almacenar el ID del usuario que ha iniciado sesión
+    let isReadOnly = false;   // Para saber si el perfil es de solo lectura
+
     async function loadProfile() {
       // Leer parámetros de la URL
       const params = new URLSearchParams(window.location.search);
       const urlUserId = params.get('userId'); // ID del perfil que se quiere ver
-      const readonly = params.get('readonly') === '1';
+      isReadOnly = params.get('readonly') === '1'; // ¿Es solo lectura?
 
-      // Si se recibió un userId, usarlo; de lo contrario, usar el del usuario logueado
-      let finalUserId = urlUserId;
-      if (!finalUserId) {
-        const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
-        if (session && session.user) {
-          finalUserId = session.user.id;
-        } else {
-          alert('No se encontró usuario logueado ni se especificó un perfil.');
-          return;
+      // 1. Obtener sesión del usuario logueado
+      const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
+
+      if (sessionError) {
+        console.error("Error getting session:", sessionError.message);
+        alert("Error al verificar tu sesión. Intenta recargar la página.");
+        return;
+      }
+
+      if (session && session.user) {
+        loggedInUserId = session.user.id;
+        // **MODIFICACIÓN: Rellenar el campo de correo electrónico del usuario logueado**
+        emailInput.value = session.user.email || 'No disponible';
+      } else {
+        // Si no hay sesión activa Y no se está pidiendo ver un perfil específico, redirigir o avisar.
+        if (!urlUserId) {
+           alert('Debes iniciar sesión para ver o editar tu perfil.');
+           // Opcionalmente redirigir a login: window.location.href = '/login.html';
+           return;
         }
       }
 
-      // Si se está en modo solo lectura, ocultar el botón de guardar
-      if (readonly) {
-        document.getElementById('saveBtn').style.display = 'none';
+      // 2. Determinar qué perfil cargar (el de la URL o el del usuario logueado)
+      currentUserId = urlUserId || loggedInUserId;
+
+      if (!currentUserId) {
+          alert('No se pudo determinar qué perfil cargar.');
+          return; // Salir si no tenemos un ID de usuario
       }
 
-      // Si el perfil que se va a mostrar es distinto al del usuario logueado y se está en modo readonly,
-      // se desactivan los inputs para que no se puedan modificar.
-      if (readonly) {
-        const inputs = document.querySelectorAll('#profile-form input, #profile-form select');
-        inputs.forEach(input => input.disabled = true);
+      // 3. Ajustar UI según si es el perfil propio o de otro (readonly)
+      // ¿Estamos viendo nuestro propio perfil?
+      const isOwnProfile = currentUserId === loggedInUserId;
+
+      if (isReadOnly || !isOwnProfile) {
+        // Modo solo lectura o viendo perfil ajeno
+        saveBtn.style.display = 'none'; // Ocultar botón guardar
+        deleteProfileBtn.style.display = 'none'; // Ocultar botón borrar perfil
+        profilePicInput.style.display = 'none'; // Ocultar input para subir foto
+        document.querySelector('.photo-section p').textContent = 'Foto de Perfil'; // Cambiar texto descriptivo
+
+        // Deshabilitar todos los campos editables del formulario
+        const inputs = profileForm.querySelectorAll('input:not([type="radio"]):not([disabled]), select, input[type="radio"]');
+        inputs.forEach(input => {
+            input.disabled = true;
+             // Si son radios, asegurarse de que no se puedan cambiar
+            if (input.type === 'radio') {
+                input.onclick = () => false;
+            }
+        });
+         // También deshabilitar el botón de borrar foto si existe
+         const deletePhotoBtn = document.getElementById('deletePhotoBtn');
+         if (deletePhotoBtn) deletePhotoBtn.style.display = 'none';
+
+      } else {
+        // Estamos viendo/editando nuestro propio perfil
+        saveBtn.style.display = 'block';
+        deleteProfileBtn.style.display = 'block';
+        profilePicInput.style.display = 'block';
+         // Asegurarse de que los campos estén habilitados (excepto el email)
+         const inputs = profileForm.querySelectorAll('input:not(#emailProfile):not([type="radio"]), select, input[type="radio"]');
+         inputs.forEach(input => {
+           input.disabled = false;
+           if (input.type === 'radio') {
+                input.onclick = null; // Restaurar comportamiento normal
+            }
+         });
       }
 
-      // Consultar el perfil del usuario correspondiente (finalUserId)
+      // 4. Consultar los datos del perfil desde la tabla 'profiles'
       const { data: profileData, error: profileError } = await supabaseClient
         .from('profiles')
         .select('*')
-        .eq('id', finalUserId)
-        .maybeSingle();
+        .eq('id', currentUserId) // Usar el ID determinado (propio o de la URL)
+        .maybeSingle(); // Esperamos un solo resultado o ninguno
 
       if (profileError) {
         console.error('Error al obtener el perfil:', profileError.message);
+        alert('Error al cargar los datos del perfil.');
         return;
       }
 
       if (profileData) {
-        // Cargar datos en el formulario
+        // 5. Cargar datos en el formulario (si existen)
         document.getElementById('fullName').value = profileData.full_name || '';
         document.getElementById('age').value = profileData.age || '';
         if (profileData.gender) {
-          const genderRadio = document.querySelector(`input[name="gender"][value="${profileData.gender}"]`);
+          // Marcar el radio button correspondiente
+          const genderRadio = profileForm.querySelector(`input[name="gender"][value="${profileData.gender}"]`);
           if (genderRadio) genderRadio.checked = true;
         }
         document.getElementById('gameLevel').value = profileData.game_level || '';
@@ -380,138 +487,314 @@
         document.getElementById('country').value = profileData.country || '';
         document.getElementById('phone').value = profileData.phone || '';
 
-        // Mostrar email (ya cargado desde la sesión)
         // Mostrar vista previa de la foto, si existe
         if (profileData.profile_pic) {
           showProfilePicPreview(profileData.profile_pic);
+        } else {
+            // Asegurarse de que no haya previsualización si no hay foto
+             deleteProfilePicPreview();
         }
+      } else {
+         // Si no existe perfil en la tabla 'profiles' y es el perfil propio,
+         // se podría mostrar un mensaje o simplemente dejar los campos vacíos para rellenar.
+         console.log("No profile data found for user:", currentUserId);
+         if (isOwnProfile) {
+            // Quizás poner valores por defecto o dejar vacío
+         } else {
+             alert("Perfil no encontrado."); // Si se intentaba ver un perfil ajeno inexistente
+         }
       }
     }
-    loadProfile();
 
-    // Mostrar vista previa de la foto
+    // Llamar a loadProfile cuando la página cargue
+    document.addEventListener('DOMContentLoaded', loadProfile);
+
+
+    // --- Funciones para la Foto de Perfil ---
+
     function showProfilePicPreview(url) {
-      const photoActions = document.getElementById('photoActions');
-      let preview = document.getElementById('profilePicPreview');
-      if (!preview) {
-        preview = document.createElement('img');
+        // Limpiar acciones previas (por si acaso)
+        photoActionsDiv.innerHTML = '';
+
+        // Crear elemento imagen para la previsualización
+        const preview = document.createElement('img');
         preview.id = 'profilePicPreview';
-        preview.style.display = 'block';
-        preview.style.marginTop = '10px';
-        photoActions.appendChild(preview);
-      }
-      preview.src = url;
-      // Agregar botón para borrar la foto si el usuario no está en modo readonly
-      const params = new URLSearchParams(window.location.search);
-      const readonly = params.get('readonly') === '1';
-      if (!readonly) {
-        let deleteBtn = document.getElementById('deletePhotoBtn');
-        if (!deleteBtn) {
-          deleteBtn = document.createElement('button');
-          deleteBtn.id = 'deletePhotoBtn';
-          deleteBtn.className = 'btn-delete-photo';
-          deleteBtn.textContent = 'Borrar Foto';
-          deleteBtn.onclick = deleteProfilePic;
-          photoActions.appendChild(deleteBtn);
+        preview.src = url;
+        preview.alt = "Foto de perfil";
+        photoActionsDiv.appendChild(preview);
+
+        // Agregar botón para borrar la foto SOLO si no estamos en modo readonly y es nuestro perfil
+        if (!isReadOnly && currentUserId === loggedInUserId) {
+            const deleteBtn = document.createElement('button');
+            deleteBtn.id = 'deletePhotoBtn';
+            deleteBtn.type = 'button'; // Importante para que no envíe el form
+            deleteBtn.className = 'btn-delete-photo';
+            deleteBtn.textContent = 'Borrar Foto Actual';
+            deleteBtn.onclick = handleDeleteProfilePic; // Llama a la función que borrará la foto (lógica de borrado real)
+            photoActionsDiv.appendChild(deleteBtn);
         }
-      }
     }
 
-    // Borrar la vista previa de la foto y limpiar el input
-    function deleteProfilePic() {
-      const preview = document.getElementById('profilePicPreview');
-      if (preview) preview.remove();
-      const deleteBtn = document.getElementById('deletePhotoBtn');
-      if (deleteBtn) deleteBtn.remove();
-      document.getElementById('profilePic').value = "";
+     // Borra solo la vista previa y limpia el input de archivo
+    function deleteProfilePicPreview() {
+         const preview = document.getElementById('profilePicPreview');
+         if (preview) preview.remove();
+         const deleteBtn = document.getElementById('deletePhotoBtn');
+         if (deleteBtn) deleteBtn.remove();
+         profilePicInput.value = ""; // Limpiar el input file
     }
 
-    // Guardar o actualizar el perfil
-    document.getElementById('profile-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      // Obtener el usuario logueado (este es el que se actualizará si no se está en modo readonly)
-      const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
-      if (sessionError || !session) {
-        alert('Error al obtener la sesión de usuario.');
+     // Función para manejar el click en "Borrar Foto Actual"
+    async function handleDeleteProfilePic() {
+         if (!confirm('¿Seguro que quieres eliminar tu foto de perfil actual? Se guardará sin foto hasta que subas una nueva.')) {
+             return;
+         }
+
+         // 1. Borrar la previsualización y el botón
+         deleteProfilePicPreview();
+
+         // 2. Poner el campo profile_pic a null en la base de datos para el usuario actual
+         if (loggedInUserId) {
+             const { error } = await supabaseClient
+                 .from('profiles')
+                 .update({ profile_pic: null })
+                 .eq('id', loggedInUserId);
+
+             if (error) {
+                 console.error("Error deleting profile picture from DB:", error.message);
+                 alert("Error al eliminar la foto del perfil. Inténtalo de nuevo.");
+                 // Opcional: recargar el perfil para restaurar la vista previa si falló el borrado
+                 loadProfile();
+             } else {
+                 console.log("Profile picture removed from DB.");
+                 // Opcionalmente, puedes añadir un mensaje de éxito temporal.
+                 // Ya no hay foto en la DB ni en la preview. El input file está limpio.
+             }
+         }
+    }
+
+
+    // Event listener para mostrar previsualización cuando se selecciona un archivo nuevo
+     profilePicInput.addEventListener('change', (event) => {
+         const file = event.target.files[0];
+         if (file) {
+             const reader = new FileReader();
+             reader.onload = function(e) {
+                 // Si ya existe una preview, la actualiza. Si no, la crea.
+                 let preview = document.getElementById('profilePicPreview');
+                 if (!preview) {
+                     // Si no hay preview (porque no había foto antes), la crea y añade el botón de borrar si es necesario
+                     showProfilePicPreview(e.target.result); // Muestra la nueva imagen localmente
+                 } else {
+                     preview.src = e.target.result; // Solo actualiza la imagen de la preview existente
+                 }
+
+                 // Asegurarse de que el botón de borrar exista si se acaba de añadir una foto
+                 if (!document.getElementById('deletePhotoBtn') && !isReadOnly && currentUserId === loggedInUserId) {
+                     const deleteBtn = document.createElement('button');
+                     deleteBtn.id = 'deletePhotoBtn';
+                     deleteBtn.type = 'button';
+                     deleteBtn.className = 'btn-delete-photo';
+                     deleteBtn.textContent = 'Borrar Foto Actual';
+                     deleteBtn.onclick = handleDeleteProfilePic;
+                     photoActionsDiv.appendChild(deleteBtn);
+                 }
+             }
+             reader.readAsDataURL(file);
+         }
+     });
+
+
+    // --- Guardar o actualizar el perfil ---
+    profileForm.addEventListener('submit', async (e) => {
+      e.preventDefault(); // Prevenir envío normal del formulario
+
+      // Comprobar si el usuario está logueado (debería estarlo si llegó aquí y no es readonly)
+      if (!loggedInUserId) {
+        alert('Error: No se detecta usuario logueado para guardar.');
         return;
       }
-      const userId = session.user.id;
 
-      // Tomar valores del formulario
+      // Deshabilitar botón para evitar doble envío
+      saveBtn.disabled = true;
+      saveBtn.textContent = 'Guardando...';
+
+      // 1. Tomar valores del formulario
       const fullName = document.getElementById('fullName').value.trim();
       const age = document.getElementById('age').value.trim();
-      const gender = document.querySelector('input[name="gender"]:checked')?.value;
+      const gender = profileForm.querySelector('input[name="gender"]:checked')?.value;
       const gameLevel = document.getElementById('gameLevel').value;
       const locality = document.getElementById('locality').value.trim();
       const province = document.getElementById('province').value.trim();
       const country = document.getElementById('country').value.trim();
       const phone = document.getElementById('phone').value.trim();
-      const profilePicInput = document.getElementById('profilePic');
+      // El email no se toma del input porque está deshabilitado y no debe cambiarse aquí.
 
-      // Subir imagen si se seleccionó una nueva
-      let profilePicUrl = null;
-      if (profilePicInput.files.length > 0) {
-        const file = profilePicInput.files[0];
-        const uniqueFileName = `profilePics/${userId}_${Date.now()}_${file.name}`;
+      // 2. Manejar la subida de la imagen (si se seleccionó una nueva)
+      let profilePicUrl = null; // URL de la imagen a guardar
+      const file = profilePicInput.files[0]; // ¿Hay un archivo nuevo seleccionado?
+
+      if (file) {
+        // Hay una nueva imagen para subir
+        const uniqueFileName = `profilePics/${loggedInUserId}_${Date.now()}_${file.name}`;
         const { data: uploadData, error: uploadError } = await supabaseClient.storage
-          .from('profiles')
-          .upload(uniqueFileName, file);
+          .from('profiles-images') // Asegúrate que 'profiles-images' sea el nombre correcto de tu Bucket de Storage
+          .upload(uniqueFileName, file, {
+             cacheControl: '3600', // Opcional: cache
+             upsert: false // Opcional: no sobrescribir si ya existe (aunque el nombre es único)
+          });
+
         if (uploadError) {
-          alert('Error al subir la imagen: ' + uploadError.message);
-          return;
+          console.error('Error al subir la imagen:', uploadError.message);
+          alert('Error al subir la nueva foto de perfil: ' + uploadError.message);
+          saveBtn.disabled = false; // Reactivar botón
+          saveBtn.textContent = 'Guardar Cambios';
+          return; // Detener el proceso de guardado
         }
-        // Obtener URL pública
+
+        // Obtener URL pública de la imagen recién subida
         const { data: publicUrlData, error: urlError } = supabaseClient.storage
-          .from('profiles')
+          .from('profiles-images') // Nombre del Bucket
           .getPublicUrl(uploadData.path);
+
         if (urlError) {
-          alert('Error al obtener URL pública: ' + urlError.message);
-          return;
+          console.error('Error al obtener URL pública:', urlError.message);
+          // Podríamos continuar sin la URL, pero avisamos
+          alert('Advertencia: La imagen se subió pero no se pudo obtener su URL pública. ' + urlError.message);
+        } else {
+          profilePicUrl = publicUrlData.publicUrl;
+          console.log("Nueva imagen subida:", profilePicUrl);
         }
-        profilePicUrl = publicUrlData.publicUrl;
+      } else {
+          // No se seleccionó un archivo nuevo.
+          // ¿Había una imagen antes y se borró con el botón "Borrar Foto Actual"?
+          // En ese caso, `profile_pic` ya se habrá puesto a null en la DB por `handleDeleteProfilePic`.
+          // ¿Había una imagen antes y NO se borró? Debemos mantener la URL existente.
+          const currentPreview = document.getElementById('profilePicPreview');
+          if (currentPreview && currentPreview.src.startsWith('http')) { // Si hay preview y es una URL (no un data: URL local)
+             profilePicUrl = currentPreview.src; // Mantener la URL actual
+             console.log("Manteniendo imagen existente:", profilePicUrl);
+          } else {
+              // No hay preview o es una local (recién seleccionada pero no guardada antes)
+              // O se borró la foto. En este caso, profilePicUrl se queda como null.
+               console.log("No se seleccionó nueva imagen y no hay imagen previa válida o se borró.");
+          }
       }
 
-      // Hacer upsert con onConflict: 'id'
+
+      // 3. Crear objeto con los datos a guardar/actualizar
+      const profileUpdateData = {
+        id: loggedInUserId, // Asegurarse de que el ID está presente para el upsert
+        full_name: fullName,
+        age: age ? parseInt(age, 10) : null, // Convertir a número o null si está vacío
+        gender: gender,
+        game_level: gameLevel,
+        locality: locality,
+        province: province,
+        country: country,
+        phone: phone,
+        profile_completed: true, // Marcar como completado
+        updated_at: new Date() // Opcional: añadir timestamp de actualización
+      };
+
+      // Añadir 'profile_pic' al objeto SOLO si tenemos una nueva URL o si queremos borrarla (null)
+      // Si profilePicUrl es null y había foto antes (y no se pulsó borrar), no queremos sobreescribir con null.
+      // Si se subió nueva foto, profilePicUrl tendrá valor.
+      // Si se pulsó borrar, profilePicUrl será null aquí, PERO ya se actualizó en la DB.
+      // Si no se tocó la foto, profilePicUrl tendrá la URL existente.
+      // Si no había foto y no se subió, profilePicUrl será null.
+       if (profilePicUrl !== undefined) { // Añadir solo si hemos decidido un valor (nuevo, existente o null intencional)
+            profileUpdateData.profile_pic = profilePicUrl;
+       } else {
+           // Esto no debería pasar con la lógica actual, pero por seguridad:
+           console.warn("profilePicUrl no definido al guardar, no se actualizará la imagen.");
+       }
+
+
+      // 4. Hacer upsert en la tabla 'profiles'
       const { data: upsertData, error: upsertError } = await supabaseClient
         .from('profiles')
-        .upsert({
-          id: userId,
-          full_name: fullName,
-          age: age,
-          gender: gender,
-          game_level: gameLevel,
-          locality: locality,
-          province: province,
-          country: country,
-          phone: phone,
-          profile_pic: profilePicUrl,
-          profile_completed: true
-        }, { onConflict: 'id' });
+        .upsert(profileUpdateData, { onConflict: 'id' }) // Actualiza si existe ID, inserta si no
+        .select() // Opcional: devolver los datos guardados
+        .single(); // Esperamos un solo registro
+
+      // 5. Manejar resultado
+      saveBtn.disabled = false; // Reactivar botón
+      saveBtn.textContent = 'Guardar Cambios';
 
       if (upsertError) {
-        alert('Error al guardar perfil: ' + upsertError.message);
+        console.error('Error al guardar perfil:', upsertError.message);
+        alert('Error al guardar el perfil: ' + upsertError.message);
       } else {
         alert('Perfil guardado exitosamente');
+        console.log('Perfil guardado:', upsertData);
+        // Opcional: si se subió una nueva foto, actualizar la preview con la URL definitiva de Supabase
+        if (profilePicUrl && file) { // Solo si se subió un archivo nuevo y obtuvimos URL
+             const preview = document.getElementById('profilePicPreview');
+             if (preview) preview.src = profilePicUrl;
+        }
+        profilePicInput.value = ""; // Limpiar input file después de guardar
       }
     });
 
-    // Borrar el perfil
+    // --- Borrar el perfil ---
     async function deleteProfile() {
-      if (!confirm('¿Estás seguro de que deseas borrar tu perfil? Esta acción no se puede deshacer.')) return;
-      const { data: { session } } = await supabaseClient.auth.getSession();
-      if (!session) {
-        alert('No se encontró sesión de usuario');
+      // Solo el usuario logueado puede borrar su propio perfil
+      if (!loggedInUserId || currentUserId !== loggedInUserId) {
+          alert("Solo puedes borrar tu propio perfil.");
+          return;
+      }
+
+      if (!confirm('¿Estás seguro de que deseas borrar tu perfil? Esta acción eliminará tus datos de perfil y no se puede deshacer.')) {
         return;
       }
-      const userId = session.user.id;
-      const { error } = await supabaseClient
+
+       // Opcional: Borrar también la foto de Storage antes de borrar el perfil
+       try {
+           const currentPreview = document.getElementById('profilePicPreview');
+           if (currentPreview && currentPreview.src.includes(SUPABASE_URL)) {
+               // Extraer el path de la imagen desde la URL pública
+               const urlParts = currentPreview.src.split('/');
+               const bucketName = urlParts[urlParts.length - 2]; // Asume .../profiles-images/path...
+               const filePath = urlParts.slice(urlParts.length - 1).join('/'); // Asume que el path no tiene '/'
+                // O mejor, si el path puede tener subcarpetas:
+                const pathStartIndex = currentPreview.src.indexOf(bucketName + '/');
+                if (pathStartIndex !== -1) {
+                    const fullPath = decodeURIComponent(currentPreview.src.substring(pathStartIndex + bucketName.length + 1));
+                    console.log("Intentando borrar archivo de storage:", fullPath);
+                     const { error: deleteError } = await supabaseClient.storage
+                        .from(bucketName)
+                        .remove([fullPath]);
+                     if (deleteError) {
+                        console.warn("No se pudo borrar la foto de Storage:", deleteError.message);
+                        // Podrías decidir si continuar o no con el borrado del perfil
+                     } else {
+                         console.log("Foto de Storage borrada.");
+                     }
+                }
+           }
+       } catch (storageError) {
+           console.warn("Error intentando borrar foto de Storage:", storageError);
+       }
+
+
+      // Borrar el registro de la tabla 'profiles'
+      const { error: deleteDbError } = await supabaseClient
         .from('profiles')
         .delete()
-        .eq('id', userId);
-      if (error) {
-        alert('Error al borrar perfil: ' + error.message);
+        .eq('id', loggedInUserId); // Usar el ID del usuario logueado
+
+      if (deleteDbError) {
+        console.error('Error al borrar perfil:', deleteDbError.message);
+        alert('Error al borrar el perfil: ' + deleteDbError.message);
       } else {
-        alert('Perfil borrado exitosamente');
+        alert('Perfil borrado exitosamente. Serás redirigido.');
+        // Opcional: Limpiar formulario o redirigir
+        // profileForm.reset();
+        // deleteProfilePicPreview();
+        // emailInput.value = ''; // Limpiar email también
+        // O redirigir a home o login:
+        window.location.href = 'home.html';
       }
     }
   </script>
