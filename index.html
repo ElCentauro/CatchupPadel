@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Catch Up Padel - Inicio (Debug Registro)</title>
+  <title>Catch Up Padel - Inicio (Redirección Jugador a Perfil)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -195,7 +195,7 @@
   </section>
 
   <footer>
-    © <span id="current-year"></span> Catch Up Padel. Todos los derechos reservados.
+    © <span id="current-year">2025</span> Catch Up Padel. Todos los derechos reservados.
   </footer>
 
   <div id="auth-section">
@@ -375,7 +375,7 @@
       try {
         // --- MODO LOGIN ---
         if (mode === 'login') {
-           // ... (Lógica de login sin cambios) ...
+          // ... (Lógica de login sin cambios) ...
           if (!emailVal || !passVal) throw new Error("Correo y contraseña son requeridos.");
 
           const { data: signInData, error: signInError } = await supabaseClient.auth.signInWithPassword({
@@ -424,13 +424,13 @@
 
         // --- MODO REGISTRO ---
         } else { // mode === 'signup'
-            console.log("[Signup] Iniciando proceso de registro..."); // DEBUG LOG
+            console.log("[Signup] Iniciando proceso de registro...");
             const selectedRoleElem = document.querySelector('input[name="user-role"]:checked');
             if (!selectedRoleElem) throw new Error("Debes seleccionar un rol (Jugador o Establecimiento).");
             if (!emailVal || !passVal) throw new Error("Correo y contraseña son requeridos.");
 
             const selectedRole = selectedRoleElem.value;
-            console.log("[Signup] Rol seleccionado:", selectedRole); // DEBUG LOG
+            console.log("[Signup] Rol seleccionado:", selectedRole);
             let establishmentName = null;
             let currentEstablishmentId = null;
 
@@ -439,73 +439,73 @@
                 currentEstablishmentId = generatedEstablishmentID;
                 if (!establishmentName) throw new Error("El nombre del establecimiento es requerido.");
                 if (!currentEstablishmentId) throw new Error("Error interno: ID de establecimiento no generado.");
-                console.log("[Signup] Datos establecimiento:", currentEstablishmentId, establishmentName); // DEBUG LOG
+                console.log("[Signup] Datos establecimiento:", currentEstablishmentId, establishmentName);
             }
 
             // 1. Crear usuario Auth
-            console.log("[Signup] Intentando crear usuario en Auth..."); // DEBUG LOG
+            console.log("[Signup] Intentando crear usuario en Auth...");
             const { data: signUpData, error: signUpError } = await supabaseClient.auth.signUp({
                 email: emailVal, password: passVal
             });
-            if (signUpError) throw signUpError; // Lanza error si falla Auth
+            if (signUpError) throw signUpError;
             const userId = signUpData.user?.id;
             if (!userId) throw new Error('Registro fallido: No se obtuvo ID de usuario.');
             console.log("[Signup] Usuario creado en Auth:", userId);
 
             // 2. Insertar perfil
-            console.log("[Signup] Intentando insertar perfil..."); // DEBUG LOG
+            console.log("[Signup] Intentando insertar perfil...");
             const { error: perfilError } = await supabaseClient
                 .from('perfiles')
                 .insert([{ user_id: userId, role: selectedRole, establishment_number: currentEstablishmentId }]);
             if (perfilError) {
                 console.error("[Signup] Error insertando perfil:", perfilError);
-                // ¡IMPORTANTE! Considerar si se debe intentar borrar el usuario de Auth aquí
-                // ya que el registro no está completo. Requiere manejo cuidadoso.
                 throw new Error(`Error al guardar perfil: ${perfilError.message}. Registro incompleto.`);
             }
             console.log("[Signup] Perfil insertado para:", userId);
 
             // 3. Insertar establecimiento (si aplica)
             if (selectedRole === 'establecimiento') {
-                console.log("[Signup] Intentando insertar establecimiento..."); // DEBUG LOG
+                console.log("[Signup] Intentando insertar establecimiento...");
                 const { error: estabError } = await supabaseClient
                     .from('establishments')
                     .insert([{ id: currentEstablishmentId, name: establishmentName }]);
                 if (estabError) {
                     console.error("[Signup] Error insertando establecimiento:", estabError);
-                     // ¡IMPORTANTE! Considerar borrar perfil y usuario de Auth.
                     throw new Error(`Error al guardar establecimiento: ${estabError.message}. Registro incompleto.`);
                 }
                  console.log("[Signup] Establecimiento insertado:", currentEstablishmentId);
             }
 
-            // --- LÓGICA DE REDIRECCIÓN POST-REGISTRO ---
-            console.log("[Signup] Registro completo en DB. Preparando redirección..."); // DEBUG LOG
+            // --- LÓGICA DE REDIRECCIÓN POST-REGISTRO (MODIFICADA) ---
+            console.log("[Signup] Registro completo en DB. Preparando redirección...");
             showMessage('Registro exitoso. Redirigiendo...', false);
 
-            // Eliminamos el timeout temporalmente para probar si es la causa
-            // await new Promise(resolve => setTimeout(resolve, 1500));
-            // console.log("[Signup] (Timeout skipped for debugging)"); // DEBUG LOG
+            // Pausa breve opcional para que el usuario vea el mensaje
+            await new Promise(resolve => setTimeout(resolve, 500)); // Reducido a 0.5 segundos
 
             if (selectedRole === 'establecimiento') {
+                // Redirigir a establecimiento.html con ID
                 const redirectUrl = `establecimiento.html?id=${encodeURIComponent(currentEstablishmentId)}`;
-                console.log("[Signup] REDIRIGIENDO (Establecimiento) a:", redirectUrl); // DEBUG LOG
+                console.log("[Signup] REDIRIGIENDO (Establecimiento) a:", redirectUrl);
                 didRedirect = true;
                 window.location.href = redirectUrl; // Intento de redirección
 
             } else { // selectedRole === 'jugador'
-                const redirectUrl = 'perfil.html';
-                console.log("[Signup] REDIRIGIENDO (Jugador) a:", redirectUrl); // DEBUG LOG
+                // Redirigir a perfil.html CON email como parámetro
+                const redirectUrl = `perfil.html?email=${encodeURIComponent(emailVal)}`; // <<-- CAMBIO AQUÍ
+                console.log("[Signup] REDIRIGIENDO (Jugador) a:", redirectUrl);
                 didRedirect = true;
                 window.location.href = redirectUrl; // Intento de redirección
             }
-             console.log("[Signup] Comando window.location.href ejecutado."); // DEBUG LOG
-             // Es posible que el script no llegue aquí si la redirección es instantánea.
+            // IMPORTANTE: perfil.html necesita JS para leer el parámetro 'email' de la URL
+            // y mostrarlo donde corresponda. Ver explicación anterior.
+
+            console.log("[Signup] Comando window.location.href ejecutado.");
         }
 
       } catch (error) {
-          // ... (Manejo de errores sin cambios, pero con log adicional) ...
-          console.error(`Error en modo ${mode}:`, error); // DEBUG LOG
+          // ... (Manejo de errores sin cambios) ...
+          console.error(`Error en modo ${mode}:`, error);
           let userMessage = `Error: `;
           if (error.message) {
             if (error.message.includes("Invalid login credentials")) userMessage = "Correo o contraseña incorrectos.";
@@ -519,15 +519,14 @@
           showMessage(userMessage, true);
 
       } finally {
-          console.log("[Finally] Bloque finally alcanzado. didRedirect =", didRedirect); // DEBUG LOG
+          console.log("[Finally] Bloque finally alcanzado. didRedirect =", didRedirect);
           if (!didRedirect) {
-              console.log("[Finally] No hubo redirección, rehabilitando botón."); // DEBUG LOG
+              console.log("[Finally] No hubo redirección, rehabilitando botón.");
               isSubmitting = false;
               submitButton.disabled = false;
               submitButton.textContent = (mode === 'login') ? 'Iniciar sesión' : 'Registrarse';
           } else {
-               console.log("[Finally] Redirección iniciada, no se rehabilita el botón."); // DEBUG LOG
-               // No rehabilitar si la redirección se inició
+               console.log("[Finally] Redirección iniciada, no se rehabilita el botón.");
           }
       }
     });
@@ -553,7 +552,13 @@
 
     // === Inicialización ===
     window.addEventListener('DOMContentLoaded', async () => {
-      if (currentYearSpan) currentYearSpan.textContent = new Date().getFullYear();
+      const year = new Date().getFullYear();
+      if (currentYearSpan) {
+        currentYearSpan.textContent = year; // Actualiza el año dinámicamente
+      } else {
+        console.warn("Elemento con id 'current-year' no encontrado para actualizar el año.");
+      }
+
       try {
         const { data: { session } } = await supabaseClient.auth.getSession();
         if (session && navAuthButtons) navAuthButtons.style.display = 'none';
