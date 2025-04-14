@@ -1,802 +1,1143 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Catch Up Padel - Mi Perfil</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-  <style>
-    /* RESET Y ESTILOS GLOBALES */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      font-family: 'Poppins', sans-serif;
-      background-color: #f0f2f5;
-      color: #333;
-      line-height: 1.6;
-    }
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
-    /* CABECERA */
-    header {
-      background-color: #d0ffd0; /* Verde flúor claro */
-      padding: 1rem 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    header .logo {
-      flex: 1;
-      text-align: center;
-      font-size: 1.8rem;
-      font-weight: 600;
-      color: #2c3e50;
-    }
-    header nav a {
-      font-size: 1rem;
-      color: #ff9500;
-      text-transform: uppercase;
-      font-weight: 500;
-    }
-    /* CONTENEDOR DEL FORMULARIO */
-    .container {
-      max-width: 800px;
-      margin: 2rem auto;
-      background-color: #FFF2E0; /* Naranja suave */
-      padding: 2rem;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    .form-header {
-      background-color: #e9ecef;
-      padding: 1rem;
-      border-radius: 8px;
-      margin-bottom: 1.5rem;
-      text-align: center;
-    }
-    .form-header h1 {
-      font-size: 2rem;
-      font-weight: 700;
-      color: #2c3e50;
-      margin: 0;
-    }
-    /* GRID DEL FORMULARIO */
-    .profile-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2rem;
-    }
-    .form-section {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-    .form-group {
-      display: flex;
-      flex-direction: column;
-    }
-    .form-group label {
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-      color: #2c3e50;
-    }
-    .form-group input[type="text"],
-    .form-group input[type="email"],
-    .form-group input[type="number"],
-    .form-group input[type="tel"],
-    .form-group select {
-      padding: 0.75rem;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      font-size: 1rem;
-      width: 100%;
-      transition: border-color 0.3s;
-    }
-    .form-group input:focus,
-    .form-group select:focus {
-      border-color: #ff9500;
-      outline: none;
-    }
-    input[disabled] {
-      background-color: #e9ecef;
-      cursor: not-allowed; /* Añadido para indicar que no se puede editar */
-    }
-    input[type="file"] {
-      padding: 0.5rem 0;
-    }
-    /* Radio group (Sexo) */
-    .radio-group {
-      display: flex;
-      gap: 1rem;
-      align-items: center;
-    }
-    .radio-group label {
-      font-weight: 400;
-      margin-right: 1rem; /* Ajustado para espaciado */
-    }
-     .radio-group input[type="radio"] { /* Estilo para los radio buttons */
-       margin-right: 0.3rem;
-     }
-    /* Teléfono con prefijo */
-    .phone-group {
-      display: flex;
-      gap: 0.5rem;
-      align-items: center;
-    }
-    .phone-prefix {
-      display: flex;
-      align-items: center;
-      padding: 0.75rem;
-      border: 1px solid #ddd;
-      border-radius: 5px 0 0 5px; /* Ajustado para unir visualmente */
-      background-color: #e9ecef;
-      font-size: 1rem;
-      border-right: none; /* Para unir visualmente con el input */
-    }
-    .phone-group input[type="tel"] { /* Ajuste para el input de teléfono */
-       border-radius: 0 5px 5px 0;
-    }
+    <meta charset="UTF-8">
+    <title>Catch Up Padel - Mi Perfil</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+      /* RESET Y ESTILOS GLOBALES */
+      :root {
+          --primary-color: #ff9500; /* Naranja principal */
+          --secondary-color: #d0ffd0; /* Verde flúor claro (header) */
+          --background-soft: #FFF2E0; /* Naranja suave (container) */
+          --background-page: #f0f2f5; /* Fondo general */
+          --text-dark: #2c3e50; /* Texto principal oscuro */
+          --text-medium: #555; /* Texto secundario */
+          --border-color: #ddd;
+          --error-color: #e74c3c;
+          --success-color: #2ecc71;
+          --disabled-bg: #e9ecef;
+          --white: #fff;
+          --shadow-light: rgba(0,0,0,0.1);
+          --shadow-medium: rgba(0,0,0,0.15);
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: 'Poppins', sans-serif;
+        background-color: var(--background-page);
+        color: var(--text-dark);
+        line-height: 1.6;
+      }
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
 
-    /* Sección para la foto de perfil */
-    .photo-section {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start; /* Alineado al inicio */
-      border-left: 1px solid #ddd;
-      padding-left: 2rem;
-    }
-    .photo-section h2 {
-      font-size: 1.3rem;
-      margin-bottom: 0.5rem;
-      color: #2c3e50;
-      align-self: flex-start; /* Alineado a la izquierda */
-    }
-    .photo-section p {
-      font-size: 0.95rem;
-      color: #555;
-      margin-bottom: 1rem;
-      align-self: flex-start; /* Alineado a la izquierda */
-    }
-    #profilePic {
-      margin-bottom: 1rem;
-      align-self: flex-start; /* Input de archivo alineado a la izquierda */
-      width: 100%; /* Ocupa el ancho disponible */
-    }
-    #photoActions {
+      /* --- Iconos --- */
+      .form-group label i {
+          margin-right: 8px;
+          width: 16px; /* Ancho fijo para alineación */
+          text-align: center;
+          color: var(--primary-color);
+      }
+
+      /* --- Transiciones Inputs --- */
+      .form-group input[type="text"],
+      .form-group input[type="email"],
+      .form-group input[type="number"],
+      .form-group input[type="tel"],
+      .form-group input[type="date"], /* Añadido date */
+      .form-group select {
+        padding: 0.8rem 1rem; /* Ajuste padding */
+        border: 1px solid var(--border-color);
+        border-radius: 5px;
+        font-size: 1rem;
+        font-family: inherit; /* Heredar fuente */
         width: 100%;
-        display: flex;         /* Para centrar contenido si es necesario */
-        flex-direction: column; /* Elementos en columna */
-        align-items: center;   /* Centrar elementos horizontalmente */
-    }
-    #profilePicPreview {
-      max-width: 150px; /* Tamaño máximo para la previsualización */
-      max-height: 150px;
-      display: block;
-      margin-top: 10px;
-      margin-bottom: 10px; /* Espacio antes del botón */
-      border-radius: 50%; /* Hacerla redonda */
-      object-fit: cover; /* Para que la imagen cubra sin deformarse */
-      border: 2px solid #ddd; /* Borde opcional */
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
+        transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Transición Suave */
+        background-color: var(--white);
+      }
+      .form-group input:focus,
+      .form-group select:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(255, 149, 0, 0.2); /* Sombra suave al enfocar */
+        outline: none;
+      }
+      input[disabled], select[disabled], input[type="radio"][disabled] + label {
+        background-color: var(--disabled-bg);
+        cursor: not-allowed;
+        color: var(--text-medium);
+      }
 
-    /* Botones */
-    .buttons-row {
-      display: flex;
-      gap: 1rem;
-      margin-top: 1.5rem;
-      grid-column: 1 / -1; /* Ocupa todo el ancho del grid */
-    }
-    button {
-      padding: 0.75rem;
-      border: none;
-      border-radius: 5px;
-      font-size: 1rem;
-      font-weight: 600;
-      color: #fff;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-    .btn-save {
-      background-color: #ff9500;
-      flex: 1;
-    }
-    .btn-save:hover {
-      background-color: #e07e00;
-    }
-    .btn-delete {
-      background-color: #e74c3c;
-      width: 150px; /* Ancho fijo */
-    }
-    .btn-delete:hover {
-      background-color: #c0392b;
-    }
-    .btn-delete-photo {
-      background-color: #e74c3c;
-      margin-top: 0.5rem;
-      padding: 0.4rem 0.8rem;
-      font-size: 0.9rem;
-      width: auto; /* Ancho automático */
-      align-self: center; /* Centrado debajo de la foto */
-    }
-    .btn-delete-photo:hover {
-      background-color: #c0392b;
-    }
-
-    /* RESPONSIVE */
-    @media (max-width: 800px) {
-      .profile-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem; /* Reducir gap */
+      /* --- Estilo Modo Readonly --- */
+      .readonly-field {
+          background-color: transparent !important;
+          border: none !important;
+          box-shadow: none !important;
+          padding-left: 0 !important;
+          padding-right: 0 !important;
+          cursor: default !important;
+          color: var(--text-dark) !important; /* Texto normal para leer */
       }
-      .photo-section {
-        border-left: none;
-        padding-left: 0;
-        margin-top: 1rem; /* Espacio cuando pasa a una columna */
-        align-items: center; /* Centrar el contenido */
+      /* Ajuste específico para selects en modo readonly */
+      select.readonly-field {
+          -webkit-appearance: none;
+          -moz-appearance: none;
+          appearance: none; /* Quitar flecha */
       }
-      .photo-section h2, .photo-section p, #profilePic {
-        align-self: center; /* Centrar texto e input */
-        text-align: center; /* Centrar texto */
-      }
-      .buttons-row {
-         flex-direction: column; /* Botones uno debajo del otro */
-      }
-       .btn-delete {
-         width: 100%; /* Ocupar todo el ancho */
+       /* Ajuste específico para radio buttons en modo readonly */
+       .readonly-field input[type="radio"] {
+           display: none; /* Ocultar el radio button original */
        }
-    }
-    @media (max-width: 600px) {
+       .readonly-field label { /* Estilizar la label del radio seleccionado */
+           pointer-events: none; /* No interactuable */
+           padding: 5px 10px;
+           border-radius: 5px;
+           margin-right: 10px;
+           border: 1px solid transparent;
+       }
+        .readonly-field input[type="radio"]:checked + label {
+           background-color: var(--disabled-bg); /* Fondo para el seleccionado */
+           border-color: var(--border-color);
+           color: var(--text-dark);
+       }
+        .readonly-field input[type="radio"]:not(:checked) + label {
+            display: none; /* Ocultar opciones no seleccionadas */
+        }
+
+      /* --- Validación en Tiempo Real --- */
+      .form-group .error-message {
+          color: var(--error-color);
+          font-size: 0.85rem;
+          margin-top: 4px;
+          display: none; /* Oculto por defecto */
+      }
+      .form-group input.is-invalid,
+      .form-group select.is-invalid {
+          border-color: var(--error-color);
+      }
+      .form-group input.is-invalid:focus,
+      .form-group select.is-invalid:focus {
+           box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.2);
+      }
+      .form-group.has-error .error-message {
+          display: block; /* Mostrar mensaje de error */
+      }
+
+      /* --- Toast Notifications --- */
+      #toast-container {
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          z-index: 1050; /* Encima de otros elementos */
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+      }
+      .toast {
+          background-color: var(--text-dark);
+          color: var(--white);
+          padding: 12px 20px;
+          border-radius: 5px;
+          box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+          opacity: 0;
+          transition: opacity 0.5s ease, transform 0.5s ease;
+          transform: translateX(100%); /* Empezar fuera de pantalla */
+          display: flex;
+          align-items: center;
+          gap: 10px;
+      }
+      .toast.show {
+          opacity: 1;
+          transform: translateX(0);
+      }
+      .toast.success {
+          background-color: var(--success-color);
+      }
+      .toast.error {
+          background-color: var(--error-color);
+      }
+       .toast i { margin-right: 5px; }
+
+
+      /* --- Loading Overlay --- */
+       #loadingOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1100; /* Encima de todo */
+            backdrop-filter: blur(3px);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        #loadingOverlay.show {
+             opacity: 1;
+             visibility: visible;
+        }
+        .spinner {
+            border: 5px solid var(--background-page); /* Light grey */
+            border-top: 5px solid var(--primary-color); /* Blue */
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+
+      /* CABECERA */
       header {
-        flex-direction: column;
-        padding: 1rem; /* Menos padding */
+        background-color: var(--secondary-color);
+        padding: 1rem 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 2px 4px var(--shadow-light);
       }
       header .logo {
-        margin-bottom: 0.5rem; /* Menos margen */
-        font-size: 1.5rem; /* Más pequeño */
+        flex-grow: 1; /* Permitir que crezca */
+        text-align: center;
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: var(--text-dark);
       }
-       header nav a {
-        font-size: 0.9rem;
+      header nav a {
+        font-size: 1rem;
+        color: var(--primary-color);
+        text-transform: uppercase;
+        font-weight: 500;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        transition: background-color 0.3s;
       }
+       header nav a:hover {
+            background-color: rgba(255, 149, 0, 0.1);
+       }
+
+      /* CONTENEDOR DEL FORMULARIO */
       .container {
-        margin: 1rem;
-        padding: 1.5rem; /* Ajustar padding */
+        max-width: 900px; /* Un poco más ancho */
+        margin: 2rem auto;
+        background-color: var(--background-soft);
+        padding: 2.5rem; /* Más padding */
+        border-radius: 10px;
+        box-shadow: 0 6px 15px var(--shadow-medium);
       }
-       .form-header h1 {
-         font-size: 1.6rem; /* Título más pequeño */
+      .form-header {
+        background-color: rgba(255, 149, 0, 0.1); /* Fondo suave naranja */
+        padding: 1.5rem;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+        text-align: center;
+      }
+      .form-header h1 {
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: var(--text-dark);
+        margin: 0;
+      }
+
+      /* GRID DEL FORMULARIO */
+      .profile-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr; /* Dos columnas */
+        gap: 2.5rem 2rem; /* Más gap vertical */
+        align-items: start; /* Alinear items al inicio */
+      }
+      .form-section {
+        display: flex;
+        flex-direction: column;
+        gap: 1.2rem; /* Espacio entre grupos */
+      }
+      .form-group {
+        display: flex;
+        flex-direction: column;
+      }
+      .form-group label {
+        font-weight: 600;
+        margin-bottom: 0.6rem; /* Más espacio */
+        color: var(--text-dark);
+        display: flex; /* Para alinear icono y texto */
+        align-items: center;
+      }
+
+      /* Radio group (Sexo) */
+      .radio-group {
+        display: flex;
+        gap: 1.5rem; /* Más separación */
+        align-items: center;
+        padding-top: 0.3rem; /* Pequeño ajuste */
+      }
+      .radio-group label {
+        font-weight: 400; /* Texto normal */
+        margin-bottom: 0; /* Sin margen inferior para la label del radio */
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+      }
+      .radio-group input[type="radio"] {
+          margin-right: 0.5rem;
+          accent-color: var(--primary-color); /* Color del check */
+          cursor: pointer;
+      }
+
+      /* Teléfono con prefijo */
+      .phone-group {
+        display: flex;
+        gap: 0; /* Sin gap para unir */
+        align-items: center;
+      }
+      .phone-prefix {
+        display: flex;
+        align-items: center;
+        padding: 0.8rem 1rem;
+        border: 1px solid var(--border-color);
+        border-right: none; /* Quitar borde derecho */
+        border-radius: 5px 0 0 5px;
+        background-color: var(--disabled-bg);
+        font-size: 1rem;
+      }
+      .phone-group input[type="tel"] {
+         border-radius: 0 5px 5px 0; /* Completar bordes */
+         flex-grow: 1; /* Ocupar espacio restante */
+      }
+
+      /* Fecha Nacimiento y Edad Calculada */
+       .birthdate-group {
+           display: flex;
+           align-items: center;
+           gap: 1rem;
+           flex-wrap: wrap; /* Permitir que la edad pase abajo si no cabe */
        }
-       .phone-group {
-          flex-direction: column; /* Prefijo arriba del número */
-          align-items: stretch; /* Que ocupen todo el ancho */
+       .birthdate-group input[type="date"] {
+           flex: 1; /* Que ocupe espacio flexible */
+           min-width: 150px; /* Ancho mínimo */
        }
-       .phone-prefix {
-          border-radius: 5px 5px 0 0; /* Ajustar bordes */
-          border-right: 1px solid #ddd; /* Restaurar borde derecho */
-          border-bottom: none; /* Quitar borde inferior */
-          justify-content: center; /* Centrar prefijo */
-          width: 100%;
+       .birthdate-group #calculatedAge {
+           font-weight: 500;
+           color: var(--text-medium);
+           background-color: var(--disabled-bg);
+           padding: 0.4rem 0.8rem;
+           border-radius: 4px;
+           font-size: 0.9rem;
+           white-space: nowrap; /* Evitar que se rompa "X años" */
        }
-       .phone-group input[type="tel"] {
-          border-radius: 0 0 5px 5px; /* Ajustar bordes */
-          width: 100%;
+
+
+      /* Sección para la foto de perfil */
+      .photo-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Centrar contenido */
+        justify-content: flex-start;
+        border-left: 1px solid var(--border-color);
+        padding-left: 2rem;
+        gap: 1rem; /* Espacio entre elementos */
+      }
+      .photo-section h2 {
+        font-size: 1.4rem; /* Más grande */
+        margin-bottom: 0.5rem;
+        color: var(--text-dark);
+        align-self: flex-start;
+      }
+      .photo-section p {
+        font-size: 0.95rem;
+        color: var(--text-medium);
+        margin-bottom: 1rem;
+        align-self: flex-start;
+      }
+       #photoPreviewContainer {
+           display: flex;
+           flex-direction: column;
+           align-items: center;
+           gap: 1rem;
+           width: 100%; /* Ocupar ancho */
+           margin-bottom: 1rem;
        }
-    }
-  </style>
+       #profilePicPreview {
+           width: 160px; /* Más grande */
+           height: 160px;
+           border-radius: 50%; /* Círculo */
+           object-fit: cover; /* Evitar deformación */
+           border: 3px solid var(--white); /* Borde blanco */
+           box-shadow: 0 4px 8px var(--shadow-light);
+           background-color: var(--disabled-bg); /* Fondo si no hay imagen */
+           display: block; /* Asegurar que es bloque */
+       }
+       #profilePicPreview[src=""], #profilePicPreview:not([src]){ /* Estilo para cuando no hay src (placeholder) */
+           /* Puedes añadir un icono de usuario de fondo si quieres */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23cccccc'%3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 60%;
+       }
+       /* Estilo para el input file (oculto) y su label (botón) */
+       #profilePic {
+           display: none; /* Ocultar el input real */
+       }
+       .btn-upload-photo {
+           display: inline-block;
+           padding: 0.6rem 1.2rem;
+           background-color: var(--primary-color);
+           color: var(--white);
+           border-radius: 5px;
+           cursor: pointer;
+           font-weight: 500;
+           text-align: center;
+           transition: background-color 0.3s;
+       }
+       .btn-upload-photo:hover {
+           background-color: #e07e00; /* Naranja más oscuro */
+       }
+       .btn-upload-photo i { margin-right: 8px; }
+
+       .btn-delete-photo {
+           background-color: transparent;
+           color: var(--error-color);
+           border: 1px solid var(--error-color);
+           padding: 0.4rem 0.8rem;
+           font-size: 0.9rem;
+           border-radius: 5px;
+           cursor: pointer;
+           transition: background-color 0.3s, color 0.3s;
+       }
+       .btn-delete-photo:hover {
+           background-color: var(--error-color);
+           color: var(--white);
+       }
+
+
+      /* Botones de Acción */
+      .buttons-row {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2.5rem; /* Más espacio arriba */
+        grid-column: 1 / -1; /* Ocupa todo el ancho del grid */
+        border-top: 1px solid var(--border-color); /* Separador */
+        padding-top: 1.5rem; /* Espacio sobre botones */
+        justify-content: flex-end; /* Alinear botones a la derecha */
+      }
+      button {
+        padding: 0.8rem 1.5rem; /* Más padding */
+        border: none;
+        border-radius: 5px;
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--white);
+        cursor: pointer;
+        transition: background-color 0.3s, opacity 0.3s;
+        display: inline-flex; /* Para alinear icono y texto */
+        align-items: center;
+        justify-content: center;
+        gap: 8px; /* Espacio entre icono y texto */
+      }
+       button:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+       }
+      .btn-save {
+        background-color: var(--primary-color);
+        min-width: 180px; /* Ancho mínimo */
+      }
+      .btn-save:hover:not(:disabled) {
+        background-color: #e07e00;
+      }
+      .btn-delete {
+        background-color: var(--error-color);
+        min-width: 150px;
+      }
+      .btn-delete:hover {
+        background-color: #c0392b;
+      }
+
+
+      /* RESPONSIVE */
+      @media (max-width: 850px) { /* Ajustado breakpoint */
+        .profile-grid {
+          grid-template-columns: 1fr;
+          gap: 1.5rem;
+        }
+        .photo-section {
+          border-left: none;
+          padding-left: 0;
+          margin-top: 1.5rem;
+          align-items: center; /* Centrar contenido */
+        }
+        .photo-section h2, .photo-section p {
+          align-self: center; /* Centrar texto */
+          text-align: center;
+        }
+        .buttons-row {
+           flex-direction: column-reverse; /* Guardar abajo, borrar arriba */
+           align-items: stretch; /* Ocupar todo el ancho */
+           padding-top: 1.5rem;
+           margin-top: 1.5rem;
+        }
+         .btn-save, .btn-delete {
+           width: 100%; /* Ocupar todo el ancho */
+         }
+      }
+      @media (max-width: 600px) {
+        header {
+          flex-direction: column;
+          padding: 1rem;
+        }
+        header .logo {
+          margin-bottom: 0.5rem;
+          font-size: 1.6rem;
+        }
+         header nav a {
+            font-size: 0.9rem;
+            padding: 0.4rem 0.8rem;
+         }
+        .container {
+          margin: 1rem;
+          padding: 1.5rem;
+        }
+         .form-header h1 {
+           font-size: 1.8rem;
+         }
+         .phone-group {
+            flex-direction: column;
+            align-items: stretch;
+         }
+         .phone-prefix {
+            border-radius: 5px 5px 0 0;
+            border-right: 1px solid var(--border-color);
+            border-bottom: none;
+            justify-content: center;
+            width: 100%;
+         }
+         .phone-group input[type="tel"] {
+            border-radius: 0 0 5px 5px;
+            width: 100%;
+         }
+         .birthdate-group {
+             flex-direction: column;
+             align-items: stretch;
+         }
+         .birthdate-group #calculatedAge {
+             text-align: center;
+             margin-top: 0.5rem;
+         }
+      }
+    </style>
 </head>
 <body>
-  <header>
-    <div class="logo">Catch Up Padel</div>
-    <nav>
-      <a href="home.html">Volver a Home</a>
-    </nav>
-  </header>
-
-  <div class="container">
-    <div class="form-header">
-      <h1>Mi Perfil</h1>
+    <div id="loadingOverlay">
+        <div class="spinner"></div>
     </div>
 
-    <form id="profile-form">
-      <div class="profile-grid">
-        <div class="form-section">
-          <div class="form-group">
-            <label for="fullName">Nombre y Apellido</label>
-            <input type="text" id="fullName" name="fullName" placeholder="Ingresa tu nombre y apellido" required>
-          </div>
-          <div class="form-group">
-            <label for="emailProfile">Correo Electrónico</label>
-            <input type="email" id="emailProfile" name="emailProfile" disabled>
-          </div>
-          <div class="form-group">
-            <label for="age">Edad</label>
-            <input type="number" id="age" name="age" placeholder="Ingresa tu edad" min="1" required> </div>
-          <div class="form-group">
-            <label>Sexo</label>
-            <div class="radio-group">
-              <label><input type="radio" name="gender" value="femenino" required> Femenino</label>
-              <label><input type="radio" name="gender" value="masculino" required> Masculino</label>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="gameLevel">Nivel de juego</label>
-            <select id="gameLevel" name="gameLevel" required>
-              <option value="" disabled selected>Selecciona tu nivel</option> <option value="principiante">Principiante</option>
-              <option value="intermedio">Intermedio</option>
-              <option value="avanzado">Avanzado</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="locality">Localidad</label>
-            <input type="text" id="locality" name="locality" placeholder="Ingresa tu localidad" required>
-          </div>
-          <div class="form-group">
-            <label for="province">Provincia</label>
-            <input type="text" id="province" name="province" placeholder="Ingresa tu provincia" required>
-          </div>
-          <div class="form-group">
-            <label for="country">País</label>
-            <input type="text" id="country" name="country" placeholder="Ingresa tu país" required>
-          </div>
-          <div class="form-group">
-            <label for="phone">Número de Teléfono</label>
-            <div class="phone-group">
-              <div class="phone-prefix">🇦🇷 +54</div>
-              <input type="tel" id="phone" name="phone" placeholder="Ej. 91122334455" pattern="[0-9]{9,15}" title="Ingresa solo números, entre 9 y 15 dígitos (sin el +54)" required>
-            </div>
-          </div>
+    <div id="toast-container"></div>
+
+    <header>
+        <div class="logo">Catch Up Padel</div>
+        <nav>
+            <a href="home.html"><i class="fa-solid fa-house"></i> Volver a Home</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="form-header">
+            <h1>Mi Perfil</h1>
         </div>
-        <div class="photo-section">
-          <h2>Foto de Perfil</h2>
-          <p>Sube tu imagen para que te reconozcan</p>
-          <input type="file" id="profilePic" name="profilePic" accept="image/png, image/jpeg, image/gif"> <div id="photoActions">
-             </div>
-        </div>
-      </div>
-      <div class="buttons-row">
-        <button type="submit" class="btn-save" id="saveBtn">Guardar Cambios</button>
-        <button type="button" class="btn-delete" id="deleteProfileBtn" onclick="deleteProfile()">Borrar Perfil</button>
-      </div>
-    </form>
-  </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script> <script>
-    // Configuración de Supabase
-    const SUPABASE_URL = 'https://idlvxinjfbsujpvxncbr.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig';
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        <form id="profile-form" novalidate> <div class="profile-grid">
+                <div class="form-section">
+                    <div class="form-group">
+                        <label for="fullName"><i class="fa-solid fa-user"></i> Nombre y Apellido</label>
+                        <input type="text" id="fullName" name="fullName" placeholder="Ingresa tu nombre y apellido" required>
+                        <span class="error-message">Este campo es obligatorio.</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="emailProfile"><i class="fa-solid fa-envelope"></i> Correo Electrónico</label>
+                        <input type="email" id="emailProfile" name="emailProfile" disabled> <span class="error-message"></span> </div>
+                     <div class="form-group">
+                        <label for="birthDate"><i class="fa-solid fa-cake-candles"></i> Fecha de Nacimiento</label>
+                        <div class="birthdate-group">
+                            <input type="date" id="birthDate" name="birthDate" required>
+                            <span id="calculatedAge"></span> </div>
+                         <span class="error-message">Ingresa una fecha válida (no futura).</span>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fa-solid fa-venus-mars"></i> Sexo</label>
+                        <div class="radio-group">
+                            <input type="radio" id="gender_f" name="gender" value="femenino" required> <label for="gender_f">Femenino</label>
+                            <input type="radio" id="gender_m" name="gender" value="masculino" required> <label for="gender_m">Masculino</label>
+                        </div>
+                         <span class="error-message">Selecciona una opción.</span> </div>
+                    <div class="form-group">
+                        <label for="gameLevel"><i class="fa-solid fa-layer-group"></i> Nivel de juego</label>
+                        <select id="gameLevel" name="gameLevel" required>
+                            <option value="" disabled selected>Selecciona tu nivel</option>
+                            <option value="principiante">Principiante</option>
+                            <option value="intermedio">Intermedio</option>
+                            <option value="avanzado">Avanzado</option>
+                        </select>
+                         <span class="error-message">Selecciona tu nivel de juego.</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="locality"><i class="fa-solid fa-map-pin"></i> Localidad</label>
+                        <input type="text" id="locality" name="locality" placeholder="Ingresa tu localidad" required>
+                         <span class="error-message">Este campo es obligatorio.</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="province"><i class="fa-solid fa-map-location-dot"></i> Provincia</label>
+                        <input type="text" id="province" name="province" placeholder="Ingresa tu provincia" required>
+                         <span class="error-message">Este campo es obligatorio.</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="country"><i class="fa-solid fa-globe"></i> País</label>
+                        <input type="text" id="country" name="country" placeholder="Ingresa tu país" value="Argentina" required> <span class="error-message">Este campo es obligatorio.</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone"><i class="fa-solid fa-phone"></i> Número de Teléfono</label>
+                        <div class="phone-group">
+                            <div class="phone-prefix">🇦🇷 +54</div>
+                            <input type="tel" id="phone" name="phone" placeholder="Ej. 91122334455" pattern="[0-9]{9,15}" title="Solo números (9 a 15 dígitos sin +54)" required>
+                        </div>
+                        <span class="error-message">Ingresa un número de teléfono válido (solo números).</span>
+                    </div>
+                </div>
+                <div class="photo-section">
+                    <h2><i class="fa-solid fa-image"></i> Foto de Perfil</h2>
+                    <p>Sube o actualiza tu imagen</p>
 
-    // Elementos del DOM reutilizables
-    const profileForm = document.getElementById('profile-form');
-    const emailInput = document.getElementById('emailProfile');
-    const saveBtn = document.getElementById('saveBtn');
-    const deleteProfileBtn = document.getElementById('deleteProfileBtn');
-    const photoActionsDiv = document.getElementById('photoActions');
-    const profilePicInput = document.getElementById('profilePic');
+                    <div id="photoPreviewContainer">
+                        <img id="profilePicPreview" src="" alt="Previsualización Foto Perfil"> <label for="profilePic" class="btn-upload-photo"><i class="fa-solid fa-upload"></i> Cambiar Foto</label>
+                         <input type="file" id="profilePic" name="profilePic" accept="image/png, image/jpeg, image/gif">
+                         <button type="button" id="deletePhotoBtn" class="btn-delete-photo" style="display: none;"><i class="fa-solid fa-trash-can"></i> Borrar Foto Actual</button>
+                    </div>
+                </div>
+            </div>
+            <div class="buttons-row">
+                 <button type="button" class="btn-delete" id="deleteProfileBtn"><i class="fa-solid fa-user-slash"></i> Borrar Perfil</button>
+                 <button type="submit" class="btn-save" id="saveBtn"><i class="fa-solid fa-floppy-disk"></i> Guardar Cambios</button>
+            </div>
+        </form>
+    </div>
 
-    let currentUserId = null; // Para almacenar el ID del usuario cuyo perfil se está viendo/editando
-    let loggedInUserId = null; // Para almacenar el ID del usuario que ha iniciado sesión
-    let isReadOnly = false;   // Para saber si el perfil es de solo lectura
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Configuración de Supabase
+        const SUPABASE_URL = 'https://idlvxinjfbsujpvxncbr.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig';
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    async function loadProfile() {
-      // Leer parámetros de la URL
-      const params = new URLSearchParams(window.location.search);
-      const urlUserId = params.get('userId'); // ID del perfil que se quiere ver
-      isReadOnly = params.get('readonly') === '1'; // ¿Es solo lectura?
+        // --- Elementos del DOM ---
+        const profileForm = document.getElementById('profile-form');
+        const emailInput = document.getElementById('emailProfile');
+        const saveBtn = document.getElementById('saveBtn');
+        const deleteProfileBtn = document.getElementById('deleteProfileBtn');
+        const profilePicInput = document.getElementById('profilePic');
+        const profilePicPreview = document.getElementById('profilePicPreview');
+        const deletePhotoBtn = document.getElementById('deletePhotoBtn');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const toastContainer = document.getElementById('toast-container');
+        const birthDateInput = document.getElementById('birthDate');
+        const calculatedAgeSpan = document.getElementById('calculatedAge');
+        const formGroups = profileForm.querySelectorAll('.form-group'); // Para validación
 
-      // 1. Obtener sesión del usuario logueado
-      const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
+        let currentUserId = null;
+        let loggedInUserId = null;
+        let isReadOnly = false;
+        let currentProfilePicUrl = null; // Para saber la URL actual de la foto
 
-      if (sessionError) {
-        console.error("Error getting session:", sessionError.message);
-        alert("Error al verificar tu sesión. Intenta recargar la página.");
-        return;
-      }
+        // --- Funciones de Utilidad ---
 
-      if (session && session.user) {
-        loggedInUserId = session.user.id;
-        // **MODIFICACIÓN: Rellenar el campo de correo electrónico del usuario logueado**
-        emailInput.value = session.user.email || 'No disponible';
-      } else {
-        // Si no hay sesión activa Y no se está pidiendo ver un perfil específico, redirigir o avisar.
-        if (!urlUserId) {
-           alert('Debes iniciar sesión para ver o editar tu perfil.');
-           // Opcionalmente redirigir a login: window.location.href = '/login.html';
-           return;
+        // Mostrar/Ocultar Loading Overlay
+        function showLoading(show) {
+            loadingOverlay.classList.toggle('show', show);
         }
-      }
 
-      // 2. Determinar qué perfil cargar (el de la URL o el del usuario logueado)
-      currentUserId = urlUserId || loggedInUserId;
+        // Mostrar Toast Notification
+        function showToast(message, type = 'info') { // types: info, success, error
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            let iconClass = 'fa-solid fa-info-circle';
+            if (type === 'success') iconClass = 'fa-solid fa-check-circle';
+            if (type === 'error') iconClass = 'fa-solid fa-times-circle';
 
-      if (!currentUserId) {
-          alert('No se pudo determinar qué perfil cargar.');
-          return; // Salir si no tenemos un ID de usuario
-      }
+            toast.innerHTML = `<i class="${iconClass}"></i> ${message}`;
+            toastContainer.appendChild(toast);
 
-      // 3. Ajustar UI según si es el perfil propio o de otro (readonly)
-      // ¿Estamos viendo nuestro propio perfil?
-      const isOwnProfile = currentUserId === loggedInUserId;
+            // Force reflow to enable transition
+            toast.offsetHeight;
 
-      if (isReadOnly || !isOwnProfile) {
-        // Modo solo lectura o viendo perfil ajeno
-        saveBtn.style.display = 'none'; // Ocultar botón guardar
-        deleteProfileBtn.style.display = 'none'; // Ocultar botón borrar perfil
-        profilePicInput.style.display = 'none'; // Ocultar input para subir foto
-        document.querySelector('.photo-section p').textContent = 'Foto de Perfil'; // Cambiar texto descriptivo
+            toast.classList.add('show');
 
-        // Deshabilitar todos los campos editables del formulario
-        const inputs = profileForm.querySelectorAll('input:not([type="radio"]):not([disabled]), select, input[type="radio"]');
-        inputs.forEach(input => {
-            input.disabled = true;
-             // Si son radios, asegurarse de que no se puedan cambiar
-            if (input.type === 'radio') {
-                input.onclick = () => false;
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    toast.remove();
+                }, 500); // Esperar que termine la transición de salida
+            }, 4000); // Duración del toast
+        }
+
+        // Calcular Edad
+        function calculateAge(birthDateString) {
+            if (!birthDateString) return '';
+            try {
+                const birthDate = new Date(birthDateString);
+                 // Corrección zona horaria: Tratar fecha como UTC para evitar problemas
+                 const birthYear = birthDate.getUTCFullYear();
+                 const birthMonth = birthDate.getUTCMonth();
+                 const birthDay = birthDate.getUTCDate();
+
+                const today = new Date();
+                 const todayYear = today.getFullYear();
+                 const todayMonth = today.getMonth();
+                 const todayDay = today.getDate();
+
+                 // Comprobar si la fecha es futura
+                 if (birthDate > today) return 'Fecha futura';
+
+                let age = todayYear - birthYear;
+                // Ajustar si aún no cumple años este año
+                if (todayMonth < birthMonth || (todayMonth === birthMonth && todayDay < birthDay)) {
+                    age--;
+                }
+                return age >= 0 ? `${age} años` : 'Fecha inválida';
+            } catch (e) {
+                return ''; // Fecha inválida
             }
-        });
-         // También deshabilitar el botón de borrar foto si existe
-         const deletePhotoBtn = document.getElementById('deletePhotoBtn');
-         if (deletePhotoBtn) deletePhotoBtn.style.display = 'none';
+        }
 
-      } else {
-        // Estamos viendo/editando nuestro propio perfil
-        saveBtn.style.display = 'block';
-        deleteProfileBtn.style.display = 'block';
-        profilePicInput.style.display = 'block';
-         // Asegurarse de que los campos estén habilitados (excepto el email)
-         const inputs = profileForm.querySelectorAll('input:not(#emailProfile):not([type="radio"]), select, input[type="radio"]');
-         inputs.forEach(input => {
-           input.disabled = false;
-           if (input.type === 'radio') {
-                input.onclick = null; // Restaurar comportamiento normal
+        // Actualizar Edad Mostrada
+        function updateDisplayedAge() {
+             const ageString = calculateAge(birthDateInput.value);
+             calculatedAgeSpan.textContent = ageString;
+             // Validar fecha también
+             validateField(birthDateInput);
+        }
+
+        // --- Validación ---
+        function validateField(field) {
+            const group = field.closest('.form-group');
+            const errorSpan = group.querySelector('.error-message');
+            let isValid = true;
+            let errorMessage = '';
+
+            // Check required
+            if (field.required && !field.value.trim()) {
+                isValid = false;
+                errorMessage = 'Este campo es obligatorio.';
+                 if (field.type === 'select-one' && field.value === "") {
+                     errorMessage = 'Selecciona una opción.';
+                 }
+                  if (field.type === 'radio') {
+                      const radioGroup = group.querySelector('.radio-group');
+                      const selectedRadio = radioGroup.querySelector('input[name="gender"]:checked');
+                      if (!selectedRadio) {
+                           isValid = false;
+                           errorMessage = 'Selecciona una opción.';
+                      } else {
+                          // Si hay uno seleccionado, la validación de requerido pasa
+                           isValid = true;
+                      }
+                 }
             }
-         });
-      }
+            // Check phone pattern (if applicable and not empty)
+            else if (field.id === 'phone' && field.value && !field.checkValidity()) {
+                isValid = false;
+                errorMessage = 'Formato inválido. ' + field.title;
+            }
+            // Check birth date (if applicable and not empty)
+            else if (field.id === 'birthDate' && field.value) {
+                 const birthDate = new Date(field.value);
+                 const today = new Date();
+                 // Reset time part for accurate comparison
+                  birthDate.setUTCHours(0, 0, 0, 0);
+                  today.setHours(0, 0, 0, 0);
 
-      // 4. Consultar los datos del perfil desde la tabla 'profiles'
-      const { data: profileData, error: profileError } = await supabaseClient
-        .from('profiles')
-        .select('*')
-        .eq('id', currentUserId) // Usar el ID determinado (propio o de la URL)
-        .maybeSingle(); // Esperamos un solo resultado o ninguno
-
-      if (profileError) {
-        console.error('Error al obtener el perfil:', profileError.message);
-        alert('Error al cargar los datos del perfil.');
-        return;
-      }
-
-      if (profileData) {
-        // 5. Cargar datos en el formulario (si existen)
-        document.getElementById('fullName').value = profileData.full_name || '';
-        document.getElementById('age').value = profileData.age || '';
-        if (profileData.gender) {
-          // Marcar el radio button correspondiente
-          const genderRadio = profileForm.querySelector(`input[name="gender"][value="${profileData.gender}"]`);
-          if (genderRadio) genderRadio.checked = true;
-        }
-        document.getElementById('gameLevel').value = profileData.game_level || '';
-        document.getElementById('locality').value = profileData.locality || '';
-        document.getElementById('province').value = profileData.province || '';
-        document.getElementById('country').value = profileData.country || '';
-        document.getElementById('phone').value = profileData.phone || '';
-
-        // Mostrar vista previa de la foto, si existe
-        if (profileData.profile_pic) {
-          showProfilePicPreview(profileData.profile_pic);
-        } else {
-            // Asegurarse de que no haya previsualización si no hay foto
-             deleteProfilePicPreview();
-        }
-      } else {
-         // Si no existe perfil en la tabla 'profiles' y es el perfil propio,
-         // se podría mostrar un mensaje o simplemente dejar los campos vacíos para rellenar.
-         console.log("No profile data found for user:", currentUserId);
-         if (isOwnProfile) {
-            // Quizás poner valores por defecto o dejar vacío
-         } else {
-             alert("Perfil no encontrado."); // Si se intentaba ver un perfil ajeno inexistente
-         }
-      }
-    }
-
-    // Llamar a loadProfile cuando la página cargue
-    document.addEventListener('DOMContentLoaded', loadProfile);
-
-
-    // --- Funciones para la Foto de Perfil ---
-
-    function showProfilePicPreview(url) {
-        // Limpiar acciones previas (por si acaso)
-        photoActionsDiv.innerHTML = '';
-
-        // Crear elemento imagen para la previsualización
-        const preview = document.createElement('img');
-        preview.id = 'profilePicPreview';
-        preview.src = url;
-        preview.alt = "Foto de perfil";
-        photoActionsDiv.appendChild(preview);
-
-        // Agregar botón para borrar la foto SOLO si no estamos en modo readonly y es nuestro perfil
-        if (!isReadOnly && currentUserId === loggedInUserId) {
-            const deleteBtn = document.createElement('button');
-            deleteBtn.id = 'deletePhotoBtn';
-            deleteBtn.type = 'button'; // Importante para que no envíe el form
-            deleteBtn.className = 'btn-delete-photo';
-            deleteBtn.textContent = 'Borrar Foto Actual';
-            deleteBtn.onclick = handleDeleteProfilePic; // Llama a la función que borrará la foto (lógica de borrado real)
-            photoActionsDiv.appendChild(deleteBtn);
-        }
-    }
-
-     // Borra solo la vista previa y limpia el input de archivo
-    function deleteProfilePicPreview() {
-         const preview = document.getElementById('profilePicPreview');
-         if (preview) preview.remove();
-         const deleteBtn = document.getElementById('deletePhotoBtn');
-         if (deleteBtn) deleteBtn.remove();
-         profilePicInput.value = ""; // Limpiar el input file
-    }
-
-     // Función para manejar el click en "Borrar Foto Actual"
-    async function handleDeleteProfilePic() {
-         if (!confirm('¿Seguro que quieres eliminar tu foto de perfil actual? Se guardará sin foto hasta que subas una nueva.')) {
-             return;
-         }
-
-         // 1. Borrar la previsualización y el botón
-         deleteProfilePicPreview();
-
-         // 2. Poner el campo profile_pic a null en la base de datos para el usuario actual
-         if (loggedInUserId) {
-             const { error } = await supabaseClient
-                 .from('profiles')
-                 .update({ profile_pic: null })
-                 .eq('id', loggedInUserId);
-
-             if (error) {
-                 console.error("Error deleting profile picture from DB:", error.message);
-                 alert("Error al eliminar la foto del perfil. Inténtalo de nuevo.");
-                 // Opcional: recargar el perfil para restaurar la vista previa si falló el borrado
-                 loadProfile();
-             } else {
-                 console.log("Profile picture removed from DB.");
-                 // Opcionalmente, puedes añadir un mensaje de éxito temporal.
-                 // Ya no hay foto en la DB ni en la preview. El input file está limpio.
-             }
-         }
-    }
-
-
-    // Event listener para mostrar previsualización cuando se selecciona un archivo nuevo
-     profilePicInput.addEventListener('change', (event) => {
-         const file = event.target.files[0];
-         if (file) {
-             const reader = new FileReader();
-             reader.onload = function(e) {
-                 // Si ya existe una preview, la actualiza. Si no, la crea.
-                 let preview = document.getElementById('profilePicPreview');
-                 if (!preview) {
-                     // Si no hay preview (porque no había foto antes), la crea y añade el botón de borrar si es necesario
-                     showProfilePicPreview(e.target.result); // Muestra la nueva imagen localmente
-                 } else {
-                     preview.src = e.target.result; // Solo actualiza la imagen de la preview existente
+                 if (isNaN(birthDate.getTime()) || birthDate > today) { // Check if valid date and not future
+                     isValid = false;
+                     errorMessage = 'Ingresa una fecha de nacimiento válida (no futura).';
                  }
+            }
 
-                 // Asegurarse de que el botón de borrar exista si se acaba de añadir una foto
-                 if (!document.getElementById('deletePhotoBtn') && !isReadOnly && currentUserId === loggedInUserId) {
-                     const deleteBtn = document.createElement('button');
-                     deleteBtn.id = 'deletePhotoBtn';
-                     deleteBtn.type = 'button';
-                     deleteBtn.className = 'btn-delete-photo';
-                     deleteBtn.textContent = 'Borrar Foto Actual';
-                     deleteBtn.onclick = handleDeleteProfilePic;
-                     photoActionsDiv.appendChild(deleteBtn);
-                 }
-             }
-             reader.readAsDataURL(file);
-         }
-     });
+            // Update UI
+            group.classList.toggle('has-error', !isValid);
+            field.classList.toggle('is-invalid', !isValid);
+            if (errorSpan) errorSpan.textContent = errorMessage;
 
-
-    // --- Guardar o actualizar el perfil ---
-    profileForm.addEventListener('submit', async (e) => {
-      e.preventDefault(); // Prevenir envío normal del formulario
-
-      // Comprobar si el usuario está logueado (debería estarlo si llegó aquí y no es readonly)
-      if (!loggedInUserId) {
-        alert('Error: No se detecta usuario logueado para guardar.');
-        return;
-      }
-
-      // Deshabilitar botón para evitar doble envío
-      saveBtn.disabled = true;
-      saveBtn.textContent = 'Guardando...';
-
-      // 1. Tomar valores del formulario
-      const fullName = document.getElementById('fullName').value.trim();
-      const age = document.getElementById('age').value.trim();
-      const gender = profileForm.querySelector('input[name="gender"]:checked')?.value;
-      const gameLevel = document.getElementById('gameLevel').value;
-      const locality = document.getElementById('locality').value.trim();
-      const province = document.getElementById('province').value.trim();
-      const country = document.getElementById('country').value.trim();
-      const phone = document.getElementById('phone').value.trim();
-      // El email no se toma del input porque está deshabilitado y no debe cambiarse aquí.
-
-      // 2. Manejar la subida de la imagen (si se seleccionó una nueva)
-      let profilePicUrl = null; // URL de la imagen a guardar
-      const file = profilePicInput.files[0]; // ¿Hay un archivo nuevo seleccionado?
-
-      if (file) {
-        // Hay una nueva imagen para subir
-        const uniqueFileName = `profilePics/${loggedInUserId}_${Date.now()}_${file.name}`;
-        const { data: uploadData, error: uploadError } = await supabaseClient.storage
-          .from('profiles-images') // Asegúrate que 'profiles-images' sea el nombre correcto de tu Bucket de Storage
-          .upload(uniqueFileName, file, {
-             cacheControl: '3600', // Opcional: cache
-             upsert: false // Opcional: no sobrescribir si ya existe (aunque el nombre es único)
-          });
-
-        if (uploadError) {
-          console.error('Error al subir la imagen:', uploadError.message);
-          alert('Error al subir la nueva foto de perfil: ' + uploadError.message);
-          saveBtn.disabled = false; // Reactivar botón
-          saveBtn.textContent = 'Guardar Cambios';
-          return; // Detener el proceso de guardado
+            return isValid;
         }
 
-        // Obtener URL pública de la imagen recién subida
-        const { data: publicUrlData, error: urlError } = supabaseClient.storage
-          .from('profiles-images') // Nombre del Bucket
-          .getPublicUrl(uploadData.path);
-
-        if (urlError) {
-          console.error('Error al obtener URL pública:', urlError.message);
-          // Podríamos continuar sin la URL, pero avisamos
-          alert('Advertencia: La imagen se subió pero no se pudo obtener su URL pública. ' + urlError.message);
-        } else {
-          profilePicUrl = publicUrlData.publicUrl;
-          console.log("Nueva imagen subida:", profilePicUrl);
-        }
-      } else {
-          // No se seleccionó un archivo nuevo.
-          // ¿Había una imagen antes y se borró con el botón "Borrar Foto Actual"?
-          // En ese caso, `profile_pic` ya se habrá puesto a null en la DB por `handleDeleteProfilePic`.
-          // ¿Había una imagen antes y NO se borró? Debemos mantener la URL existente.
-          const currentPreview = document.getElementById('profilePicPreview');
-          if (currentPreview && currentPreview.src.startsWith('http')) { // Si hay preview y es una URL (no un data: URL local)
-             profilePicUrl = currentPreview.src; // Mantener la URL actual
-             console.log("Manteniendo imagen existente:", profilePicUrl);
-          } else {
-              // No hay preview o es una local (recién seleccionada pero no guardada antes)
-              // O se borró la foto. En este caso, profilePicUrl se queda como null.
-               console.log("No se seleccionó nueva imagen y no hay imagen previa válida o se borró.");
-          }
-      }
-
-
-      // 3. Crear objeto con los datos a guardar/actualizar
-      const profileUpdateData = {
-        id: loggedInUserId, // Asegurarse de que el ID está presente para el upsert
-        full_name: fullName,
-        age: age ? parseInt(age, 10) : null, // Convertir a número o null si está vacío
-        gender: gender,
-        game_level: gameLevel,
-        locality: locality,
-        province: province,
-        country: country,
-        phone: phone,
-        profile_completed: true, // Marcar como completado
-        updated_at: new Date() // Opcional: añadir timestamp de actualización
-      };
-
-      // Añadir 'profile_pic' al objeto SOLO si tenemos una nueva URL o si queremos borrarla (null)
-      // Si profilePicUrl es null y había foto antes (y no se pulsó borrar), no queremos sobreescribir con null.
-      // Si se subió nueva foto, profilePicUrl tendrá valor.
-      // Si se pulsó borrar, profilePicUrl será null aquí, PERO ya se actualizó en la DB.
-      // Si no se tocó la foto, profilePicUrl tendrá la URL existente.
-      // Si no había foto y no se subió, profilePicUrl será null.
-       if (profilePicUrl !== undefined) { // Añadir solo si hemos decidido un valor (nuevo, existente o null intencional)
-            profileUpdateData.profile_pic = profilePicUrl;
-       } else {
-           // Esto no debería pasar con la lógica actual, pero por seguridad:
-           console.warn("profilePicUrl no definido al guardar, no se actualizará la imagen.");
-       }
-
-
-      // 4. Hacer upsert en la tabla 'profiles'
-      const { data: upsertData, error: upsertError } = await supabaseClient
-        .from('profiles')
-        .upsert(profileUpdateData, { onConflict: 'id' }) // Actualiza si existe ID, inserta si no
-        .select() // Opcional: devolver los datos guardados
-        .single(); // Esperamos un solo registro
-
-      // 5. Manejar resultado
-      saveBtn.disabled = false; // Reactivar botón
-      saveBtn.textContent = 'Guardar Cambios';
-
-      if (upsertError) {
-        console.error('Error al guardar perfil:', upsertError.message);
-        alert('Error al guardar el perfil: ' + upsertError.message);
-      } else {
-        alert('Perfil guardado exitosamente');
-        console.log('Perfil guardado:', upsertData);
-        // Opcional: si se subió una nueva foto, actualizar la preview con la URL definitiva de Supabase
-        if (profilePicUrl && file) { // Solo si se subió un archivo nuevo y obtuvimos URL
-             const preview = document.getElementById('profilePicPreview');
-             if (preview) preview.src = profilePicUrl;
-        }
-        profilePicInput.value = ""; // Limpiar input file después de guardar
-      }
-    });
-
-    // --- Borrar el perfil ---
-    async function deleteProfile() {
-      // Solo el usuario logueado puede borrar su propio perfil
-      if (!loggedInUserId || currentUserId !== loggedInUserId) {
-          alert("Solo puedes borrar tu propio perfil.");
-          return;
-      }
-
-      if (!confirm('¿Estás seguro de que deseas borrar tu perfil? Esta acción eliminará tus datos de perfil y no se puede deshacer.')) {
-        return;
-      }
-
-       // Opcional: Borrar también la foto de Storage antes de borrar el perfil
-       try {
-           const currentPreview = document.getElementById('profilePicPreview');
-           if (currentPreview && currentPreview.src.includes(SUPABASE_URL)) {
-               // Extraer el path de la imagen desde la URL pública
-               const urlParts = currentPreview.src.split('/');
-               const bucketName = urlParts[urlParts.length - 2]; // Asume .../profiles-images/path...
-               const filePath = urlParts.slice(urlParts.length - 1).join('/'); // Asume que el path no tiene '/'
-                // O mejor, si el path puede tener subcarpetas:
-                const pathStartIndex = currentPreview.src.indexOf(bucketName + '/');
-                if (pathStartIndex !== -1) {
-                    const fullPath = decodeURIComponent(currentPreview.src.substring(pathStartIndex + bucketName.length + 1));
-                    console.log("Intentando borrar archivo de storage:", fullPath);
-                     const { error: deleteError } = await supabaseClient.storage
-                        .from(bucketName)
-                        .remove([fullPath]);
-                     if (deleteError) {
-                        console.warn("No se pudo borrar la foto de Storage:", deleteError.message);
-                        // Podrías decidir si continuar o no con el borrado del perfil
+        function validateForm() {
+            let isFormValid = true;
+            const fieldsToValidate = profileForm.querySelectorAll('[required], input[type="tel"], input[type="date"]');
+            fieldsToValidate.forEach(field => {
+                 // Solo validar radios una vez por grupo
+                 if (field.type === 'radio' && field.name === 'gender') {
+                     if (!profileForm.querySelector('input[name="gender"]:checked')) {
+                          if (!validateField(field)) isFormValid = false; // Validar uno para mostrar error
                      } else {
-                         console.log("Foto de Storage borrada.");
+                           // Si hay uno seleccionado, limpiar el error del grupo
+                            const group = field.closest('.form-group');
+                            group.classList.remove('has-error');
+                            field.classList.remove('is-invalid');
+                            const errorSpan = group.querySelector('.error-message');
+                            if(errorSpan) errorSpan.textContent = '';
+                     }
+                 } else if (field.type !== 'radio') { // Validar otros campos individualmente
+                      if (!validateField(field)) {
+                          isFormValid = false;
+                      }
+                 }
+            });
+            return isFormValid;
+        }
+
+        // Añadir listeners para validación en blur (al salir del campo)
+        profileForm.querySelectorAll('input[required], select[required], input[type="tel"]').forEach(field => {
+            field.addEventListener('blur', () => validateField(field));
+        });
+        // Listener específico para fecha y radios
+        birthDateInput.addEventListener('change', updateDisplayedAge); // Valida fecha y calcula edad
+        profileForm.querySelectorAll('input[name="gender"]').forEach(radio => {
+            radio.addEventListener('change', () => validateField(radio)); // Validar el grupo de radios al cambiar
+        });
+
+
+        // --- Funciones de Perfil ---
+
+        async function loadProfile() {
+            showLoading(true);
+            try {
+                // Leer parámetros de la URL
+                const params = new URLSearchParams(window.location.search);
+                const urlUserId = params.get('userId');
+                isReadOnly = params.get('readonly') === '1';
+
+                // 1. Obtener sesión del usuario logueado
+                const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
+                if (sessionError) throw new Error("Error al obtener sesión: " + sessionError.message);
+
+                if (session && session.user) {
+                    loggedInUserId = session.user.id;
+                    emailInput.value = session.user.email || 'No disponible';
+                } else if (!urlUserId) {
+                    throw new Error('Debes iniciar sesión para ver o editar tu perfil.');
+                }
+
+                // 2. Determinar qué perfil cargar
+                currentUserId = urlUserId || loggedInUserId;
+                if (!currentUserId) throw new Error('No se pudo determinar qué perfil cargar.');
+
+                // 3. Consultar los datos del perfil
+                const { data: profileData, error: profileError } = await supabaseClient
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', currentUserId)
+                    .maybeSingle();
+                if (profileError) throw new Error("Error al obtener perfil: " + profileError.message);
+
+                // 4. Cargar datos en el formulario (si existen)
+                if (profileData) {
+                    document.getElementById('fullName').value = profileData.full_name || '';
+                    // ** IMPORTANTE: Cargar Fecha de Nacimiento, no Edad **
+                    birthDateInput.value = profileData.birth_date || '';
+                    updateDisplayedAge(); // Calcular y mostrar edad inicial
+
+                    if (profileData.gender) {
+                        const genderRadio = profileForm.querySelector(`input[name="gender"][value="${profileData.gender}"]`);
+                        if (genderRadio) genderRadio.checked = true;
+                    }
+                    document.getElementById('gameLevel').value = profileData.game_level || '';
+                    document.getElementById('locality').value = profileData.locality || '';
+                    document.getElementById('province').value = profileData.province || '';
+                    document.getElementById('country').value = profileData.country || 'Argentina'; // Default
+                    document.getElementById('phone').value = profileData.phone || '';
+
+                    // Foto de Perfil
+                    currentProfilePicUrl = profileData.profile_pic; // Guardar URL actual
+                    if (currentProfilePicUrl) {
+                        profilePicPreview.src = currentProfilePicUrl;
+                        deletePhotoBtn.style.display = 'inline-block'; // Mostrar botón borrar
+                    } else {
+                        profilePicPreview.src = ''; // Asegurar que no hay imagen rota
+                        deletePhotoBtn.style.display = 'none'; // Ocultar botón borrar
+                    }
+                } else {
+                     // Limpiar formulario si no hay datos (o es perfil nuevo)
+                     profileForm.reset(); // Limpia inputs básicos
+                     emailInput.value = session?.user?.email || ''; // Restaurar email
+                     profilePicPreview.src = '';
+                     deletePhotoBtn.style.display = 'none';
+                     calculatedAgeSpan.textContent = '';
+                     document.getElementById('country').value = 'Argentina'; // Default
+                     if (!urlUserId) { // Solo si está viendo su propio perfil (no encontrado)
+                        console.log("Perfil no encontrado, formulario listo para completar.");
+                     } else {
+                          throw new Error("Perfil no encontrado.");
                      }
                 }
-           }
-       } catch (storageError) {
-           console.warn("Error intentando borrar foto de Storage:", storageError);
-       }
+
+                // 5. Ajustar UI según si es readonly o perfil ajeno
+                setupReadOnlyMode();
+
+            } catch (error) {
+                console.error("Error en loadProfile:", error);
+                showToast(error.message || 'Error al cargar el perfil.', 'error');
+                // Podrías redirigir u ocultar el formulario si el error es crítico
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function setupReadOnlyMode() {
+             const isOwnProfile = currentUserId === loggedInUserId;
+             const finalReadOnly = isReadOnly || !isOwnProfile; // Es readonly si se fuerza o no es el propio perfil
+
+             // Ocultar/mostrar botones principales
+             saveBtn.style.display = finalReadOnly ? 'none' : 'inline-flex';
+             deleteProfileBtn.style.display = (finalReadOnly || !isOwnProfile) ? 'none' : 'inline-flex'; // Borrar solo propio perfil
+
+             // Ocultar controles de foto
+             profilePicInput.style.display = finalReadOnly ? 'none' : 'block';
+             document.querySelector('label[for="profilePic"]').style.display = finalReadOnly ? 'none' : 'inline-block';
+             deletePhotoBtn.style.display = (finalReadOnly || !currentProfilePicUrl) ? 'none' : 'inline-block';
+
+             // Aplicar estilo readonly a los campos
+             const fields = profileForm.querySelectorAll('input:not([type="file"]):not(#emailProfile), select, .radio-group');
+             fields.forEach(field => {
+                 if (field.classList.contains('radio-group')) {
+                      field.classList.toggle('readonly-field', finalReadOnly);
+                      field.querySelectorAll('input[type="radio"]').forEach(radio => radio.disabled = finalReadOnly);
+                 } else {
+                      field.disabled = finalReadOnly;
+                      field.classList.toggle('readonly-field', finalReadOnly);
+                 }
+             });
+
+             // Limpiar errores visuales si estamos en modo readonly
+             if (finalReadOnly) {
+                 formGroups.forEach(group => {
+                      group.classList.remove('has-error');
+                      group.querySelector('input, select')?.classList.remove('is-invalid');
+                 });
+             }
+        }
 
 
-      // Borrar el registro de la tabla 'profiles'
-      const { error: deleteDbError } = await supabaseClient
-        .from('profiles')
-        .delete()
-        .eq('id', loggedInUserId); // Usar el ID del usuario logueado
+        // --- Manejo Foto Perfil ---
+        profilePicInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    profilePicPreview.src = e.target.result;
+                    deletePhotoBtn.style.display = 'inline-block'; // Mostrar botón borrar al previsualizar
+                }
+                reader.readAsDataURL(file);
+            }
+        });
 
-      if (deleteDbError) {
-        console.error('Error al borrar perfil:', deleteDbError.message);
-        alert('Error al borrar el perfil: ' + deleteDbError.message);
-      } else {
-        alert('Perfil borrado exitosamente. Serás redirigido.');
-        // Opcional: Limpiar formulario o redirigir
-        // profileForm.reset();
-        // deleteProfilePicPreview();
-        // emailInput.value = ''; // Limpiar email también
-        // O redirigir a home o login:
-        window.location.href = 'home.html';
-      }
-    }
-  </script>
+        deletePhotoBtn.addEventListener('click', async () => {
+             if (!confirm('¿Seguro que quieres eliminar tu foto de perfil actual?')) {
+                 return;
+             }
+             // Borrar previsualización
+             profilePicPreview.src = '';
+             profilePicInput.value = ''; // Limpiar input file
+             deletePhotoBtn.style.display = 'none'; // Ocultar botón
+
+             // Poner profile_pic a null en la BD (¡Importante!)
+             // Esto se hará efectivo al guardar el perfil completo,
+             // o podemos hacerlo inmediatamente si preferimos:
+             /*
+             showLoading(true);
+             try {
+                 const { error } = await supabaseClient
+                     .from('profiles')
+                     .update({ profile_pic: null })
+                     .eq('id', loggedInUserId);
+                 if (error) throw error;
+                 currentProfilePicUrl = null; // Actualizar estado local
+                 showToast("Foto eliminada.", "success");
+             } catch (error) {
+                 console.error("Error deleting profile pic:", error);
+                 showToast("Error al eliminar la foto.", "error");
+                 // Restaurar preview si falló? (Opcional)
+                  if(currentProfilePicUrl) profilePicPreview.src = currentProfilePicUrl;
+                  deletePhotoBtn.style.display = currentProfilePicUrl ? 'inline-block' : 'none';
+             } finally {
+                 showLoading(false);
+             }
+             */
+             // Por ahora, marcaremos que se debe borrar al guardar:
+             currentProfilePicUrl = null; // Indicar que no hay foto o se quiere borrar
+        });
+
+        // --- Guardar Perfil ---
+        profileForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (isReadOnly) return; // No hacer nada si es readonly
+
+            // Validar formulario antes de enviar
+            if (!validateForm()) {
+                 showToast('Por favor, corrige los errores en el formulario.', 'error');
+                 return;
+             }
+
+            if (!loggedInUserId) {
+                showToast('Error: No se detecta usuario logueado.', 'error');
+                return;
+            }
+
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Guardando...'; // Bootstrap spinner example
+             // Fallback simple:
+             const originalButtonText = '<i class="fa-solid fa-floppy-disk"></i> Guardar Cambios';
+             saveBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Guardando...';
+
+
+            try {
+                // 1. Tomar valores del formulario
+                const fullName = document.getElementById('fullName').value.trim();
+                // ** IMPORTANTE: Tomar Fecha Nacimiento **
+                const birthDateValue = birthDateInput.value || null; // null si está vacío
+                const gender = profileForm.querySelector('input[name="gender"]:checked')?.value;
+                const gameLevel = document.getElementById('gameLevel').value;
+                const locality = document.getElementById('locality').value.trim();
+                const province = document.getElementById('province').value.trim();
+                const country = document.getElementById('country').value.trim();
+                const phone = document.getElementById('phone').value.trim();
+
+                let finalProfilePicUrl = currentProfilePicUrl; // Empezar con la URL actual (o null si se borró)
+
+                // 2. Subir nueva imagen si se seleccionó
+                const file = profilePicInput.files[0];
+                if (file) {
+                    const uniqueFileName = `profilePics/${loggedInUserId}_${Date.now()}_${file.name}`;
+                    // Asegúrate que el bucket se llama 'profiles-images' o como lo tengas definido
+                    const { data: uploadData, error: uploadError } = await supabaseClient.storage
+                        .from('profiles-images')
+                        .upload(uniqueFileName, file, { upsert: true }); // Upsert por si acaso
+
+                    if (uploadError) throw new Error('Error al subir imagen: ' + uploadError.message);
+
+                    // Obtener URL pública
+                    const { data: publicUrlData, error: urlError } = supabaseClient.storage
+                        .from('profiles-images')
+                        .getPublicUrl(uploadData.path);
+                    if (urlError) throw new Error('Error al obtener URL pública: ' + urlError.message);
+
+                    finalProfilePicUrl = publicUrlData.publicUrl; // Usar la nueva URL
+                    currentProfilePicUrl = finalProfilePicUrl; // Actualizar estado local
+                }
+
+                // 3. Crear objeto con datos a guardar
+                const profileUpdateData = {
+                    id: loggedInUserId,
+                    full_name: fullName,
+                    // ** IMPORTANTE: Guardar birth_date **
+                    birth_date: birthDateValue,
+                    gender: gender,
+                    game_level: gameLevel,
+                    locality: locality,
+                    province: province,
+                    country: country,
+                    phone: phone,
+                    profile_pic: finalProfilePicUrl, // La URL final (nueva, existente o null si se borró)
+                    profile_completed: true,
+                    updated_at: new Date()
+                };
+
+                // 4. Hacer upsert
+                const { data: upsertData, error: upsertError } = await supabaseClient
+                    .from('profiles')
+                    .upsert(profileUpdateData, { onConflict: 'id' })
+                    .select()
+                    .single();
+
+                if (upsertError) throw new Error('Error al guardar perfil: ' + upsertError.message);
+
+                showToast('Perfil guardado exitosamente', 'success');
+                profilePicInput.value = ''; // Limpiar input file si se subió algo
+
+                 // Actualizar estado visual de botón de borrar foto
+                 deletePhotoBtn.style.display = finalProfilePicUrl ? 'inline-block' : 'none';
+
+
+            } catch (error) {
+                console.error("Error guardando perfil:", error);
+                showToast(error.message || 'Error desconocido al guardar.', 'error');
+            } finally {
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = originalButtonText;
+            }
+        });
+
+
+        // --- Borrar Perfil ---
+        deleteProfileBtn.addEventListener('click', async () => {
+            if (!loggedInUserId || currentUserId !== loggedInUserId) {
+                showToast("Solo puedes borrar tu propio perfil.", "error");
+                return;
+            }
+            if (!confirm('¿Estás MUY seguro de que deseas borrar tu perfil?\n¡Esta acción eliminará todos tus datos y no se puede deshacer!')) {
+                return;
+            }
+
+             showLoading(true);
+            try {
+                // Opcional: Borrar foto de Storage primero
+                if (currentProfilePicUrl && currentProfilePicUrl.includes(SUPABASE_URL)) {
+                     try {
+                        const bucketName = 'profiles-images'; // Asegúrate que es el nombre correcto
+                        const pathStartIndex = currentProfilePicUrl.indexOf(bucketName + '/');
+                        if (pathStartIndex !== -1) {
+                            const fullPath = decodeURIComponent(currentProfilePicUrl.substring(pathStartIndex + bucketName.length + 1));
+                             await supabaseClient.storage.from(bucketName).remove([fullPath]);
+                             console.log("Foto de Storage borrada:", fullPath);
+                        }
+                    } catch (storageError) {
+                         console.warn("No se pudo borrar la foto de Storage (quizás ya no existía):", storageError.message);
+                     }
+                }
+
+                // Borrar el registro de la tabla 'profiles'
+                const { error: deleteDbError } = await supabaseClient
+                    .from('profiles')
+                    .delete()
+                    .eq('id', loggedInUserId);
+
+                if (deleteDbError) throw new Error("Error al borrar perfil: " + deleteDbError.message);
+
+                showToast('Perfil borrado exitosamente. Serás redirigido.', 'success');
+                setTimeout(() => {
+                     window.location.href = 'home.html'; // Redirigir
+                 }, 2000); // Esperar 2 seg para que se vea el toast
+
+            } catch (error) {
+                 console.error("Error borrando perfil:", error);
+                 showToast(error.message || 'Error desconocido al borrar.', 'error');
+                 showLoading(false); // Ocultar loading si falla
+            }
+             // No ocultar loading si tiene éxito, porque redirige
+        });
+
+        // --- Carga Inicial ---
+        document.addEventListener('DOMContentLoaded', loadProfile);
+
+    </script>
 </body>
 </html>
