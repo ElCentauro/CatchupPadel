@@ -784,6 +784,7 @@
         document.getElementById('btn-schedule').addEventListener('click', function() {
             const repeatWeeks = parseInt(document.getElementById('repeatWeeks').value, 10);
             const matchDateInput = document.getElementById('matchDate').value;
+            const matchNameInput = document.getElementById('matchName').value.trim();
             const scheduledList = document.getElementById('scheduledList');
             scheduledList.innerHTML = '';
 
@@ -799,8 +800,9 @@
                     const scheduledDate = new Date(baseDate);
                     scheduledDate.setDate(baseDate.getDate() + i * 7);
                     const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                    const formattedDate = scheduledDate.toLocaleDateString('es-ES', options);
                     const li = document.createElement('li');
-                    li.textContent = scheduledDate.toLocaleDateString('es-ES', options);
+                    li.textContent = `Partido: ${matchNameInput} - Fecha: ${formattedDate}`;
                     ul.appendChild(li);
                 }
                 scheduledList.appendChild(ul);
