@@ -186,7 +186,7 @@
         .card { overflow: hidden; }
         .card-header { background: #007bff; color: #fff; padding: 10px 15px; font-size: 20px; }
         .card-content { padding: 15px; color: #333; }
-        .map-container { width: 100%; height: 200px; border-top: 1px solid #ddd; }
+        .map-container { width: 100%; height: 200px; border-top: 1px solid #ddd; display: flex; justify-content: center; align-items: center; }
         .btn-view-partido, .btn-join, .btn-leave {
             margin-top: 1rem; background-color: #3498db; color: #fff;
             border: none; padding: 0.5rem 1rem; border-radius: 6px;
@@ -257,7 +257,16 @@
             margin-top: 0.5rem;
             font-size: 0.85rem;
             color: #555;
+            text-align: left; /* Alineación a la izquierda para que coincida con los demás datos */
+        }
+        .distance-info strong {
+            font-weight: bold; /* Título en negrita */
+        }
+        .map-placeholder {
+            color: #777;
+            font-size: 0.9rem;
             text-align: center;
+            padding: 1rem;
         }
     </style>
 </head>
@@ -776,13 +785,12 @@
                     <p><strong>Localidad:</strong> ${c.locality}</p>
                     <p><strong>Dirección:</strong> ${c.address}</p>
                     <p><strong>Cantidad de Canchas:</strong> ${c.court_count}</p>
-                    <div id="distance-${c.id}" class="distance-info"></div>
+                    <p class="distance-info"><strong>Distancia actual en kilómetros:</strong> <span id="distance-${c.id}"></span></p>
                 `;
                 card.appendChild(content);
                 const mapContainer = document.createElement("div");
                 mapContainer.className = "map-container";
-                const mapURL = `https://maps.google.com/maps?q=$${c.latitude},${c.longitude}&hl=es&z=14&output=embed`;
-                mapContainer.innerHTML = `<iframe src="${mapURL}" width="100%" height="100%" frameborder="0" style="border:0" allowfullscreen></iframe>`;
+                mapContainer.innerHTML = `<div class="map-placeholder">Mapa de la cancha</div>`;
                 card.appendChild(mapContainer);
                 canchasResults.appendChild(card);
             });
@@ -873,7 +881,7 @@
                             const distanceKm = calculateDistance(userLat, userLng, cancha.latitude, cancha.longitude);
                             const distanceDiv = document.getElementById(`distance-${cancha.id}`);
                             if (distanceDiv) {
-                                distanceDiv.textContent = `Distancia actual en kilómetros: ${distanceKm.toFixed(2)}`;
+                                distanceDiv.innerHTML = `<strong>Distancia actual en kilómetros:</strong> ${distanceKm.toFixed(2)}`;
                             }
                         });
                     },
@@ -882,7 +890,7 @@
                         const canchasResults = document.getElementById("canchasResults");
                         if (canchasResults) {
                             canchasResults.querySelectorAll('.distance-info').forEach(div => {
-                                div.textContent = "Ubicación no disponible.";
+                                div.innerHTML = `<strong>Distancia actual en kilómetros:</strong> Ubicación no disponible.`;
                             });
                         }
                     }
@@ -891,7 +899,7 @@
                 const canchasResults = document.getElementById("canchasResults");
                 if (canchasResults) {
                     canchasResults.querySelectorAll('.distance-info').forEach(div => {
-                        div.textContent = "Geolocalización no soportada.";
+                        div.innerHTML = `<strong>Distancia actual en kilómetros:</strong> Geolocalización no soportada.`;
                     });
                 }
             }
