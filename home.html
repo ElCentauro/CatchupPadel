@@ -38,7 +38,7 @@
         .hero h1 { font-size: 3rem; font-weight: 700; margin-bottom: 1rem; color: #fff; }
         .hero p { font-size: 1.2rem; margin-bottom: 2rem; max-width: 700px; margin: 0 auto; line-height: 1.6; }
 
-        /* TARJETAS FLOTANTES - ESTILO PERSONALIZADO CON IMÁGENES CORREGIDO Y MEJORADO */
+        /* TARJETAS FLOTANTES - ESTILO PERSONALIZADO CON IMÁGENES */
         .cards-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem; margin-top: 2rem; }
         .floating-card {
             background-color: rgba(255, 165, 0, 0.85); /* Naranja ligeramente más intenso */
@@ -298,6 +298,7 @@
         <button class="close-btn-partidos" onclick="closePartidosSearch()">X</button>
         <h2>Partidos Abiertos</h2>
         <div class="filter-container">
+            <input type="text" id="filterCanchasPartido" placeholder="Buscar por cancha" />
             <input type="text" id="filterLocality" placeholder="Ej. Buenos Aires" />
             <button id="btn-filter-partidos">Filtrar</button>
         </div>
@@ -432,7 +433,7 @@
                 option.value = level;
                 gameLevelListPlayers.appendChild(option);
             });
-            const localityListPlayers = documentgetElementById("localityListPlayers");
+            const localityListPlayers = document.getElementById("localityListPlayers");
             localityListPlayers.innerHTML = "";
             localitiesSet.forEach(loc => {
                 const option = document.createElement("option");
@@ -450,20 +451,23 @@
         function showPartidosSearch() {
             hideAllSections();
             document.getElementById("searchPartidosSection").style.display = "block";
+            document.getElementById("filterCanchasPartido").value = "";
             document.getElementById("filterLocality").value = "";
             document.getElementById("partidosResults").innerHTML = "";
         }
         function closePartidosSearch() {
             document.getElementById("searchPartidosSection").style.display = "none";
+            document.getElementById("filterCanchasPartido").value = "";
             document.getElementById("filterLocality").value = "";
             document.getElementById("partidosResults").innerHTML = "";
         }
         document.getElementById("btn-filter-partidos").addEventListener("click", () => {
-            const filterLocality = document.getElementById("filterLocality").value.trim();
-            loadOpenPartidos(filterLocality);
+            const canchaFilter = document.getElementById("filterCanchasPartido").value.trim();
+            const localityFilter = document.getElementById("filterLocality").value.trim();
+            loadOpenPartidos(canchaFilter, localityFilter);
         });
 
-        async function loadOpenPartidos(localityFilter = "") {
+        async function loadOpenPartidos(canchaFilter = "", localityFilter = "") {
             const partidosResults = document.getElementById("partidosResults");
             partidosResults.innerHTML = "";
             const todayISO = new Date().toISOString().slice(0, 10);
@@ -471,6 +475,7 @@
                 .select("*, establishments(name, locality), participants(user_id, cancelled, leave_reason)")
                 .gte("match_date", todayISO)
                 .neq("completitud", "Completo");
+            if (canchaFilter) { query = query.ilike("establishments.name", `%${canchaFilter}%`); }
             if (localityFilter) { query = query.ilike("establishments.locality", `%${localityFilter}%`); }
             const { data, error } = await query;
             if (error) {
@@ -768,7 +773,8 @@
                 card.appendChild(content);
                 const mapContainer = document.createElement("div");
                 mapContainer.className = "map-container";
-                const mapURL = `https://maps.google.com/maps?q=$${c.latitude},${c.longitude}&hl=es&z=14&output=embed`;
+                // Corrección de la URL de Google Maps
+                const mapURL = `https://maps.google.com/maps?q=${c.latitude},${c.longitude}&hl=es&z=14&output=embed`;
                 mapContainer.innerHTML = `<iframe src="${mapURL}" width="100%" height="100%" frameborder="0" style="border:0" allowfullscreen></iframe>`;
                 card.appendChild(mapContainer);
                 canchasResults.appendChild(card);
@@ -844,7 +850,7 @@
             await preloadPlayersData();
             if (loggedUser && document.getElementById("partidosButton").style.display !== "none") {
                 document.getElementById("searchPartidosSection").style.display = "block";
-                loadOpenPartidos();
+                loadOpenPartidos("", ""); // Cargar partidos al entrar
             }
         });
     </script>
