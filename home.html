@@ -253,13 +253,19 @@
             width: 32px; height: 32px; border-radius: 50%;
             border: 1px solid #ddd; object-fit: cover;
         }
+        .distance-info {
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            color: #555;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
     <nav>
         <div class="menu-container">
             <a href="perfil.html" class="menu-item" id="profileLink">Crear Perfil</a>
-            <a href="#" class="menu-item" id="partidosButton">Partidos</a>
+            <a href="#" class="menu-item" id="partidosButton" onclick="showPartidosSearch()">Partidos</a>
             <a href="#" class="menu-item" id="canchasButton" ondblclick="window.location.href='establecimiento.html'">Canchas</a>
             <a href="#" class="menu-item" id="pistasButton" ondblclick="window.location.href='pistas.html'">Pistas</a>
             <a href="#" class="menu-item" id="jugadoresButton" onclick="showPlayersSection()">Conoce Jugadores</a>
@@ -756,7 +762,8 @@
                 canchasResults.innerHTML = '<p style="text-align:center; width:100%;">No se encontraron canchas para los criterios ingresados.</p>';
                 return;
             }
-            data.forEach(c => {
+            const canchasData = data;
+            canchasData.forEach(c => {
                 const card = document.createElement("div");
                 card.className = "card";
                 const header = document.createElement("div");
@@ -769,17 +776,19 @@
                     <p><strong>Localidad:</strong> ${c.locality}</p>
                     <p><strong>Dirección:</strong> ${c.address}</p>
                     <p><strong>Cantidad de Canchas:</strong> ${c.court_count}</p>
+                    <div id="distance-${c.id}" class="distance-info"></div>
                 `;
                 card.appendChild(content);
                 const mapContainer = document.createElement("div");
                 mapContainer.className = "map-container";
-                // Corrección de la URL de Google Maps
-                const mapURL = `https://maps.google.com/maps?q=${c.latitude},${c.longitude}&hl=es&z=14&output=embed`;
+                const mapURL = `https://maps.google.com/maps?q=$${c.latitude},${c.longitude}&hl=es&z=14&output=embed`;
                 mapContainer.innerHTML = `<iframe src="${mapURL}" width="100%" height="100%" frameborder="0" style="border:0" allowfullscreen></iframe>`;
                 card.appendChild(mapContainer);
                 canchasResults.appendChild(card);
             });
+            getUserLocationForDistance(canchasData);
         }
+
         function showCanchasLoader() { document.getElementById("canchasFeedback").innerHTML = '<div class="loader"></div>'; }
         function clearCanchasLoader() { document.getElementById("canchasFeedback").innerHTML = ""; }
 
@@ -853,6 +862,57 @@
                 loadOpenPartidos("", ""); // Cargar partidos al entrar
             }
         });
+
+        function getUserLocationForDistance(canchasData) {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    position => {
+                        const userLat = position.coords.latitude;
+                        const userLng = position.coords.longitude;
+                        canchasData.forEach(cancha => {
+                            const distanceKm = calculateDistance(userLat, userLng, cancha.latitude, cancha.longitude);
+                            const distanceDiv = document.getElementById(`distance-${cancha.id}`);
+                            if (distanceDiv) {
+                                distanceDiv.textContent = `Distancia actual en kilómetros: ${distanceKm.toFixed(2)}`;
+                            }
+                        });
+                    },
+                    error => {
+                        console.error("Error al obtener la ubicación:", error);
+                        const canchasResults = document.getElementById("canchasResults");
+                        if (canchasResults) {
+                            canchasResults.querySelectorAll('.distance-info').forEach(div => {
+                                div.textContent = "Ubicación no disponible.";
+                            });
+                        }
+                    }
+                );
+            } else {
+                const canchasResults = document.getElementById("canchasResults");
+                if (canchasResults) {
+                    canchasResults.querySelectorAll('.distance-info').forEach(div => {
+                        div.textContent = "Geolocalización no soportada.";
+                    });
+                }
+            }
+        }
+
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371; // Radio de la Tierra en km
+            const dLat = deg2rad(lat2 - lat1);
+            const dLon = deg2rad(lon2 - lon1);
+            const a =
+                Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+                Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            const d = R * c; // Distancia en km
+            return d;
+        }
+
+        function deg2rad(deg) {
+            return deg * (Math.PI / 180);
+        }
     </script>
 </body>
 </html>
