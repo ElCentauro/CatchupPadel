@@ -12,7 +12,7 @@
     /* RESET Y ESTILOS GLOBALES */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Poppins', sans-serif; background-color: #f8f8f8; color: #333; }
-    
+
     /* MENÚ DE NAVEGACIÓN */
     nav {
       width: 100%; background-color: #fff; padding: 1rem 2rem;
@@ -29,7 +29,7 @@
     .menu-item:hover { background-color: #ff9500; color: #fff; }
     .menu-item.logout { border-color: #e74c3c; color: #e74c3c; }
     .menu-item.logout:hover { background-color: #e74c3c; color: #fff; }
-    
+
     /* SECCIÓN HERO */
     .hero {
       position: relative; padding: 3rem 1rem; text-align: center;
@@ -39,7 +39,7 @@
     }
     .hero h1 { font-size: 3rem; font-weight: 700; margin-bottom: 1rem; color: #fff; }
     .hero p { font-size: 1.2rem; margin-bottom: 2rem; max-width: 700px; margin: 0 auto; line-height: 1.6; }
-    
+
     /* TARJETAS FLOTANTES */
     .cards-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-top: 2rem; }
     .floating-card {
@@ -50,6 +50,16 @@
     .floating-card:hover { transform: translateY(-5px); }
     .floating-card h3 { font-size: 1rem; margin-bottom: 0.5rem; color: #2c3e50; }
     .floating-card p { font-size: 0.85rem; color: #555; }
+
+    /* Animación de titileo para el título de los partidos abiertos */
+    @keyframes flashGreen {
+      0% { color: #2ecc71; }
+      50% { color: #a2d9ce; }
+      100% { color: #2ecc71; }
+    }
+    .blinking-title {
+      animation: flashGreen 1s infinite;
+    }
     
     /* SECCIONES DE BÚSQUEDA */
     .search-partidos, .search-canchas, .search-players {
@@ -137,7 +147,7 @@
       cursor: pointer; color: #999;
     }
     #matchModal .close-modal:hover { color: #555; }
-    /* Botón de refrescar en el modal */
+    /* Botón de refrescar en el Modal */
     #matchModal .btn-refresh {
       margin-top: 1rem; background-color: #2ecc71; color: #fff;
       border: none; padding: 0.5rem 1rem; border-radius: 6px;
@@ -161,6 +171,15 @@
     }
     .missing-players { font-weight: 600; color: #e74c3c; text-align: center; }
     .cancelled { text-decoration: line-through; color: #888; }
+    
+    /* Miniaturas de participantes en la tarjeta */
+    .participants-avatars {
+      display: flex; gap: 5px; margin-top: 10px; flex-wrap: wrap;
+    }
+    .participants-avatars img {
+      width: 32px; height: 32px; border-radius: 50%;
+      border: 1px solid #ddd; object-fit: cover;
+    }
   </style>
 </head>
 <body>
@@ -246,7 +265,9 @@
   <!-- MODAL PARA DETALLES DEL PARTIDO -->
   <div id="matchModal">
     <div class="modal-content">
-      <button class="close-modal" onclick="closeModal()"><i class="fas fa-times"></i></button>
+      <button class="close-modal" onclick="closeModal()">
+        <i class="fas fa-times"></i>
+      </button>
       <!-- Botón para refrescar el modal -->
       <button class="btn-refresh" onclick="refreshModal()">Refrescar</button>
       <div id="modalContent"></div>
@@ -301,8 +322,8 @@
       allEstablishments = data;
       const namesSet = new Set(), localitiesSet = new Set();
       data.forEach(item => {
-        if (item.name) namesSet.add(item.name);
-        if (item.locality) localitiesSet.add(item.locality);
+        if(item.name) namesSet.add(item.name);
+        if(item.locality) localitiesSet.add(item.locality);
       });
       const namesList = document.getElementById("namesList");
       namesList.innerHTML = "";
@@ -325,9 +346,9 @@
       if (error) { console.error("Error cargando jugadores:", error.message); return; }
       const namesSet = new Set(), gameLevelsSet = new Set(), localitiesSet = new Set();
       data.forEach(player => {
-        if (player.full_name) namesSet.add(player.full_name);
-        if (player.game_level) gameLevelsSet.add(player.game_level);
-        if (player.locality) localitiesSet.add(player.locality);
+        if(player.full_name) namesSet.add(player.full_name);
+        if(player.game_level) gameLevelsSet.add(player.game_level);
+        if(player.locality) localitiesSet.add(player.locality);
       });
       const namesListPlayers = document.getElementById("namesListPlayers");
       namesListPlayers.innerHTML = "";
@@ -373,11 +394,13 @@
       const filterLocality = document.getElementById("filterLocality").value.trim();
       loadOpenPartidos(filterLocality);
     });
+    
     async function loadOpenPartidos(localityFilter = "") {
       const partidosResults = document.getElementById("partidosResults");
       partidosResults.innerHTML = "";
       const todayISO = new Date().toISOString().slice(0, 10);
-      let query = supabaseClient.from("partidos").select("*, establishments(name, locality), participants(user_id, cancelled, leave_reason)")
+      let query = supabaseClient.from("partidos")
+        .select("*, establishments(name, locality), participants(user_id, cancelled, leave_reason)")
         .gte("match_date", todayISO)
         .neq("completitud", "Completo");
       if (localityFilter) { query = query.ilike("establishments.locality", `%${localityFilter}%`); }
@@ -393,15 +416,41 @@
       }
       const matchesMap = {};
       data.forEach(partido => { matchesMap[partido.id] = partido; });
-      Object.values(matchesMap).forEach(partido => {
+      
+      // Para cada partido, se construye la tarjeta y se añaden las miniaturas de los participantes activos.
+      for (let partido of Object.values(matchesMap)) {
         const activeParticipants = partido.participants ? partido.participants.filter(p => !p.cancelled) : [];
         const joinedCount = activeParticipants.length;
         const totalPlayers = partido.total_players || 4;
         const missing = totalPlayers - joinedCount;
+    
+        // Construir miniaturas de participantes activos
+        let avatarsHTML = "";
+        if (activeParticipants.length > 0) {
+          const userIds = activeParticipants.map(p => p.user_id);
+          const { data: userProfiles } = await supabaseClient
+            .from("profiles")
+            .select("id, profile_pic")
+            .in("id", userIds);
+          if (userProfiles && userProfiles.length > 0) {
+            const maxToShow = 4;
+            const partialProfiles = userProfiles.slice(0, maxToShow);
+            partialProfiles.forEach(profile => {
+              const pic = profile.profile_pic || "https://via.placeholder.com/32";
+              avatarsHTML += `<img src="${pic}" alt="Foto" />`;
+            });
+            if (userProfiles.length > maxToShow) {
+              const extraCount = userProfiles.length - maxToShow;
+              avatarsHTML += `<span style="font-size:0.85rem; color:#666;">+${extraCount} más</span>`;
+            }
+          }
+        }
+    
+        // La modificación: el título ahora lleva la clase "blinking-title" para animar su color.
         const card = document.createElement("div");
         card.className = "partido-card";
         card.innerHTML = `
-          <h3>${partido.match_name}</h3>
+          <h3 class="blinking-title">${partido.match_name}</h3>
           <div class="icon-text">
             <i class="fas fa-calendar-alt"></i>
             <p class="highlight">${partido.match_date}</p>
@@ -418,15 +467,16 @@
             <p><span class="highlight">Nivel:</span> ${partido.match_level}</p>
           </div>
           <p class="highlight">Faltan ${missing} jugadores de ${totalPlayers}</p>
+          <div class="participants-avatars">${avatarsHTML}</div>
           <button class="btn-view-partido">Ver el Partido</button>
         `;
         const viewButton = card.querySelector(".btn-view-partido");
         viewButton.addEventListener("click", () => { showModal(partido); });
         partidosResults.appendChild(card);
-      });
+      }
     }
     
-    // Función para refrescar el partido con datos actualizados
+    // Función para refrescar la información del partido
     async function refreshMatch(matchId) {
       const { data, error } = await supabaseClient
         .from("partidos")
@@ -452,68 +502,63 @@
       showModal(refreshed);
     }
     
-    // Espera breve para dar tiempo a que Supabase actualice
-    async function wait(ms) {
+    // Función de espera
+    function wait(ms) {
       return new Promise(resolve => setTimeout(resolve, ms));
     }
     
-    // Función para mostrar el modal con datos actualizados
+    // Función para mostrar el modal con información actualizada del partido
     async function showModal(partido) {
-      await wait(300);  // Esperamos 300ms antes de refrescar
+      await wait(300);
       const updatedPartido = await refreshMatch(partido.id);
       if (!updatedPartido) return;
-      
+    
       const modal = document.getElementById("matchModal");
       const modalContent = document.getElementById("modalContent");
-      
-      // Guardar el id del partido en el atributo data-match-id del modal
       modalContent.setAttribute("data-match-id", updatedPartido.id);
-      
-      // Calcular participantes activos (excluyendo los cancelados)
+    
       const activeParticipants = updatedPartido.participants ? updatedPartido.participants.filter(p => !p.cancelled) : [];
       const joinedCount = activeParticipants.length;
       const totalPlayers = updatedPartido.total_players || 4;
       const missing = totalPlayers - joinedCount;
-      
-      // Obtener detalles de participantes (todos)
-      let participantIds = [];
+    
+      // Obtención de detalles de participantes (todos)
+      let userIds = [];
       if (updatedPartido.participants) {
-        participantIds = updatedPartido.participants.map(p => p.user_id);
+        userIds = updatedPartido.participants.map(p => p.user_id);
       }
-      let participantDetails = [];
-      if (participantIds.length > 0) {
-        const { data: players, error } = await supabaseClient
-          .from("profiles")
-          .select("full_name, profile_pic, id")
-          .in("id", participantIds);
-        if (!error && players) { participantDetails = players; }
-      }
-      
-      // Construir la lista HTML de participantes, tachando los cancelados y mostrando el motivo
       let participantListHTML = `<div class="participants-list-container"><ul>`;
-      if (participantDetails.length > 0) {
-        participantDetails.forEach(player => {
-          const participantRecord = updatedPartido.participants.find(p => p.user_id === player.id);
-          let styleName = "";
-          let reasonText = "";
-          if (participantRecord && participantRecord.cancelled) {
-            styleName = "cancelled";
-            if (participantRecord.leave_reason) {
-              reasonText = ` - (${participantRecord.leave_reason})`;
+      if (userIds.length > 0) {
+        const { data: userProfiles } = await supabaseClient
+          .from("profiles")
+          .select("id, full_name, profile_pic")
+          .in("id", userIds);
+        if (userProfiles && userProfiles.length > 0) {
+          userProfiles.forEach(usr => {
+            const rec = updatedPartido.participants.find(r => r.user_id === usr.id);
+            let styleName = "";
+            let reasonText = "";
+            if (rec && rec.cancelled) {
+              styleName = "cancelled";
+              if (rec.leave_reason) {
+                reasonText = ` - (${rec.leave_reason})`;
+              }
             }
-          }
-          participantListHTML += `
-            <li>
-              <img src="${player.profile_pic || "https://via.placeholder.com/40"}" alt="Foto de ${player.full_name}" />
-              <span class="${styleName}">${player.full_name}${reasonText}</span>
-            </li>
-          `;
-        });
+            participantListHTML += `
+              <li>
+                <img src="${usr.profile_pic || "https://via.placeholder.com/40"}" alt="Foto de ${usr.full_name}" />
+                <span class="${styleName}">${usr.full_name}${reasonText}</span>
+              </li>
+            `;
+          });
+        } else {
+          participantListHTML += "<li>No hay jugadores apuntados.</li>";
+        }
       } else {
         participantListHTML += "<li>No hay jugadores apuntados.</li>";
       }
       participantListHTML += "</ul></div>";
-      
+    
       modalContent.innerHTML = `
         <h2>${updatedPartido.match_name}</h2>
         <p><strong>Fecha:</strong> ${updatedPartido.match_date}</p>
@@ -525,13 +570,12 @@
         ${participantListHTML}
         <p class="missing-players">Faltan ${missing} jugadores de ${totalPlayers} totales</p>
       `;
-      
-      // Determinar si el usuario ya está inscrito en el partido
-      const userRecord = updatedPartido.participants && loggedUser ?
-            updatedPartido.participants.find(p => p.user_id === loggedUser.id) : null;
-      
+    
+      const userRecord = updatedPartido.participants && loggedUser
+        ? updatedPartido.participants.find(p => p.user_id === loggedUser.id)
+        : null;
+    
       if (!userRecord) {
-        // Si el usuario no está, mostramos el botón "Unirse"
         const joinButton = document.createElement("button");
         joinButton.className = "btn-join";
         joinButton.textContent = "Unirse";
@@ -543,7 +587,6 @@
         modalContent.appendChild(joinButton);
       }
       else if (userRecord && !userRecord.cancelled) {
-        // Si el usuario está inscrito y activo, mostramos el botón "Darse de baja"
         const info = document.createElement("p");
         info.textContent = "Ya estás apuntado a este partido.";
         modalContent.appendChild(info);
@@ -553,7 +596,10 @@
         leaveButton.addEventListener("click", async () => {
           let explanation = prompt("Ingresa un motivo (máx. 50 caracteres):");
           if (explanation === null) return;
-          if (explanation.length > 50) { alert("El motivo debe tener 50 caracteres o menos."); return; }
+          if (explanation.length > 50) {
+            alert("El motivo debe tener 50 caracteres o menos.");
+            return;
+          }
           await leaveMatch(updatedPartido.id, explanation);
           const refreshed = await refreshMatch(updatedPartido.id);
           showModal(refreshed);
@@ -561,12 +607,11 @@
         modalContent.appendChild(leaveButton);
       }
       else if (userRecord && userRecord.cancelled) {
-        // Si ya se dio de baja, mostramos un mensaje sin botón
         const info = document.createElement("p");
         info.textContent = "Ya te has dado de baja de este partido.";
         modalContent.appendChild(info);
       }
-      
+    
       modal.style.display = "flex";
     }
     
@@ -579,8 +624,11 @@
       const { data, error } = await supabaseClient
         .from("participants")
         .insert([{ match_id: matchId, user_id: loggedUser.id }]);
-      if (error) { alert("Error al unirse: " + error.message); }
-      else { alert("Te has unido al partido"); }
+      if (error) {
+        alert("Error al unirse: " + error.message);
+      } else {
+        alert("Te has unido al partido");
+      }
     }
     
     async function leaveMatch(matchId, explanation) {
@@ -589,8 +637,11 @@
         .from("participants")
         .update({ cancelled: true, leave_reason: explanation })
         .match({ match_id: matchId, user_id: loggedUser.id });
-      if (error) { alert("Error al darse de baja: " + error.message); }
-      else { alert("Has cancelado tu participación en el partido"); }
+      if (error) {
+        alert("Error al darse de baja: " + error.message);
+      } else {
+        alert("Has cancelado tu participación en el partido");
+      }
     }
     
     function showCanchaSearch() {
@@ -649,7 +700,7 @@
         card.appendChild(content);
         const mapContainer = document.createElement("div");
         mapContainer.className = "map-container";
-        const mapURL = `https://maps.google.com/maps?q=${c.latitude},${c.longitude}&hl=es;&z=14&output=embed`;
+        const mapURL = `https://maps.google.com/maps?q=${c.latitude},${c.longitude}&hl=es&z=14&output=embed`;
         mapContainer.innerHTML = `<iframe src="${mapURL}" width="100%" height="100%" frameborder="0" style="border:0" allowfullscreen></iframe>`;
         card.appendChild(mapContainer);
         canchasResults.appendChild(card);
