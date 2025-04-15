@@ -38,7 +38,7 @@
         .hero h1 { font-size: 3rem; font-weight: 700; margin-bottom: 1rem; color: #fff; }
         .hero p { font-size: 1.2rem; margin-bottom: 2rem; max-width: 700px; margin: 0 auto; line-height: 1.6; }
 
-        /* TARJETAS FLOTANTES - ESTILO VIBRANTE Y ENERGÉTICO MEJORADO */
+        /* TARJETAS FLOTANTES - ESTILO PERSONALIZADO CON IMÁGENES */
         .cards-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem; margin-top: 2rem; }
         .floating-card {
             background-color: rgba(255, 165, 0, 0.85); /* Naranja ligeramente más intenso */
@@ -62,12 +62,34 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url('siluetas.png'); /* Tu imagen con fondo transparente */
             background-size: contain; /* Ajusta el tamaño de la imagen para que quepa dentro */
-            background-position: center top; /* Posiciona la imagen centrada en la parte superior */
             background-repeat: no-repeat;
-            opacity: 0.6; /* Reduce la opacidad para que sea un fondo sutil */
+            opacity: 0.5; /* Reduce la opacidad para que sea un fondo sutil */
             transition: opacity 0.3s ease-in-out;
+        }
+
+        .floating-card.card-partidos::before {
+            background-image: url('siluetas.png');
+            background-position: center top 10%; /* Centrado arriba con un pequeño desplazamiento */
+            background-size: 60%; /* Ajusta el tamaño según sea necesario */
+        }
+
+        .floating-card.card-jugadores::before {
+            background-image: url('conoce.png');
+            background-position: center top 15%; /* Centrado arriba con un pequeño desplazamiento */
+            background-size: 50%; /* Ajusta el tamaño según sea necesario */
+        }
+
+        .floating-card.card-programa::before {
+            background-image: url('cita.png');
+            background-position: center top 15%; /* Centrado arriba con un pequeño desplazamiento */
+            background-size: 50%; /* Ajusta el tamaño según sea necesario */
+        }
+
+        .floating-card.card-canchas::before {
+            background-image: url('cancha.png');
+            background-position: center top 10%; /* Centrado arriba con un pequeño desplazamiento */
+            background-size: 60%; /* Ajusta el tamaño según sea necesario */
         }
 
         .floating-card:hover {
@@ -76,7 +98,7 @@
         }
 
         .floating-card:hover::before {
-            opacity: 0.8; /* Ligeramente más visible al hacer hover */
+            opacity: 0.7; /* Ligeramente más visible al hacer hover */
         }
 
         .floating-card i {
@@ -249,22 +271,22 @@
         <h1>Bienvenido a Catch Up Padel</h1>
         <p>Conecta con jugadores de pádel cerca de ti y disfruta del mejor deporte en comunidad.</p>
         <div class="cards-container">
-            <div class="floating-card" onclick="showCanchaSearch()">
+            <div class="floating-card card-canchas" onclick="showCanchaSearch()">
                 <i class="fas fa-map-marker-alt"></i>
                 <h3>Buscar Canchas</h3>
                 <p>Descubre canchas cercanas</p>
             </div>
-            <div class="floating-card" ondblclick="window.location.href='partidos.html'">
+            <div class="floating-card card-programa" ondblclick="window.location.href='partidos.html'">
                 <i class="fas fa-calendar-plus"></i>
                 <h3>Programa Partidos</h3>
                 <p>Crea y únete a juegos</p>
             </div>
-            <div class="floating-card" onclick="showPlayersSection()">
+            <div class="floating-card card-jugadores" onclick="showPlayersSection()">
                 <i class="fas fa-handshake"></i>
                 <h3>Conoce Jugadores</h3>
                 <p>Haz clic para buscar</p>
             </div>
-            <div class="floating-card" onclick="showPartidosSearch()">
+            <div class="floating-card card-partidos" onclick="showPartidosSearch()">
                 <i class="fas fa-search"></i>
                 <h3>Buscar Partidos Abiertos</h3>
                 <p>Partidos futuros con cupos disponibles</p>
