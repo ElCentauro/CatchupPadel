@@ -551,10 +551,10 @@
                 const card = document.createElement("div");
                 card.className = "partido-card";
                 card.innerHTML = `
-                    <h3 class="blinking-title">${partido.match_name}</h3>
-                    <div class="icon-text">
-                        <i class="fas fa-calendar-alt"></i>
-                        <p class="highlight">${partido.match_date}</p>
+                    <h3 class="blinking-title"><span class="math-inline">\{partido\.match\_name\}</h3\>
+<div class\="icon\-text"\>
+<i class\="fas fa\-calendar\-alt"\></i\>
+<p class\="highlight"\></span>{partido.match_date}</p>
                     </div>
                     <div class="icon-text">
                         <i class="fas fa-clock"></i>
@@ -567,8 +567,8 @@
                         <i class="fas fa-table-tennis-paddle-ball"></i>
                         <p><span class="highlight">Nivel:</span> ${partido.match_level}</p>
                     </div>
-                    <p class="highlight">Faltan ${missing} jugadores de ${totalPlayers}</p>
-                    <div class="participants-avatars">${avatarsHTML}</div>
+                    <p class="highlight">Faltan ${missing} jugadores de <span class="math-inline">\{totalPlayers\}</p\>
+<div class\="participants\-avatars"\></span>{avatarsHTML}</div>
                     <button class="btn-view-partido">Ver el Partido</button>
                 `;
                 const viewButton = card.querySelector(".btn-view-partido");
@@ -647,8 +647,8 @@
                         }
                         participantListHTML += `
                             <li>
-                                <img src="${usr.profile_pic || "https://via.placeholder.com/40"}" alt="Foto de ${usr.full_name}" />
-                                <span class="${styleName}">${usr.full_name}${reasonText}</span>
+                                <img src="${usr.profile_pic || "https://via.placeholder.com/40"}" alt="Foto de <span class="math-inline">\{usr\.full\_name\}" /\>
+<span class\="</span>{styleName}"><span class="math-inline">\{usr\.full\_name\}</span>{reasonText}</span>
                             </li>
                         `;
                     });
@@ -788,6 +788,7 @@
             canchasData.forEach(c => {
                 const card = document.createElement("div");
                 card.className = "card";
+                c.element = card; // Guardar referencia al elemento de la tarjeta
                 const header = document.createElement("div");
                 header.className = "card-header";
                 header.textContent = c.name;
@@ -797,14 +798,12 @@
                 content.innerHTML = `
                     <p><strong>Localidad:</strong> ${c.locality}</p>
                     <p><strong>Dirección:</strong> ${c.address}</p>
-                    <p><strong>Cantidad de Canchas:</strong> ${c.court_count}</p>
-                    <p class="distance-info"><strong>Distancia actual en kilómetros:</strong> <span id="distance-${c.id}"></span></p>
+                    <p><strong>Cantidad de Canchas:</strong> <span class="math-inline">\{c\.court\_count\}</p\>
+<p class\="distance\-info"\><span id\="distance\-</span>{c.id}"></span></p>
                 `;
                 card.appendChild(content);
                 const mapContainer = document.createElement("div");
                 mapContainer.className = "map-container";
-                const googleMapsLink = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(c.address)}&travelmode=driving`;
-                mapContainer.innerHTML = `<a href="${googleMapsLink}" class="map-link" target="_blank">Ver indicaciones en Google Maps</a>`;
                 card.appendChild(mapContainer);
                 canchasResults.appendChild(card);
             });
@@ -827,125 +826,4 @@
             document.getElementById("searchPlayersSection").style.display = "none";
             document.getElementById("filterPlayersName").value = "";
             document.getElementById("filterPlayersGameLevel").value = "";
-            document.getElementById("filterPlayersLocality").value = "";
-            document.getElementById("playersResults").innerHTML = "";
-            document.getElementById("playersFeedback").innerHTML = "";
-        }
-        document.getElementById("btn-filter-players").addEventListener("click", () => {
-            const nameFilter = document.getElementById("filterPlayersName").value.trim();
-            const gameLevelFilter = document.getElementById("filterPlayersGameLevel").value.trim();
-            const localityFilter = document.getElementById("filterPlayersLocality").value.trim();
-            loadPlayers(nameFilter, gameLevelFilter, localityFilter);
-        });
-        async function loadPlayers(nameFilter = "", gameLevelFilter = "", localityFilter = "") {
-            const playersResults = document.getElementById("playersResults");
-            const playersFeedback = document.getElementById("playersFeedback");
-            playersResults.innerHTML = "";
-            playersFeedback.innerHTML = "";
-            let query = supabaseClient.from("profiles").select("*");
-            if (nameFilter) { query = query.ilike("full_name", `%${nameFilter}%`); }
-            if (gameLevelFilter) { query = query.ilike("game_level", `%${gameLevelFilter}%`); }
-            if (localityFilter) { query = query.ilike("locality", `%${localityFilter}%`); }
-            const { data, error } = await query;
-            if (error) {
-                playersFeedback.innerHTML = `<p style="color:red;">Error: ${error.message}</p>`;
-                return;
-            }
-            if (!data || data.length === 0) {
-                playersResults.innerHTML = '<p style="text-align:center; width:100%;">No se encontraron jugadores.</p>';
-                return;
-            }
-            data.forEach(player => {
-                const card = document.createElement("div");
-                card.className = "player-card";
-                card.innerHTML = `
-                    <div style="display:flex; align-items:center; gap:1rem;">
-                        <img src="${player.profile_pic || "https://via.placeholder.com/100"}" alt="Foto de perfil" style="width:100px; height:100px; border-radius:50%; object-fit: cover;" />
-                        <div>
-                            <h3>${player.full_name}</h3>
-                            <p><strong>Edad:</strong> ${player.age || "N/D"}</p>
-                            <p><strong>Sexo:</strong> ${player.gender || "N/D"}</p>
-                            <p><strong>Nivel de juego:</strong> ${player.game_level || "N/D"}</p>
-                            <p><strong>Localidad:</strong> ${player.locality || "N/D"}</p>
-                            <p><strong>Teléfono:</strong> ${player.phone || "N/D"}</p>
-                        </div>
-                    </div>
-                `;
-                playersResults.appendChild(card);
-            });
-        }
-
-        document.addEventListener("DOMContentLoaded", async () => {
-            await checkProfile();
-            await preloadEstablishments();
-            await preloadPlayersData();
-            if (loggedUser && document.getElementById("partidosButton").style.display !== "none") {
-                document.getElementById("searchPartidosSection").style.display = "block";
-                loadOpenPartidos("", ""); // Cargar partidos al entrar
-            }
-        });
-
-        function getUserLocationForDistance(canchasData) {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    position => {
-                        const userLat = position.coords.latitude;
-                        const userLng = position.coords.longitude;
-                        canchasData.forEach(cancha => {
-                            const distanceKm = calculateDistance(userLat, userLng, cancha.latitude, cancha.longitude);
-                            const distanceDiv = document.getElementById(`distance-${cancha.id}`);
-                            if (distanceDiv) {
-                                distanceDiv.innerHTML = `<strong>Distancia actual en kilómetros:</strong> ${distanceKm.toFixed(2)}`;
-                            }
-                            const mapContainer = cancha.element.querySelector('.map-container');
-                            if (mapContainer) {
-                                const googleMapsLink = `https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLng}&destination=${encodeURIComponent(cancha.address)}&travelmode=driving`;
-                                mapContainer.innerHTML = `<a href="${googleMapsLink}" class="map-link" target="_blank">Ver indicaciones en Google Maps</a>`;
-                            }
-                        });
-                    },
-                    error => {
-                        console.error("Error al obtener la ubicación:", error);
-                        const canchasResults = document.getElementById("canchasResults");
-                        if (canchasResults) {
-                            canchasResults.querySelectorAll('.distance-info').forEach(div => {
-                                div.innerHTML = `<strong>Distancia actual en kilómetros:</strong> Ubicación no disponible.`;
-                            });
-                            canchasResults.querySelectorAll('.map-container').forEach(container => {
-                                container.innerHTML = `<div class="map-placeholder">Indicaciones no disponibles.</div>`;
-                            });
-                        }
-                    }
-                );
-            } else {
-                const canchasResults = document.getElementById("canchasResults");
-                if (canchasResults) {
-                    canchasResults.querySelectorAll('.distance-info').forEach(div => {
-                        div.innerHTML = `<strong>Distancia actual en kilómetros:</strong> Geolocalización no soportada.`;
-                    });
-                    canchasResults.querySelectorAll('.map-container').forEach(container => {
-                        container.innerHTML = `<div class="map-placeholder">Geolocalización no soportada.</div>`;
-                    });
-                }
-            }
-        }
-
-        function calculateDistance(lat1, lon1, lat2, lon2) {
-            const R = 6371; // Radio de la Tierra en km
-            const dLat = deg2rad(lat2 - lat1);
-            const dLon = deg2rad(lon2 - lon1);
-            const a =
-                Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
-                Math.sin(dLon / 2) * Math.sin(dLon / 2);
-            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-            const d = R * c; // Distancia en km
-            return d;
-        }
-
-        function deg2rad(deg) {
-            return deg * (Math.PI / 180);
-        }
-    </script>
-</body>
-</html>
+            document
