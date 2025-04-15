@@ -3,66 +3,32 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Catch Up Padel - Home</title>
+  <title>Catch Up Padel - Home (Revisado)</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
   <style>
     /* --- INICIO CSS --- */
 
-    /* RESET Y ESTILOS GLOBALES */
+    /* Estilos base y variables (similares a la versión anterior) */
+    :root {
+      --primary-color: #E68A00; --primary-color-hover: #D97706; --secondary-color: #007bff;
+      --danger-color: #dc3545; --danger-color-hover: #c82333; --success-color: #28a745;
+      --success-color-hover: #218838; --light-bg: #ffffff; --medium-bg: #f8f9fa;
+      --dark-text: #343a40; --medium-text: #555e68; --light-text: #ffffff;
+      --card-bg: linear-gradient(to bottom, #fffdf8, #ffe5cc); --card-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      --card-hover-shadow: 0 6px 16px rgba(0,0,0,0.12); --border-radius-sm: 4px;
+      --border-radius-md: 8px; --border-radius-lg: 12px;
+    }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; }
-    body {
-      font-family: 'Poppins', sans-serif;
-      background-color: #f8f9fa; /* Ligeramente más suave */
-      color: #343a40; /* Gris oscuro más estándar */
-      line-height: 1.6;
-    }
-    main { display: block; /* Asegura que <main> funcione como bloque en navegadores antiguos */ }
-
-    /* VARIABLES DE COLOR Y TEMAS */
-    :root {
-      --primary-color: #E68A00; /* Naranja más oscuro para mejor contraste AA */
-      --primary-color-hover: #D97706; /* Naranja más oscuro para hover */
-      --secondary-color: #007bff; /* Azul (ej. para info adicional o links) */
-      --danger-color: #dc3545; /* Rojo para logout/cancelar */
-      --danger-color-hover: #c82333;
-      --success-color: #28a745; /* Verde (ej. refresh button) */
-      --success-color-hover: #218838;
-      --light-bg: #ffffff;
-      --medium-bg: #f8f9fa;
-      --dark-text: #343a40;
-      --medium-text: #555e68;
-      --light-text: #ffffff;
-      --card-bg: linear-gradient(to bottom, #fffdf8, #ffe5cc);
-      --card-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      --card-hover-shadow: 0 6px 16px rgba(0,0,0,0.12);
-      --border-radius-sm: 4px;
-      --border-radius-md: 8px;
-      --border-radius-lg: 12px;
-    }
-
-    /* UTILIDADES */
-    .visually-hidden {
-      position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
-      overflow: hidden; clip: rect(0, 0, 0, 0); border: 0;
-    }
-
-    /* ESTADO DE FOCO GLOBAL (MEJORA ACCESIBILIDAD) */
-    :focus-visible {
-      outline: 3px solid var(--secondary-color); outline-offset: 2px;
-      box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.25); border-radius: var(--border-radius-sm);
-    }
+    body { font-family: 'Poppins', sans-serif; background-color: #f8f9fa; color: #343a40; line-height: 1.6; }
+    main { display: block; }
+    :focus-visible { outline: 3px solid var(--secondary-color); outline-offset: 2px; box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.25); border-radius: var(--border-radius-sm); }
     :focus:not(:focus-visible) { outline: none; }
+    .visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }
 
-    /* ESTILOS DE BOTONES REUTILIZABLES */
-    .btn {
-      display: inline-block; padding: 0.75rem 1.5rem; border: none;
-      border-radius: var(--border-radius-md); font-size: 1rem; font-weight: 600;
-      text-align: center; text-decoration: none; cursor: pointer;
-      transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
+    /* Botones */
+    .btn { display: inline-block; padding: 0.75rem 1.5rem; border: none; border-radius: var(--border-radius-md); font-size: 1rem; font-weight: 600; text-align: center; text-decoration: none; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
     .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); }
     .btn-primary { background-color: var(--primary-color); color: var(--light-text); }
     .btn-primary:hover { background-color: var(--primary-color-hover); color: var(--light-text); }
@@ -72,122 +38,53 @@
     .btn-success:hover { background-color: var(--success-color-hover); color: var(--light-text); }
     .btn-danger { background-color: var(--danger-color); color: var(--light-text); }
     .btn-danger:hover { background-color: var(--danger-color-hover); color: var(--light-text); }
-    .btn-outline-primary { background-color: transparent; color: var(--primary-color); border: 2px solid var(--primary-color); }
-    .btn-outline-primary:hover { background-color: var(--primary-color); color: var(--light-text); }
-    .btn-outline-danger { background-color: transparent; color: var(--danger-color); border: 2px solid var(--danger-color); }
-    .btn-outline-danger:hover { background-color: var(--danger-color); color: var(--light-text); }
     .btn-sm { padding: 0.5rem 1rem; font-size: 0.9rem; }
 
-    /* MENÚ DE NAVEGACIÓN */
-    nav {
-      width: 100%; background-color: var(--light-bg); padding: 1rem 2rem;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.07); position: sticky; top: 0; z-index: 100;
-    }
-    .menu-container {
-      display: flex; justify-content: center; align-items: center; flex-wrap: wrap;
-      gap: 1rem; max-width: 1200px; margin: 0 auto;
-    }
-    .menu-item {
-      padding: 0.6rem 1.2rem; border: 2px solid var(--primary-color); border-radius: var(--border-radius-md);
-      color: var(--primary-color); text-transform: uppercase; font-weight: 600; letter-spacing: 1px;
-      transition: background-color 0.3s, color 0.3s, transform 0.2s; cursor: pointer;
-      text-decoration: none; font-size: 0.9rem;
-    }
-    .menu-item:hover, .menu-item.active {
-      background-color: var(--primary-color); color: var(--light-text); transform: scale(1.03);
-    }
+    /* Navegación */
+    nav { width: 100%; background-color: var(--light-bg); padding: 1rem 2rem; box-shadow: 0 2px 5px rgba(0,0,0,0.07); position: sticky; top: 0; z-index: 100; }
+    .menu-container { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 1rem; max-width: 1200px; margin: 0 auto; }
+    .menu-item { padding: 0.6rem 1.2rem; border: 2px solid var(--primary-color); border-radius: var(--border-radius-md); color: var(--primary-color); text-transform: uppercase; font-weight: 600; letter-spacing: 1px; transition: all 0.3s ease; cursor: pointer; text-decoration: none; font-size: 0.9rem; }
+    .menu-item:hover, .menu-item.active { background-color: var(--primary-color); color: var(--light-text); transform: scale(1.03); }
     .menu-item.logout { border-color: var(--danger-color); color: var(--danger-color); }
     .menu-item.logout:hover { background-color: var(--danger-color); color: var(--light-text); }
-    .menu-item.disabled {
-      border-color: #adb5bd; color: #adb5bd; opacity: 0.6; cursor: not-allowed; pointer-events: none;
-    }
+    .menu-item.disabled { border-color: #adb5bd; color: #adb5bd; opacity: 0.6; cursor: not-allowed; pointer-events: none; }
     .menu-item.disabled:hover { background-color: transparent; transform: none; }
 
-    /* SECCIÓN HERO */
-    .hero {
-      position: relative; padding: 4rem 1rem 3rem 1rem; text-align: center;
-      background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.65)),
-      url("https://images.unsplash.com/photo-1593341646581-529f6c49c5d1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80") center/cover no-repeat;
-      color: var(--light-text); min-height: 50vh; display: flex; flex-direction: column;
-      justify-content: center; align-items: center;
-    }
-    .hero h1 {
-      font-size: clamp(2.5rem, 5vw, 3.5rem); font-weight: 700; margin-bottom: 1rem;
-      text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
-    }
-    .hero p {
-      font-size: clamp(1rem, 2.5vw, 1.2rem); margin-bottom: 2.5rem; max-width: 700px;
-      margin-left: auto; margin-right: auto; line-height: 1.7; opacity: 0.9;
-    }
+    /* Hero */
+    .hero { position: relative; padding: 4rem 1rem 3rem 1rem; text-align: center; background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.65)), url("https://images.unsplash.com/photo-1593341646581-529f6c49c5d1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80") center/cover no-repeat; color: var(--light-text); min-height: 50vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+    .hero h1 { font-size: clamp(2.5rem, 5vw, 3.5rem); font-weight: 700; margin-bottom: 1rem; text-shadow: 1px 1px 3px rgba(0,0,0,0.5); }
+    .hero p { font-size: clamp(1rem, 2.5vw, 1.2rem); margin-bottom: 0; max-width: 700px; margin-left: auto; margin-right: auto; line-height: 1.7; opacity: 0.9; } /* No margin bottom aquí */
 
-    /* CONTENEDOR DE CONTROLES TIPO TAB */
-    .tab-controls-container {
-      background-color: var(--medium-bg); padding: 2rem 1rem; margin-top: -50px;
-      position: relative; z-index: 10; border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
-      box-shadow: 0 -5px 15px rgba(0,0,0,0.05);
-    }
-    .tab-controls {
-      display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem;
-      max-width: 1200px; margin: 0 auto;
-    }
-    .tab-control {
-      background-color: var(--light-bg); border-radius: var(--border-radius-lg); padding: 1.2rem 1.5rem;
-      min-width: 200px; text-align: center; color: var(--dark-text);
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1); transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
-      cursor: pointer; border: 2px solid transparent; font-size: 1rem; font-weight: 600;
-    }
+    /* Controles Tabs */
+    .tab-controls-container { background-color: var(--medium-bg); padding: 2rem 1rem; margin-top: 0; position: relative; z-index: 10; /* No solapar hero */ }
+    .tab-controls { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem; max-width: 1200px; margin: 0 auto; }
+    .tab-control { background-color: var(--light-bg); border-radius: var(--border-radius-lg); padding: 1.2rem 1.5rem; min-width: 200px; text-align: center; color: var(--dark-text); box-shadow: 0 4px 8px rgba(0,0,0,0.1); transition: all 0.3s ease; cursor: pointer; border: 2px solid transparent; font-size: 1rem; font-weight: 600; }
     .tab-control:hover { transform: translateY(-5px); box-shadow: var(--card-hover-shadow); }
-    .tab-control.active {
-      transform: translateY(-2px); box-shadow: var(--card-hover-shadow); background-color: var(--primary-color);
-      color: var(--light-text); border-color: var(--primary-color-hover);
-    }
+    .tab-control.active { transform: translateY(-2px); box-shadow: var(--card-hover-shadow); background-color: var(--primary-color); color: var(--light-text); border-color: var(--primary-color-hover); }
     .tab-control.active h3 { color: var(--light-text); }
     .tab-control.active p { color: rgba(255, 255, 255, 0.85); }
-    .tab-control h3 { font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--primary-color-hover); transition: color 0.3s ease; }
-    .tab-control p { font-size: 0.9rem; color: var(--medium-text); transition: color 0.3s ease; }
+    .tab-control h3 { font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--primary-color-hover); transition: color 0.3s ease; pointer-events: none; /* Evitar que H3 capture el click */}
+    .tab-control p { font-size: 0.9rem; color: var(--medium-text); transition: color 0.3s ease; pointer-events: none; /* Evitar que P capture el click */}
 
-    /* CONTENEDOR DE CONTENIDO DE TABS */
-    .tab-content-area {
-      max-width: 1200px; margin: 0 auto; padding: 2rem 1rem; background-color: var(--light-bg);
-      border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg); box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-      position: relative; z-index: 5; min-height: 300px;
-    }
-    .tab-pane { display: none; animation: fadeIn 0.5s ease; }
+    /* Contenido Tabs */
+    .tab-content-area { max-width: 1200px; margin: 1rem auto 2rem auto; padding: 0; background-color: transparent; box-shadow: none; } /* Simplificado, sin fondo/sombra propia */
+    .tab-pane { display: none; animation: fadeIn 0.5s ease; background-color: var(--light-bg); border-radius: var(--border-radius-lg); box-shadow: var(--card-shadow); padding: 2rem; margin-bottom: 1.5rem; }
     .tab-pane.is-active-tab-content { display: block; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    .tab-pane { padding: 1.5rem; }
     .tab-pane h2 { font-size: clamp(1.5rem, 4vw, 2rem); margin-bottom: 1.5rem; color: #2c3e50; text-align: center; padding-top: 0; }
-    .close-section-btn { display: none; } /* Botón X ya no se usa con tabs */
 
-    /* Contenedor de filtros */
-    .filter-container {
-      display: flex; flex-wrap: wrap; justify-content: center; align-items: center;
-      gap: 1rem; margin-bottom: 1.5rem;
-    }
-    .filter-container input[type="text"], .filter-container input[type="date"] {
-      padding: 0.75rem 1rem; border: 1px solid #ced4da; border-radius: var(--border-radius-md);
-      font-size: 1rem; min-width: 200px; flex-grow: 1; max-width: 280px;
-    }
+    /* Filtros y Loader */
+    .filter-container { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+    .filter-container input[type="text"] { padding: 0.75rem 1rem; border: 1px solid #ced4da; border-radius: var(--border-radius-md); font-size: 1rem; min-width: 200px; flex-grow: 1; max-width: 280px; }
     .filter-container input[type="text"]:focus { border-color: var(--primary-color); box-shadow: 0 0 0 0.2rem rgba(230, 138, 0, 0.25); outline: none; }
     .filter-container button { flex-shrink: 0; }
-
-    /* Feedback y Loader */
     .feedback-container { text-align: center; margin: 1rem 0; min-height: 40px; }
-    .loader {
-      border: 5px solid #f3f3f3; border-top: 5px solid var(--primary-color); border-radius: 50%;
-      width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 20px auto; display: block;
-    }
+    .loader { border: 5px solid #f3f3f3; border-top: 5px solid var(--primary-color); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 20px auto; display: block; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-    /* GRID DE RESULTADOS */
+    /* Resultados Grid y Tarjetas */
     .results-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; padding: 1rem 0; }
-
-    /* TARJETAS DE RESULTADOS (Base) */
-    .result-card {
-      background: var(--card-bg); border-radius: var(--border-radius-lg); box-shadow: var(--card-shadow);
-      padding: 1.5rem; transition: transform 0.3s ease, box-shadow 0.3s ease; display: flex;
-      flex-direction: column; overflow: hidden;
-    }
+    .result-card { background: var(--card-bg); border-radius: var(--border-radius-lg); box-shadow: var(--card-shadow); padding: 1.5rem; transition: all 0.3s ease; display: flex; flex-direction: column; overflow: hidden; }
     .result-card:hover { transform: translateY(-5px) scale(1.01); box-shadow: var(--card-hover-shadow); }
     .result-card h3 { font-size: 1.3rem; color: #2c3e50; margin-bottom: 0.75rem; }
     .result-card p { font-size: 0.95rem; color: var(--medium-text); margin: 0.4rem 0; line-height: 1.5; }
@@ -196,50 +93,30 @@
     .result-card .icon-text i { color: var(--primary-color); width: 16px; text-align: center; }
     .result-card .divider { border-top: 1px solid rgba(0,0,0,0.1); margin: 1rem 0; }
 
-    /* Tarjeta Partido Específica */
+    /* Tarjeta Partido */
     .partido-card h3.highlight { color: var(--success-color); font-weight: bold; }
     .participants-avatars { display: flex; gap: -12px; margin-top: 10px; flex-wrap: wrap; align-items: center; }
-    .participants-avatars img {
-      /* Tamaño aumentado */
-      width: 42px; height: 42px; border-radius: 50%; border: 2px solid var(--light-bg);
-      object-fit: cover; box-shadow: 0 1px 2px rgba(0,0,0,0.2);
-    }
-    .participants-avatars .extra-count {
-      display: inline-block; background-color: #e9ecef; color: var(--medium-text); border-radius: 50%;
-      /* Tamaño y line-height ajustados */
-      width: 42px; height: 42px; line-height: 40px; text-align: center; font-size: 0.9rem;
-      font-weight: 600; margin-left: 2px; border: 2px solid var(--light-bg); box-shadow: 0 1px 2px rgba(0,0,0,0.2);
-    }
+    .participants-avatars img { width: 42px; height: 42px; border-radius: 50%; border: 2px solid var(--light-bg); object-fit: cover; box-shadow: 0 1px 2px rgba(0,0,0,0.2); }
+    .participants-avatars .extra-count { display: inline-block; background-color: #e9ecef; color: var(--medium-text); border-radius: 50%; width: 42px; height: 42px; line-height: 40px; text-align: center; font-size: 0.9rem; font-weight: 600; margin-left: 2px; border: 2px solid var(--light-bg); box-shadow: 0 1px 2px rgba(0,0,0,0.2); }
     .partido-card .btn-view-partido { margin-top: 1rem; align-self: flex-start; }
 
-    /* Tarjeta Cancha Específica */
-    .cancha-card .card-header { /* ... (igual) ... */ }
-    .cancha-card .map-container { /* ... (igual) ... */ }
+    /* Tarjeta Cancha */
+    .cancha-card .card-header { background: var(--primary-color); color: var(--light-text); padding: 10px 15px; margin: -1.5rem -1.5rem 1rem -1.5rem; font-size: 1.2rem; border-top-left-radius: var(--border-radius-lg); border-top-right-radius: var(--border-radius-lg); }
+    .cancha-card .map-container { width: calc(100% + 3rem); margin: 1rem -1.5rem -1.5rem -1.5rem; height: 200px; border-bottom-left-radius: var(--border-radius-lg); border-bottom-right-radius: var(--border-radius-lg); overflow: hidden; border-top: 1px solid #eee; }
     .cancha-card .map-container iframe { border: none; }
 
-    /* Tarjeta Jugador Específica */
-    .player-card .player-header { /* ... (igual) ... */ }
-    .player-card .player-avatar { /* ... (igual) ... */ }
-    .player-card h3 { /* ... (igual) ... */ }
-    .player-card .player-details p { /* ... (igual) ... */ }
+    /* Tarjeta Jugador */
+    .player-card .player-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+    .player-card .player-avatar { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary-color); flex-shrink: 0; }
+    .player-card h3 { margin-bottom: 0.25rem; }
+    .player-card .player-details p { margin: 0.2rem 0; font-size: 0.9rem; }
 
-    /* MODAL */
-    #matchModal {
-      display: none; position: fixed; inset: 0; width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.6); justify-content: center; align-items: center;
-      z-index: 1000; padding: 1rem; overflow-y: auto;
-    }
+    /* Modal */
+    #matchModal { display: none; position: fixed; inset: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); justify-content: center; align-items: center; z-index: 1000; padding: 1rem; overflow-y: auto; }
     #matchModal.is-visible { display: flex; }
-    #matchModal .modal-content {
-      background: linear-gradient(to bottom right, #ffffff, #f8f9fa); border-radius: var(--border-radius-lg);
-      color: var(--dark-text); max-width: 600px; width: 95%; position: relative;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2); padding: 2rem; animation: modalFadeSlide 0.4s ease-out; margin: auto;
-    }
+    #matchModal .modal-content { background: linear-gradient(to bottom right, #ffffff, #f8f9fa); border-radius: var(--border-radius-lg); color: var(--dark-text); max-width: 600px; width: 95%; position: relative; box-shadow: 0 10px 25px rgba(0,0,0,0.2); padding: 2rem; animation: modalFadeSlide 0.4s ease-out; margin: auto; }
     @keyframes modalFadeSlide { from { transform: translateY(-30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-    #matchModal .close-modal {
-      position: absolute; top: 10px; right: 10px; background: none; border: none; font-size: 1.8rem;
-      cursor: pointer; color: #aaa; padding: 8px; line-height: 1; transition: color 0.3s ease, transform 0.3s ease;
-    }
+    #matchModal .close-modal { position: absolute; top: 10px; right: 10px; background: none; border: none; font-size: 1.8rem; cursor: pointer; color: #aaa; padding: 8px; line-height: 1; transition: all 0.3s ease; }
     #matchModal .close-modal:hover { color: var(--dark-text); transform: rotate(90deg); }
     #modalContent h2 { margin-bottom: 1.5rem; font-size: 1.8rem; color: var(--primary-color-hover); text-align: center; }
     #modalContent p { margin-bottom: 0.8rem; font-size: 1rem; color: var(--medium-text); }
@@ -258,12 +135,20 @@
     #modalContent .modal-actions .leave-input-group { display: flex; flex-direction: column; width: 100%; gap: 0.5rem; margin-top: 1rem; }
     #modalContent .modal-actions .leave-input-group input { padding: 0.5rem; border: 1px solid #ccc; border-radius: var(--border-radius-sm); font-size: 0.9rem; }
 
-    /* FOOTER */
+    /* Footer */
     footer { text-align: center; padding: 1.5rem 1rem; background: #e9ecef; margin-top: 3rem; color: var(--medium-text); font-size: 0.9rem; border-top: 1px solid #dee2e6; }
 
-    /* MEDIA QUERIES */
-    @media (max-width: 768px) { /* ... (igual) ... */ }
-    @media (max-width: 480px) { /* ... (igual) ... */ }
+    /* Media Queries */
+    @media (max-width: 768px) {
+      nav { padding: 0.8rem 1rem; } .menu-container { justify-content: space-around; gap: 0.5rem; } .menu-item { padding: 0.5rem 0.8rem; font-size: 0.8rem; }
+      .hero { padding: 3rem 1rem 2rem 1rem; min-height: 40vh; } .hero h1 { font-size: clamp(2rem, 6vw, 2.8rem); } .hero p { font-size: clamp(0.9rem, 3vw, 1.1rem); }
+      .tab-controls-container { padding: 1.5rem 0.5rem; } .tab-controls { gap: 0.8rem; } .tab-control { min-width: 150px; padding: 1rem; } .tab-control h3 { font-size: 1rem; } .tab-control p { font-size: 0.8rem; }
+      .tab-content-area { padding: 1.5rem 0.5rem; } .tab-pane { padding: 1rem; }
+      .filter-container { flex-direction: column; align-items: stretch; } .filter-container input[type="text"] { min-width: auto; width: 100%; }
+      .results-grid { grid-template-columns: 1fr; gap: 1rem;}
+      #matchModal .modal-content { padding: 1.5rem; width: 95%; } #modalContent h2 { font-size: 1.5rem; } #modalContent h3 { font-size: 1.1rem; }
+    }
+    @media (max-width: 480px) { .tab-controls { flex-direction: column; align-items: stretch; } .tab-control { min-width: auto; width: 100%; } }
 
     /* --- FIN CSS --- */
   </style>
@@ -286,15 +171,16 @@
       <h1>Bienvenido a Catch Up Padel</h1>
       <p>Encuentra partidos, canchas y jugadores cerca de ti.</p>
     </section>
+
     <div class="tab-controls-container">
       <div class="tab-controls" id="tabControls">
-         <button class="tab-control" data-target-section="searchPartidosSection">
+         <button type="button" class="tab-control" data-target-section="searchPartidosSection">
            <h3>Partidos Abiertos</h3><p>Únete a juegos con cupos</p>
          </button>
-         <button class="tab-control" data-target-section="searchCanchasSection">
+         <button type="button" class="tab-control" data-target-section="searchCanchasSection">
            <h3>Buscar Canchas</h3><p>Descubre establecimientos</p>
          </button>
-         <button class="tab-control" data-target-section="searchPlayersSection">
+         <button type="button" class="tab-control" data-target-section="searchPlayersSection">
            <h3>Conoce Jugadores</h3><p>Encuentra compañeros</p>
          </button>
          <a href="partidos.html" class="tab-control" style="text-decoration: none;">
@@ -302,11 +188,12 @@
          </a>
       </div>
     </div>
+
     <div class="tab-content-area" id="tabContentArea">
       <section class="tab-pane" id="searchPartidosSection">
         <h2>Partidos Abiertos</h2>
         <div class="filter-container">
-          <input type="text" id="filterLocalityPartidos" placeholder="Filtrar por Localidad (Ej. Buenos Aires)" />
+          <input type="text" id="filterLocalityPartidos" placeholder="Filtrar por Localidad" />
           <button id="btn-filter-partidos" class="btn btn-primary">Filtrar Partidos</button>
         </div>
         <div class="feedback-container" id="partidosFeedback"></div>
@@ -343,14 +230,10 @@
 
   <div id="matchModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" style="display: none;">
     <div class="modal-content">
-      <button class="close-modal" aria-label="Cerrar modal">
-        <i class="fas fa-times" aria-hidden="true"></i>
-      </button>
+      <button type="button" class="close-modal" aria-label="Cerrar modal"><i class="fas fa-times" aria-hidden="true"></i></button>
       <div id="modalContent"></div>
       <div class="modal-actions">
-           <button id="modalRefreshButton" class="btn btn-sm btn-success">
-             <i class="fas fa-sync-alt"></i> Refrescar
-           </button>
+           <button type="button" id="modalRefreshButton" class="btn btn-sm btn-success"><i class="fas fa-sync-alt"></i> Refrescar</button>
            <div id="modalActionButtons"></div>
       </div>
     </div>
@@ -364,275 +247,248 @@
   <script>
     // --- INICIO SCRIPT ---
 
-    // --- Supabase Client ---
+    // Cliente Supabase
     const SUPABASE_URL = "https://idlvxinjfbsujpvxncbr.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig";
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY); // Corregido a supabase minúscula
 
-    // --- Variables Globales ---
-    let loggedUser = null; let userProfile = null; let allEstablishments = [];
-    let currentOpenModalMatchId = null; let elementThatOpenedModal = null;
+    // Variables Globales
+    let loggedUser = null, userProfile = null, allEstablishments = [];
+    let currentOpenModalMatchId = null, elementThatOpenedModal = null;
 
-    // --- Selectores de Elementos ---
-    const profileLink = document.getElementById("profileLink");
-    const partidosButton = document.getElementById("partidosButton");
-    const canchasButton = document.getElementById("canchasButton");
-    const pistasButton = document.getElementById("pistasButton");
-    const jugadoresButton = document.getElementById("jugadoresButton");
-    const logoutButton = document.getElementById("logoutButton");
-    const tabControlsContainer = document.getElementById('tabControls');
-    const tabContentArea = document.getElementById('tabContentArea');
-    const tabPanes = tabContentArea.querySelectorAll('.tab-pane');
-    const tabControls = tabControlsContainer.querySelectorAll('.tab-control[data-target-section]');
-    const searchPartidosSection = document.getElementById("searchPartidosSection");
-    const searchCanchasSection = document.getElementById("searchCanchasSection");
-    const searchPlayersSection = document.getElementById("searchPlayersSection");
-    const partidosResults = document.getElementById("partidosResults");
-    const canchasResults = document.getElementById("canchasResults");
-    const playersResults = document.getElementById("playersResults");
-    const partidosFeedback = document.getElementById("partidosFeedback");
-    const canchasFeedback = document.getElementById("canchasFeedback");
-    const playersFeedback = document.getElementById("playersFeedback");
-    const matchModal = document.getElementById('matchModal');
-    const modalContent = document.getElementById('modalContent');
-    const modalCloseButton = matchModal?.querySelector('.close-modal'); // Añadido chequeo por si modal no existe
-    const modalRefreshButton = document.getElementById('modalRefreshButton');
-    const modalActionButtonsContainer = document.getElementById('modalActionButtons');
+    // Selectores DOM (agrupados)
+    const Selectors = {
+        profileLink: document.getElementById("profileLink"),
+        partidosButton: document.getElementById("partidosButton"), // Para menu active state
+        jugadoresButton: document.getElementById("jugadoresButton"), // Para menu active state
+        logoutButton: document.getElementById("logoutButton"),
+        tabControlsContainer: document.getElementById('tabControls'),
+        tabContentArea: document.getElementById('tabContentArea'),
+        get tabPanes() { return this.tabContentArea?.querySelectorAll('.tab-pane') || []; },
+        get tabControls() { return this.tabControlsContainer?.querySelectorAll('.tab-control[data-target-section]') || []; },
+        partidosFeedback: document.getElementById("partidosFeedback"),
+        partidosResults: document.getElementById("partidosResults"),
+        canchasFeedback: document.getElementById("canchasFeedback"),
+        canchasResults: document.getElementById("canchasResults"),
+        playersFeedback: document.getElementById("playersFeedback"),
+        playersResults: document.getElementById("playersResults"),
+        matchModal: document.getElementById('matchModal'),
+        modalContent: document.getElementById('modalContent'),
+        get modalCloseButton() { return this.matchModal?.querySelector('.close-modal'); },
+        modalRefreshButton: document.getElementById('modalRefreshButton'),
+        modalActionButtonsContainer: document.getElementById('modalActionButtons'),
+        currentYearSpan: document.getElementById('currentYear'),
+        filterLocalityPartidos: document.getElementById("filterLocalityPartidos"),
+        btnFilterPartidos: document.getElementById("btn-filter-partidos"),
+        filterCanchasName: document.getElementById("filterCanchasName"),
+        filterCanchasLocality: document.getElementById("filterCanchasLocality"),
+        btnFilterCanchas: document.getElementById("btn-filter-canchas"),
+        filterPlayersName: document.getElementById("filterPlayersName"),
+        filterPlayersGameLevel: document.getElementById("filterPlayersGameLevel"),
+        filterPlayersLocality: document.getElementById("filterPlayersLocality"),
+        btnFilterPlayers: document.getElementById("btn-filter-players"),
+        // Añadir otros IDs si son necesarios
+    };
 
-    // --- Funciones de Utilidad ---
-    function showLoader(feedbackContainer) { if(feedbackContainer) feedbackContainer.innerHTML = '<div class="loader" aria-hidden="true"></div><p class="visually-hidden">Cargando...</p>'; }
-    function clearFeedback(feedbackContainer) { if(feedbackContainer) feedbackContainer.innerHTML = ""; }
-    function showError(feedbackContainer, message) { if(feedbackContainer) feedbackContainer.innerHTML = `<p style="color: var(--danger-color);">${message}</p>`; }
-    function showInfo(feedbackContainer, message) { if(feedbackContainer) feedbackContainer.innerHTML = `<p style="color: var(--medium-text);">${message}</p>`; }
+    // --- Funciones Utilidad ---
+    const showLoader = (el) => { if(el) el.innerHTML = '<div class="loader" aria-hidden="true"></div><p class="visually-hidden">Cargando...</p>'; };
+    const clearFeedback = (el) => { if(el) el.innerHTML = ""; };
+    const showError = (el, msg) => { if(el) el.innerHTML = `<p style="color: var(--danger-color);">${msg}</p>`; };
+    const showInfo = (el, msg) => { if(el) el.innerHTML = `<p style="color: var(--medium-text);">${msg}</p>`; };
 
-    // --- Lógica de Tabs ---
+    // --- Lógica Tabs ---
     function activateTab(targetSectionId) {
-        tabControls.forEach(control => control.classList.remove('active'));
-        tabPanes.forEach(pane => pane.classList.remove('is-active-tab-content'));
-        const activeControl = tabControlsContainer?.querySelector(`.tab-control[data-target-section="${targetSectionId}"]`);
+        if (!Selectors.tabControlsContainer || !Selectors.tabContentArea) return;
+        Selectors.tabControls.forEach(control => control.classList.remove('active'));
+        Selectors.tabPanes.forEach(pane => pane.classList.remove('is-active-tab-content'));
+        const activeControl = Selectors.tabControlsContainer.querySelector(`.tab-control[data-target-section="${targetSectionId}"]`);
         const activePane = document.getElementById(targetSectionId);
         if (activeControl) activeControl.classList.add('active');
         if (activePane) activePane.classList.add('is-active-tab-content');
-        else console.warn(`Tab pane with ID ${targetSectionId} not found.`);
+        else console.warn(`Tab pane ID ${targetSectionId} not found.`);
     }
 
-    // --- Lógica de Autenticación y Perfil ---
-    async function logout() { await supabaseClient.auth.signOut(); window.location.href = "index.html"; }
+    // --- Autenticación y Perfil ---
+    async function logout() { await supabase.auth.signOut(); window.location.href = "index.html"; }
     function updateUIBasedOnAuth() {
-        // Adaptar según lógica de negocio para habilitar/deshabilitar
-        const isLoggedIn = !!loggedUser;
-        const hasProfile = !!userProfile;
-
-        profileLink.classList.toggle('disabled', !isLoggedIn);
-        if(isLoggedIn && hasProfile) { profileLink.textContent = "Modificar Perfil"; profileLink.href = "perfil.html"; }
-        else if(isLoggedIn && !hasProfile) { profileLink.textContent = "Crear Perfil"; profileLink.href = "perfil.html"; }
-        else { profileLink.textContent = "Iniciar Sesión"; profileLink.href = "index.html"; }
-
-        partidosButton?.classList.toggle('disabled', !isLoggedIn || !hasProfile); // Ejemplo: Requiere perfil
-        jugadoresButton?.classList.toggle('disabled', !isLoggedIn || !hasProfile); // Ejemplo: Requiere perfil
-        logoutButton?.classList.toggle('disabled', !isLoggedIn);
-
-        // Ocultar botones según tipo de perfil si existiera esa lógica
-        canchasButton.style.display = 'none'; pistasButton.style.display = 'none';
-
-        // Habilitar/deshabilitar tabs (ejemplo: partidos y jugadores requieren perfil)
-        tabControls.forEach(tc => {
+        const isLoggedIn = !!loggedUser; const hasProfile = !!userProfile;
+        Selectors.profileLink?.classList.toggle('disabled', !isLoggedIn);
+        if(isLoggedIn && hasProfile) { Selectors.profileLink.textContent="Modificar"; Selectors.profileLink.href="perfil.html"; }
+        else if(isLoggedIn && !hasProfile) { Selectors.profileLink.textContent="Crear Perfil"; Selectors.profileLink.href="perfil.html"; }
+        else { Selectors.profileLink.textContent="Login"; Selectors.profileLink.href="index.html"; }
+        Selectors.logoutButton?.classList.toggle('disabled', !isLoggedIn);
+        // Deshabilitar tabs que requieren perfil si no se cumple
+        Selectors.tabControls?.forEach(tc => {
             const target = tc.dataset.targetSection;
-            const requiresProfile = target === 'searchPartidosSection' || target === 'searchPlayersSection';
-            tc.style.pointerEvents = (!isLoggedIn && requiresProfile) || (isLoggedIn && !hasProfile && requiresProfile) ? 'none' : 'auto';
-            tc.style.opacity = (!isLoggedIn && requiresProfile) || (isLoggedIn && !hasProfile && requiresProfile) ? '0.6' : '1';
+            const requiresProfile = target === 'searchPartidosSection' || target === 'searchPlayersSection'; // Asumiendo que estos requieren perfil
+            const isDisabled = (!isLoggedIn && requiresProfile) || (isLoggedIn && !hasProfile && requiresProfile);
+            tc.style.pointerEvents = isDisabled ? 'none' : 'auto';
+            tc.style.opacity = isDisabled ? '0.6' : '1';
         });
     }
     async function checkAuthAndProfile() {
-        const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
-        if (sessionError) { console.error("Session Error:", sessionError); loggedUser = null; userProfile = null; updateUIBasedOnAuth(); return; }
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+        if (sessionError) { console.error("Session Error:", sessionError); loggedUser=null; userProfile=null; updateUIBasedOnAuth(); return; }
         if (session?.user) {
             loggedUser = { id: session.user.id, email: session.user.email };
-            const { data, error } = await supabaseClient.from("profiles").select("*").eq("id", loggedUser.id).single();
+            const { data, error } = await supabase.from("profiles").select("*").eq("id", loggedUser.id).single();
             if (error && error.code !== 'PGRST116') { console.error("Profile Error:", error); userProfile = null; } else { userProfile = data; }
-        } else { loggedUser = null; userProfile = null; }
+        } else { loggedUser=null; userProfile=null; }
         updateUIBasedOnAuth();
     }
 
-    // --- Precarga de Datos para Filtros ---
-    async function preloadEstablishmentsData() {
-      const { data, error } = await supabaseClient.from("establishments").select("name, locality");
-      if (error) { console.error("Error establecimientos:", error.message); return; }
-      allEstablishments = data || []; // Asegurar que sea array
-      const namesSet = new Set(allEstablishments.map(item => item.name).filter(Boolean));
-      const localitiesSet = new Set(allEstablishments.map(item => item.locality).filter(Boolean));
-      fillDatalist("namesList", namesSet); fillDatalist("localityList", localitiesSet);
+    // --- Precarga Datos Filtros ---
+    async function preloadDataForFilters() {
+        try { // Cargar establecimientos y jugadores en paralelo
+            await Promise.all([
+                (async () => { // Establecimientos
+                    const { data, error } = await supabase.from("establishments").select("name, locality");
+                    if (error) throw new Error(`Establecimientos: ${error.message}`);
+                    allEstablishments = data || [];
+                    const names = new Set(allEstablishments.map(i => i.name).filter(Boolean));
+                    const locs = new Set(allEstablishments.map(i => i.locality).filter(Boolean));
+                    fillDatalist("namesList", names); fillDatalist("localityList", locs);
+                })(),
+                (async () => { // Jugadores
+                    const { data, error } = await supabase.from("profiles").select("full_name, game_level, locality");
+                    if (error) throw new Error(`Jugadores: ${error.message}`);
+                    const profiles = data || [];
+                    const names = new Set(profiles.map(p => p.full_name).filter(Boolean));
+                    const levels = new Set(profiles.map(p => p.game_level).filter(Boolean));
+                    const locs = new Set(profiles.map(p => p.locality).filter(Boolean));
+                    fillDatalist("namesListPlayers", names); fillDatalist("gameLevelListPlayers", levels); fillDatalist("localityListPlayers", locs);
+                })()
+            ]);
+            console.log("Datos para filtros pre-cargados.");
+        } catch (error) {
+            console.error("Error pre-cargando datos para filtros:", error);
+        }
     }
-    async function preloadPlayersData() {
-        const { data, error } = await supabaseClient.from("profiles").select("full_name, game_level, locality");
-        if (error) { console.error("Error jugadores:", error.message); return; }
-        const profilesData = data || []; // Asegurar que sea array
-        const namesSet = new Set(profilesData.map(p => p.full_name).filter(Boolean));
-        const gameLevelsSet = new Set(profilesData.map(p => p.game_level).filter(Boolean));
-        const localitiesSet = new Set(profilesData.map(p => p.locality).filter(Boolean));
-        fillDatalist("namesListPlayers", namesSet); fillDatalist("gameLevelListPlayers", gameLevelsSet); fillDatalist("localityListPlayers", localitiesSet);
-    }
-    function fillDatalist(datalistId, dataSet) {
-        const datalist = document.getElementById(datalistId);
-        if (datalist) datalist.innerHTML = Array.from(dataSet).map(value => `<option value="${value}"></option>`).join('');
-    }
+    function fillDatalist(id, dataSet) { const el = document.getElementById(id); if (el) el.innerHTML = [...dataSet].map(v => `<option value="${v}"></option>`).join(''); }
 
-    // --- Lógica de Búsqueda y Visualización ---
-    async function loadOpenPartidos(localityFilter = "") {
-        if (!loggedUser) { showInfo(partidosFeedback, "Debes iniciar sesión para ver partidos."); return; }
-        showLoader(partidosFeedback); partidosResults.innerHTML = ""; const todayISO = new Date().toISOString().slice(0, 10);
-        let query = supabaseClient.from("partidos")
-          .select(`id, match_name, match_date, start_time, end_time, match_level, total_players, completitud, establishments(name, locality), participants(user_id, cancelled, leave_reason, profiles(id, profile_pic, full_name))`)
-          .gte("match_date", todayISO).neq("completitud", "Completo").order('match_date').order('start_time');
-        const { data, error } = await query; clearFeedback(partidosFeedback);
-        if (error) { showError(partidosFeedback, `Error partidos: ${error.message}`); return; }
-        const filteredData = localityFilter ? (data || []).filter(p => p.establishments?.locality?.toLowerCase().includes(localityFilter.toLowerCase())) : (data || []);
-        if (!filteredData.length) { showInfo(partidosFeedback, "No se encontraron partidos abiertos" + (localityFilter ? ` en ${localityFilter}` : ".")); return; }
-        filteredData.forEach(partido => partidosResults.appendChild(createPartidoCard(partido)));
+    // --- Carga y Creación de Tarjetas ---
+
+    // Partidos
+    async function loadOpenPartidos(filter = "") {
+        if (!loggedUser) { showInfo(Selectors.partidosFeedback, "Inicia sesión para ver partidos."); return; }
+        showLoader(Selectors.partidosFeedback); Selectors.partidosResults.innerHTML = ""; const today = new Date().toISOString().slice(0, 10);
+        try {
+            let query = supabase.from("partidos")
+              .select(`id, match_name, match_date, start_time, end_time, match_level, total_players, completitud, establishments(name, locality), participants(user_id, cancelled, leave_reason, profiles(id, profile_pic, full_name))`)
+              .gte("match_date", today).neq("completitud", "Completo").order('match_date').order('start_time');
+            const { data, error } = await query;
+            if (error) throw error;
+            const list = data || [];
+            const filtered = filter ? list.filter(p => p.establishments?.locality?.toLowerCase().includes(filter.toLowerCase())) : list;
+            clearFeedback(Selectors.partidosFeedback);
+            if (!filtered.length) { showInfo(Selectors.partidosFeedback, "No hay partidos abiertos" + (filter ? ` en ${filter}` : ".")); return; }
+            filtered.forEach(p => Selectors.partidosResults.appendChild(createPartidoCard(p)));
+        } catch (error) { showError(Selectors.partidosFeedback, `Error partidos: ${error.message}`); console.error(error); }
     }
     function createPartidoCard(partido) {
-        const card = document.createElement("div"); card.className = "result-card partido-card"; card.setAttribute('data-match-id', partido.id);
-        const activeParticipants = partido.participants?.filter(p => !p.cancelled) || [];
-        const joinedCount = activeParticipants.length; const totalPlayers = partido.total_players || 4; const missing = totalPlayers - joinedCount;
-        let avatarsHTML = "";
-        if (activeParticipants.length > 0) {
-            const maxToShow = 4; const participantsToShow = activeParticipants.slice(0, maxToShow);
-            participantsToShow.forEach(p => { const profile = p.profiles; const pic = profile?.profile_pic || `https://via.placeholder.com/42`; const alt = profile?.full_name ? `Avatar de ${profile.full_name}` : "Avatar"; avatarsHTML += `<img src="${pic}" alt="${alt}" loading="lazy" />`; });
-            if (activeParticipants.length > maxToShow) avatarsHTML += `<span class="extra-count">+${activeParticipants.length - maxToShow}</span>`;
-        } else { avatarsHTML = "<p style='font-size:0.85em; color: var(--medium-text);'>¡Sé el primero!</p>"; }
-        card.innerHTML = `<h3 class="${missing > 0 ? 'highlight' : ''}">${partido.match_name}</h3><div class="icon-text"><i class="fas fa-calendar-alt"></i><p><span class="highlight">${partido.match_date}</span></p></div><div class="icon-text"><i class="fas fa-clock"></i><p>${partido.start_time || 'TBC'} - ${partido.end_time || ''}</p></div><div class="icon-text"><i class="fas fa-map-marker-alt"></i><p>${partido.establishments?.name || "Est. TBC"} (${partido.establishments?.locality || "Loc. TBC"})</p></div><div class="divider"></div><div class="icon-text"><i class="fas fa-layer-group"></i><p><span class="highlight">Nivel:</span> ${partido.match_level || 'Mixto'}</p></div><p class="highlight">${missing > 0 ? `Faltan ${missing} de ${totalPlayers}` : '¡Completo!'}</p><div class="participants-avatars">${avatarsHTML}</div><button class="btn btn-sm btn-secondary btn-view-partido">Ver Detalles</button>`;
-        const viewButton = card.querySelector(".btn-view-partido");
-        if (viewButton) { viewButton.addEventListener("click", (e) => { console.log(`Click en Ver Detalles - Partido ID: ${partido.id}`); elementThatOpenedModal = e.currentTarget; handleShowMatchModal(partido.id); }); }
-        else { console.error("Botón .btn-view-partido no encontrado en tarjeta:", card); }
+        const card = document.createElement("div"); card.className = "result-card partido-card"; card.dataset.matchId = partido.id;
+        const participants = partido.participants?.filter(p => !p.cancelled) || [];
+        const count = participants.length; const total = partido.total_players || 4; const missing = total - count;
+        let avatars = "";
+        if (count > 0) { const maxAv = 4; participants.slice(0, maxAv).forEach(p => { const pf = p.profiles; const pic = pf?.profile_pic || `https://via.placeholder.com/42`; const alt = pf?.full_name ? `Avatar de ${pf.full_name}`: "Avatar"; avatars += `<img src="${pic}" alt="${alt}" loading="lazy"/>`; }); if(count > maxAv) avatars += `<span class="extra-count">+${count - maxAv}</span>`; }
+        else { avatars = "<p style='font-size:0.8em;color:var(--medium-text)'>¡Sé el primero!</p>"; }
+        card.innerHTML = `<h3 class="${missing > 0 ? 'highlight':''}">${partido.match_name}</h3><div class="icon-text"><i class="fas fa-calendar-alt"></i><p><span class="highlight">${partido.match_date}</span></p></div><div class="icon-text"><i class="fas fa-clock"></i><p>${partido.start_time||'TBC'}-${partido.end_time||''}</p></div><div class="icon-text"><i class="fas fa-map-marker-alt"></i><p>${partido.establishments?.name||'TBC'} (${partido.establishments?.locality||'TBC'})</p></div><div class="divider"></div><div class="icon-text"><i class="fas fa-layer-group"></i><p><span class="highlight">Nivel:</span> ${partido.match_level||'Mixto'}</p></div><p class="highlight">${missing>0?`Faltan ${missing} de ${total}`:'¡Completo!'}</p><div class="participants-avatars">${avatars}</div><button type="button" class="btn btn-sm btn-secondary btn-view-partido">Ver Detalles</button>`;
+        const btn = card.querySelector(".btn-view-partido"); if (btn) { btn.addEventListener("click", (e)=>{ console.log(`Click Ver Detalles - ID: ${partido.id}`); elementThatOpenedModal = e.currentTarget; handleShowMatchModal(partido.id); }); } else console.error("Botón Ver Detalles no hallado");
         return card;
     }
-    async function loadCanchas(nameFilter = "", localityFilter = "") {
-        showLoader(canchasFeedback); canchasResults.innerHTML = "";
-        let query = supabaseClient.from("establishments").select("*");
-        if (nameFilter) query = query.ilike("name", `%${nameFilter}%`); if (localityFilter) query = query.ilike("locality", `%${localityFilter}%`);
-        const { data, error } = await query; clearFeedback(canchasFeedback);
-        if (error) { showError(canchasFeedback, `Error canchas: ${error.message}`); return; }
-        if (!data?.length) { showInfo(canchasFeedback, "No se encontraron canchas."); return; }
-        data.forEach(cancha => canchasResults.appendChild(createCanchaCard(cancha)));
-    }
-    function createCanchaCard(cancha) { /* ... (igual que antes) ... */ }
-    async function loadPlayers(nameFilter = "", gameLevelFilter = "", localityFilter = "") {
-        showLoader(playersFeedback); playersResults.innerHTML = "";
-        let query = supabaseClient.from("profiles").select("*");
-        if (nameFilter) query = query.ilike("full_name", `%${nameFilter}%`); if (gameLevelFilter) query = query.ilike("game_level", `%${gameLevelFilter}%`); if (localityFilter) query = query.ilike("locality", `%${localityFilter}%`);
-        if (loggedUser) query = query.neq('id', loggedUser.id);
-        const { data, error } = await query; clearFeedback(playersFeedback);
-        if (error) { showError(playersFeedback, `Error jugadores: ${error.message}`); return; }
-        if (!data?.length) { showInfo(playersFeedback, "No se encontraron jugadores."); return; }
-        data.forEach(player => playersResults.appendChild(createPlayerCard(player)));
-    }
-    function createPlayerCard(player) { /* ... (igual que antes, con alt text) ... */ }
 
-    // --- Lógica del Modal de Partidos ---
+    // Canchas
+    async function loadCanchas(name = "", locality = "") {
+        showLoader(Selectors.canchasFeedback); Selectors.canchasResults.innerHTML = "";
+        try { let query = supabase.from("establishments").select("*"); if (name) query = query.ilike("name", `%${name}%`); if (locality) query = query.ilike("locality", `%${locality}%`); const { data, error } = await query; if(error) throw error; clearFeedback(Selectors.canchasFeedback); if (!data?.length) { showInfo(Selectors.canchasFeedback, "No se encontraron canchas."); return; } data.forEach(c => Selectors.canchasResults.appendChild(createCanchaCard(c))); } catch (error) { showError(Selectors.canchasFeedback, `Error canchas: ${error.message}`); console.error(error); }
+    }
+    function createCanchaCard(cancha) { const card = document.createElement("div"); card.className = "result-card cancha-card"; card.innerHTML = `<div class="card-header">${cancha.name}</div><div class="card-content"><p><strong>Localidad:</strong> ${cancha.locality||'N/E'}</p><p><strong>Dirección:</strong> ${cancha.address||'N/E'}</p><p><strong>Canchas:</strong> ${cancha.court_count??'N/D'}</p></div>${(cancha.latitude&&cancha.longitude)?`<div class="map-container"><iframe src="https://maps.google.com/maps?q=${cancha.latitude},${cancha.longitude}&hl=es&z=14&output=embed" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Mapa de ${cancha.name}"></iframe></div>`:'<p style="padding:1rem;text-align:center;color:var(--medium-text)">Ubicación no disponible</p>'}`; return card; } // Corregida URL Google Maps
+
+    // Jugadores
+    async function loadPlayers(name = "", level = "", locality = "") {
+        showLoader(Selectors.playersFeedback); Selectors.playersResults.innerHTML = "";
+        try { let query = supabase.from("profiles").select("*"); if (name) query = query.ilike("full_name", `%${name}%`); if (level) query = query.ilike("game_level", `%${level}%`); if (locality) query = query.ilike("locality", `%${locality}%`); if (loggedUser) query = query.neq('id', loggedUser.id); const { data, error } = await query; if(error) throw error; clearFeedback(Selectors.playersFeedback); if (!data?.length) { showInfo(Selectors.playersFeedback, "No se encontraron jugadores."); return; } data.forEach(p => Selectors.playersResults.appendChild(createPlayerCard(p))); } catch (error) { showError(Selectors.playersFeedback, `Error jugadores: ${error.message}`); console.error(error); }
+    }
+    function createPlayerCard(player) { const card = document.createElement("div"); card.className = "result-card player-card"; const pic = player.profile_pic || "https://via.placeholder.com/80"; const alt = player.full_name ? `Foto de ${player.full_name}` : "Foto"; card.innerHTML = `<div class="player-header"><img src="${pic}" alt="${alt}" class="player-avatar" loading="lazy" /><div class="player-info"><h3>${player.full_name||'N/D'}</h3><p><strong>Nivel:</strong> ${player.game_level||'N/D'}</p><p><strong>Localidad:</strong> ${player.locality||'N/D'}</p></div></div><div class="player-details"><p><strong>Edad:</strong> ${player.age||'N/D'}</p><p><strong>Sexo:</strong> ${player.gender||'N/D'}</p><p><strong>Tel:</strong> ${player.phone||'Privado'}</p></div>`; return card; }
+
+    // --- Lógica Modal ---
     async function handleShowMatchModal(matchId) {
-        console.log(`handleShowMatchModal llamado con ID: ${matchId}`);
-        if (!loggedUser) { alert("Debes iniciar sesión para ver los detalles."); console.log("Modal abortado: no logueado."); return; }
+        console.log(`FUNC: handleShowMatchModal, ID: ${matchId}`);
+        if (!loggedUser) { alert("Inicia sesión para ver detalles."); console.log("Modal abort: no login."); return; }
         currentOpenModalMatchId = matchId;
-        if (!matchModal) { console.error("Error crítico: Elemento #matchModal no encontrado."); return; }
-        matchModal.classList.add('is-visible');
-        console.log("#matchModal debería ser visible ahora. Clases:", matchModal.className);
-        if(modalContent) modalContent.innerHTML = '<div class="loader"></div>'; else console.error("Elemento modalContent no encontrado");
-        if(modalActionButtonsContainer) modalActionButtonsContainer.innerHTML = ''; else console.error("Elemento modalActionButtonsContainer no encontrado");
-        try { if (modalCloseButton) modalCloseButton.focus(); else console.warn("Botón cierre modal no encontrado para focus."); }
-        catch (focusError) { console.error("Error enfocando botón cierre:", focusError); }
+        if (!Selectors.matchModal) { console.error("Modal element not found!"); return; }
+        Selectors.matchModal.classList.add('is-visible'); console.log("Modal class added:", Selectors.matchModal.className);
+        if(Selectors.modalContent) Selectors.modalContent.innerHTML = '<div class="loader"></div>'; else console.error("modalContent not found");
+        if(Selectors.modalActionButtonsContainer) Selectors.modalActionButtonsContainer.innerHTML = ''; else console.error("modalActionButtonsContainer not found");
+        try { Selectors.modalCloseButton?.focus(); } catch (e) { console.error("Focus error:", e); }
         await loadMatchDetailsIntoModal(matchId);
     }
     function handleCloseMatchModal() {
-        console.log("handleCloseMatchModal llamado.");
-        if (!matchModal) { console.error("Error crítico: Elemento #matchModal no encontrado en cierre."); return; }
-        matchModal.classList.remove('is-visible');
-        currentOpenModalMatchId = null;
-        if(modalContent) modalContent.innerHTML = '';
-        if(modalActionButtonsContainer) modalActionButtonsContainer.innerHTML = '';
-        if (elementThatOpenedModal) { try { elementThatOpenedModal.focus(); console.log("Foco devuelto."); } catch (focusError) { console.error("Error devolviendo foco:", focusError); } elementThatOpenedModal = null; }
+        console.log("FUNC: handleCloseMatchModal");
+        if (!Selectors.matchModal) return;
+        Selectors.matchModal.classList.remove('is-visible'); currentOpenModalMatchId = null;
+        if(Selectors.modalContent) Selectors.modalContent.innerHTML = '';
+        if(Selectors.modalActionButtonsContainer) Selectors.modalActionButtonsContainer.innerHTML = '';
+        if (elementThatOpenedModal) { try { elementThatOpenedModal.focus(); console.log("Focus returned."); } catch (e) { console.error("Return focus error:", e); } elementThatOpenedModal = null; }
     }
-    async function loadMatchDetailsIntoModal(matchId) {
-        console.log(`Cargando detalles para modal - ID: ${matchId}`);
-        const { data: partido, error } = await supabaseClient.from("partidos")
-            .select(`*, establishments(name, locality), participants(*, profiles(id, full_name, profile_pic))`)
-            .eq("id", matchId).single();
-        if (error || !partido) { console.error("Error fetch detalles modal:", error?.message); if(modalContent) modalContent.innerHTML = `<p style="color:var(--danger-color)">Error al cargar detalles.</p>`; return; }
-        console.log("Detalles del partido cargados:", partido);
-        renderModalContent(partido); renderModalActionButtons(partido);
+    async function loadMatchDetailsIntoModal(id) {
+        console.log(`FUNC: loadMatchDetailsIntoModal, ID: ${id}`);
+        try { const { data: partido, error } = await supabase.from("partidos").select(`*, establishments(name, locality), participants(*, profiles(id, full_name, profile_pic))`).eq("id", id).single(); if (error || !partido) throw error || new Error("Partido no encontrado"); console.log("Detalles recibidos:", partido); renderModalContent(partido); renderModalActionButtons(partido); } catch (error) { console.error("Error fetch modal details:", error); if(Selectors.modalContent) Selectors.modalContent.innerHTML = `<p style="color:var(--danger-color)">Error al cargar detalles.</p>`; }
     }
-    async function handleRefreshModal() {
-         if (currentOpenModalMatchId && modalRefreshButton) {
-            modalRefreshButton.disabled = true; modalRefreshButton.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i> Refrescando...';
-            await loadMatchDetailsIntoModal(currentOpenModalMatchId);
-            modalRefreshButton.disabled = false; modalRefreshButton.innerHTML = '<i class="fas fa-sync-alt"></i> Refrescar';
-        }
-    }
+    async function handleRefreshModal() { if (currentOpenModalMatchId && Selectors.modalRefreshButton) { Selectors.modalRefreshButton.disabled = true; Selectors.modalRefreshButton.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i>...'; await loadMatchDetailsIntoModal(currentOpenModalMatchId); Selectors.modalRefreshButton.disabled = false; Selectors.modalRefreshButton.innerHTML = '<i class="fas fa-sync-alt"></i> Refrescar'; } }
     function renderModalContent(partido) {
-         if (!modalContent) return;
-         const activeParticipants = partido.participants?.filter(p => !p.cancelled) || [];
-         const joinedCount = activeParticipants.length; const totalPlayers = partido.total_players || 4; const missing = totalPlayers - joinedCount;
-         let participantListHTML = '<ul>';
-         if (partido.participants?.length > 0) {
-             partido.participants.forEach(p => {
-                 const profile = p.profiles; const pic = profile?.profile_pic || "https://via.placeholder.com/45";
-                 const altText = profile?.full_name ? `Foto de ${profile.full_name}` : "Avatar"; const name = profile?.full_name || "Jugador (Error)";
-                 const isCancelled = p.cancelled; const reason = p.leave_reason ? `<span class="leave-reason">(${p.leave_reason})</span>` : "";
-                 participantListHTML += `<li><img src="${pic}" alt="${altText}" loading="lazy" /><span class="${isCancelled ? 'cancelled' : ''}">${name} ${isCancelled ? reason : ''}</span></li>`;
-             });
-         } else { participantListHTML += "<li>Aún no hay jugadores apuntados.</li>"; }
-         participantListHTML += "</ul>";
-         modalContent.innerHTML = `<h2 id="modalTitle">${partido.match_name}</h2><p><strong>Fecha:</strong> ${partido.match_date}</p><p><strong>Hora:</strong> ${partido.start_time || 'N/D'} - ${partido.end_time || 'N/D'}</p><p><strong>Lugar:</strong> ${partido.establishments?.name || 'N/D'} (${partido.establishments?.locality || 'N/D'})</p><p><strong>Nivel:</strong> ${partido.match_level || 'N/D'}</p><h3>Jugadores (${joinedCount}/${totalPlayers}):</h3><div class="participants-list-container">${participantListHTML}</div>${missing > 0 ? `<p class="missing-players">¡Faltan ${missing} jugadores!</p>` : '<p style="text-align:center; color:var(--success-color); font-weight:bold;">¡Completo!</p>'}`;
+        if (!Selectors.modalContent) return;
+        const participants = partido.participants?.filter(p => !p.cancelled) || [];
+        const count = participants.length; const total = partido.total_players || 4; const missing = total - count;
+        let listHTML = '<ul>';
+        if (partido.participants?.length > 0) { partido.participants.forEach(p => { const pf = p.profiles; const pic = pf?.profile_pic || "https://via.placeholder.com/45"; const alt = pf?.full_name ? `Foto de ${pf.full_name}` : "Avatar"; const name = pf?.full_name || "?"; const cancelled = p.cancelled; const reason = p.leave_reason ? `<span class="leave-reason">(${p.leave_reason})</span>` : ""; listHTML += `<li><img src="${pic}" alt="${alt}" loading="lazy"/><span class="${cancelled?'cancelled':''}">${name} ${cancelled?reason:''}</span></li>`; }); }
+        else { listHTML += "<li>Nadie apuntado aún.</li>"; } listHTML += "</ul>";
+        Selectors.modalContent.innerHTML = `<h2 id="modalTitle">${partido.match_name}</h2><p><strong>Fecha:</strong> ${partido.match_date}</p><p><strong>Hora:</strong> ${partido.start_time||'N/D'}-${partido.end_time||'N/D'}</p><p><strong>Lugar:</strong> ${partido.establishments?.name||'N/D'} (${partido.establishments?.locality||'N/D'})</p><p><strong>Nivel:</strong> ${partido.match_level||'N/D'}</p><h3>Jugadores (${count}/${total}):</h3><div class="participants-list-container">${listHTML}</div>${missing>0?`<p class="missing-players">¡Faltan ${missing}!</p>`:'<p style="text-align:center;color:var(--success-color);font-weight:bold">¡Completo!</p>'}`;
     }
     function renderModalActionButtons(partido) {
-         if (!modalActionButtonsContainer) return;
-         modalActionButtonsContainer.innerHTML = ''; const userRecord = partido.participants?.find(p => p.user_id === loggedUser?.id);
-         const isFull = (partido.participants?.filter(p => !p.cancelled).length ?? 0) >= (partido.total_players || 4);
-         const canJoin = !userRecord && !isFull; const canLeave = userRecord && !userRecord.cancelled; const hasLeft = userRecord && userRecord.cancelled;
-         if (canJoin) { /* ... (botón unirse) ... */ }
-         else if (canLeave) { /* ... (grupo darse baja) ... */ }
-         else if (hasLeft) { /* ... (mensaje ya te diste baja) ... */ }
-         else if (isFull && !userRecord) { /* ... (mensaje completo) ... */ }
+        if (!Selectors.modalActionButtonsContainer || !loggedUser) return; Selectors.modalActionButtonsContainer.innerHTML = '';
+        const userRec = partido.participants?.find(p => p.user_id === loggedUser.id);
+        const isFull = (partido.participants?.filter(p => !p.cancelled).length ?? 0) >= (partido.total_players || 4);
+        const canJoin = !userRec && !isFull; const canLeave = userRec && !userRec.cancelled; const hasLeft = userRec && userRec.cancelled;
+        if (canJoin) { const btn=document.createElement("button"); btn.className="btn btn-primary"; btn.textContent="Unirse"; btn.onclick = async()=>{ btn.disabled=true; btn.textContent="Uniéndose..."; await handleJoinMatch(partido.id); await handleRefreshModal(); }; Selectors.modalActionButtonsContainer.appendChild(btn); }
+        else if (canLeave) { const div=document.createElement("div"); div.className="leave-input-group"; const input=document.createElement("input"); input.type="text"; input.placeholder="Motivo baja (opcional, max 50)"; input.maxLength=50; div.appendChild(input); const btn=document.createElement("button"); btn.className="btn btn-danger"; btn.textContent="Darse Baja"; btn.onclick = async()=>{ const r=input.value.trim(); btn.disabled=true; btn.textContent="Saliendo..."; await handleLeaveMatch(partido.id,r); await handleRefreshModal(); }; div.appendChild(btn); Selectors.modalActionButtonsContainer.appendChild(div); const p=document.createElement("p"); p.textContent="Ya estás apuntado."; p.style.cssText="text-align:center;margin-top:0.5rem;width:100%"; Selectors.modalActionButtonsContainer.appendChild(p); }
+        else if (hasLeft) { const p=document.createElement("p"); p.textContent=`Te diste de baja ${userRec.leave_reason?`(Motivo: ${userRec.leave_reason})`:''}`; p.style.cssText="color:var(--medium-text);text-align:center;width:100%"; Selectors.modalActionButtonsContainer.appendChild(p); }
+        else if (isFull && !userRec) { const p=document.createElement("p"); p.textContent="Partido completo."; p.style.cssText="color:var(--medium-text);text-align:center;width:100%"; Selectors.modalActionButtonsContainer.appendChild(p); }
     }
-    async function handleJoinMatch(matchId) { /* ... (igual que antes) ... */ }
-    async function handleLeaveMatch(matchId, reason = "") { /* ... (igual que antes) ... */ }
+    async function handleJoinMatch(id) { if (!loggedUser) return; try { const { error } = await supabase.from("participants").insert([{ match_id: id, user_id: loggedUser.id }]); if (error) throw error; loadOpenPartidos(Selectors.filterLocalityPartidos?.value.trim()); } catch (error) { console.error("Error join:", error); alert(`Error unirse: ${error.message}`); } }
+    async function handleLeaveMatch(id, reason="") { if (!loggedUser) return; try { const { error } = await supabase.from("participants").update({ cancelled: true, leave_reason: reason||null }).match({ match_id: id, user_id: loggedUser.id, cancelled: false }); if (error) throw error; loadOpenPartidos(Selectors.filterLocalityPartidos?.value.trim()); } catch (error) { console.error("Error leave:", error); alert(`Error baja: ${error.message}`); } }
 
-    // --- Inicialización y Event Listeners ---
+    // --- Inicialización y Listeners ---
     function setupEventListeners() {
-      if(logoutButton) logoutButton.addEventListener('click', logout);
-      tabControls.forEach(control => { /* ... (igual que antes) ... */ });
-      document.getElementById("btn-filter-partidos")?.addEventListener("click", () => loadOpenPartidos(document.getElementById("filterLocalityPartidos")?.value.trim()));
-      document.getElementById("btn-filter-canchas")?.addEventListener("click", () => loadCanchas(document.getElementById("filterCanchasName")?.value.trim(), document.getElementById("filterCanchasLocality")?.value.trim()));
-      document.getElementById("btn-filter-players")?.addEventListener("click", () => loadPlayers(document.getElementById("filterPlayersName")?.value.trim(), document.getElementById("filterPlayersGameLevel")?.value.trim(), document.getElementById("filterPlayersLocality")?.value.trim()));
-      if (modalCloseButton) modalCloseButton.addEventListener('click', handleCloseMatchModal); else console.error("Listener no añadido: Botón cierre modal no encontrado.");
-      if (modalRefreshButton) modalRefreshButton.addEventListener('click', handleRefreshModal); else console.error("Listener no añadido: Botón refresh modal no encontrado.");
-      if (matchModal) {
-        matchModal.addEventListener('click', (e) => { if (e.target === matchModal) handleCloseMatchModal(); });
-        document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && matchModal.classList.contains('is-visible')) handleCloseMatchModal(); });
-      } else { console.error("Listener no añadido: Elemento #matchModal no encontrado."); }
-      const currentYearSpan = document.getElementById('currentYear'); if(currentYearSpan) currentYearSpan.textContent = new Date().getFullYear();
+      Selectors.logoutButton?.addEventListener('click', logout);
+      Selectors.tabControls?.forEach(control => { control.addEventListener('click', () => { const target = control.dataset.targetSection; if (target) { activateTab(target); /* Carga condicional de datos */ if (target==='searchPartidosSection' && !Selectors.partidosResults?.innerHTML.trim()) loadOpenPartidos(); else if (target==='searchCanchasSection' && !Selectors.canchasResults?.innerHTML.trim()) loadCanchas(); else if (target==='searchPlayersSection' && !Selectors.playersResults?.innerHTML.trim()) loadPlayers(); } }); });
+      Selectors.btnFilterPartidos?.addEventListener("click", () => loadOpenPartidos(Selectors.filterLocalityPartidos?.value.trim()));
+      Selectors.btnFilterCanchas?.addEventListener("click", () => loadCanchas(Selectors.filterCanchasName?.value.trim(), Selectors.filterCanchasLocality?.value.trim()));
+      Selectors.btnFilterPlayers?.addEventListener("click", () => loadPlayers(Selectors.filterPlayersName?.value.trim(), Selectors.filterPlayersGameLevel?.value.trim(), Selectors.filterPlayersLocality?.value.trim()));
+      Selectors.modalCloseButton?.addEventListener('click', handleCloseMatchModal);
+      Selectors.modalRefreshButton?.addEventListener('click', handleRefreshModal);
+      Selectors.matchModal?.addEventListener('click', (e) => { if (e.target === Selectors.matchModal) handleCloseMatchModal(); });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && Selectors.matchModal?.classList.contains('is-visible')) handleCloseMatchModal(); });
+      if(Selectors.currentYearSpan) Selectors.currentYearSpan.textContent = new Date().getFullYear();
     }
 
-    // --- Punto de Entrada Principal ---
+    // --- Punto de Entrada ---
     document.addEventListener("DOMContentLoaded", async () => {
-      console.log("DOM Cargado. Iniciando script.");
-      setupEventListeners(); // Setup listeners ASAP
+      console.log("DOM Cargado. Iniciando...");
+      setupEventListeners();
       try {
-          await checkAuthAndProfile();
-          await preloadEstablishmentsData();
-          await preloadPlayersData();
-          if (loggedUser && userProfile) {
-              console.log("Usuario logueado y con perfil. Activando tab partidos y cargando...");
+          await checkAuthAndProfile(); // Verifica login y perfil
+          await preloadDataForFilters(); // Carga datalists
+          if (loggedUser && userProfile) { // Si está listo, muestra partidos
+              console.log("Usuario listo. Cargando partidos...");
               activateTab('searchPartidosSection');
-              loadOpenPartidos(); // Carga automática corregida
-          } else {
-              console.log("Usuario no logueado o sin perfil. Activando tab canchas por defecto.");
-              activateTab('searchCanchasSection'); // Activar tab default
+              loadOpenPartidos();
+          } else { // Si no, muestra canchas (o el tab default que elijas)
+              console.log("Usuario no listo. Activando tab canchas.");
+              activateTab('searchCanchasSection');
           }
-      } catch (error) {
-          console.error("Error durante la inicialización:", error);
-          // Mostrar un mensaje de error general al usuario si falla la carga inicial?
-      }
-      console.warn("IMPORTANTE: Asegúrate de que RLS esté habilitado en Supabase.");
+      } catch (error) { console.error("Error inicialización:", error); showError(document.body, "Error al iniciar la aplicación."); } // Error general
+      console.warn("IMPORTANTE: Revisar Row Level Security (RLS) en Supabase.");
     });
 
     // --- FIN SCRIPT ---
