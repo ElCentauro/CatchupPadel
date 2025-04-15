@@ -793,22 +793,27 @@
                 return;
             }
 
-            if (repeatWeeks > 0) {
-                const baseDate = new Date(matchDateInput);
-                const ul = document.createElement('ul');
-                for (let i = 0; i < repeatWeeks; i++) {
-                    const scheduledDate = new Date(baseDate);
-                    scheduledDate.setDate(baseDate.getDate() + (i + 1) * 7);
-                    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-                    const formattedDate = scheduledDate.toLocaleDateString('es-ES', options);
-                    const li = document.createElement('li');
-                    li.textContent = `Partido: ${matchNameInput} - Fecha: ${formattedDate}`;
-                    ul.appendChild(li);
-                }
-                scheduledList.appendChild(ul);
-            } else {
-                scheduledList.textContent = 'No se programarán partidos adicionales.';
+            const baseDate = new Date(matchDateInput);
+            const ul = document.createElement('ul');
+
+            // Always include the original date
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            const formattedOriginalDate = baseDate.toLocaleDateString('es-ES', options);
+            const originalLi = document.createElement('li');
+            originalLi.textContent = `Partido: ${matchNameInput} - Fecha: ${formattedOriginalDate} (Original)`;
+            ul.appendChild(originalLi);
+
+            // Calculate and add subsequent dates if repeatWeeks > 0
+            for (let i = 0; i < repeatWeeks; i++) {
+                const scheduledDate = new Date(baseDate);
+                scheduledDate.setDate(baseDate.getDate() + (i + 1) * 7);
+                const formattedDate = scheduledDate.toLocaleDateString('es-ES', options);
+                const li = document.createElement('li');
+                li.textContent = `Partido: ${matchNameInput} - Fecha: ${formattedDate}`;
+                ul.appendChild(li);
             }
+
+            scheduledList.appendChild(ul);
         });
 
         // Botón "Unirse al Partido"
