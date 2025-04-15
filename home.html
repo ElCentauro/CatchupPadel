@@ -68,16 +68,10 @@
             transition: opacity 0.3s ease-in-out;
         }
 
-        .floating-card.card-partidos::before {
-            background-image: url('siluetas.png');
+        .floating-card.card-canchas::before {
+            background-image: url('cancha.png');
             background-position: center 40%; /* Centrado con un ajuste vertical */
-            background-size: 45%; /* Tamaño ajustado para mejor visualización */
-        }
-
-        .floating-card.card-jugadores::before {
-            background-image: url('conoce.png');
-            background-position: center 45%; /* Centrado con un ajuste vertical */
-            background-size: 40%; /* Tamaño ajustado para mejor visualización */
+            background-size: 50%; /* Tamaño ajustado para mejor visualización */
         }
 
         .floating-card.card-programa::before {
@@ -86,10 +80,16 @@
             background-size: 40%; /* Tamaño ajustado para mejor visualización */
         }
 
-        .floating-card.card-canchas::before {
-            background-image: url('cancha.png');
+        .floating-card.card-jugadores::before {
+            background-image: url('conoce.png');
+            background-position: center 45%; /* Centrado con un ajuste vertical */
+            background-size: 40%; /* Tamaño ajustado para mejor visualización */
+        }
+
+        .floating-card.card-partidos::before {
+            background-image: url('siluetas.png');
             background-position: center 40%; /* Centrado con un ajuste vertical */
-            background-size: 50%; /* Tamaño ajustado para mejor visualización */
+            background-size: 45%; /* Tamaño ajustado para mejor visualización */
         }
 
         .floating-card:hover {
@@ -262,8 +262,8 @@
             <a href="#" class="menu-item" id="partidosButton">Partidos</a>
             <a href="#" class="menu-item" id="canchasButton" ondblclick="window.location.href='establecimiento.html'">Canchas</a>
             <a href="#" class="menu-item" id="pistasButton" ondblclick="window.location.href='pistas.html'">Pistas</a>
-            <a href="#" class="menu-item" id="jugadoresButton" onclick="showPlayersSection()"><i class="fas fa-users"></i> Conoce Jugadores</a>
-            <a href="#" class="menu-item logout" id="logoutButton" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+            <a href="#" class="menu-item" id="jugadoresButton" onclick="showPlayersSection()">Conoce Jugadores</a>
+            <a href="#" class="menu-item logout" id="logoutButton" onclick="logout()">Cerrar Sesión</a>
         </div>
     </nav>
 
@@ -432,7 +432,7 @@
                 option.value = level;
                 gameLevelListPlayers.appendChild(option);
             });
-            const localityListPlayers = document.getElementById("localityListPlayers");
+            const localityListPlayers = documentgetElementById("localityListPlayers");
             localityListPlayers.innerHTML = "";
             localitiesSet.forEach(loc => {
                 const option = document.createElement("option");
@@ -835,7 +835,7 @@
                     </div>
                 `;
                 playersResults.appendChild(card);
-            }
+            });
         }
 
         document.addEventListener("DOMContentLoaded", async () => {
