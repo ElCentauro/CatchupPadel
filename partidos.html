@@ -551,7 +551,7 @@
                         <option value="11">11 semanas</option>
                         <option value="12">12 semanas</option>
                     </select>
-                    <button type="button" id="btn-schedule" class="btn btn-schedule"><i class="fas fa-calendar-plus"></i> Programar Partidos</button>
+                    <button type="button" id="btn-schedule" class="btn btn-schedule" disabled><i class="fas fa-calendar-plus"></i> Programar Partidos</button>
                 </div>
                 <div id="scheduledList"></div>
             </fieldset>
@@ -706,7 +706,12 @@
                     document.getElementById('teamType').value = data.team_type;
                     document.getElementById('completitud').value = data.completitud;
                     document.getElementById('btn-create').textContent = "Modificar Partido";
+                    document.getElementById('btn-schedule').disabled = false; // Habilitar al cargar un partido existente
+                } else {
+                    document.getElementById('btn-schedule').disabled = true; // Deshabilitar si no hay partido cargado
                 }
+            } else {
+                document.getElementById('btn-schedule').disabled = true; // Deshabilitar si no hay sesión
             }
             updateJoinUI();
         }
@@ -763,6 +768,7 @@
                     console.error("Update error:", error);
                 } else {
                     alert("Partido modificado exitosamente con ID: " + matchId);
+                    document.getElementById('btn-schedule').disabled = false; // Habilitar tras modificación
                 }
             } else {
                 ({ data, error } = await supabaseClient
@@ -775,6 +781,7 @@
                     currentMatchId = matchId;
                     document.getElementById('btn-create').textContent = "Modificar Partido";
                     alert("Partido creado exitosamente con ID: " + matchId);
+                    document.getElementById('btn-schedule').disabled = false; // Habilitar tras creación
                 }
             }
             updateJoinUI();
@@ -796,17 +803,11 @@
             const baseDate = new Date(matchDateInput);
             const ul = document.createElement('ul');
 
-            // Always include the original date
-            const options = { year: 'numeric', month: 'long', day: 'numeric' };
-            const formattedOriginalDate = baseDate.toLocaleDateString('es-ES', options);
-            const originalLi = document.createElement('li');
-            originalLi.textContent = `Partido: ${matchNameInput} - Fecha: ${formattedOriginalDate} (Original)`;
-            ul.appendChild(originalLi);
-
             // Calculate and add subsequent dates if repeatWeeks > 0
             for (let i = 0; i < repeatWeeks; i++) {
                 const scheduledDate = new Date(baseDate);
                 scheduledDate.setDate(baseDate.getDate() + (i + 1) * 7);
+                const options = { year: 'numeric', month: 'long', day: 'numeric' };
                 const formattedDate = scheduledDate.toLocaleDateString('es-ES', options);
                 const li = document.createElement('li');
                 li.textContent = `Partido: ${matchNameInput} - Fecha: ${formattedDate}`;
@@ -930,6 +931,11 @@
             }
         }
         checkProfile();
+
+        // Deshabilitar el botón de programar al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('btn-schedule').disabled = true;
+        });
     </script>
 </body>
 </html>
