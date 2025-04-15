@@ -38,46 +38,68 @@
         .hero h1 { font-size: 3rem; font-weight: 700; margin-bottom: 1rem; color: #fff; }
         .hero p { font-size: 1.2rem; margin-bottom: 2rem; max-width: 700px; margin: 0 auto; line-height: 1.6; }
 
-        /* TARJETAS FLOTANTES - ESTILO VIBRANTE Y ENERGÉTICO */
+        /* TARJETAS FLOTANTES - ESTILO VIBRANTE Y ENERGÉTICO MEJORADO */
         .cards-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem; margin-top: 2rem; }
         .floating-card {
-            background-color: rgba(255, 165, 0, 0.8); /* Naranja con 80% de opacidad */
-            background-image: url('siluetas.png'); /* Reemplaza 'siluetas.png' si tu archivo tiene otro nombre o ubicación */
-            background-size: cover;
-            background-position: center;
-            backdrop-filter: blur(10px); /* Efecto de cristal esmerilado */
+            background-color: rgba(255, 165, 0, 0.85); /* Naranja ligeramente más intenso */
+            backdrop-filter: blur(12px); /* Efecto de cristal esmerilado más pronunciado */
             border-radius: 12px;
-            padding: 1.5rem;
-            width: 260px; /* Ligeramente más anchas */
+            padding: 1.75rem; /* Un poco más de espacio interior */
+            width: 260px;
             text-align: center;
-            color: #003366; /* Azul oscuro para contraste */
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Sombra más notable */
-            transition: transform 0.3s ease-in-out;
+            color: #fff; /* Texto principal en blanco para mejor contraste */
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25); /* Sombra más definida */
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Transición para la sombra también */
             cursor: pointer;
+            position: relative; /* Para posicionar la imagen de fondo */
+            overflow: hidden; /* Para que la imagen no se salga del borde */
+        }
+
+        .floating-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('siluetas.png'); /* Tu imagen con fondo transparente */
+            background-size: contain; /* Ajusta el tamaño de la imagen para que quepa dentro */
+            background-position: center top; /* Posiciona la imagen centrada en la parte superior */
+            background-repeat: no-repeat;
+            opacity: 0.6; /* Reduce la opacidad para que sea un fondo sutil */
+            transition: opacity 0.3s ease-in-out;
         }
 
         .floating-card:hover {
-            transform: scale(1.08); /* Ligeramente más grande al hacer hover */
+            transform: translateY(-5px) scale(1.03); /* Ligeramente más elevación y escala */
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3); /* Sombra más intensa al hacer hover */
+        }
+
+        .floating-card:hover::before {
+            opacity: 0.8; /* Ligeramente más visible al hacer hover */
         }
 
         .floating-card i {
-            font-size: 2rem; /* Íconos más grandes */
-            color: #fff; /* Íconos en blanco */
-            margin-bottom: 0.75rem;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4); /* Sombra para los íconos */
+            font-size: 2rem;
+            color: #fff;
+            margin-bottom: 0.5rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            position: relative; /* Para estar encima de la imagen de fondo */
         }
 
         .floating-card h3 {
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
-            color: #fff; /* Título en blanco */
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+            font-size: 1.2rem;
+            margin-bottom: 0.25rem;
+            color: #fff;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            position: relative; /* Para estar encima de la imagen de fondo */
         }
 
         .floating-card p {
             font-size: 0.9rem;
-            color: #fff; /* Descripción en blanco */
-            text-shadow: 0.5px 0.5px 1px rgba(0, 0, 0, 0.4);
+            color: #eee; /* Un tono de blanco más suave */
+            text-shadow: 0.5px 0.5px 1px rgba(0, 0, 0, 0.5);
+            position: relative; /* Para estar encima de la imagen de fondo */
         }
 
         /* Animación de titileo para el título de los partidos abiertos */
