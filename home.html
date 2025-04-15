@@ -1,784 +1,808 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Catch Up Padel - Home</title>
-  <!-- Fuente Moderna -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
-  <!-- Íconos (Font Awesome) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-  <style>
-    /* RESET Y ESTILOS GLOBALES */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Poppins', sans-serif; background-color: #f8f8f8; color: #333; }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Catch Up Padel - Home</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        /* RESET Y ESTILOS GLOBALES */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background-color: #f8f8f8; color: #333; }
 
-    /* MENÚ DE NAVEGACIÓN */
-    nav {
-      width: 100%; background-color: #fff; padding: 1rem 2rem;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    .menu-container {
-      display: flex; justify-content: space-evenly; align-items: center; flex-wrap: wrap; gap: 1rem;
-    }
-    .menu-item {
-      padding: 0.5rem 1rem; border: 2px solid #ff9500; border-radius: 8px; color: #ff9500;
-      text-transform: uppercase; font-weight: 600; letter-spacing: 1px;
-      transition: background-color 0.3s, color 0.3s; cursor: pointer; text-decoration: none;
-    }
-    .menu-item:hover { background-color: #ff9500; color: #fff; }
-    .menu-item.logout { border-color: #e74c3c; color: #e74c3c; }
-    .menu-item.logout:hover { background-color: #e74c3c; color: #fff; }
+        /* MENÚ DE NAVEGACIÓN */
+        nav {
+            width: 100%; background-color: #fff; padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .menu-container {
+            display: flex; justify-content: space-evenly; align-items: center; flex-wrap: wrap; gap: 1rem;
+        }
+        .menu-item {
+            padding: 0.75rem 1.5rem; border: 2px solid #ff9500; border-radius: 8px; color: #ff9500;
+            text-transform: uppercase; font-weight: 600; letter-spacing: 1px;
+            transition: background-color 0.3s, color 0.3s; cursor: pointer; text-decoration: none;
+        }
+        .menu-item:hover { background-color: #ff9500; color: #fff; }
+        .menu-item.logout { border-color: #e74c3c; color: #e74c3c; }
+        .menu-item.logout:hover { background-color: #e74c3c; color: #fff; }
 
-    /* SECCIÓN HERO */
-    .hero {
-      position: relative; padding: 3rem 1rem; text-align: center;
-      background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)),
-      url("https://images.unsplash.com/photo-1593341646581-529f6c49c5d1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80");
-      background-size: cover; background-position: center; color: #fff; min-height: 60vh;
-    }
-    .hero h1 { font-size: 3rem; font-weight: 700; margin-bottom: 1rem; color: #fff; }
-    .hero p { font-size: 1.2rem; margin-bottom: 2rem; max-width: 700px; margin: 0 auto; line-height: 1.6; }
+        /* SECCIÓN HERO */
+        .hero {
+            position: relative; padding: 3rem 1rem; text-align: center;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)),
+            url("https://images.unsplash.com/photo-1593341646581-529f6c49c5d1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80");
+            background-size: cover; background-position: center; color: #fff; min-height: 60vh;
+        }
+        .hero h1 { font-size: 3rem; font-weight: 700; margin-bottom: 1rem; color: #fff; }
+        .hero p { font-size: 1.2rem; margin-bottom: 2rem; max-width: 700px; margin: 0 auto; line-height: 1.6; }
 
-    /* TARJETAS FLOTANTES */
-    .cards-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-top: 2rem; }
-    .floating-card {
-      background-color: rgba(255,255,255,0.9); backdrop-filter: blur(4px); border-radius: 8px;
-      padding: 1rem; width: 220px; text-align: center; color: #333;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2); transition: transform 0.3s; cursor: pointer;
-    }
-    .floating-card:hover { transform: translateY(-5px); }
-    .floating-card h3 { font-size: 1rem; margin-bottom: 0.5rem; color: #2c3e50; }
-    .floating-card p { font-size: 0.85rem; color: #555; }
+        /* TARJETAS FLOTANTES - ESTILO VIBRANTE Y ENERGÉTICO */
+        .cards-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem; margin-top: 2rem; }
+        .floating-card {
+            background-color: rgba(255, 165, 0, 0.8); /* Naranja con 80% de opacidad */
+            background-image: url('siluetas.png'); /* Reemplaza 'siluetas.png' si tu archivo tiene otro nombre o ubicación */
+            background-size: cover;
+            background-position: center;
+            backdrop-filter: blur(10px); /* Efecto de cristal esmerilado */
+            border-radius: 12px;
+            padding: 1.5rem;
+            width: 260px; /* Ligeramente más anchas */
+            text-align: center;
+            color: #003366; /* Azul oscuro para contraste */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Sombra más notable */
+            transition: transform 0.3s ease-in-out;
+            cursor: pointer;
+        }
 
-    /* Animación de titileo para el título de los partidos abiertos */
-    @keyframes flashGreen {
-      0% { color: #2ecc71; }
-      50% { color: #a2d9ce; }
-      100% { color: #2ecc71; }
-    }
-    .blinking-title {
-      animation: flashGreen 1s infinite;
-    }
-    
-    /* SECCIONES DE BÚSQUEDA */
-    .search-partidos, .search-canchas, .search-players {
-      display: none; max-width: 1200px; margin: 2rem auto; padding: 1.5rem 2rem;
-      background-color: #fff; border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05); position: relative;
-    }
-    .search-partidos h2, .search-canchas h2, .search-players h2 {
-      font-size: 1.8rem; margin-bottom: 1rem; color: #2c3e50; text-align: center;
-    }
-    .filter-container {
-      display: flex; flex-wrap: wrap; justify-content: center; align-items: center;
-      gap: 1rem; margin-bottom: 1rem;
-    }
-    .filter-container input {
-      padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px;
-      font-size: 1rem; width: 250px;
-    }
-    .filter-container button {
-      padding: 0.75rem 1.5rem; background-color: #ff9500;
-      color: #fff; border: none; border-radius: 8px;
-      font-size: 1rem; cursor: pointer; transition: background-color 0.3s ease;
-    }
-    .filter-container button:hover { background-color: #e07e00; }
-    .close-btn, .close-btn-partidos, .close-btn-players {
-      position: absolute; top: 10px; right: 10px;
-      background: none; border: none; font-size: 1.2rem;
-      color: #999; cursor: pointer;
-    }
-    
-    /* GRID DE RESULTADOS */
-    #partidosResults, .results-container, #playersResults {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem; padding: 1rem;
-    }
-    
-    /* TARJETAS */
-    .partido-card, .card, .player-card {
-      background: linear-gradient(to bottom, #fffdf8, #ffe5cc);
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1); padding: 1.5rem;
-      transition: transform 0.3s ease;
-    }
-    .partido-card:hover, .card:hover, .player-card:hover { transform: scale(1.02); }
-    .partido-card h3, .card-header, .player-card h3 {
-      font-size: 1.3rem; color: #2c3e50; margin-bottom: 0.75rem;
-    }
-    .partido-card p, .card-content p, .player-card p {
-      font-size: 0.95rem; color: #555; margin: 0.4rem 0;
-    }
-    .card { overflow: hidden; }
-    .card-header { background: #007bff; color: #fff; padding: 10px 15px; font-size: 20px; }
-    .card-content { padding: 15px; color: #333; }
-    .map-container { width: 100%; height: 200px; border-top: 1px solid #ddd; }
-    .btn-view-partido, .btn-join, .btn-leave {
-      margin-top: 1rem; background-color: #3498db; color: #fff;
-      border: none; padding: 0.5rem 1rem; border-radius: 6px;
-      cursor: pointer; font-size: 0.9rem;
-    }
-    .btn-view-partido:hover, .btn-join:hover, .btn-leave:hover { background-color: #2980b9; }
-    .loader {
-      border: 4px solid #f3f3f3; border-top: 4px solid #007bff;
-      border-radius: 50%; width: 30px; height: 30px;
-      animation: spin 1s linear infinite; margin: 20px auto;
-    }
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    
-    /* MODAL y ANIMACIONES */
-    #matchModal {
-      display: none; position: fixed; top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.5); justify-content: center;
-      align-items: center; z-index: 1000;
-    }
-    #matchModal .modal-content {
-      background: linear-gradient(to bottom right, #ffffff, #f0f9ff);
-      border-radius: 12px; color: #333; max-width: 550px; width: 90%;
-      position: relative; box-shadow: 0 8px 16px rgba(0,0,0,0.2); padding: 20px;
-      animation: modalFade 0.4s ease-out;
-    }
-    @keyframes modalFade { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-    #matchModal .close-modal {
-      position: absolute; top: 10px; right: 10px;
-      background: none; border: none; font-size: 1.4rem;
-      cursor: pointer; color: #999;
-    }
-    #matchModal .close-modal:hover { color: #555; }
-    /* Botón de refrescar en el Modal */
-    #matchModal .btn-refresh {
-      margin-top: 1rem; background-color: #2ecc71; color: #fff;
-      border: none; padding: 0.5rem 1rem; border-radius: 6px;
-      cursor: pointer; font-size: 0.9rem;
-    }
-    #matchModal .btn-refresh:hover { background-color: #27ae60; }
-    
-    /* LISTA DE PARTICIPANTES */
-    #modalContent ul { list-style: none; margin: 0; padding: 0; }
-    #modalContent li { margin-bottom: 10px; display: flex; align-items: center; }
-    #modalContent li img {
-      width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;
-      object-fit: cover; border: 2px solid #ddd;
-    }
-    #modalContent h2 { margin-bottom: 12px; font-size: 1.8rem; color: #2980b9; text-align: center; }
-    #modalContent p { margin-bottom: 10px; font-size: 1rem; color: #555; }
-    #modalContent h3 { margin-top: 14px; font-size: 1.2rem; color: #2c3e50; margin-bottom: 8px; }
-    .participants-list-container {
-      background: #fafafa; border-radius: 8px; padding: 10px;
-      margin-bottom: 10px; border: 1px solid #eee;
-    }
-    .missing-players { font-weight: 600; color: #e74c3c; text-align: center; }
-    .cancelled { text-decoration: line-through; color: #888; }
-    
-    /* Miniaturas de participantes en la tarjeta */
-    .participants-avatars {
-      display: flex; gap: 5px; margin-top: 10px; flex-wrap: wrap;
-    }
-    .participants-avatars img {
-      width: 32px; height: 32px; border-radius: 50%;
-      border: 1px solid #ddd; object-fit: cover;
-    }
-  </style>
+        .floating-card:hover {
+            transform: scale(1.08); /* Ligeramente más grande al hacer hover */
+        }
+
+        .floating-card i {
+            font-size: 2rem; /* Íconos más grandes */
+            color: #fff; /* Íconos en blanco */
+            margin-bottom: 0.75rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4); /* Sombra para los íconos */
+        }
+
+        .floating-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: #fff; /* Título en blanco */
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+        }
+
+        .floating-card p {
+            font-size: 0.9rem;
+            color: #fff; /* Descripción en blanco */
+            text-shadow: 0.5px 0.5px 1px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Animación de titileo para el título de los partidos abiertos */
+        @keyframes flashGreen {
+            0% { color: #2ecc71; }
+            50% { color: #a2d9ce; }
+            100% { color: #2ecc71; }
+        }
+        .blinking-title {
+            animation: flashGreen 1s infinite;
+        }
+
+        /* SECCIONES DE BÚSQUEDA */
+        .search-partidos, .search-canchas, .search-players {
+            display: none; max-width: 1200px; margin: 2rem auto; padding: 1.5rem 2rem;
+            background-color: #fff; border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05); position: relative;
+        }
+        .search-partidos h2, .search-canchas h2, .search-players h2 {
+            font-size: 1.8rem; margin-bottom: 1rem; color: #2c3e50; text-align: center;
+        }
+        .filter-container {
+            display: flex; flex-wrap: wrap; justify-content: center; align-items: center;
+            gap: 1rem; margin-bottom: 1rem;
+        }
+        .filter-container input {
+            padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px;
+            font-size: 1rem; width: 250px;
+        }
+        .filter-container button {
+            padding: 0.75rem 1.5rem; background-color: #ff9500;
+            color: #fff; border: none; border-radius: 8px;
+            font-size: 1rem; cursor: pointer; transition: background-color 0.3s ease;
+        }
+        .filter-container button:hover { background-color: #e07e00; }
+        .close-btn, .close-btn-partidos, .close-btn-players {
+            position: absolute; top: 10px; right: 10px;
+            background: none; border: none; font-size: 1.2rem;
+            color: #999; cursor: pointer;
+        }
+
+        /* GRID DE RESULTADOS */
+        #partidosResults, .results-container, #playersResults {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem; padding: 1rem;
+        }
+
+        /* TARJETAS */
+        .partido-card, .card, .player-card {
+            background: linear-gradient(to bottom, #fffdf8, #ffe5cc);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1); padding: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+        .partido-card:hover, .card:hover, .player-card:hover { transform: scale(1.02); }
+        .partido-card h3, .card-header, .player-card h3 {
+            font-size: 1.3rem; color: #2c3e50; margin-bottom: 0.75rem;
+        }
+        .partido-card p, .card-content p, .player-card p {
+            font-size: 0.95rem; color: #555; margin: 0.4rem 0;
+        }
+        .card { overflow: hidden; }
+        .card-header { background: #007bff; color: #fff; padding: 10px 15px; font-size: 20px; }
+        .card-content { padding: 15px; color: #333; }
+        .map-container { width: 100%; height: 200px; border-top: 1px solid #ddd; }
+        .btn-view-partido, .btn-join, .btn-leave {
+            margin-top: 1rem; background-color: #3498db; color: #fff;
+            border: none; padding: 0.5rem 1rem; border-radius: 6px;
+            cursor: pointer; font-size: 0.9rem;
+        }
+        .btn-view-partido:hover, .btn-join:hover, .btn-leave:hover { background-color: #2980b9; }
+        .loader {
+            border: 4px solid #f3f3f3; border-top: 4px solid #007bff;
+            border-radius: 50%; width: 30px; height: 30px;
+            animation: spin 1s linear infinite; margin: 20px auto;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* MODAL y ANIMACIONES */
+        #matchModal {
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.5); justify-content: center;
+            align-items: center; z-index: 1000;
+        }
+        #matchModal .modal-content {
+            background: linear-gradient(to bottom right, #ffffff, #f0f9ff);
+            border-radius: 12px; color: #333; max-width: 550px; width: 90%;
+            position: relative; box-shadow: 0 8px 16px rgba(0,0,0,0.2); padding: 20px;
+            animation: modalFade 0.4s ease-out;
+        }
+        @keyframes modalFade { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        #matchModal .close-modal {
+            position: absolute; top: 10px; right: 10px;
+            background: none; border: none; font-size: 1.4rem;
+            cursor: pointer; color: #999;
+        }
+        #matchModal .close-modal:hover { color: #555; }
+        /* Botón de refrescar en el Modal */
+        #matchModal .btn-refresh {
+            margin-top: 1rem; background-color: #2ecc71; color: #fff;
+            border: none; padding: 0.5rem 1rem; border-radius: 6px;
+            cursor: pointer; font-size: 0.9rem;
+        }
+        #matchModal .btn-refresh:hover { background-color: #27ae60; }
+
+        /* LISTA DE PARTICIPANTES */
+        #modalContent ul { list-style: none; margin: 0; padding: 0; }
+        #modalContent li { margin-bottom: 10px; display: flex; align-items: center; }
+        #modalContent li img {
+            width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;
+            object-fit: cover; border: 2px solid #ddd;
+        }
+        #modalContent h2 { margin-bottom: 12px; font-size: 1.8rem; color: #2980b9; text-align: center; }
+        #modalContent p { margin-bottom: 10px; font-size: 1rem; color: #555; }
+        #modalContent h3 { margin-top: 14px; font-size: 1.2rem; color: #2c3e50; margin-bottom: 8px; }
+        .participants-list-container {
+            background: #fafafa; border-radius: 8px; padding: 10px;
+            margin-bottom: 10px; border: 1px solid #eee;
+        }
+        .missing-players { font-weight: 600; color: #e74c3c; text-align: center; }
+        .cancelled { text-decoration: line-through; color: #888; }
+
+        /* Miniaturas de participantes en la tarjeta */
+        .participants-avatars {
+            display: flex; gap: 5px; margin-top: 10px; flex-wrap: wrap;
+        }
+        .participants-avatars img {
+            width: 32px; height: 32px; border-radius: 50%;
+            border: 1px solid #ddd; object-fit: cover;
+        }
+    </style>
 </head>
 <body>
-  <!-- MENÚ DE NAVEGACIÓN -->
-  <nav>
-    <div class="menu-container">
-      <a href="perfil.html" class="menu-item" id="profileLink">Crear Perfil</a>
-      <a href="#" class="menu-item" id="partidosButton">Partidos</a>
-      <a href="#" class="menu-item" id="canchasButton" ondblclick="window.location.href='establecimiento.html'">Canchas</a>
-      <a href="#" class="menu-item" id="pistasButton" ondblclick="window.location.href='pistas.html'">Pistas</a>
-      <a href="#" class="menu-item" id="jugadoresButton" onclick="showPlayersSection()">Conoce Jugadores</a>
-      <a href="#" class="menu-item logout" id="logoutButton" onclick="logout()">Cerrar Sesión</a>
-    </div>
-  </nav>
-  
-  <!-- SECCIÓN HERO -->
-  <section class="hero">
-    <h1>Bienvenido a Catch Up Padel</h1>
-    <p>Conecta con jugadores de pádel cerca de ti y disfruta del mejor deporte en comunidad.</p>
-    <div class="cards-container">
-      <div class="floating-card" onclick="showCanchaSearch()">
-        <h3>Buscar Canchas</h3>
-        <p>Descubre canchas cercanas</p>
-      </div>
-      <div class="floating-card" ondblclick="window.location.href='partidos.html'">
-        <h3>Programa Partidos</h3>
-        <p>Crea y únete a juegos</p>
-      </div>
-      <div class="floating-card" onclick="showPlayersSection()">
-        <h3>Conoce Jugadores</h3>
-        <p>Haz clic para buscar</p>
-      </div>
-      <div class="floating-card" onclick="showPartidosSearch()">
-        <h3>Buscar Partidos Abiertos</h3>
-        <p>Partidos futuros con cupos disponibles</p>
-      </div>
-    </div>
-  </section>
-  
-  <!-- SECCIÓN PARTIDOS ABIERTOS -->
-  <div class="search-partidos" id="searchPartidosSection">
-    <button class="close-btn-partidos" onclick="closePartidosSearch()">X</button>
-    <h2>Partidos Abiertos</h2>
-    <div class="filter-container">
-      <input type="text" id="filterLocality" placeholder="Ej. Buenos Aires" />
-      <button id="btn-filter-partidos">Filtrar</button>
-    </div>
-    <div id="partidosResults"></div>
-  </div>
-  
-  <!-- SECCIÓN BUSCAR CANCHAS -->
-  <div class="search-canchas" id="searchCanchasSection">
-    <button class="close-btn" onclick="closeCanchaSearch()">X</button>
-    <h2>Buscar Canchas</h2>
-    <div class="filter-container">
-      <input type="text" id="filterCanchasName" placeholder="Nombre" list="namesList" />
-      <datalist id="namesList"></datalist>
-      <input type="text" id="filterCanchasLocality" placeholder="Localidad" list="localityList" />
-      <datalist id="localityList"></datalist>
-      <button id="btn-filter-canchas">Buscar Canchas</button>
-    </div>
-    <div id="canchasFeedback"></div>
-    <div class="results-container" id="canchasResults"></div>
-  </div>
-  
-  <!-- SECCIÓN BUSCAR JUGADORES -->
-  <div class="search-players" id="searchPlayersSection">
-    <button class="close-btn-players" onclick="closePlayersSection()">X</button>
-    <h2>Buscar Jugadores</h2>
-    <div class="filter-container">
-      <input type="text" id="filterPlayersName" placeholder="Nombre y Apellido" list="namesListPlayers" />
-      <datalist id="namesListPlayers"></datalist>
-      <input type="text" id="filterPlayersGameLevel" placeholder="Nivel de juego" list="gameLevelListPlayers" />
-      <datalist id="gameLevelListPlayers"></datalist>
-      <input type="text" id="filterPlayersLocality" placeholder="Localidad" list="localityListPlayers" />
-      <datalist id="localityListPlayers"></datalist>
-      <button id="btn-filter-players">Buscar Jugadores</button>
-    </div>
-    <div id="playersFeedback"></div>
-    <div id="playersResults"></div>
-  </div>
-  
-  <!-- MODAL PARA DETALLES DEL PARTIDO -->
-  <div id="matchModal">
-    <div class="modal-content">
-      <button class="close-modal" onclick="closeModal()">
-        <i class="fas fa-times"></i>
-      </button>
-      <!-- Botón para refrescar el modal -->
-      <button class="btn-refresh" onclick="refreshModal()">Refrescar</button>
-      <div id="modalContent"></div>
-    </div>
-  </div>
-  
-  <!-- FOOTER -->
-  <footer style="text-align:center; padding:1rem 0; background:#fff; margin-top:2rem;">
-    © 2025 Catch Up Padel. Todos los derechos reservados.
-  </footer>
-  
-  <!-- SUPABASE -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-  <script>
-    const SUPABASE_URL = "https://idlvxinjfbsujpvxncbr.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig";
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    
-    let loggedUser = null;
-    let allEstablishments = [];
-    
-    async function logout() {
-      await supabaseClient.auth.signOut();
-      window.location.href = "index.html";
-    }
-    
-    async function checkProfile() {
-      const profileLink = document.getElementById("profileLink");
-      const { data: { session } } = await supabaseClient.auth.getSession();
-      if (session && session.user) {
-        const userId = session.user.id;
-        const { data: profileData, error } = await supabaseClient
-          .from("profiles")
-          .select("*")
-          .eq("id", userId);
-        if (!error && profileData && profileData.length > 0) {
-          profileLink.textContent = "Modificar Perfil";
-          document.getElementById("canchasButton").style.display = "none";
-          document.getElementById("pistasButton").style.display = "none";
-        } else {
-          profileLink.style.display = "none";
-          document.getElementById("partidosButton").style.display = "none";
-          document.getElementById("jugadoresButton").style.display = "none";
-        }
-        loggedUser = { id: userId, email: session.user.email };
-      }
-    }
-    
-    async function preloadEstablishments() {
-      const { data, error } = await supabaseClient.from("establishments").select("*");
-      if (error) { console.error("Error cargando establecimientos:", error.message); return; }
-      allEstablishments = data;
-      const namesSet = new Set(), localitiesSet = new Set();
-      data.forEach(item => {
-        if(item.name) namesSet.add(item.name);
-        if(item.locality) localitiesSet.add(item.locality);
-      });
-      const namesList = document.getElementById("namesList");
-      namesList.innerHTML = "";
-      namesSet.forEach(name => {
-        const option = document.createElement("option");
-        option.value = name;
-        namesList.appendChild(option);
-      });
-      const localityList = document.getElementById("localityList");
-      localityList.innerHTML = "";
-      localitiesSet.forEach(loc => {
-        const option = document.createElement("option");
-        option.value = loc;
-        localityList.appendChild(option);
-      });
-    }
-    
-    async function preloadPlayersData() {
-      const { data, error } = await supabaseClient.from("profiles").select("*");
-      if (error) { console.error("Error cargando jugadores:", error.message); return; }
-      const namesSet = new Set(), gameLevelsSet = new Set(), localitiesSet = new Set();
-      data.forEach(player => {
-        if(player.full_name) namesSet.add(player.full_name);
-        if(player.game_level) gameLevelsSet.add(player.game_level);
-        if(player.locality) localitiesSet.add(player.locality);
-      });
-      const namesListPlayers = document.getElementById("namesListPlayers");
-      namesListPlayers.innerHTML = "";
-      namesSet.forEach(name => {
-        const option = document.createElement("option");
-        option.value = name;
-        namesListPlayers.appendChild(option);
-      });
-      const gameLevelListPlayers = document.getElementById("gameLevelListPlayers");
-      gameLevelListPlayers.innerHTML = "";
-      gameLevelsSet.forEach(level => {
-        const option = document.createElement("option");
-        option.value = level;
-        gameLevelListPlayers.appendChild(option);
-      });
-      const localityListPlayers = document.getElementById("localityListPlayers");
-      localityListPlayers.innerHTML = "";
-      localitiesSet.forEach(loc => {
-        const option = document.createElement("option");
-        option.value = loc;
-        localityListPlayers.appendChild(option);
-      });
-    }
-    
-    function hideAllSections() {
-      document.getElementById("searchPartidosSection").style.display = "none";
-      document.getElementById("searchCanchasSection").style.display = "none";
-      document.getElementById("searchPlayersSection").style.display = "none";
-    }
-    
-    function showPartidosSearch() {
-      hideAllSections();
-      document.getElementById("searchPartidosSection").style.display = "block";
-      document.getElementById("filterLocality").value = "";
-      document.getElementById("partidosResults").innerHTML = "";
-    }
-    function closePartidosSearch() {
-      document.getElementById("searchPartidosSection").style.display = "none";
-      document.getElementById("filterLocality").value = "";
-      document.getElementById("partidosResults").innerHTML = "";
-    }
-    document.getElementById("btn-filter-partidos").addEventListener("click", () => {
-      const filterLocality = document.getElementById("filterLocality").value.trim();
-      loadOpenPartidos(filterLocality);
-    });
-    
-    async function loadOpenPartidos(localityFilter = "") {
-      const partidosResults = document.getElementById("partidosResults");
-      partidosResults.innerHTML = "";
-      const todayISO = new Date().toISOString().slice(0, 10);
-      let query = supabaseClient.from("partidos")
-        .select("*, establishments(name, locality), participants(user_id, cancelled, leave_reason)")
-        .gte("match_date", todayISO)
-        .neq("completitud", "Completo");
-      if (localityFilter) { query = query.ilike("establishments.locality", `%${localityFilter}%`); }
-      const { data, error } = await query;
-      if (error) {
-        console.error("Error buscando partidos abiertos:", error.message);
-        partidosResults.innerHTML = `<p style="color:red;">Error: ${error.message}</p>`;
-        return;
-      }
-      if (!data || data.length === 0) {
-        partidosResults.innerHTML = "<p>No se encontraron partidos abiertos.</p>";
-        return;
-      }
-      const matchesMap = {};
-      data.forEach(partido => { matchesMap[partido.id] = partido; });
-      
-      // Para cada partido, se construye la tarjeta y se añaden las miniaturas de los participantes activos.
-      for (let partido of Object.values(matchesMap)) {
-        const activeParticipants = partido.participants ? partido.participants.filter(p => !p.cancelled) : [];
-        const joinedCount = activeParticipants.length;
-        const totalPlayers = partido.total_players || 4;
-        const missing = totalPlayers - joinedCount;
-    
-        // Construir miniaturas de participantes activos
-        let avatarsHTML = "";
-        if (activeParticipants.length > 0) {
-          const userIds = activeParticipants.map(p => p.user_id);
-          const { data: userProfiles } = await supabaseClient
-            .from("profiles")
-            .select("id, profile_pic")
-            .in("id", userIds);
-          if (userProfiles && userProfiles.length > 0) {
-            const maxToShow = 4;
-            const partialProfiles = userProfiles.slice(0, maxToShow);
-            partialProfiles.forEach(profile => {
-              const pic = profile.profile_pic || "https://via.placeholder.com/32";
-              avatarsHTML += `<img src="${pic}" alt="Foto" />`;
-            });
-            if (userProfiles.length > maxToShow) {
-              const extraCount = userProfiles.length - maxToShow;
-              avatarsHTML += `<span style="font-size:0.85rem; color:#666;">+${extraCount} más</span>`;
-            }
-          }
-        }
-    
-        // La modificación: el título ahora lleva la clase "blinking-title" para animar su color.
-        const card = document.createElement("div");
-        card.className = "partido-card";
-        card.innerHTML = `
-          <h3 class="blinking-title">${partido.match_name}</h3>
-          <div class="icon-text">
-            <i class="fas fa-calendar-alt"></i>
-            <p class="highlight">${partido.match_date}</p>
-          </div>
-          <div class="icon-text">
-            <i class="fas fa-clock"></i>
-            <p>${partido.start_time} - ${partido.end_time}</p>
-          </div>
-          <p>Cancha: ${partido.establishments ? partido.establishments.name : ""}</p>
-          <p>Localidad: ${partido.establishments ? partido.establishments.locality : ""}</p>
-          <div class="divider"></div>
-          <div class="icon-text">
-            <i class="fas fa-table-tennis-paddle-ball"></i>
-            <p><span class="highlight">Nivel:</span> ${partido.match_level}</p>
-          </div>
-          <p class="highlight">Faltan ${missing} jugadores de ${totalPlayers}</p>
-          <div class="participants-avatars">${avatarsHTML}</div>
-          <button class="btn-view-partido">Ver el Partido</button>
-        `;
-        const viewButton = card.querySelector(".btn-view-partido");
-        viewButton.addEventListener("click", () => { showModal(partido); });
-        partidosResults.appendChild(card);
-      }
-    }
-    
-    // Función para refrescar la información del partido
-    async function refreshMatch(matchId) {
-      const { data, error } = await supabaseClient
-        .from("partidos")
-        .select("*, establishments(name, locality), participants(user_id, cancelled, leave_reason)")
-        .eq("id", matchId)
-        .single();
-      if (error) {
-        alert("Error actualizando partido: " + error.message);
-        return null;
-      }
-      return data;
-    }
-    
-    // Botón "Refrescar" en el modal
-    async function refreshModal() {
-      const modalContent = document.getElementById("modalContent");
-      const currentMatchId = modalContent.getAttribute("data-match-id");
-      if (!currentMatchId) {
-        alert("No se pudo refrescar, intente nuevamente.");
-        return;
-      }
-      const refreshed = await refreshMatch(currentMatchId);
-      showModal(refreshed);
-    }
-    
-    // Función de espera
-    function wait(ms) {
-      return new Promise(resolve => setTimeout(resolve, ms));
-    }
-    
-    // Función para mostrar el modal con información actualizada del partido
-    async function showModal(partido) {
-      await wait(300);
-      const updatedPartido = await refreshMatch(partido.id);
-      if (!updatedPartido) return;
-    
-      const modal = document.getElementById("matchModal");
-      const modalContent = document.getElementById("modalContent");
-      modalContent.setAttribute("data-match-id", updatedPartido.id);
-    
-      const activeParticipants = updatedPartido.participants ? updatedPartido.participants.filter(p => !p.cancelled) : [];
-      const joinedCount = activeParticipants.length;
-      const totalPlayers = updatedPartido.total_players || 4;
-      const missing = totalPlayers - joinedCount;
-    
-      // Obtención de detalles de participantes (todos)
-      let userIds = [];
-      if (updatedPartido.participants) {
-        userIds = updatedPartido.participants.map(p => p.user_id);
-      }
-      let participantListHTML = `<div class="participants-list-container"><ul>`;
-      if (userIds.length > 0) {
-        const { data: userProfiles } = await supabaseClient
-          .from("profiles")
-          .select("id, full_name, profile_pic")
-          .in("id", userIds);
-        if (userProfiles && userProfiles.length > 0) {
-          userProfiles.forEach(usr => {
-            const rec = updatedPartido.participants.find(r => r.user_id === usr.id);
-            let styleName = "";
-            let reasonText = "";
-            if (rec && rec.cancelled) {
-              styleName = "cancelled";
-              if (rec.leave_reason) {
-                reasonText = ` - (${rec.leave_reason})`;
-              }
-            }
-            participantListHTML += `
-              <li>
-                <img src="${usr.profile_pic || "https://via.placeholder.com/40"}" alt="Foto de ${usr.full_name}" />
-                <span class="${styleName}">${usr.full_name}${reasonText}</span>
-              </li>
-            `;
-          });
-        } else {
-          participantListHTML += "<li>No hay jugadores apuntados.</li>";
-        }
-      } else {
-        participantListHTML += "<li>No hay jugadores apuntados.</li>";
-      }
-      participantListHTML += "</ul></div>";
-    
-      modalContent.innerHTML = `
-        <h2>${updatedPartido.match_name}</h2>
-        <p><strong>Fecha:</strong> ${updatedPartido.match_date}</p>
-        <p><strong>Hora:</strong> ${updatedPartido.start_time} - ${updatedPartido.end_time}</p>
-        <p><strong>Cancha:</strong> ${updatedPartido.establishments ? updatedPartido.establishments.name : ""}</p>
-        <p><strong>Localidad:</strong> ${updatedPartido.establishments ? updatedPartido.establishments.locality : ""}</p>
-        <p><strong>Nivel:</strong> ${updatedPartido.match_level}</p>
-        <h3>Jugadores Apuntados:</h3>
-        ${participantListHTML}
-        <p class="missing-players">Faltan ${missing} jugadores de ${totalPlayers} totales</p>
-      `;
-    
-      const userRecord = updatedPartido.participants && loggedUser
-        ? updatedPartido.participants.find(p => p.user_id === loggedUser.id)
-        : null;
-    
-      if (!userRecord) {
-        const joinButton = document.createElement("button");
-        joinButton.className = "btn-join";
-        joinButton.textContent = "Unirse";
-        joinButton.addEventListener("click", async () => {
-          await joinMatch(updatedPartido.id);
-          const refreshed = await refreshMatch(updatedPartido.id);
-          showModal(refreshed);
-        });
-        modalContent.appendChild(joinButton);
-      }
-      else if (userRecord && !userRecord.cancelled) {
-        const info = document.createElement("p");
-        info.textContent = "Ya estás apuntado a este partido.";
-        modalContent.appendChild(info);
-        const leaveButton = document.createElement("button");
-        leaveButton.className = "btn-leave";
-        leaveButton.textContent = "Darse de baja";
-        leaveButton.addEventListener("click", async () => {
-          let explanation = prompt("Ingresa un motivo (máx. 50 caracteres):");
-          if (explanation === null) return;
-          if (explanation.length > 50) {
-            alert("El motivo debe tener 50 caracteres o menos.");
-            return;
-          }
-          await leaveMatch(updatedPartido.id, explanation);
-          const refreshed = await refreshMatch(updatedPartido.id);
-          showModal(refreshed);
-        });
-        modalContent.appendChild(leaveButton);
-      }
-      else if (userRecord && userRecord.cancelled) {
-        const info = document.createElement("p");
-        info.textContent = "Ya te has dado de baja de este partido.";
-        modalContent.appendChild(info);
-      }
-    
-      modal.style.display = "flex";
-    }
-    
-    function closeModal() {
-      document.getElementById("matchModal").style.display = "none";
-    }
-    
-    async function joinMatch(matchId) {
-      await new Promise(resolve => setTimeout(resolve, 300));
-      const { data, error } = await supabaseClient
-        .from("participants")
-        .insert([{ match_id: matchId, user_id: loggedUser.id }]);
-      if (error) {
-        alert("Error al unirse: " + error.message);
-      } else {
-        alert("Te has unido al partido");
-      }
-    }
-    
-    async function leaveMatch(matchId, explanation) {
-      await new Promise(resolve => setTimeout(resolve, 300));
-      const { data, error } = await supabaseClient
-        .from("participants")
-        .update({ cancelled: true, leave_reason: explanation })
-        .match({ match_id: matchId, user_id: loggedUser.id });
-      if (error) {
-        alert("Error al darse de baja: " + error.message);
-      } else {
-        alert("Has cancelado tu participación en el partido");
-      }
-    }
-    
-    function showCanchaSearch() {
-      hideAllSections();
-      document.getElementById("searchCanchasSection").style.display = "block";
-      document.getElementById("filterCanchasName").value = "";
-      document.getElementById("filterCanchasLocality").value = "";
-      document.getElementById("canchasResults").innerHTML = "";
-      document.getElementById("canchasFeedback").innerHTML = "";
-    }
-    function closeCanchaSearch() {
-      document.getElementById("searchCanchasSection").style.display = "none";
-      document.getElementById("filterCanchasName").value = "";
-      document.getElementById("filterCanchasLocality").value = "";
-      document.getElementById("canchasResults").innerHTML = "";
-      document.getElementById("canchasFeedback").innerHTML = "";
-    }
-    document.getElementById("btn-filter-canchas").addEventListener("click", () => {
-      const nameFilter = document.getElementById("filterCanchasName").value.trim();
-      const localityFilter = document.getElementById("filterCanchasLocality").value.trim();
-      loadCanchas(nameFilter, localityFilter);
-    });
-    async function loadCanchas(nameFilter = "", localityFilter = "") {
-      const canchasResults = document.getElementById("canchasResults");
-      const canchasFeedback = document.getElementById("canchasFeedback");
-      canchasResults.innerHTML = "";
-      canchasFeedback.innerHTML = "";
-      showCanchasLoader();
-      let query = supabaseClient.from("establishments").select("*");
-      if (nameFilter) { query = query.ilike("name", `%${nameFilter}%`); }
-      if (localityFilter) { query = query.ilike("locality", `%${localityFilter}%`); }
-      const { data, error } = await query;
-      clearCanchasLoader();
-      if (error) {
-        canchasFeedback.innerHTML = `<p style="color:red;">Error: ${error.message}</p>`;
-        return;
-      }
-      if (!data || data.length === 0) {
-        canchasResults.innerHTML = '<p style="text-align:center; width:100%;">No se encontraron canchas para los criterios ingresados.</p>';
-        return;
-      }
-      data.forEach(c => {
-        const card = document.createElement("div");
-        card.className = "card";
-        const header = document.createElement("div");
-        header.className = "card-header";
-        header.textContent = c.name;
-        card.appendChild(header);
-        const content = document.createElement("div");
-        content.className = "card-content";
-        content.innerHTML = `
-          <p><strong>Localidad:</strong> ${c.locality}</p>
-          <p><strong>Dirección:</strong> ${c.address}</p>
-          <p><strong>Cantidad de Canchas:</strong> ${c.court_count}</p>
-        `;
-        card.appendChild(content);
-        const mapContainer = document.createElement("div");
-        mapContainer.className = "map-container";
-        const mapURL = `https://maps.google.com/maps?q=${c.latitude},${c.longitude}&hl=es&z=14&output=embed`;
-        mapContainer.innerHTML = `<iframe src="${mapURL}" width="100%" height="100%" frameborder="0" style="border:0" allowfullscreen></iframe>`;
-        card.appendChild(mapContainer);
-        canchasResults.appendChild(card);
-      });
-    }
-    function showCanchasLoader() { document.getElementById("canchasFeedback").innerHTML = '<div class="loader"></div>'; }
-    function clearCanchasLoader() { document.getElementById("canchasFeedback").innerHTML = ""; }
-    
-    function showPlayersSection() {
-      hideAllSections();
-      document.getElementById("searchPlayersSection").style.display = "block";
-      document.getElementById("filterPlayersName").value = "";
-      document.getElementById("filterPlayersGameLevel").value = "";
-      document.getElementById("filterPlayersLocality").value = "";
-      document.getElementById("playersResults").innerHTML = "";
-      document.getElementById("playersFeedback").innerHTML = "";
-    }
-    function closePlayersSection() {
-      document.getElementById("searchPlayersSection").style.display = "none";
-      document.getElementById("filterPlayersName").value = "";
-      document.getElementById("filterPlayersGameLevel").value = "";
-      document.getElementById("filterPlayersLocality").value = "";
-      document.getElementById("playersResults").innerHTML = "";
-      document.getElementById("playersFeedback").innerHTML = "";
-    }
-    document.getElementById("btn-filter-players").addEventListener("click", () => {
-      const nameFilter = document.getElementById("filterPlayersName").value.trim();
-      const gameLevelFilter = document.getElementById("filterPlayersGameLevel").value.trim();
-      const localityFilter = document.getElementById("filterPlayersLocality").value.trim();
-      loadPlayers(nameFilter, gameLevelFilter, localityFilter);
-    });
-    async function loadPlayers(nameFilter = "", gameLevelFilter = "", localityFilter = "") {
-      const playersResults = document.getElementById("playersResults");
-      const playersFeedback = document.getElementById("playersFeedback");
-      playersResults.innerHTML = "";
-      playersFeedback.innerHTML = "";
-      let query = supabaseClient.from("profiles").select("*");
-      if (nameFilter) { query = query.ilike("full_name", `%${nameFilter}%`); }
-      if (gameLevelFilter) { query = query.ilike("game_level", `%${gameLevelFilter}%`); }
-      if (localityFilter) { query = query.ilike("locality", `%${localityFilter}%`); }
-      const { data, error } = await query;
-      if (error) {
-        playersFeedback.innerHTML = `<p style="color:red;">Error: ${error.message}</p>`;
-        return;
-      }
-      if (!data || data.length === 0) {
-        playersResults.innerHTML = '<p style="text-align:center; width:100%;">No se encontraron jugadores.</p>';
-        return;
-      }
-      data.forEach(player => {
-        const card = document.createElement("div");
-        card.className = "player-card";
-        card.innerHTML = `
-          <div style="display:flex; align-items:center; gap:1rem;">
-            <img src="${player.profile_pic || "https://via.placeholder.com/100"}" alt="Foto de perfil" style="width:100px; height:100px; border-radius:50%; object-fit: cover;" />
-            <div>
-              <h3>${player.full_name}</h3>
-              <p><strong>Edad:</strong> ${player.age || "N/D"}</p>
-              <p><strong>Sexo:</strong> ${player.gender || "N/D"}</p>
-              <p><strong>Nivel de juego:</strong> ${player.game_level || "N/D"}</p>
-              <p><strong>Localidad:</strong> ${player.locality || "N/D"}</p>
-              <p><strong>Teléfono:</strong> ${player.phone || "N/D"}</p>
+    <nav>
+        <div class="menu-container">
+            <a href="perfil.html" class="menu-item" id="profileLink">Crear Perfil</a>
+            <a href="#" class="menu-item" id="partidosButton">Partidos</a>
+            <a href="#" class="menu-item" id="canchasButton" ondblclick="window.location.href='establecimiento.html'">Canchas</a>
+            <a href="#" class="menu-item" id="pistasButton" ondblclick="window.location.href='pistas.html'">Pistas</a>
+            <a href="#" class="menu-item" id="jugadoresButton" onclick="showPlayersSection()"><i class="fas fa-users"></i> Conoce Jugadores</a>
+            <a href="#" class="menu-item logout" id="logoutButton" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <h1>Bienvenido a Catch Up Padel</h1>
+        <p>Conecta con jugadores de pádel cerca de ti y disfruta del mejor deporte en comunidad.</p>
+        <div class="cards-container">
+            <div class="floating-card" onclick="showCanchaSearch()">
+                <i class="fas fa-map-marker-alt"></i>
+                <h3>Buscar Canchas</h3>
+                <p>Descubre canchas cercanas</p>
             </div>
-          </div>
-        `;
-        playersResults.appendChild(card);
-      });
-    }
-    
-    document.addEventListener("DOMContentLoaded", async () => {
-      await checkProfile();
-      await preloadEstablishments();
-      await preloadPlayersData();
-      if (loggedUser && document.getElementById("partidosButton").style.display !== "none") {
-        document.getElementById("searchPartidosSection").style.display = "block";
-        loadOpenPartidos();
-      }
-    });
-  </script>
+            <div class="floating-card" ondblclick="window.location.href='partidos.html'">
+                <i class="fas fa-calendar-plus"></i>
+                <h3>Programa Partidos</h3>
+                <p>Crea y únete a juegos</p>
+            </div>
+            <div class="floating-card" onclick="showPlayersSection()">
+                <i class="fas fa-handshake"></i>
+                <h3>Conoce Jugadores</h3>
+                <p>Haz clic para buscar</p>
+            </div>
+            <div class="floating-card" onclick="showPartidosSearch()">
+                <i class="fas fa-search"></i>
+                <h3>Buscar Partidos Abiertos</h3>
+                <p>Partidos futuros con cupos disponibles</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="search-partidos" id="searchPartidosSection">
+        <button class="close-btn-partidos" onclick="closePartidosSearch()">X</button>
+        <h2>Partidos Abiertos</h2>
+        <div class="filter-container">
+            <input type="text" id="filterLocality" placeholder="Ej. Buenos Aires" />
+            <button id="btn-filter-partidos">Filtrar</button>
+        </div>
+        <div id="partidosResults"></div>
+    </div>
+
+    <div class="search-canchas" id="searchCanchasSection">
+        <button class="close-btn" onclick="closeCanchaSearch()">X</button>
+        <h2>Buscar Canchas</h2>
+        <div class="filter-container">
+            <input type="text" id="filterCanchasName" placeholder="Nombre" list="namesList" />
+            <datalist id="namesList"></datalist>
+            <input type="text" id="filterCanchasLocality" placeholder="Localidad" list="localityList" />
+            <datalist id="localityList"></datalist>
+            <button id="btn-filter-canchas">Buscar Canchas</button>
+        </div>
+        <div id="canchasFeedback"></div>
+        <div class="results-container" id="canchasResults"></div>
+    </div>
+
+    <div class="search-players" id="searchPlayersSection">
+        <button class="close-btn-players" onclick="closePlayersSection()">X</button>
+        <h2>Buscar Jugadores</h2>
+        <div class="filter-container">
+            <input type="text" id="filterPlayersName" placeholder="Nombre y Apellido" list="namesListPlayers" />
+            <datalist id="namesListPlayers"></datalist>
+            <input type="text" id="filterPlayersGameLevel" placeholder="Nivel de juego" list="gameLevelListPlayers" />
+            <datalist id="gameLevelListPlayers"></datalist>
+            <input type="text" id="filterPlayersLocality" placeholder="Localidad" list="localityListPlayers" />
+            <datalist id="localityListPlayers"></datalist>
+            <button id="btn-filter-players">Buscar Jugadores</button>
+        </div>
+        <div id="playersFeedback"></div>
+        <div id="playersResults"></div>
+    </div>
+
+    <div id="matchModal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <button class="btn-refresh" onclick="refreshModal()">Refrescar</button>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <footer style="text-align:center; padding:1rem 0; background:#fff; margin-top:2rem;">
+        © 2025 Catch Up Padel. Todos los derechos reservados.
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script>
+        const SUPABASE_URL = "https://idlvxinjfbsujpvxncbr.supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig";
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let loggedUser = null;
+        let allEstablishments = [];
+
+        async function logout() {
+            await supabaseClient.auth.signOut();
+            window.location.href = "index.html";
+        }
+
+        async function checkProfile() {
+            const profileLink = document.getElementById("profileLink");
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (session && session.user) {
+                const userId = session.user.id;
+                const { data: profileData, error } = await supabaseClient
+                    .from("profiles")
+                    .select("*")
+                    .eq("id", userId);
+                if (!error && profileData && profileData.length > 0) {
+                    profileLink.textContent = "Modificar Perfil";
+                    document.getElementById("canchasButton").style.display = "none";
+                    document.getElementById("pistasButton").style.display = "none";
+                } else {
+                    profileLink.style.display = "none";
+                    document.getElementById("partidosButton").style.display = "none";
+                    document.getElementById("jugadoresButton").style.display = "none";
+                }
+                loggedUser = { id: userId, email: session.user.email };
+            }
+        }
+
+        async function preloadEstablishments() {
+            const { data, error } = await supabaseClient.from("establishments").select("*");
+            if (error) { console.error("Error cargando establecimientos:", error.message); return; }
+            allEstablishments = data;
+            const namesSet = new Set(), localitiesSet = new Set();
+            data.forEach(item => {
+                if(item.name) namesSet.add(item.name);
+                if(item.locality) localitiesSet.add(item.locality);
+            });
+            const namesList = document.getElementById("namesList");
+            namesList.innerHTML = "";
+            namesSet.forEach(name => {
+                const option = document.createElement("option");
+                option.value = name;
+                namesList.appendChild(option);
+            });
+            const localityList = document.getElementById("localityList");
+            localityList.innerHTML = "";
+            localitiesSet.forEach(loc => {
+                const option = document.createElement("option");
+                option.value = loc;
+                localityList.appendChild(option);
+            });
+        }
+
+        async function preloadPlayersData() {
+            const { data, error } = await supabaseClient.from("profiles").select("*");
+            if (error) { console.error("Error cargando jugadores:", error.message); return; }
+            const namesSet = new Set(), gameLevelsSet = new Set(), localitiesSet = new Set();
+            data.forEach(player => {
+                if(player.full_name) namesSet.add(player.full_name);
+                if(player.game_level) gameLevelsSet.add(player.game_level);
+                if(player.locality) localitiesSet.add(player.locality);
+            });
+            const namesListPlayers = document.getElementById("namesListPlayers");
+            namesListPlayers.innerHTML = "";
+            namesSet.forEach(name => {
+                const option = document.createElement("option");
+                option.value = name;
+                namesListPlayers.appendChild(option);
+            });
+            const gameLevelListPlayers = document.getElementById("gameLevelListPlayers");
+            gameLevelListPlayers.innerHTML = "";
+            gameLevelsSet.forEach(level => {
+                const option = document.createElement("option");
+                option.value = level;
+                gameLevelListPlayers.appendChild(option);
+            });
+            const localityListPlayers = document.getElementById("localityListPlayers");
+            localityListPlayers.innerHTML = "";
+            localitiesSet.forEach(loc => {
+                const option = document.createElement("option");
+                option.value = loc;
+                localityListPlayers.appendChild(option);
+            });
+        }
+
+        function hideAllSections() {
+            document.getElementById("searchPartidosSection").style.display = "none";
+            document.getElementById("searchCanchasSection").style.display = "none";
+            document.getElementById("searchPlayersSection").style.display = "none";
+        }
+
+        function showPartidosSearch() {
+            hideAllSections();
+            document.getElementById("searchPartidosSection").style.display = "block";
+            document.getElementById("filterLocality").value = "";
+            document.getElementById("partidosResults").innerHTML = "";
+        }
+        function closePartidosSearch() {
+            document.getElementById("searchPartidosSection").style.display = "none";
+            document.getElementById("filterLocality").value = "";
+            document.getElementById("partidosResults").innerHTML = "";
+        }
+        document.getElementById("btn-filter-partidos").addEventListener("click", () => {
+            const filterLocality = document.getElementById("filterLocality").value.trim();
+            loadOpenPartidos(filterLocality);
+        });
+
+        async function loadOpenPartidos(localityFilter = "") {
+            const partidosResults = document.getElementById("partidosResults");
+            partidosResults.innerHTML = "";
+            const todayISO = new Date().toISOString().slice(0, 10);
+            let query = supabaseClient.from("partidos")
+                .select("*, establishments(name, locality), participants(user_id, cancelled, leave_reason)")
+                .gte("match_date", todayISO)
+                .neq("completitud", "Completo");
+            if (localityFilter) { query = query.ilike("establishments.locality", `%${localityFilter}%`); }
+            const { data, error } = await query;
+            if (error) {
+                console.error("Error buscando partidos abiertos:", error.message);
+                partidosResults.innerHTML = `<p style="color:red;">Error: ${error.message}</p>`;
+                return;
+            }
+            if (!data || data.length === 0) {
+                partidosResults.innerHTML = "<p>No se encontraron partidos abiertos.</p>";
+                return;
+            }
+            const matchesMap = {};
+            data.forEach(partido => { matchesMap[partido.id] = partido; });
+
+            // Para cada partido, se construye la tarjeta y se añaden las miniaturas de los participantes activos.
+            for (let partido of Object.values(matchesMap)) {
+                const activeParticipants = partido.participants ? partido.participants.filter(p => !p.cancelled) : [];
+                const joinedCount = activeParticipants.length;
+                const totalPlayers = partido.total_players || 4;
+                const missing = totalPlayers - joinedCount;
+
+                // Construir miniaturas de participantes activos
+                let avatarsHTML = "";
+                if (activeParticipants.length > 0) {
+                    const userIds = activeParticipants.map(p => p.user_id);
+                    const { data: userProfiles } = await supabaseClient
+                        .from("profiles")
+                        .select("id, profile_pic")
+                        .in("id", userIds);
+                    if (userProfiles && userProfiles.length > 0) {
+                        const maxToShow = 4;
+                        const partialProfiles = userProfiles.slice(0, maxToShow);
+                        partialProfiles.forEach(profile => {
+                            const pic = profile.profile_pic || "https://via.placeholder.com/32";
+                            avatarsHTML += `<img src="${pic}" alt="Foto" />`;
+                        });
+                        if (userProfiles.length > maxToShow) {
+                            const extraCount = userProfiles.length - maxToShow;
+                            avatarsHTML += `<span style="font-size:0.85rem; color:#666;">+${extraCount} más</span>`;
+                        }
+                    }
+                }
+
+                // La modificación: el título ahora lleva la clase "blinking-title" para animar su color.
+                const card = document.createElement("div");
+                card.className = "partido-card";
+                card.innerHTML = `
+                    <h3 class="blinking-title">${partido.match_name}</h3>
+                    <div class="icon-text">
+                        <i class="fas fa-calendar-alt"></i>
+                        <p class="highlight">${partido.match_date}</p>
+                    </div>
+                    <div class="icon-text">
+                        <i class="fas fa-clock"></i>
+                        <p>${partido.start_time} - ${partido.end_time}</p>
+                    </div>
+                    <p>Cancha: ${partido.establishments ? partido.establishments.name : ""}</p>
+                    <p>Localidad: ${partido.establishments ? partido.establishments.locality : ""}</p>
+                    <div class="divider"></div>
+                    <div class="icon-text">
+                        <i class="fas fa-table-tennis-paddle-ball"></i>
+                        <p><span class="highlight">Nivel:</span> ${partido.match_level}</p>
+                    </div>
+                    <p class="highlight">Faltan ${missing} jugadores de ${totalPlayers}</p>
+                    <div class="participants-avatars">${avatarsHTML}</div>
+                    <button class="btn-view-partido">Ver el Partido</button>
+                `;
+                const viewButton = card.querySelector(".btn-view-partido");
+                viewButton.addEventListener("click", () => { showModal(partido); });
+                partidosResults.appendChild(card);
+            }
+        }
+
+        // Función para refrescar la información del partido
+        async function refreshMatch(matchId) {
+            const { data, error } = await supabaseClient
+                .from("partidos")
+                .select("*, establishments(name, locality), participants(user_id, cancelled, leave_reason)")
+                .eq("id", matchId)
+                .single();
+            if (error) {
+                alert("Error actualizando partido: " + error.message);
+                return null;
+            }
+            return data;
+        }
+
+        // Botón "Refrescar" en el modal
+        async function refreshModal() {
+            const modalContent = document.getElementById("modalContent");
+            const currentMatchId = modalContent.getAttribute("data-match-id");
+            if (!currentMatchId) {
+                alert("No se pudo refrescar, intente nuevamente.");
+                return;
+            }
+            const refreshed = await refreshMatch(currentMatchId);
+            showModal(refreshed);
+        }
+
+        // Función de espera
+        function wait(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        // Función para mostrar el modal con información actualizada del partido
+        async function showModal(partido) {
+            await wait(300);
+            const updatedPartido = await refreshMatch(partido.id);
+            if (!updatedPartido) return;
+
+            const modal = document.getElementById("matchModal");
+            const modalContent = document.getElementById("modalContent");
+            modalContent.setAttribute("data-match-id", updatedPartido.id);
+
+            const activeParticipants = updatedPartido.participants ? updatedPartido.participants.filter(p => !p.cancelled) : [];
+            const joinedCount = activeParticipants.length;
+            const totalPlayers = updatedPartido.total_players || 4;
+            const missing = totalPlayers - joinedCount;
+
+            // Obtención de detalles de participantes (todos)
+            let userIds = [];
+            if (updatedPartido.participants) {
+                userIds = updatedPartido.participants.map(p => p.user_id);
+            }
+            let participantListHTML = `<div class="participants-list-container"><ul>`;
+            if (userIds.length > 0) {
+                const { data: userProfiles } = await supabaseClient
+                    .from("profiles")
+                    .select("id, full_name, profile_pic")
+                    .in("id", userIds);
+                if (userProfiles && userProfiles.length > 0) {
+                    userProfiles.forEach(usr => {
+                        const rec = updatedPartido.participants.find(r => r.user_id === usr.id);
+                        let styleName = "";
+                        let reasonText = "";
+                        if (rec && rec.cancelled) {
+                            styleName = "cancelled";
+                            if (rec.leave_reason) {
+                                reasonText = ` - (${rec.leave_reason})`;
+                            }
+                        }
+                        participantListHTML += `
+                            <li>
+                                <img src="${usr.profile_pic || "https://via.placeholder.com/40"}" alt="Foto de ${usr.full_name}" />
+                                <span class="${styleName}">${usr.full_name}${reasonText}</span>
+                            </li>
+                        `;
+                    });
+                } else {
+                    participantListHTML += "<li>No hay jugadores apuntados.</li>";
+                }
+            } else {
+                participantListHTML += "<li>No hay jugadores apuntados.</li>";
+            }
+            participantListHTML += "</ul></div>";
+
+            modalContent.innerHTML = `
+                <h2>${updatedPartido.match_name}</h2>
+                <p><strong>Fecha:</strong> ${updatedPartido.match_date}</p>
+                <p><strong>Hora:</strong> ${updatedPartido.start_time} - ${updatedPartido.end_time}</p>
+                <p><strong>Cancha:</strong> ${updatedPartido.establishments ? updatedPartido.establishments.name : ""}</p>
+                <p><strong>Localidad:</strong> ${updatedPartido.establishments ? updatedPartido.establishments.locality : ""}</p>
+                <p><strong>Nivel:</strong> ${updatedPartido.match_level}</p>
+                <h3>Jugadores Apuntados:</h3>
+                ${participantListHTML}
+                <p class="missing-players">Faltan ${missing} jugadores de ${totalPlayers} totales</p>
+            `;
+
+            const userRecord = updatedPartido.participants && loggedUser
+                ? updatedPartido.participants.find(p => p.user_id === loggedUser.id)
+                : null;
+
+            if (!userRecord) {
+                const joinButton = document.createElement("button");
+                joinButton.className = "btn-join";
+                joinButton.textContent = "Unirse";
+                joinButton.addEventListener("click", async () => {
+                    await joinMatch(updatedPartido.id);
+                    const refreshed = await refreshMatch(updatedPartido.id);
+                    showModal(refreshed);
+                });
+                modalContent.appendChild(joinButton);
+            }
+            else if (userRecord && !userRecord.cancelled) {
+                const info = document.createElement("p");
+                info.textContent = "Ya estás apuntado a este partido.";
+                modalContent.appendChild(info);
+                const leaveButton = document.createElement("button");
+                leaveButton.className = "btn-leave";
+                leaveButton.textContent = "Darse de baja";
+                leaveButton.addEventListener("click", async () => {
+                    let explanation = prompt("Ingresa un motivo (máx. 50 caracteres):");
+                    if (explanation === null) return;
+                    if (explanation.length > 50) {
+                        alert("El motivo debe tener 50 caracteres o menos.");
+                        return;
+                    }
+                    await leaveMatch(updatedPartido.id, explanation);
+                    const refreshed = await refreshMatch(updatedPartido.id);
+                    showModal(refreshed);
+                });
+                modalContent.appendChild(leaveButton);
+            }
+            else if (userRecord && userRecord.cancelled) {
+                const info = document.createElement("p");
+                info.textContent = "Ya te has dado de baja de este partido.";
+                modalContent.appendChild(info);
+            }
+
+            modal.style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById("matchModal").style.display = "none";
+        }
+
+        async function joinMatch(matchId) {
+            await new Promise(resolve => setTimeout(resolve, 300));
+            const { data, error } = await supabaseClient
+                .from("participants")
+                .insert([{ match_id: matchId, user_id: loggedUser.id }]);
+            if (error) {
+                alert("Error al unirse: " + error.message);
+            } else {
+                alert("Te has unido al partido");
+            }
+        }
+
+        async function leaveMatch(matchId, explanation) {
+            await new Promise(resolve => setTimeout(resolve, 300));
+            const { data, error } = await supabaseClient
+                .from("participants")
+                .update({ cancelled: true, leave_reason: explanation })
+                .match({ match_id: matchId, user_id: loggedUser.id });
+            if (error) {
+                alert("Error al darse de baja: " + error.message);
+            } else {
+                alert("Has cancelado tu participación en el partido");
+            }
+        }
+
+        function showCanchaSearch() {
+            hideAllSections();
+            document.getElementById("searchCanchasSection").style.display = "block";
+            document.getElementById("filterCanchasName").value = "";
+            document.getElementById("filterCanchasLocality").value = "";
+            document.getElementById("canchasResults").innerHTML = "";
+            document.getElementById("canchasFeedback").innerHTML = "";
+        }
+        function closeCanchaSearch() {
+            document.getElementById("searchCanchasSection").style.display = "none";
+            document.getElementById("filterCanchasName").value = "";
+            document.getElementById("filterCanchasLocality").value = "";
+            document.getElementById("canchasResults").innerHTML = "";
+            document.getElementById("canchasFeedback").innerHTML = "";
+        }
+        document.getElementById("btn-filter-canchas").addEventListener("click", () => {
+            const nameFilter = document.getElementById("filterCanchasName").value.trim();
+            const localityFilter = document.getElementById("filterCanchasLocality").value.trim();
+            loadCanchas(nameFilter, localityFilter);
+        });
+        async function loadCanchas(nameFilter = "", localityFilter = "") {
+            const canchasResults = document.getElementById("canchasResults");
+            const canchasFeedback = document.getElementById("canchasFeedback");
+            canchasResults.innerHTML = "";
+            canchasFeedback.innerHTML = "";
+            showCanchasLoader();
+            let query = supabaseClient.from("establishments").select("*");
+            if (nameFilter) { query = query.ilike("name", `%${nameFilter}%`); }
+            if (localityFilter) { query = query.ilike("locality", `%${localityFilter}%`); }
+            const { data, error } = await query;
+            clearCanchasLoader();
+            if (error) {
+                canchasFeedback.innerHTML = `<p style="color:red;">Error: ${error.message}</p>`;
+                return;
+            }
+            if (!data || data.length === 0) {
+                canchasResults.innerHTML = '<p style="text-align:center; width:100%;">No se encontraron canchas para los criterios ingresados.</p>';
+                return;
+            }
+            data.forEach(c => {
+                const card = document.createElement("div");
+                card.className = "card";
+                const header = document.createElement("div");
+                header.className = "card-header";
+                header.textContent = c.name;
+                card.appendChild(header);
+                const content = document.createElement("div");
+                content.className = "card-content";
+                content.innerHTML = `
+                    <p><strong>Localidad:</strong> ${c.locality}</p>
+                    <p><strong>Dirección:</strong> ${c.address}</p>
+                    <p><strong>Cantidad de Canchas:</strong> ${c.court_count}</p>
+                `;
+                card.appendChild(content);
+                const mapContainer = document.createElement("div");
+                mapContainer.className = "map-container";
+                const mapURL = `https://maps.google.com/maps?q=$${c.latitude},${c.longitude}&hl=es&z=14&output=embed`;
+                mapContainer.innerHTML = `<iframe src="${mapURL}" width="100%" height="100%" frameborder="0" style="border:0" allowfullscreen></iframe>`;
+                card.appendChild(mapContainer);
+                canchasResults.appendChild(card);
+            });
+        }
+        function showCanchasLoader() { document.getElementById("canchasFeedback").innerHTML = '<div class="loader"></div>'; }
+        function clearCanchasLoader() { document.getElementById("canchasFeedback").innerHTML = ""; }
+
+        function showPlayersSection() {
+            hideAllSections();
+            document.getElementById("searchPlayersSection").style.display = "block";
+            document.getElementById("filterPlayersName").value = "";
+            document.getElementById("filterPlayersGameLevel").value = "";
+            document.getElementById("filterPlayersLocality").value = "";
+            document.getElementById("playersResults").innerHTML = "";
+            document.getElementById("playersFeedback").innerHTML = "";
+        }
+        function closePlayersSection() {
+            document.getElementById("searchPlayersSection").style.display = "none";
+            document.getElementById("filterPlayersName").value = "";
+            document.getElementById("filterPlayersGameLevel").value = "";
+            document.getElementById("filterPlayersLocality").value = "";
+            document.getElementById("playersResults").innerHTML = "";
+            document.getElementById("playersFeedback").innerHTML = "";
+        }
+        document.getElementById("btn-filter-players").addEventListener("click", () => {
+            const nameFilter = document.getElementById("filterPlayersName").value.trim();
+            const gameLevelFilter = document.getElementById("filterPlayersGameLevel").value.trim();
+            const localityFilter = document.getElementById("filterPlayersLocality").value.trim();
+            loadPlayers(nameFilter, gameLevelFilter, localityFilter);
+        });
+        async function loadPlayers(nameFilter = "", gameLevelFilter = "", localityFilter = "") {
+            const playersResults = document.getElementById("playersResults");
+            const playersFeedback = document.getElementById("playersFeedback");
+            playersResults.innerHTML = "";
+            playersFeedback.innerHTML = "";
+            let query = supabaseClient.from("profiles").select("*");
+            if (nameFilter) { query = query.ilike("full_name", `%${nameFilter}%`); }
+            if (gameLevelFilter) { query = query.ilike("game_level", `%${gameLevelFilter}%`); }
+            if (localityFilter) { query = query.ilike("locality", `%${localityFilter}%`); }
+            const { data, error } = await query;
+            if (error) {
+                playersFeedback.innerHTML = `<p style="color:red;">Error: ${error.message}</p>`;
+                return;
+            }
+            if (!data || data.length === 0) {
+                playersResults.innerHTML = '<p style="text-align:center; width:100%;">No se encontraron jugadores.</p>';
+                return;
+            }
+            data.forEach(player => {
+                const card = document.createElement("div");
+                card.className = "player-card";
+                card.innerHTML = `
+                    <div style="display:flex; align-items:center; gap:1rem;">
+                        <img src="${player.profile_pic || "https://via.placeholder.com/100"}" alt="Foto de perfil" style="width:100px; height:100px; border-radius:50%; object-fit: cover;" />
+                        <div>
+                            <h3>${player.full_name}</h3>
+                            <p><strong>Edad:</strong> ${player.age || "N/D"}</p>
+                            <p><strong>Sexo:</strong> ${player.gender || "N/D"}</p>
+                            <p><strong>Nivel de juego:</strong> ${player.game_level || "N/D"}</p>
+                            <p><strong>Localidad:</strong> ${player.locality || "N/D"}</p>
+                            <p><strong>Teléfono:</strong> ${player.phone || "N/D"}</p>
+                        </div>
+                    </div>
+                `;
+                playersResults.appendChild(card);
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            await checkProfile();
+            await preloadEstablishments();
+            await preloadPlayersData();
+            if (loggedUser && document.getElementById("partidosButton").style.display !== "none") {
+                document.getElementById("searchPartidosSection").style.display = "block";
+                loadOpenPartidos();
+            }
+        });
+    </script>
 </body>
 </html>
