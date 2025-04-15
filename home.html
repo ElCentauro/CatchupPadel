@@ -38,7 +38,7 @@
         .hero h1 { font-size: 3rem; font-weight: 700; margin-bottom: 1rem; color: #fff; }
         .hero p { font-size: 1.2rem; margin-bottom: 2rem; max-width: 700px; margin: 0 auto; line-height: 1.6; }
 
-        /* TARJETAS FLOTANTES - ESTILO PERSONALIZADO CON IMÁGENES */
+        /* TARJETAS FLOTANTES - ESTILO PERSONALIZADO CON IMÁGENES CORREGIDO Y MEJORADO */
         .cards-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem; margin-top: 2rem; }
         .floating-card {
             background-color: rgba(255, 165, 0, 0.85); /* Naranja ligeramente más intenso */
@@ -64,41 +64,41 @@
             height: 100%;
             background-size: contain; /* Ajusta el tamaño de la imagen para que quepa dentro */
             background-repeat: no-repeat;
-            opacity: 0.5; /* Reduce la opacidad para que sea un fondo sutil */
+            opacity: 0.4; /* Reduje un poco la opacidad inicial */
             transition: opacity 0.3s ease-in-out;
         }
 
         .floating-card.card-partidos::before {
             background-image: url('siluetas.png');
-            background-position: center top 10%; /* Centrado arriba con un pequeño desplazamiento */
-            background-size: 60%; /* Ajusta el tamaño según sea necesario */
+            background-position: center 40%; /* Centrado con un ajuste vertical */
+            background-size: 45%; /* Tamaño ajustado para mejor visualización */
         }
 
         .floating-card.card-jugadores::before {
             background-image: url('conoce.png');
-            background-position: center top 15%; /* Centrado arriba con un pequeño desplazamiento */
-            background-size: 50%; /* Ajusta el tamaño según sea necesario */
+            background-position: center 45%; /* Centrado con un ajuste vertical */
+            background-size: 40%; /* Tamaño ajustado para mejor visualización */
         }
 
         .floating-card.card-programa::before {
             background-image: url('cita.png');
-            background-position: center top 15%; /* Centrado arriba con un pequeño desplazamiento */
-            background-size: 50%; /* Ajusta el tamaño según sea necesario */
+            background-position: center 45%; /* Centrado con un ajuste vertical */
+            background-size: 40%; /* Tamaño ajustado para mejor visualización */
         }
 
         .floating-card.card-canchas::before {
             background-image: url('cancha.png');
-            background-position: center top 10%; /* Centrado arriba con un pequeño desplazamiento */
-            background-size: 60%; /* Ajusta el tamaño según sea necesario */
+            background-position: center 40%; /* Centrado con un ajuste vertical */
+            background-size: 50%; /* Tamaño ajustado para mejor visualización */
         }
 
         .floating-card:hover {
-            transform: translateY(-5px) scale(1.03); /* Ligeramente más elevación y escala */
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3); /* Sombra más intensa al hacer hover */
+            transform: translateY(-7px) scale(1.05); /* Un poco más de elevación y escala */
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.3); /* Sombra más intensa al hacer hover */
         }
 
         .floating-card:hover::before {
-            opacity: 0.7; /* Ligeramente más visible al hacer hover */
+            opacity: 0.6; /* Ligeramente más visible al hacer hover */
         }
 
         .floating-card i {
@@ -835,7 +835,7 @@
                     </div>
                 `;
                 playersResults.appendChild(card);
-            });
+            }
         }
 
         document.addEventListener("DOMContentLoaded", async () => {
