@@ -15,7 +15,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/dmuy/MDTimePicker/mdtimepicker.js"></script>
 
-    <!-- ===============  ESTILOS  (sin cambios)  =============== -->
+    <!-- ===============  ESTILOS (sin cambios)  =============== -->
     <style>
         /* ---------- variables ---------- */
         :root{
@@ -341,6 +341,9 @@ let joinedPlayers=[];
 let loggedUser=null;
 
 /* ====== helpers ====== */
+function generatePartyId(){
+    return Math.floor(100000+Math.random()*900000).toString(); // 6 dígitos
+}
 async function loadJoinedPlayers(matchId){
     const {data,error}=await supabaseClient
         .from('players_matches')
@@ -409,7 +412,9 @@ $('#canchaSelect').on('change',async function(){
 /* ====== submit crear/modificar ====== */
 $('#match-form').on('submit',async e=>{
     e.preventDefault();
+    const matchId=currentMatchId||generatePartyId();
     const data={
+        id:matchId,
         match_name:$('#matchName').val().trim(),
         match_date:$('#matchDate').val(),
         start_time:$('#startTime').val(),
@@ -422,14 +427,13 @@ $('#match-form').on('submit',async e=>{
         team_type:$('#teamType').val(),
         completitud:'Parcial'
     };
-    let error,created;
+    let error;
     if(currentMatchId){
         ({error}=await supabaseClient.from('partidos').update(data).eq('id',currentMatchId));
     }else{
-        ({data:created,error}=await supabaseClient.from('partidos')
-            .insert([data]).select('id').single());
+        ({error}=await supabaseClient.from('partidos').insert([data]));
         if(!error){
-            currentMatchId=created.id;
+            currentMatchId=matchId;
             $('#btn-create').text('Modificar Partido');
             await loadJoinedPlayers(currentMatchId);
         }
@@ -458,6 +462,7 @@ $('#btn-schedule').on('click',function(){
                      {year:'numeric',month:'long',day:'numeric',weekday:'long'});
         ul.append(`<li>Partido: ${$('#matchName').val().trim()} - Fecha: ${nice}</li>`);
         scheduled.push({
+            id:generatePartyId(),
             match_name:$('#matchName').val().trim(),
             match_date:iso,
             start_time:$('#startTime').val(),
