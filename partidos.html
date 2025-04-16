@@ -790,7 +790,6 @@
             const matchDateInput = document.getElementById('matchDate').value;
             const matchNameInput = document.getElementById('matchName').value.trim();
             const startTimeInput = document.getElementById('startTime').value;
-            const endTimeInput = document.getElementById('endTime').value;
             const durationMinutesInput = document.getElementById('durationMinutes').value;
             const canchaSelect = document.getElementById('canchaSelect').value;
             const pistaSelect = document.getElementById('pistaSelect').value;
@@ -825,7 +824,7 @@
                     match_name: matchNameInput,
                     match_date: scheduledDate.toISOString().split('T')[0],
                     start_time: startTimeInput,
-                    end_time: endTimeInput,
+                    end_time: document.getElementById('endTime').value,
                     organizer: organizerInput,
                     player_count: playerCount,
                     cancha_id: canchaSelect,
@@ -891,11 +890,6 @@
             const endTime = String(endHour).padStart(2, '0') + ':' + String(endMinute).padStart(2, '0');
             $('#endTime').val(endTime);
         }
-
-        // Listener para el cambio de hora de inicio, recalcular hora de fin
-        $('#startTime').on('change', function() {
-            recalcEndTime();
-        });
 
         // Listener para el cambio de duración, recalcular hora de fin
         document.getElementById('durationMinutes').addEventListener('input', function() {
