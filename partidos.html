@@ -18,7 +18,7 @@
     <style>
         /* ============================================
             VARIABLES CSS
-        ============================================ */
+        =========================================== */
         :root {
             --color-primario: #FFA726; /* Naranja un poco más suave */
             --color-secundario: #FFB74D;
@@ -35,7 +35,7 @@
 
         /* ============================================
             RESET Y ESTILOS GLOBALES
-        ============================================ */
+        =========================================== */
         * {
             margin: 0;
             padding: 0;
@@ -68,7 +68,7 @@
 
         /* ============================================
             CABECERA Y NAVEGACIÓN
-        ============================================ */
+        =========================================== */
         header {
             background-color: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(10px);
@@ -122,7 +122,7 @@
 
         /* ============================================
             CONTENEDOR PRINCIPAL CON ANIMACIÓN fadeInput
-        ============================================ */
+        =========================================== */
         .container {
             max-width: 900px;
             width: 95%;
@@ -164,7 +164,7 @@
 
         /* ============================================
             FIELDSETS Y LEYENDAS
-        ============================================ */
+        =========================================== */
         fieldset {
             border: 2px solid var(--color-primario);
             border-radius: 15px;
@@ -192,7 +192,7 @@
 
         /* ============================================
             FORM GROUP Y ESTILOS DE INPUT
-        ============================================ */
+        =========================================== */
         .form-group {
             margin-bottom: 1.8rem;
         }
@@ -245,7 +245,7 @@
 
         /* ============================================
             RADIO BUTTONS
-        ============================================ */
+        =========================================== */
         .radio-group {
             display: flex;
             gap: 2.5rem;
@@ -289,7 +289,7 @@
 
         /* ============================================
             BOTONES
-        ============================================ */
+        =========================================== */
         .btn {
             display: inline-block;
             padding: 1.2rem 2.5rem;
@@ -317,7 +317,7 @@
 
         /* ============================================
             SECCIONES ESPECÍFICAS
-        ============================================ */
+        =========================================== */
         /* Programar Partidos */
         .schedule-section select {
             max-width: 200px;
@@ -454,12 +454,12 @@
                     <label for="durationMinutes"><i class="fas fa-hourglass-half"></i> Duración (minutos)</label>
                     <input type="number" id="durationMinutes" placeholder="Ej. 90" min="0" max="180" step="1" list="durationOptions">
                     <datalist id="durationOptions">
-                        <option value="30">
-                        <option value="60">
-                        <option value="90">
-                        <option value="120">
-                        <option value="150">
-                        <option value="180">
+                        <option value="30"></option>
+                        <option value="60"></option>
+                        <option value="90"></option>
+                        <option value="120"></option>
+                        <option value="150"></option>
+                        <option value="180"></option>
                     </datalist>
                     <div id="durationDisplay">90 minutos</div>
                 </div>
@@ -491,13 +491,13 @@
                     <label for="canchaSelect"><i class="fas fa-map-marker-alt"></i> Cancha</label>
                     <select id="canchaSelect" required>
                         <option value="">Seleccione una cancha</option>
-                        </select>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label for="pistaSelect"><i class="fas fa-map-pin"></i> Pista</label>
                     <select id="pistaSelect" required>
                         <option value="">Seleccione una pista</option>
-                        </select>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label for="matchLevel"><i class="fas fa-signal"></i> Nivel del Partido</label>
@@ -575,7 +575,7 @@
                 format: 'hh:mm',     // Con is24hour=true obtiene "18:30"
                 theme: 'blue',
                 hourPadding: true,
-                readOnly: true      // Se fuerza el uso del dial
+                readOnly: true       // Se fuerza el uso del dial
             });
 
             // Recalcular la hora de fin cada vez que se cambie la hora de inicio
@@ -722,8 +722,8 @@
 
             const matchName = document.getElementById('matchName').value.trim();
             const matchDate = document.getElementById('matchDate').value;
-            const startTime = document.getElementById('startTime').value;  // Ej: "18:30"
-            const endTime = document.getElementById('endTime').value;      // Ej: "19:30"
+            const startTime = document.getElementById('startTime').value;   // Ej: "18:30"
+            const endTime = document.getElementById('endTime').value;     // Ej: "19:30"
             const organizer = document.getElementById('organizer').value;
             const playerCount = parseInt(document.querySelector('input[name="playerCount"]:checked')?.value, 10);
             const cancha = document.getElementById('canchaSelect').value;
@@ -741,8 +741,8 @@
                 id: matchId,
                 match_name: matchName,
                 match_date: matchDate,
-                start_time: startTime,  // Se guarda en formato "HH:mm"
-                end_time: endTime,      // También en "HH:mm"
+                start_time: startTime,   // Se guarda en formato "HH:mm"
+                end_time: endTime,       // También en "HH:mm"
                 organizer: organizer,
                 player_count: playerCount,
                 cancha_id: cancha,
@@ -808,7 +808,8 @@
                 return;
             }
 
-            const baseDate = new Date(matchDateInput);
+            const [year, month, day] = matchDateInput.split('-').map(Number);
+            const baseDate = new Date(year, month - 1, day); // Month is 0-indexed
             const ul = document.createElement('ul');
 
             // Calculate and add subsequent dates if repeatWeeks > 0
@@ -822,7 +823,7 @@
                 ul.appendChild(li);
                 scheduledMatches.push({
                     match_name: matchNameInput,
-                    match_date: scheduledDate.toISOString().split('T')[0],
+                    match_date: `${scheduledDate.getFullYear()}-${String(scheduledDate.getMonth() + 1).padStart(2, '0')}-${String(scheduledDate.getDate()).padStart(2, '0')}`,
                     start_time: startTimeInput,
                     end_time: document.getElementById('endTime').value,
                     organizer: organizerInput,
@@ -831,7 +832,7 @@
                     pista_id: pistaSelect,
                     match_level: matchLevelSelect,
                     team_type: teamTypeSelect,
-                    completitud: "Pendiente"
+                    completitud: "Parcial"
                 });
             }
 
@@ -873,7 +874,7 @@
 
         // Función para recalcular la Hora de Fin
         function recalcEndTime() {
-            const startVal = $('#startTime').val();  // Ej: "18:30"
+            const startVal = $('#startTime').val();   // Ej: "18:30"
             const dur = parseInt(document.getElementById('durationMinutes').value, 10) || 0;
             if (!startVal || dur <= 0) return;
 
