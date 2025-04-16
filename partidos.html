@@ -404,6 +404,21 @@
             opacity: 0.6;
             pointer-events: none;
         }
+
+        .btn-primary {
+            background-color: var(--color-primario);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--color-acento);
+        }
     </style>
 </head>
 <body>
@@ -532,7 +547,7 @@
                     <button type="button" id="btn-schedule" class="btn btn-schedule" disabled><i class="fas fa-calendar-plus"></i> Programar Partidos</button>
                 </div>
                 <div id="scheduledList"></div>
-                <button type="button" id="btn-save-scheduled" class="btn btn-primary" style="margin-top: 1rem; display:none;"><i class="fas fa-save"></i> Grabar Partidos Programados</button>
+                <button type="button" id="btn-save-scheduled" class="btn btn-primary" style="margin-top: 1rem; display:none;"><i class="fas fa-save"></i> Grabar Programación</button>
             </fieldset>
 
             <hr>
