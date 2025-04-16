@@ -842,9 +842,10 @@
                 saveScheduledButton.onclick = async () => {
                     saveScheduledButton.disabled = true;
                     for (const matchData of scheduledMatches) {
+                        const { match_name, match_date, start_time, end_time, organizer, player_count, cancha_id, pista_id, match_level, team_type, completitud } = matchData;
                         const { data, error } = await supabaseClient
                             .from('partidos')
-                            .insert([matchData]);
+                            .insert([{ match_name, match_date, start_time, end_time, organizer, player_count, cancha_id, pista_id, match_level, team_type, completitud }]);
                         if (error) {
                             console.error('Error al guardar partido programado:', error);
                             alert('Error al guardar los partidos programados.');
