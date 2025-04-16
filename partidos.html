@@ -814,7 +814,7 @@
             // Calculate and add subsequent dates if repeatWeeks > 0
             for (let i = 0; i < repeatWeeks; i++) {
                 const scheduledDate = new Date(baseDate);
-                scheduledDate.setTime(baseDate.getTime() + (i + 1) * 7 * 24 * 60 * 60 * 1000);
+                scheduledDate.setDate(baseDate.getDate() + (i + 1) * 7);
                 const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
                 const formattedDate = scheduledDate.toLocaleDateString('es-ES', options);
                 const li = document.createElement('li');
