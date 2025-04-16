@@ -1,519 +1,410 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Catch Up Padel - Crear Partido</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Catch Up Padel - Crear Partido</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-    <!-- Fuentes e iconos -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<!-- Fuentes + iconos -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-    <!-- Time‑picker -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/dmuy/MDTimePicker/mdtimepicker.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/dmuy/MDTimePicker/mdtimepicker.js"></script>
+<!-- Time‑picker -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/dmuy/MDTimePicker/mdtimepicker.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/dmuy/MDTimePicker/mdtimepicker.js"></script>
 
-    <!-- ===============  ESTILOS  (sin cambios)  =============== -->
-    <style>
-        /* ---------- variables ---------- */
-        :root{
-            --color-primario:#FFA726;
-            --color-secundario:#FFB74D;
-            --color-fondo:#FFF;
-            --color-texto:#333;
-            --color-hover:#777;
-            --color-input-focus:rgba(255,167,38,.2);
-            --color-borde:#ddd;
-            --color-acento:#FF5722;
-            --font-principal:'Poppins',sans-serif;
-            --font-titulo:'Playfair Display',serif;
-            --font-general:'Roboto',sans-serif;
-        }
-        /* ---------- reset / global ---------- */
-        *{margin:0;padding:0;box-sizing:border-box}
-        html{scroll-behavior:smooth}
-        body{
-            font-family:var(--font-general);
-            background:linear-gradient(135deg,#FFE0B2 0%,#FFCC80 100%);
-            color:var(--color-texto);line-height:1.6;
-            min-height:100vh;display:flex;flex-direction:column;
-        }
-        a{text-decoration:none;color:inherit;transition:.3s}
-        a:hover{color:var(--color-primario)}
-        /* ---------- cabecera ---------- */
-        header{
-            background:rgba(255,255,255,.9);backdrop-filter:blur(10px);
-            padding:1.5rem 2rem;box-shadow:0 4px 12px rgba(0,0,0,.08);
-            display:flex;justify-content:space-between;align-items:center;
-            position:sticky;top:0;z-index:10;flex-wrap:wrap;
-        }
-        header .logo{
-            font-family:var(--font-titulo);font-size:2.5rem;font-weight:600;
-            color:var(--color-primario);display:flex;align-items:center;
-            transition:.3s;
-        }
-        header .logo i{margin-right:.5rem;color:var(--color-acento)}
-        header .logo:hover{transform:scale(1.03)}
-        header nav a{
-            font-size:1.1rem;padding:.75rem 1.5rem;
-            background:var(--color-acento);color:#fff;border-radius:8px;
-            font-weight:500;transition:.3s;
-            box-shadow:0 2px 6px rgba(0,0,0,.1)
-        }
-        header nav a:hover{
-            background:var(--color-primario);transform:translateY(-2px);
-            box-shadow:0 4px 10px rgba(0,0,0,.15)
-        }
-        /* ---------- contenedor ---------- */
-        .container{
-            max-width:900px;width:95%;margin:3rem auto;
-            background:#fff;padding:2.5rem;border-radius:12px;
-            box-shadow:0 8px 20px rgba(0,0,0,.1);
-            animation:fadeInput .6s ease forwards;opacity:0;
-            border:1px solid var(--color-acento);
-        }
-        @keyframes fadeInput{
-            0%{opacity:0;transform:translateY(20px)}
-            100%{opacity:1;transform:translateY(0)}
-        }
-        h1{
-            text-align:center;margin-bottom:2rem;
-            font-family:var(--font-titulo);font-size:2.8rem;
-            color:var(--color-primario)
-        }
-        hr{margin:2.5rem 0;border:none;border-top:1px solid var(--color-borde)}
-        /* ---------- fieldsets ---------- */
-        fieldset{
-            border:2px solid var(--color-primario);border-radius:15px;
-            padding:2rem;margin-bottom:2rem;background:#f9f9f9;
-            box-shadow:0 4px 10px rgba(0,0,0,.05);transition:.3s;
-        }
-        fieldset:hover{box-shadow:0 6px 14px rgba(0,0,0,.07)}
-        legend{
-            font-weight:bold;padding:0 15px;color:var(--color-primario);
-            font-family:var(--font-principal);font-size:1.3rem;
-            border-bottom:2px solid var(--color-primario);margin-bottom:1.2rem;
-            display:inline-block
-        }
-        /* ---------- inputs ---------- */
-        .form-group{margin-bottom:1.8rem}
-        label{
-            display:block;margin-bottom:.7rem;font-weight:600;
-            color:var(--color-primario);font-size:1.1rem
-        }
-        input[type="text"],input[type="date"],input[type="number"],select{
-            width:100%;padding:1.2rem;border:1px solid var(--color-borde);
-            border-radius:10px;font-size:1rem;transition:.3s;background:#fff;
-        }
-        input:disabled{background:#eee;cursor:not-allowed}
-        input:hover,select:hover{border-color:var(--color-acento)}
-        input:focus,select:focus{
-            outline:none;border-color:var(--color-acento);
-            box-shadow:0 0 8px var(--color-input-focus)
-        }
-        .duration-group{display:flex;flex-direction:column}
-        /* ---------- radio ---------- */
-        .radio-group{display:flex;gap:2.5rem;margin-top:1rem}
-        .radio-group label{display:flex;align-items:center;cursor:pointer}
-        .radio-group input[type="radio"]{
-            appearance:none;-webkit-appearance:none;width:20px;height:20px;
-            border:2px solid var(--color-acento);border-radius:50%;
-            margin-right:.7rem;cursor:pointer;transition:.2s;
-        }
-        .radio-group input[type="radio"]:checked{background:var(--color-acento)}
-        .radio-group input[type="radio"]:checked::before{
-            content:'';display:block;width:12px;height:12px;border-radius:50%;
-            background:#fff;margin:4px;
-        }
-        /* ---------- botones ---------- */
-        .btn{
-            display:inline-block;padding:1.2rem 2.5rem;border:none;
-            border-radius:12px;background:var(--color-primario);color:#fff;
-            font-size:1.15rem;font-weight:600;cursor:pointer;
-            transition:.3s;margin-top:2rem;
-            box-shadow:0 4px 10px rgba(0,0,0,.12);
-        }
-        .btn:hover{
-            background:var(--color-acento);transform:translateY(-3px);
-            box-shadow:0 6px 14px rgba(0,0,0,.15)
-        }
-        .btn-schedule{margin-left:1.5rem}
-        .btn-primary{
-            background:var(--color-primario);color:#fff;border:none;
-            padding:.75rem 1.5rem;border-radius:8px;cursor:pointer;font-size:1rem;
-            transition:.3s
-        }
-        .btn-primary:hover{background:var(--color-acento)}
-        /* ---------- programar ---------- */
-        .schedule-section select{
-            max-width:200px;padding:1rem;border-radius:10px;
-            border:1px solid var(--color-borde);font-size:1rem
-        }
-        .schedule-section-disabled{opacity:.6;pointer-events:none}
-        #scheduledList{margin-top:2rem;font-size:1rem;color:var(--color-hover);
-            border-top:1px dashed var(--color-borde);padding-top:2rem}
-        #scheduledList ul{list-style:none;padding-left:0}
-        #scheduledList li{padding:.7rem 0;border-bottom:1px dashed var(--color-borde)}
-        #scheduledList li:last-child{border-bottom:none}
-        /* ---------- unirse ---------- */
-        .join-section{text-align:center;margin-top:3.5rem;padding:2.5rem;
-            background:#f9f9f9;border-radius:15px;
-            box-shadow:0 4px 10px rgba(0,0,0,.05)}
-        .join-section h2{
-            font-family:var(--font-titulo);color:var(--color-acento);
-            margin-bottom:1.5rem;font-size:2rem
-        }
-        .join-progress{margin:2rem auto;max-width:400px;border-radius:12px;
-            overflow:hidden;border:2px solid var(--color-primario)}
-        progress{width:100%;height:30px;-webkit-appearance:none;appearance:none;border-radius:12px}
-        progress::-webkit-progress-bar{background:#eee;border-radius:12px}
-        progress::-webkit-progress-value{background:var(--color-primario);border-radius:12px}
-        .join-info{margin-top:20px;font-size:1.2rem;color:var(--color-primario);font-weight:bold}
-    </style>
+<style>
+/* =========== VARIABLES ========== */
+:root{
+  --color-primario:#FFA726;--color-secundario:#FFB74D;--color-fondo:#FFF;
+  --color-texto:#333;--color-hover:#777;--color-input-focus:rgba(255,167,38,.2);
+  --color-borde:#ddd;--color-acento:#FF5722;
+  --font-principal:'Poppins',sans-serif;--font-titulo:'Playfair Display',serif;
+  --font-general:'Roboto',sans-serif;
+}
+/* =========== RESET / BASE ========== */
+*,*:before,*:after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font-general);background:linear-gradient(135deg,#FFE0B2 0%,#FFCC80 100%);
+  color:var(--color-texto);line-height:1.6;min-height:100vh;display:flex;flex-direction:column;
+}
+a{text-decoration:none;color:inherit;transition:.3s}a:hover{color:var(--color-primario)}
+/* =========== ENCABEZADO ========== */
+header{
+  background:rgba(255,255,255,.9);backdrop-filter:blur(10px);padding:1.5rem 2rem;
+  box-shadow:0 4px 12px rgba(0,0,0,.08);display:flex;justify-content:space-between;
+  align-items:center;position:sticky;top:0;z-index:10;flex-wrap:wrap;
+}
+header .logo{
+  font-family:var(--font-titulo);font-size:2.5rem;font-weight:600;color:var(--color-primario);
+  display:flex;align-items:center;transition:.3s;
+}
+header .logo i{margin-right:.5rem;color:var(--color-acento)}
+header .logo:hover{transform:scale(1.03)}
+header nav a{
+  font-size:1.1rem;padding:.75rem 1.5rem;background:var(--color-acento);color:#fff;border-radius:8px;
+  font-weight:500;transition:.3s;box-shadow:0 2px 6px rgba(0,0,0,.1)
+}
+header nav a:hover{background:var(--color-primario);transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,.15)}
+/* =========== CONTENEDOR ========== */
+.container{
+  max-width:900px;width:95%;margin:3rem auto;background:#fff;padding:2.5rem;border-radius:12px;
+  box-shadow:0 8px 20px rgba(0,0,0,.1);animation:fade .6s ease forwards;opacity:0;
+  border:1px solid var(--color-acento)
+}
+@keyframes fade{0%{opacity:0;transform:translateY(20px)}100%{opacity:1;transform:translateY(0)}}
+h1{text-align:center;margin-bottom:2rem;font-family:var(--font-titulo);font-size:2.8rem;color:var(--color-primario)}
+hr{margin:2.5rem 0;border:none;border-top:1px solid var(--color-borde)}
+/* =========== FIELDSETS ========== */
+fieldset{
+  border:2px solid var(--color-primario);border-radius:15px;padding:2rem;margin-bottom:2rem;
+  background:#f9f9f9;box-shadow:0 4px 10px rgba(0,0,0,.05);transition:.3s;
+}
+fieldset:hover{box-shadow:0 6px 14px rgba(0,0,0,.07)}
+legend{
+  font-weight:bold;padding:0 15px;color:var(--color-primario);font-family:var(--font-principal);
+  font-size:1.3rem;border-bottom:2px solid var(--color-primario);margin-bottom:1.2rem;display:inline-block;
+}
+/* =========== FORM ========== */
+.form-group{margin-bottom:1.8rem}
+label{
+  display:block;margin-bottom:.7rem;font-weight:600;color:var(--color-primario);font-size:1.1rem
+}
+input[type="text"],input[type="date"],input[type="number"],select{
+  width:100%;padding:1.2rem;border:1px solid var(--color-borde);border-radius:10px;font-size:1rem;
+  transition:.3s;background:#fff;
+}
+input:disabled{background:#eee;cursor:not-allowed}
+input:hover,select:hover{border-color:var(--color-acento)}
+input:focus,select:focus{outline:none;border-color:var(--color-acento);box-shadow:0 0 8px var(--color-input-focus)}
+.duration-group{display:flex;flex-direction:column}
+/* RADIO */
+.radio-group{display:flex;gap:2.5rem;margin-top:1rem}
+.radio-group label{display:flex;align-items:center;cursor:pointer}
+.radio-group input[type="radio"]{
+  appearance:none;-webkit-appearance:none;width:20px;height:20px;border:2px solid var(--color-acento);border-radius:50%;
+  margin-right:.7rem;cursor:pointer;transition:.2s;
+}
+.radio-group input[type="radio"]:checked{background:var(--color-acento)}
+.radio-group input[type="radio"]:checked::before{content:'';display:block;width:12px;height:12px;border-radius:50%;background:#fff;margin:4px}
+/* BOTONES */
+.btn{display:inline-block;padding:1.2rem 2.5rem;border:none;border-radius:12px;background:var(--color-primario);color:#fff;font-size:1.15rem;font-weight:600;cursor:pointer;transition:.3s;margin-top:2rem;box-shadow:0 4px 10px rgba(0,0,0,.12)}
+.btn:hover{background:var(--color-acento);transform:translateY(-3px);box-shadow:0 6px 14px rgba(0,0,0,.15)}
+.btn-schedule{margin-left:1.5rem}
+.btn-primary{background:var(--color-primario);color:#fff;border:none;padding:.75rem 1.5rem;border-radius:8px;cursor:pointer;font-size:1rem;transition:.3s}
+.btn-primary:hover{background:var(--color-acento)}
+/* SECCIÓN PROGRAMAR */
+.schedule-section select{max-width:200px;padding:1rem;border-radius:10px;border:1px solid var(--color-borde);font-size:1rem}
+.schedule-section-disabled{opacity:.6;pointer-events:none}
+#scheduledList{margin-top:2rem;font-size:1rem;color:var(--color-hover);border-top:1px dashed var(--color-borde);padding-top:2rem}
+#scheduledList ul{list-style:none;padding-left:0}
+#scheduledList li{padding:.7rem 0;border-bottom:1px dashed var(--color-borde)}
+#scheduledList li:last-child{border-bottom:none}
+/* SECCIÓN UNIRSE */
+.join-section{text-align:center;margin-top:3.5rem;padding:2.5rem;background:#f9f9f9;border-radius:15px;box-shadow:0 4px 10px rgba(0,0,0,.05)}
+.join-section h2{font-family:var(--font-titulo);color:var(--color-acento);margin-bottom:1.5rem;font-size:2rem}
+.join-progress{margin:2rem auto;max-width:400px;border-radius:12px;overflow:hidden;border:2px solid var(--color-primario)}
+progress{width:100%;height:30px;-webkit-appearance:none;appearance:none;border-radius:12px}
+progress::-webkit-progress-bar{background:#eee;border-radius:12px}
+progress::-webkit-progress-value{background:var(--color-primario);border-radius:12px}
+.join-info{margin-top:20px;font-size:1.2rem;color:var(--color-primario);font-weight:bold}
+</style>
 </head>
 <body>
 <header>
-    <div class="logo"><i class="fas fa-racket"></i> Catch Up Padel</div>
-    <nav><a href="home.html"><i class="fas fa-home"></i> Volver a Home</a></nav>
+  <div class="logo"><i class="fas fa-racket"></i>&nbsp;Catch Up Padel</div>
+  <nav><a href="home.html"><i class="fas fa-home"></i>&nbsp;Volver a Home</a></nav>
 </header>
 
 <div class="container">
-    <h1><i class="fas fa-play-circle"></i> Crear Partido de Padel</h1>
+<h1><i class="fas fa-play-circle"></i>&nbsp;Crear Partido de Padel</h1>
 
-    <form id="match-form">
-        <!-- =================== DATOS DEL PARTIDO =================== -->
-        <fieldset>
-            <legend><i class="far fa-calendar-alt"></i> Datos del Partido</legend>
-            <div class="form-group">
-                <label for="matchName"><i class="fas fa-signature"></i> Nombre del Partido</label>
-                <input type="text" id="matchName" placeholder="Ej. Torneo de Verano" required>
-            </div>
-            <div class="form-group">
-                <label for="matchDate"><i class="fas fa-calendar-day"></i> Fecha del Partido</label>
-                <input type="date" id="matchDate" required>
-            </div>
-            <div class="form-group">
-                <label for="startTime"><i class="far fa-clock"></i> Hora de Inicio</label>
-                <input type="text" id="startTime" placeholder="Selecciona la hora" required>
-            </div>
-            <div class="form-group duration-group">
-                <label for="durationMinutes"><i class="fas fa-hourglass-half"></i> Duración (minutos)</label>
-                <input type="number" id="durationMinutes" placeholder="Ej. 90"
-                       min="0" max="180" step="1" list="durationOptions">
-                <datalist id="durationOptions">
-                    <option value="30"></option><option value="60"></option><option value="90"></option>
-                    <option value="120"></option><option value="150"></option><option value="180"></option>
-                </datalist>
-                <div id="durationDisplay">90 minutos</div>
-            </div>
-            <div class="form-group">
-                <label for="endTime"><i class="far fa-clock"></i> Hora de Fin</label>
-                <input type="text" id="endTime" placeholder="Calculado automáticamente" disabled>
-            </div>
-        </fieldset>
+<form id="match-form">
+  <!-- ========= DATOS PARTIDO ========= -->
+  <fieldset>
+    <legend><i class="far fa-calendar-alt"></i>&nbsp;Datos del Partido</legend>
+    <div class="form-group">
+      <label for="matchName"><i class="fas fa-signature"></i>&nbsp;Nombre del Partido</label>
+      <input type="text" id="matchName" placeholder="Ej. Torneo de Verano" required>
+    </div>
+    <div class="form-group">
+      <label for="matchDate"><i class="fas fa-calendar-day"></i>&nbsp;Fecha del Partido</label>
+      <input type="date" id="matchDate" required>
+    </div>
+    <div class="form-group">
+      <label for="startTime"><i class="far fa-clock"></i>&nbsp;Hora de Inicio</label>
+      <input type="text" id="startTime" placeholder="Selecciona la hora" required>
+    </div>
+    <div class="form-group duration-group">
+      <label for="durationMinutes"><i class="fas fa-hourglass-half"></i>&nbsp;Duración (minutos)</label>
+      <input type="number" id="durationMinutes" min="0" max="180" step="1" value="90" list="durationOptions">
+      <datalist id="durationOptions">
+        <option value="30"><option value="60"><option value="90"><option value="120"><option value="150"><option value="180">
+      </datalist>
+      <div id="durationDisplay">90 minutos</div>
+    </div>
+    <div class="form-group">
+      <label for="endTime"><i class="far fa-clock"></i>&nbsp;Hora de Fin</label>
+      <input type="text" id="endTime" placeholder="Calculado automáticamente" disabled>
+    </div>
+  </fieldset>
 
-        <!-- =================== ORGANIZADOR =================== -->
-        <fieldset>
-            <legend><i class="fas fa-user-tie"></i> Datos del Organizador</legend>
-            <div class="form-group">
-                <label for="organizer"><i class="fas fa-user"></i> Organizador</label>
-                <input type="text" id="organizer" readonly>
-            </div>
-        </fieldset>
+  <!-- ========= ORGANIZADOR ========= -->
+  <fieldset>
+    <legend><i class="fas fa-user-tie"></i>&nbsp;Datos del Organizador</legend>
+    <div class="form-group">
+      <label for="organizer"><i class="fas fa-user"></i>&nbsp;Organizador</label>
+      <input type="text" id="organizer" readonly>
+    </div>
+  </fieldset>
 
-        <!-- =================== DETALLES DEL PARTIDO =================== -->
-        <fieldset>
-            <legend><i class="fas fa-info-circle"></i> Detalles del Partido</legend>
-            <div class="form-group">
-                <label><i class="fas fa-users"></i> Cantidad de Jugadores</label>
-                <div class="radio-group">
-                    <label><input type="radio" name="playerCount" value="2" required> 2 jugadores</label>
-                    <label><input type="radio" name="playerCount" value="4" required> 4 jugadores</label>
-                    <label><input type="radio" name="playerCount" value="6" required> 6 jugadores</label>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="canchaSelect"><i class="fas fa-map-marker-alt"></i> Cancha</label>
-                <select id="canchaSelect" required>
-                    <option value="">Seleccione una cancha</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="pistaSelect"><i class="fas fa-map-pin"></i> Pista</label>
-                <select id="pistaSelect" required>
-                    <option value="">Seleccione una pista</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="matchLevel"><i class="fas fa-signal"></i> Nivel del Partido</label>
-                <select id="matchLevel" required>
-                    <option value="">Seleccione el nivel</option>
-                    <option value="Principiante">Principiante</option>
-                    <option value="Intermedios">Intermedios</option>
-                    <option value="Avanzados">Avanzados</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="teamType"><i class="fas fa-venus-mars"></i> Tipo de Parejas</label>
-                <select id="teamType" required>
-                    <option value="">Seleccione el tipo</option>
-                    <option value="Femenino">Femenino</option>
-                    <option value="Masculino">Masculino</option>
-                    <option value="Mixto">Mixto</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="completitud"><i class="fas fa-check-double"></i> Completitud</label>
-                <input type="text" id="completitud" value="Parcial (faltan 0)" readonly>
-            </div>
-        </fieldset>
+  <!-- ========= DETALLES ========= -->
+  <fieldset>
+    <legend><i class="fas fa-info-circle"></i>&nbsp;Detalles del Partido</legend>
+    <div class="form-group">
+      <label><i class="fas fa-users"></i>&nbsp;Cantidad de Jugadores</label>
+      <div class="radio-group">
+        <label><input type="radio" name="playerCount" value="2" required> 2</label>
+        <label><input type="radio" name="playerCount" value="4" required> 4</label>
+        <label><input type="radio" name="playerCount" value="6" required> 6</label>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="canchaSelect"><i class="fas fa-map-marker-alt"></i>&nbsp;Cancha</label>
+      <select id="canchaSelect" required><option value="">Seleccione una cancha</option></select>
+    </div>
+    <div class="form-group">
+      <label for="pistaSelect"><i class="fas fa-map-pin"></i>&nbsp;Pista</label>
+      <select id="pistaSelect" required><option value="">Seleccione una pista</option></select>
+    </div>
+    <div class="form-group">
+      <label for="matchLevel"><i class="fas fa-signal"></i>&nbsp;Nivel del Partido</label>
+      <select id="matchLevel" required>
+        <option value="">Seleccione</option><option value="Principiante">Principiante</option>
+        <option value="Intermedios">Intermedios</option><option value="Avanzados">Avanzados</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="teamType"><i class="fas fa-venus-mars"></i>&nbsp;Tipo de Parejas</label>
+      <select id="teamType" required>
+        <option value="">Seleccione</option><option value="Femenino">Femenino</option>
+        <option value="Masculino">Masculino</option><option value="Mixto">Mixto</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="completitud"><i class="fas fa-check-double"></i>&nbsp;Completitud</label>
+      <input type="text" id="completitud" value="Parcial (faltan 0)" readonly>
+    </div>
+  </fieldset>
 
-        <button type="submit" id="btn-create" class="btn btn-create" style="margin-bottom:1rem;">
-            <i class="fas fa-plus-circle"></i> Crear Partido
-        </button>
+  <button type="submit" id="btn-create" class="btn" style="margin-bottom:1rem;">
+    <i class="fas fa-plus-circle"></i>&nbsp;Crear Partido
+  </button>
 
-        <!-- =================== PROGRAMAR PARTIDOS =================== -->
-        <fieldset class="schedule-section schedule-section-disabled">
-            <legend><i class="fas fa-calendar-week"></i> Programar Partidos</legend>
-            <div class="form-group">
-                <label for="repeatWeeks"><i class="fas fa-redo"></i> Repetir (semanas):</label>
-                <select id="repeatWeeks">
-                    <option value="0">No repetir</option>
-                    <option value="1">1</option><option value="2">2</option><option value="3">3</option>
-                    <option value="4">4</option><option value="5">5</option><option value="6">6</option>
-                    <option value="7">7</option><option value="8">8</option><option value="9">9</option>
-                    <option value="10">10</option><option value="11">11</option><option value="12">12</option>
-                </select>
-                <button type="button" id="btn-schedule" class="btn btn-schedule" disabled>
-                    <i class="fas fa-calendar-plus"></i> Programar Partidos
-                </button>
-            </div>
-            <div id="scheduledList"></div>
-            <button type="button" id="btn-save-scheduled" class="btn btn-primary"
-                    style="margin-top:1rem;display:none;">
-                <i class="fas fa-save"></i> Grabar Programación
-            </button>
-        </fieldset>
+  <!-- ========= PROGRAMAR ========= -->
+  <fieldset class="schedule-section schedule-section-disabled">
+    <legend><i class="fas fa-calendar-week"></i>&nbsp;Programar Partidos</legend>
+    <div class="form-group">
+      <label for="repeatWeeks"><i class="fas fa-redo"></i>&nbsp;Repetir (semanas)</label>
+      <select id="repeatWeeks">
+        <option value="0">No repetir</option><option value="1">1</option><option value="2">2</option>
+        <option value="3">3</option><option value="4">4</option><option value="5">5</option>
+        <option value="6">6</option><option value="7">7</option><option value="8">8</option>
+        <option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option>
+      </select>
+      <button type="button" id="btn-schedule" class="btn btn-schedule" disabled>
+        <i class="fas fa-calendar-plus"></i>&nbsp;Programar
+      </button>
+    </div>
+    <div id="scheduledList"></div>
+    <button type="button" id="btn-save-scheduled" class="btn btn-primary" style="display:none;margin-top:1rem;">
+      <i class="fas fa-save"></i>&nbsp;Grabar Programación
+    </button>
+  </fieldset>
 
-        <hr>
+  <hr>
 
-        <!-- =================== UNIRSE =================== -->
-        <div class="join-section">
-            <h2><i class="fas fa-handshake"></i> Unirse al Partido</h2>
-            <button type="button" id="btn-join" class="btn btn-join">
-                <i class="fas fa-user-plus"></i> Unirse al Partido
-            </button>
-            <div class="join-progress">
-                <progress id="joinProgress" value="0" max="1"></progress>
-                <div class="join-info" id="joinInfo">0 jugadores unidos / 0 necesarios</div>
-            </div>
-        </div>
-    </form>
+  <!-- ========= UNIRSE ========= -->
+  <div class="join-section">
+    <h2><i class="fas fa-handshake"></i>&nbsp;Unirse al Partido</h2>
+    <button type="button" id="btn-join" class="btn">
+      <i class="fas fa-user-plus"></i>&nbsp;Unirse al Partido
+    </button>
+    <div class="join-progress">
+      <progress id="joinProgress" value="0" max="1"></progress>
+      <div class="join-info" id="joinInfo">0 jugadores unidos / 0 necesarios</div>
+    </div>
+  </div>
+</form>
 </div>
 
 <!-- Supabase -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
 <script>
-/* ====== util fecha local para evitar desfase ====== */
-function getLocalDate(y,m,d){
-    return new Date(Date.UTC(y,m-1,d,12,0,0));
-}
+/* ---------- util fecha local ---------- */
+function getLocalDate(y,m,d){return new Date(Date.UTC(y,m-1,d,12,0,0));}
 
-/* ====== timepicker ====== */
-$(function(){
-    $('#startTime').mdtimepicker({
-        is24hour:true,format:'hh:mm',theme:'blue',hourPadding:true,readOnly:true
-    }).on('change',recalcEndTime);
-});
+/* ---------- uuid sencillo ---------- */
+function uuid4(){return'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0,v=c==='x'?r:(r&0x3|0x8);return v.toString(16)})}
 
-/* ====== Supabase ====== */
+/* ---------- timepicker ---------- */
+$(function(){$('#startTime').mdtimepicker({is24hour:true,format:'hh:mm',theme:'blue',hourPadding:true,readOnly:true}).on('change',recalcEndTime);});
+
+/* ---------- Supabase ---------- */
 const supabaseClient=supabase.createClient(
-    'https://idlvxinjfbsujpvxncbr.supabase.co',
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig'
+  'https://idlvxinjfbsujpvxncbr.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig'
 );
 
-/* ====== globales ====== */
+/* ---------- globales ---------- */
 let currentMatchId=null;
 let joinedPlayers=[];
 let loggedUser=null;
 
-/* ====== helpers ====== */
-function generatePartyId(){
-    return Math.floor(10000+Math.random()*90000).toString();
-}
+/* ---------- helpers ---------- */
+const generateId=()=>Math.floor(10000+Math.random()*90000).toString();
 
-/* ====== cargar organizador ====== */
+/* ---------- cargar organizador ---------- */
 (async()=>{
-    const {data:{session}}=await supabaseClient.auth.getSession();
-    if(session){
-        const {data:prof}=await supabaseClient
-              .from('profiles').select('full_name').eq('id',session.user.id).single();
-        const name=prof?.full_name||session.user.email;
-        $('#organizer').val(name);
-        loggedUser={id:session.user.id,name};
-    }
+  const {data:{session}}=await supabaseClient.auth.getSession();
+  if(session){
+    const prof=await supabaseClient.from('profiles').select('full_name').eq('id',session.user.id).single();
+    const name=prof.data?.full_name||session.user.email;
+    $('#organizer').val(name);
+    loggedUser={id:session.user.id,name};
+  }
 })();
 
-/* ====== cargar canchas ====== */
+/* ---------- cargar canchas ---------- */
 (async()=>{
-    const {data}=await supabaseClient.from('establishments').select('id,name');
-    data?.forEach(c=>{
-        $('#canchaSelect').append(`<option value="${c.id}">${c.name}</option>`);
-    });
+  const {data}=await supabaseClient.from('establishments').select('id,name');
+  data?.forEach(c=>$('#canchaSelect').append(`<option value="${c.id}">${c.name}</option>`));
 })();
 
-/* ====== pistas por cancha ====== */
+/* ---------- pistas ---------- */
 $('#canchaSelect').on('change',async function(){
-    const id=this.value;
-    const $pista=$('#pistaSelect').html('<option value="">Seleccione una pista</option>');
-    if(!id) return;
-    const {data}=await supabaseClient.from('pistas')
-        .select('id,court_name').eq('establishment_id',id);
-    data?.forEach(p=>$pista.append(`<option value="${p.id}">${p.court_name}</option>`));
+  const id=this.value,$pista=$('#pistaSelect').html('<option value="">Seleccione una pista</option>');
+  if(!id)return;
+  const {data}=await supabaseClient.from('pistas').select('id,court_name').eq('establishment_id',id);
+  data?.forEach(p=>$pista.append(`<option value="${p.id}">${p.court_name}</option>`));
 });
 
-/* ====== cargar partido existente (opcional) ====== */
+/* ---------- cargar partido existente ---------- */
 (async()=>{
-    const {data:{session}}=await supabaseClient.auth.getSession();
-    if(!session) return;
-    const {data}=await supabaseClient
-        .from('partidos').select('*').eq('organizer',session.user.email).maybeSingle();
-    if(!data) return;
-    currentMatchId=data.id;
-    $('#matchName').val(data.match_name);
-    $('#matchDate').val(data.match_date);
-    $('#startTime').val(data.start_time);
-    $('#endTime').val(data.end_time);
-    $(`input[name="playerCount"][value="${data.player_count}"]`).prop('checked',true);
-    $('#canchaSelect').val(data.cancha_id).trigger('change');
-    setTimeout(()=>$('#pistaSelect').val(data.pista_id),500);
-    $('#matchLevel').val(data.match_level);
-    $('#teamType').val(data.team_type);
-    $('#completitud').val(data.completitud);
-    $('#btn-create').text('Modificar Partido');
-    $('.schedule-section').removeClass('schedule-section-disabled');
-    $('#btn-schedule').prop('disabled',false);
+  const {data:{session}}=await supabaseClient.auth.getSession();
+  if(!session)return;
+  const {data:partido}=await supabaseClient.from('partidos').select('*').eq('organizer',session.user.email).maybeSingle();
+  if(!partido)return;
+  currentMatchId=partido.id;
+  $('#matchName').val(partido.match_name);
+  $('#matchDate').val(partido.match_date);
+  $('#startTime').val(partido.start_time);
+  $('#endTime').val(partido.end_time);
+  $(`input[name="playerCount"][value="${partido.player_count}"]`).prop('checked',true);
+  $('#canchaSelect').val(partido.cancha_id).trigger('change');
+  setTimeout(()=>$('#pistaSelect').val(partido.pista_id),500);
+  $('#matchLevel').val(partido.match_level);
+  $('#teamType').val(partido.team_type);
+  $('#completitud').val(partido.completitud);
+  $('#btn-create').text('Modificar Partido');
+  $('.schedule-section').removeClass('schedule-section-disabled');
+  $('#btn-schedule').prop('disabled',false);
+  await loadJoinedPlayers();
 })();
 
-/* ====== submit crear/modificar ====== */
+/* ---------- submit crear/modificar ---------- */
 $('#match-form').on('submit',async e=>{
-    e.preventDefault();
-    const matchId=currentMatchId||generatePartyId();
-    const data={
-        id:matchId,
-        match_name:$('#matchName').val().trim(),
-        match_date:$('#matchDate').val(),
-        start_time:$('#startTime').val(),
-        end_time:$('#endTime').val(),
-        organizer:$('#organizer').val(),
-        player_count:parseInt($('input[name="playerCount"]:checked').val(),10),
-        cancha_id:$('#canchaSelect').val(),
-        pista_id:$('#pistaSelect').val(),
-        match_level:$('#matchLevel').val(),
-        team_type:$('#teamType').val(),
-        completitud:'Parcial'
-    };
-    let error;
-    if(currentMatchId){
-        ({error}=await supabaseClient.from('partidos').update(data).eq('id',currentMatchId));
-    }else{
-        ({error}=await supabaseClient.from('partidos').insert([data]));
-        if(!error){currentMatchId=matchId;$('#btn-create').text('Modificar Partido');}
-    }
-    if(error){alert('Error: '+error.message);return;}
-    $('.schedule-section').removeClass('schedule-section-disabled');
-    $('#btn-schedule').prop('disabled',false);
-    alert('Operación exitosa.');
+  e.preventDefault();
+  const id=currentMatchId||generateId();
+  const data={
+    id,
+    match_name:$('#matchName').val().trim(),match_date:$('#matchDate').val(),
+    start_time:$('#startTime').val(),end_time:$('#endTime').val(),
+    organizer:$('#organizer').val(),player_count:+$('input[name="playerCount"]:checked').val(),
+    cancha_id:$('#canchaSelect').val(),pista_id:$('#pistaSelect').val(),
+    match_level:$('#matchLevel').val(),team_type:$('#teamType').val(),
+    completitud:'Parcial'
+  };
+  let err;
+  if(currentMatchId){({error:err}=await supabaseClient.from('partidos').update(data).eq('id',currentMatchId));}
+  else{({error:err}=await supabaseClient.from('partidos').insert([data]));if(!err){currentMatchId=id;$('#btn-create').text('Modificar Partido');}}
+  if(err){alert('Error: '+(err.message||JSON.stringify(err)));return;}
+  $('.schedule-section').removeClass('schedule-section-disabled');$('#btn-schedule').prop('disabled',false);
+  alert('Operación exitosa.');
 });
 
-/* ====== programar partidos ====== */
+/* ---------- programar partidos ---------- */
 $('#btn-schedule').on('click',function(){
-    const repeat=parseInt($('#repeatWeeks').val(),10);
-    const baseDateStr=$('#matchDate').val();
-    if(!baseDateStr){alert('Ingresa una fecha.');return;}
-    const [y,m,d]=baseDateStr.split('-').map(Number);
-    const base=getLocalDate(y,m,d);
-    const scheduled=[];
-    const ul=$('<ul></ul>');
-    for(let i=0;i<repeat;i++){
-        const newDate=getLocalDate(base.getUTCFullYear(),
-                                   base.getUTCMonth()+1,
-                                   base.getUTCDate()+(i+1)*7);
-        const iso=newDate.toISOString().substring(0,10);
-        const nice=newDate.toLocaleDateString('es-ES',
-                     {year:'numeric',month:'long',day:'numeric',weekday:'long'});
-        ul.append(`<li>Partido: ${$('#matchName').val().trim()} - Fecha: ${nice}</li>`);
-        scheduled.push({
-            id:generatePartyId(),                                      <!-- <<< aquí la nueva línea -->
-            match_name:$('#matchName').val().trim(),
-            match_date:iso,
-            start_time:$('#startTime').val(),
-            end_time:$('#endTime').val(),
-            organizer:$('#organizer').val(),
-            player_count:parseInt($('input[name="playerCount"]:checked').val(),10),
-            cancha_id:$('#canchaSelect').val(),
-            pista_id:$('#pistaSelect').val(),
-            match_level:$('#matchLevel').val(),
-            team_type:$('#teamType').val(),
-            completitud:'Parcial'
-        });
-    }
-    $('#scheduledList').empty().append(ul);
-    if(!scheduled.length){$('#btn-save-scheduled').hide();return;}
-    $('#btn-save-scheduled').show().off('click').on('click',async function(){
-        const btn=this;btn.disabled=true;
-        for(const row of scheduled){
-            const {error}=await supabaseClient.from('partidos').insert([row]);
-            if(error){alert('Error al guardar los partidos programados.');btn.disabled=false;return;}
-        }
-        alert('Partidos programados guardados.');
-        btn.disabled=false;$(btn).hide();$('#scheduledList').empty();
+  const repeat=+$('#repeatWeeks').val(),baseStr=$('#matchDate').val();
+  if(!baseStr){alert('Ingresa una fecha.');return;}
+  const [y,m,d]=baseStr.split('-').map(Number),base=getLocalDate(y,m,d);
+  const matches=[],ul=$('<ul></ul>');
+  for(let i=0;i<repeat;i++){
+    const date=getLocalDate(base.getUTCFullYear(),base.getUTCMonth()+1,base.getUTCDate()+(i+1)*7);
+    const iso=date.toISOString().substring(0,10);
+    ul.append(`<li>Partido: ${$('#matchName').val().trim()} - Fecha: ${date.toLocaleDateString('es-ES',{year:'numeric',month:'long',day:'numeric',weekday:'long'})}</li>`);
+    matches.push({
+      id:generateId(),match_name:$('#matchName').val().trim(),match_date:iso,
+      start_time:$('#startTime').val(),end_time:$('#endTime').val(),organizer:$('#organizer').val(),
+      player_count:+$('input[name="playerCount"]:checked').val(),cancha_id:$('#canchaSelect').val(),
+      pista_id:$('#pistaSelect').val(),match_level:$('#matchLevel').val(),team_type:$('#teamType').val(),
+      completitud:'Parcial'
     });
+  }
+  $('#scheduledList').empty().append(ul);
+  if(!matches.length){$('#btn-save-scheduled').hide();return;}
+  $('#btn-save-scheduled').show().off('click').on('click',async function(){
+    this.disabled=true;
+    for(const m of matches){const {error}=await supabaseClient.from('partidos').insert([m]);if(error){alert('Error: '+(error.message||JSON.stringify(error)));this.disabled=false;return;}}
+    alert('Programación guardada.');this.disabled=false;$(this).hide();$('#scheduledList').empty();
+  });
 });
 
-/* ====== unirse ====== */
+/* ---------- cargar jugadores unidos ---------- */
+async function loadJoinedPlayers(){
+  if(!currentMatchId)return;
+  const {data,error}=await supabaseClient.from('players_matches').select('player_id').eq('match_id',currentMatchId);
+  if(error){console.error(error);return;}
+  joinedPlayers=data.map(r=>r.player_id);updateJoinUI();
+}
+
+/* ---------- unirse al partido ---------- */
 $('#btn-join').on('click',async()=>{
-    if(!currentMatchId){alert('Primero crea el partido.');return;}
-    if(!loggedUser){alert('Debes iniciar sesión.');return;}
-    if(joinedPlayers.includes(loggedUser.id)){alert('Ya estás unido.');return;}
-    const {error}=await supabaseClient.from('players_matches')
-        .insert([{match_id:currentMatchId,player_id:loggedUser.id}]);
-    if(error){alert('Error: '+error.message);return;}
-    joinedPlayers.push(loggedUser.id);updateJoinUI();alert('¡Unido con éxito!');
+  if(!currentMatchId){alert('Primero crea el partido.');return;}
+  if(!loggedUser){alert('Debes iniciar sesión.');return;}
+  if(joinedPlayers.includes(loggedUser.id)){alert('Ya estás unido.');return;}
+  const {error}=await supabaseClient.from('players_matches').insert([{
+    id:uuid4(),match_id:currentMatchId,player_id:loggedUser.id
+  }]);
+  if(error){alert('Error al unirte: '+(error.message||JSON.stringify(error)));return;}
+  await loadJoinedPlayers();alert('¡Te has unido al partido!');
 });
 
-/* ====== actualizar ui ====== */
+/* ---------- actualizar UI ---------- */
 function updateJoinUI(){
-    const req=parseInt($('input[name="playerCount"]:checked').val()||0,10);
-    const cur=joinedPlayers.length;
-    $('#joinProgress').attr({max:req,value:cur});
-    $('#joinInfo').text(`${cur} jugador${cur!==1?'es':''} unido${cur!==1?'s':''} / ${req} necesarios`);
+  const req=+$('input[name="playerCount"]:checked').val()||0,cur=joinedPlayers.length;
+  $('#joinProgress').attr({max:req||1,value:cur});$('#joinInfo').text(`${cur} jugador${cur!==1?'es':''} unido${cur!==1?'s':''} / ${req} necesarios`);
 }
 
-/* ====== recalc end time ====== */
+/* ---------- recalc hora fin ---------- */
 function recalcEndTime(){
-    const start=$('#startTime').val();if(!start)return;
-    const dur=parseInt($('#durationMinutes').val(),10)||0;if(dur<=0)return;
-    const [h,m]=start.split(':').map(Number);
-    const tot=h*60+m+dur;
-    const endH=String(Math.floor(tot/60)%24).padStart(2,'0');
-    const endM=String(tot%60).padStart(2,'0');
-    $('#endTime').val(`${endH}:${endM}`);
+  const start=$('#startTime').val(),dur=+$('#durationMinutes').val()||0;
+  if(!start||dur<=0)return;
+  const [h,m]=start.split(':').map(Number),tot=h*60+m+dur,endH=String(Math.floor(tot/60)%24).padStart(2,'0'),endM=String(tot%60).padStart(2,'0');
+  $('#endTime').val(`${endH}:${endM}`);
 }
 
-/* ====== duración cambia ====== */
-$('#durationMinutes').on('input',function(){
-    let v=parseInt(this.value,10)||0;if(v>180){v=180;this.value=v;}
-    $('#durationDisplay').text(v+' minutos');recalcEndTime();
-});
+/* ---------- duración cambia ---------- */
+$('#durationMinutes').on('input',function(){let v=+this.value||0;if(v>180){v=180;this.value=v;}$('#durationDisplay').text(v+' minutos');recalcEndTime();});
 
-/* ====== init ====== */
+/* ---------- init ---------- */
 $(function(){
-    $('.schedule-section').addClass('schedule-section-disabled');
-    $('#btn-schedule').prop('disabled',true);
+  $('.schedule-section').addClass('schedule-section-disabled');$('#btn-schedule').prop('disabled',true);
+  recalcEndTime();
 });
 </script>
 </body>
