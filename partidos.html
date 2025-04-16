@@ -428,6 +428,12 @@
                 gap: 1.5rem;
             }
         }
+
+        /* Estilo para la sección de programar partidos deshabilitada */
+        .schedule-section-disabled {
+            opacity: 0.6;
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
@@ -532,7 +538,9 @@
                 </div>
             </fieldset>
 
-            <fieldset class="schedule-section">
+            <button type="submit" id="btn-create" class="btn btn-create"><i class="fas fa-plus-circle"></i> Crear Partido</button>
+
+            <fieldset class="schedule-section schedule-section-disabled">
                 <legend><i class="fas fa-calendar-week"></i> Programar Partidos</legend>
                 <div class="form-group">
                     <label for="repeatWeeks"><i class="fas fa-redo"></i> Repetir partido durante (semanas):</label>
@@ -556,19 +564,17 @@
                 <div id="scheduledList"></div>
             </fieldset>
 
-            <button type="submit" id="btn-create" class="btn btn-create"><i class="fas fa-plus-circle"></i> Crear Partido</button>
-        </form>
+            <hr>
 
-        <hr>
-
-        <div class="join-section">
-            <h2><i class="fas fa-handshake"></i> Unirse al Partido</h2>
-            <button type="button" id="btn-join" class="btn btn-join"><i class="fas fa-user-plus"></i> Unirse al Partido</button>
-            <div class="join-progress">
-                <progress id="joinProgress" value="0" max="1"></progress>
-                <div class="join-info" id="joinInfo">0 jugadores unidos / 0 necesarios</div>
+            <div class="join-section">
+                <h2><i class="fas fa-handshake"></i> Unirse al Partido</h2>
+                <button type="button" id="btn-join" class="btn btn-join"><i class="fas fa-user-plus"></i> Unirse al Partido</button>
+                <div class="join-progress">
+                    <progress id="joinProgress" value="0" max="1"></progress>
+                    <div class="join-info" id="joinInfo">0 jugadores unidos / 0 necesarios</div>
+                </div>
             </div>
-        </div>
+        </form>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
@@ -706,11 +712,14 @@
                     document.getElementById('teamType').value = data.team_type;
                     document.getElementById('completitud').value = data.completitud;
                     document.getElementById('btn-create').textContent = "Modificar Partido";
+                    document.querySelector('.schedule-section').classList.remove('schedule-section-disabled');
                     document.getElementById('btn-schedule').disabled = false; // Habilitar al cargar un partido existente
                 } else {
+                    document.querySelector('.schedule-section').classList.add('schedule-section-disabled');
                     document.getElementById('btn-schedule').disabled = true; // Deshabilitar si no hay partido cargado
                 }
             } else {
+                document.querySelector('.schedule-section').classList.add('schedule-section-disabled');
                 document.getElementById('btn-schedule').disabled = true; // Deshabilitar si no hay sesión
             }
             updateJoinUI();
@@ -768,6 +777,7 @@
                     console.error("Update error:", error);
                 } else {
                     alert("Partido modificado exitosamente con ID: " + matchId);
+                    document.querySelector('.schedule-section').classList.remove('schedule-section-disabled');
                     document.getElementById('btn-schedule').disabled = false; // Habilitar tras modificación
                 }
             } else {
@@ -781,6 +791,7 @@
                     currentMatchId = matchId;
                     document.getElementById('btn-create').textContent = "Modificar Partido";
                     alert("Partido creado exitosamente con ID: " + matchId);
+                    document.querySelector('.schedule-section').classList.remove('schedule-section-disabled');
                     document.getElementById('btn-schedule').disabled = false; // Habilitar tras creación
                 }
             }
@@ -932,8 +943,12 @@
         }
         checkProfile();
 
-        // Deshabilitar el botón de programar al cargar la página
+        // Deshabilitar la sección de programar partidos al cargar la página
         document.addEventListener('DOMContentLoaded', function() {
+            const scheduleSection = document.querySelector('.schedule-section');
+            if (scheduleSection) {
+                scheduleSection.classList.add('schedule-section-disabled');
+            }
             document.getElementById('btn-schedule').disabled = true;
         });
     </script>
