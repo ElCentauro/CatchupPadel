@@ -523,7 +523,7 @@
                 </div>
             </fieldset>
 
-            <button type="submit" id="btn-create" class="btn btn-create"><i class="fas fa-plus-circle"></i> Crear Partido</button>
+            <button type="submit" id="btn-create" class="btn btn-create" style="margin-bottom: 1rem;"><i class="fas fa-plus-circle"></i> Crear Partido</button>
 
             <fieldset class="schedule-section schedule-section-disabled">
                 <legend><i class="fas fa-calendar-week"></i> Programar Partidos</legend>
@@ -820,7 +820,19 @@
                 const li = document.createElement('li');
                 li.textContent = `Partido: ${matchNameInput} - Fecha: ${formattedDate}`;
                 ul.appendChild(li);
-                scheduledMatches.push({ date: scheduledDate.toISOString().split('T')[0] }); // Store date in YYYY-MM-DD format
+                scheduledMatches.push({
+                    match_name: matchNameInput,
+                    match_date: scheduledDate.toISOString().split('T')[0],
+                    start_time: startTimeInput,
+                    end_time: document.getElementById('endTime').value,
+                    organizer: organizerInput,
+                    player_count: playerCount,
+                    cancha_id: canchaSelect,
+                    pista_id: pistaSelect,
+                    match_level: matchLevelSelect,
+                    team_type: teamTypeSelect,
+                    completitud: "Pendiente"
+                });
             }
 
             scheduledList.appendChild(ul);
@@ -828,23 +840,10 @@
                 saveScheduledButton.style.display = 'block';
                 saveScheduledButton.onclick = async () => {
                     saveScheduledButton.disabled = true;
-                    for (const match of scheduledMatches) {
-                        const newMatchData = {
-                            match_name: matchNameInput,
-                            match_date: match.date,
-                            start_time: startTimeInput,
-                            end_time: document.getElementById('endTime').value, // Assuming end time is the same
-                            organizer: organizerInput,
-                            player_count: playerCount,
-                            cancha_id: canchaSelect,
-                            pista_id: pistaSelect,
-                            match_level: matchLevelSelect,
-                            team_type: teamTypeSelect,
-                            completitud: "Pendiente" // Or another appropriate status
-                        };
+                    for (const matchData of scheduledMatches) {
                         const { data, error } = await supabaseClient
                             .from('partidos')
-                            .insert([newMatchData]);
+                            .insert([matchData]);
                         if (error) {
                             console.error('Error al guardar partido programado:', error);
                             alert('Error al guardar los partidos programados.');
@@ -872,14 +871,35 @@
             // ... (Código sin cambios)
         }
 
-        // Función para recalcular la Hora de Fin (sin cambios)
+        // Función para recalcular la Hora de Fin
         function recalcEndTime() {
-            // ... (Código sin cambios)
+            const startVal = $('#startTime').val();  // Ej: "18:30"
+            const dur = parseInt(document.getElementById('durationMinutes').value, 10) || 0;
+            if (!startVal || dur <= 0) return;
+
+            // Parsear la hora de inicio "HH:mm"
+            const [hourStr, minuteStr] = startVal.split(':');
+            let hour = parseInt(hourStr, 10);
+            let minute = parseInt(minuteStr, 10);
+
+            let totalMinutes = hour * 60 + minute + dur;
+            let endHour = Math.floor(totalMinutes / 60) % 24;
+            let endMinute = totalMinutes % 60;
+
+            // Formatear resultado en "HH:mm"
+            const endTime = String(endHour).padStart(2, '0') + ':' + String(endMinute).padStart(2, '0');
+            $('#endTime').val(endTime);
         }
 
-        // Listener para el cambio de duración (sin cambios)
+        // Listener para el cambio de duración, recalcular hora de fin
         document.getElementById('durationMinutes').addEventListener('input', function() {
-            // ... (Código sin cambios)
+            let dur = parseInt(this.value, 10) || 0;
+            if (dur > 180) {
+                dur = 180;
+                this.value = dur;
+            }
+            document.getElementById('durationDisplay').textContent = dur + " minutos";
+            recalcEndTime();
         });
 
         // Deshabilitar la sección de programar partidos al cargar la página
