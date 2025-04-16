@@ -5,437 +5,75 @@
     <title>Catch Up Padel - Crear Partido</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <!-- Fuentes -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+    <!-- Iconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
+    <!-- Time‑picker -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/dmuy/MDTimePicker/mdtimepicker.css">
 
+    <!-- jQuery & mdtimepicker -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
     <script src="https://cdn.jsdelivr.net/gh/dmuy/MDTimePicker/mdtimepicker.js"></script>
 
     <style>
-        /* ============================================
-            VARIABLES CSS
-        ============================================ */
+        /* ------------- VARIABLES ------------- */
         :root {
-            --color-primario: #FFA726; /* Naranja un poco más suave */
-            --color-secundario: #FFB74D;
-            --color-fondo: #FFF;
-            --color-texto: #333;
-            --color-hover: #777;
-            --color-input-focus: rgba(255, 167, 38, 0.2);
-            --color-borde: #ddd;
-            --color-acento: #FF5722; /* Un naranja rojizo como acento */
-            --font-principal: 'Poppins', sans-serif;
-            --font-titulo: 'Playfair Display', serif;
-            --font-general: 'Roboto', sans-serif;
+            --color-primario:#FFA726;
+            --color-secundario:#FFB74D;
+            --color-fondo:#FFF;
+            --color-texto:#333;
+            --color-hover:#777;
+            --color-input-focus:rgba(255,167,38,.2);
+            --color-borde:#ddd;
+            --color-acento:#FF5722;
+            --font-principal:'Poppins',sans-serif;
+            --font-titulo:'Playfair Display',serif;
+            --font-general:'Roboto',sans-serif;
         }
-
-        /* ============================================
-            RESET Y ESTILOS GLOBALES
-        ============================================ */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: var(--font-general);
-            background: linear-gradient(135deg, #FFE0B2 0%, #FFCC80 100%); /* Naranja suave degradado */
-            color: var(--color-texto);
-            line-height: 1.6;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        a {
-            text-decoration: none;
-            color: inherit;
-            transition: color 0.3s ease-in-out;
-        }
-
-        a:hover {
-            color: var(--color-primario);
-        }
-
-        /* ============================================
-            CABECERA Y NAVEGACIÓN
-        ============================================ */
-        header {
-            background-color: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
-            padding: 1.5rem 2rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            flex-wrap: wrap;
-        }
-
-        header .logo {
-            font-family: var(--font-titulo);
-            font-size: 2.5rem;
-            font-weight: 600;
-            color: var(--color-primario);
-            transition: transform 0.3s ease-in-out;
-            display: flex;
-            align-items: center;
-        }
-
-        header .logo i {
-            margin-right: 0.5rem;
-            font-size: 1.2em;
-            color: var(--color-acento);
-        }
-
-        header .logo:hover {
-            transform: scale(1.03);
-        }
-
-        header nav a {
-            font-size: 1.1rem;
-            padding: 0.75rem 1.5rem;
-            background-color: var(--color-acento);
-            color: #fff;
-            border-radius: 8px;
-            font-weight: 500;
-            transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        header nav a:hover {
-            background-color: var(--color-primario);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-        }
-
-        /* ============================================
-            CONTENEDOR PRINCIPAL CON ANIMACIÓN fadeInput
-        ============================================ */
-        .container {
-            max-width: 900px;
-            width: 95%;
-            margin: 3rem auto;
-            background-color: var(--color-fondo);
-            padding: 2.5rem;
-            border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* Sombreado más sutil */
-            animation: fadeInput 0.6s ease forwards;
-            opacity: 0;
-            border: 1px solid var(--color-acento); /* Borde fino con color de acento */
-        }
-
-        @keyframes fadeInput {
-            0% {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 2rem;
-            font-family: var(--font-titulo);
-            font-size: 2.8rem;
-            color: var(--color-primario);
-            letter-spacing: 0.8px;
-        }
-
-        hr {
-            margin: 2.5rem 0;
-            border: none;
-            border-top: 1px solid var(--color-borde);
-        }
-
-        /* ============================================
-            FIELDSETS Y LEYENDAS
-        ============================================ */
-        fieldset {
-            border: 2px solid var(--color-primario);
-            border-radius: 15px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            background-color: #f9f9f9;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-            transition: box-shadow 0.3s ease-in-out;
-        }
-
-        fieldset:hover {
-            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.07);
-        }
-
-        legend {
-            font-weight: bold;
-            padding: 0 15px;
-            color: var(--color-primario);
-            font-family: var(--font-principal);
-            font-size: 1.3rem;
-            border-bottom: 2px solid var(--color-primario);
-            margin-bottom: 1.2rem;
-            display: inline-block;
-        }
-
-        /* ============================================
-            FORM GROUP Y ESTILOS DE INPUT
-        ============================================ */
-        .form-group {
-            margin-bottom: 1.8rem;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 0.7rem;
-            font-weight: 600;
-            color: var(--color-primario); /* Etiquetas más visuales */
-            font-size: 1.1rem;
-        }
-
-        input[type="text"],
-        input[type="date"],
-        input[type="number"],
-        select {
-            width: 100%;
-            padding: 1.2rem;
-            border: 1px solid var(--color-borde);
-            border-radius: 10px;
-            font-size: 1rem;
-            transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-            background-color: #fff;
-        }
-
-        /* Campo deshabilitado (hora de fin) */
-        input:disabled {
-            background-color: #eee;
-            cursor: not-allowed;
-        }
-
-        /* Efecto hover y transición en los campos */
-        input:hover,
-        select:hover {
-            border-color: var(--color-acento);
-        }
-
-        input:focus,
-        select:focus {
-            outline: none;
-            border-color: var(--color-acento);
-            box-shadow: 0 0 8px var(--color-input-focus); /* Foco más sutil */
-        }
-
-        /* Grupo para la duración con valores sugeridos */
-        .duration-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* ============================================
-            RADIO BUTTONS
-        ============================================ */
-        .radio-group {
-            display: flex;
-            gap: 2.5rem;
-            margin-top: 1rem;
-        }
-
-        .radio-group label {
-            display: flex;
-            align-items: center;
-            font-weight: normal;
-            cursor: pointer;
-        }
-
-        .radio-group input[type="radio"] {
-            appearance: none;
-            -webkit-appearance: none;
-            width: 20px;
-            height: 20px;
-            border: 2px solid var(--color-acento);
-            border-radius: 50%;
-            outline: none;
-            cursor: pointer;
-            margin-right: 0.7rem;
-            transition: background-color 0.2s ease-in-out;
-        }
-
-        .radio-group input[type="radio"]:checked {
-            background-color: var(--color-acento);
-            border: 2px solid var(--color-acento);
-        }
-
-        .radio-group input[type="radio"]:checked::before {
-            content: '';
-            display: block;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background-color: var(--color-fondo);
-            margin: 4px;
-        }
-
-        /* ============================================
-            BOTONES
-        ============================================ */
-        .btn {
-            display: inline-block;
-            padding: 1.2rem 2.5rem;
-            border: none;
-            border-radius: 12px;
-            background-color: var(--color-primario);
-            color: #fff;
-            font-size: 1.15rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out, box-shadow 0.3s ease-in-out;
-            margin-top: 2rem;
-            font-weight: 600;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
-        }
-
-        .btn:hover {
-            background-color: var(--color-acento);
-            transform: translateY(-3px);
-            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
-        }
-
-        .btn-schedule {
-            margin-left: 1.5rem;
-        }
-
-        /* ============================================
-            SECCIONES ESPECÍFICAS
-        ============================================ */
-        /* Programar Partidos */
-        .schedule-section select {
-            max-width: 200px;
-            padding: 1rem;
-            border-radius: 10px;
-            border: 1px solid var(--color-borde);
-            font-size: 1rem;
-        }
-
-        #scheduledList {
-            margin-top: 2rem;
-            font-size: 1rem;
-            color: var(--color-hover);
-            border-top: 1px dashed var(--color-borde);
-            padding-top: 2rem;
-        }
-
-        #scheduledList ul {
-            list-style: none;
-            padding-left: 0;
-        }
-
-        #scheduledList li {
-            padding: 0.7rem 0;
-            border-bottom: 1px dashed var(--color-borde);
-        }
-
-        #scheduledList li:last-child {
-            border-bottom: none;
-        }
-
-        /* Sección "Unirse al Partido" */
-        .join-section {
-            text-align: center;
-            margin-top: 3.5rem;
-            padding: 2.5rem;
-            background-color: #f9f9f9;
-            border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-        }
-
-        .join-section h2 {
-            font-family: var(--font-titulo);
-            color: var(--color-acento);
-            margin-bottom: 1.5rem;
-            font-size: 2rem;
-        }
-
-        .join-progress {
-            margin: 2rem auto;
-            max-width: 400px;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 2px solid var(--color-primario);
-        }
-
-        progress {
-            width: 100%;
-            height: 30px;
-            -webkit-appearance: none;
-            appearance: none;
-            border-radius: 12px;
-        }
-
-        progress::-webkit-progress-bar {
-            background-color: #eee;
-            border-radius: 12px;
-        }
-
-        progress::-webkit-progress-value {
-            background-color: var(--color-primario);
-            border-radius: 12px;
-        }
-
-        .join-info {
-            margin-top: 20px;
-            font-size: 1.2rem;
-            color: var(--color-primario);
-            font-weight: bold;
-        }
-
-        /* Estilo para la sección de programar partidos deshabilitada */
-        .schedule-section-disabled {
-            opacity: 0.6;
-            pointer-events: none;
-        }
-
-        .btn-primary {
-            background-color: var(--color-primario);
-            color: white;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background-color 0.3s ease;
-        }
-
-        .btn-primary:hover {
-            background-color: var(--color-acento);
-        }
+        /* ------------- RESET & BASE ------------- */
+        *{margin:0;padding:0;box-sizing:border-box;}
+        html{scroll-behavior:smooth;}
+        body{font-family:var(--font-general);background:linear-gradient(135deg,#FFE0B2 0%,#FFCC80 100%);color:var(--color-texto);line-height:1.6;min-height:100vh;display:flex;flex-direction:column;}
+        a{text-decoration:none;color:inherit;transition:color .3s ease-in-out;}a:hover{color:var(--color-primario);}
+        /* ------------- HEADER ------------- */
+        header{background-color:rgba(255,255,255,.9);backdrop-filter:blur(10px);padding:1.5rem 2rem;box-shadow:0 4px 12px rgba(0,0,0,.08);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10;flex-wrap:wrap;}
+        header .logo{font-family:var(--font-titulo);font-size:2.5rem;font-weight:600;color:var(--color-primario);display:flex;align-items:center;transition:transform .3s ease-in-out;}
+        header .logo i{margin-right:.5rem;font-size:1.2em;color:var(--color-acento);}header .logo:hover{transform:scale(1.03);}header nav a{font-size:1.1rem;padding:.75rem 1.5rem;background-color:var(--color-acento);color:#fff;border-radius:8px;font-weight:500;transition:background-color .3s ease-in-out,transform .2s ease-in-out;box-shadow:0 2px 6px rgba(0,0,0,.1);}header nav a:hover{background-color:var(--color-primario);transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,.15);}        
+        /* ------------- CONTAINER ------------- */
+        .container{max-width:900px;width:95%;margin:3rem auto;background-color:var(--color-fondo);padding:2.5rem;border-radius:12px;box-shadow:0 8px 20px rgba(0,0,0,.1);animation:fadeInput .6s ease forwards;opacity:0;border:1px solid var(--color-acento);}@keyframes fadeInput{0%{opacity:0;transform:translateY(20px);}100%{opacity:1;transform:translateY(0);}}
+        h1{text-align:center;margin-bottom:2rem;font-family:var(--font-titulo);font-size:2.8rem;color:var(--color-primario);letter-spacing:.8px;}
+        hr{margin:2.5rem 0;border:none;border-top:1px solid var(--color-borde);}        
+        /* ------------- FORM ELEMENTS ------------- */
+        fieldset{border:2px solid var(--color-primario);border-radius:15px;padding:2rem;margin-bottom:2rem;background-color:#f9f9f9;box-shadow:0 4px 10px rgba(0,0,0,.05);transition:box-shadow .3s ease-in-out;}fieldset:hover{box-shadow:0 6px 14px rgba(0,0,0,.07);}legend{font-weight:bold;padding:0 15px;color:var(--color-primario);font-family:var(--font-principal);font-size:1.3rem;border-bottom:2px solid var(--color-primario);margin-bottom:1.2rem;display:inline-block;}
+        .form-group{margin-bottom:1.8rem;}label{display:block;margin-bottom:.7rem;font-weight:600;color:var(--color-primario);font-size:1.1rem;}
+        input[type="text"],input[type="date"],input[type="number"],select{width:100%;padding:1.2rem;border:1px solid var(--color-borde);border-radius:10px;font-size:1rem;transition:border-color .3s ease-in-out,box-shadow .3s ease-in-out;background-color:#fff;}
+        input:disabled{background-color:#eee;cursor:not-allowed;}input:hover,select:hover{border-color:var(--color-acento);}input:focus,select:focus{outline:none;border-color:var(--color-acento);box-shadow:0 0 8px var(--color-input-focus);}        
+        .radio-group{display:flex;gap:2.5rem;margin-top:1rem;}.radio-group label{display:flex;align-items:center;cursor:pointer;font-weight:normal;}.radio-group input[type="radio"]{appearance:none;width:20px;height:20px;border:2px solid var(--color-acento);border-radius:50%;margin-right:.7rem;cursor:pointer;transition:background-color .2s ease-in-out;}.radio-group input[type="radio"]:checked{background-color:var(--color-acento);} .radio-group input[type="radio"]:checked::before{content:'';display:block;width:12px;height:12px;border-radius:50%;background-color:#fff;margin:4px;}
+        .btn{display:inline-block;padding:1.2rem 2.5rem;border:none;border-radius:12px;background-color:var(--color-primario);color:#fff;font-size:1.15rem;cursor:pointer;transition:background-color .3s ease-in-out,transform .2s ease-in-out,box-shadow .3s ease-in-out;margin-top:2rem;font-weight:600;box-shadow:0 4px 10px rgba(0,0,0,.12);} .btn:hover{background-color:var(--color-acento);transform:translateY(-3px);box-shadow:0 6px 14px rgba(0,0,0,.15);} .btn-schedule{margin-left:1.5rem;}
+        .schedule-section select{max-width:200px;padding:1rem;border-radius:10px;border:1px solid var(--color-borde);font-size:1rem;}
+        #scheduledList{margin-top:2rem;font-size:1rem;color:var(--color-hover);border-top:1px dashed var(--color-borde);padding-top:2rem;}#scheduledList ul{list-style:none;padding-left:0;}#scheduledList li{padding:.7rem 0;border-bottom:1px dashed var(--color-borde);}#scheduledList li:last-child{border-bottom:none;}
+        .join-section{text-align:center;margin-top:3.5rem;padding:2.5rem;background-color:#f9f9f9;border-radius:15px;box-shadow:0 4px 10px rgba(0,0,0,.05);} .join-section h2{font-family:var(--font-titulo);color:var(--color-acento);margin-bottom:1.5rem;font-size:2rem;}
+        .join-progress{margin:2rem auto;max-width:400px;border-radius:12px;overflow:hidden;border:2px solid var(--color-primario);}progress{width:100%;height:30px;appearance:none;border-radius:12px;}progress::-webkit-progress-bar{background-color:#eee;border-radius:12px;}progress::-webkit-progress-value{background-color:var(--color-primario);border-radius:12px;}
+        .join-info{margin-top:20px;font-size:1.2rem;color:var(--color-primario);font-weight:bold;}
+        .schedule-section-disabled{opacity:.6;pointer-events:none;}
+        .btn-primary{background-color:var(--color-primario);color:#fff;border:none;padding:.75rem 1.5rem;border-radius:8px;cursor:pointer;font-size:1rem;transition:background-color .3s ease;} .btn-primary:hover{background-color:var(--color-acento);}
     </style>
 </head>
 <body>
+    <!-- HEADER -->
     <header>
-        <div class="logo">
-            <i class="fas fa-racket"></i>
-            Catch Up Padel
-        </div>
-        <nav>
-            <a href="home.html"><i class="fas fa-home"></i> Volver a Home</a>
-        </nav>
+        <div class="logo"><i class="fas fa-racket"></i>Catch Up Padel</div>
+        <nav><a href="home.html"><i class="fas fa-home"></i> Volver a Home</a></nav>
     </header>
 
+    <!-- MAIN -->
     <div class="container">
         <h1><i class="fas fa-play-circle"></i> Crear Partido de Padel</h1>
-
         <form id="match-form">
+            <!-- DATOS DEL PARTIDO -->
             <fieldset>
                 <legend><i class="far fa-calendar-alt"></i> Datos del Partido</legend>
                 <div class="form-group">
@@ -454,12 +92,7 @@
                     <label for="durationMinutes"><i class="fas fa-hourglass-half"></i> Duración (minutos)</label>
                     <input type="number" id="durationMinutes" placeholder="Ej. 90" min="0" max="180" step="1" list="durationOptions">
                     <datalist id="durationOptions">
-                        <option value="30">
-                        <option value="60">
-                        <option value="90">
-                        <option value="120">
-                        <option value="150">
-                        <option value="180">
+                        <option value="30"><option value="60"><option value="90"><option value="120"><option value="150"><option value="180">
                     </datalist>
                     <div id="durationDisplay">90 minutos</div>
                 </div>
@@ -469,6 +102,7 @@
                 </div>
             </fieldset>
 
+            <!-- ORGANIZADOR -->
             <fieldset>
                 <legend><i class="fas fa-user-tie"></i> Datos del Organizador</legend>
                 <div class="form-group">
@@ -477,6 +111,7 @@
                 </div>
             </fieldset>
 
+            <!-- DETALLES -->
             <fieldset>
                 <legend><i class="fas fa-info-circle"></i> Detalles del Partido</legend>
                 <div class="form-group">
@@ -491,13 +126,13 @@
                     <label for="canchaSelect"><i class="fas fa-map-marker-alt"></i> Cancha</label>
                     <select id="canchaSelect" required>
                         <option value="">Seleccione una cancha</option>
-                        </select>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label for="pistaSelect"><i class="fas fa-map-pin"></i> Pista</label>
                     <select id="pistaSelect" required>
                         <option value="">Seleccione una pista</option>
-                        </select>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label for="matchLevel"><i class="fas fa-signal"></i> Nivel del Partido</label>
@@ -523,35 +158,27 @@
                 </div>
             </fieldset>
 
-            <button type="submit" id="btn-create" class="btn btn-create" style="margin-bottom: 1rem;"><i class="fas fa-plus-circle"></i> Crear Partido</button>
+            <button type="submit" id="btn-create" class="btn btn-create" style="margin-bottom:1rem;"><i class="fas fa-plus-circle"></i> Crear Partido</button>
 
+            <!-- PROGRAMAR PARTIDOS -->
             <fieldset class="schedule-section schedule-section-disabled">
                 <legend><i class="fas fa-calendar-week"></i> Programar Partidos</legend>
                 <div class="form-group">
                     <label for="repeatWeeks"><i class="fas fa-redo"></i> Repetir partido durante (semanas):</label>
                     <select id="repeatWeeks">
                         <option value="0">No repetir</option>
-                        <option value="1">1 semana</option>
-                        <option value="2">2 semanas</option>
-                        <option value="3">3 semanas</option>
-                        <option value="4">4 semanas</option>
-                        <option value="5">5 semanas</option>
-                        <option value="6">6 semanas</option>
-                        <option value="7">7 semanas</option>
-                        <option value="8">8 semanas</option>
-                        <option value="9">9 semanas</option>
-                        <option value="10">10 semanas</option>
-                        <option value="11">11 semanas</option>
-                        <option value="12">12 semanas</option>
+                        <!-- opciones 1‑12 -->
+                        <script>for(let i=1;i<=12;i++){document.write(`<option value="${i}">${i} semana${i>1?'s':''}</option>`);}</script>
                     </select>
                     <button type="button" id="btn-schedule" class="btn btn-schedule" disabled><i class="fas fa-calendar-plus"></i> Programar Partidos</button>
                 </div>
                 <div id="scheduledList"></div>
-                <button type="button" id="btn-save-scheduled" class="btn btn-primary" style="margin-top: 1rem; display:none;"><i class="fas fa-save"></i> Grabar Programación</button>
+                <button type="button" id="btn-save-scheduled" class="btn btn-primary" style="margin-top:1rem;display:none;"><i class="fas fa-save"></i> Grabar Programación</button>
             </fieldset>
 
             <hr>
 
+            <!-- UNIRSE AL PARTIDO -->
             <div class="join-section">
                 <h2><i class="fas fa-handshake"></i> Unirse al Partido</h2>
                 <button type="button" id="btn-join" class="btn btn-join"><i class="fas fa-user-plus"></i> Unirse al Partido</button>
@@ -563,360 +190,184 @@
         </form>
     </div>
 
+    <!-- SUPABASE -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
     <script>
-        // ============================================
-        // INICIALIZAR MDTimePicker PARA "Hora de Inicio" en formato 24h
-        // ============================================
-        $(document).ready(function() {
-            $('#startTime').mdtimepicker({
-                is24hour: true,     // Activar formato 24h
-                format: 'hh:mm',     // Con is24hour=true obtiene "18:30"
-                theme: 'blue',
-                hourPadding: true,
-                readOnly: true      // Se fuerza el uso del dial
-            });
+        /*************************************************
+         *  UTILIDADES                                 *
+         *************************************************/
+        // Genera un ID aleatorio de 5 dígitos para la PK "id"
+        function generatePartyId(){return (Math.floor(10000+Math.random()*90000)).toString();}
 
-            // Recalcular la hora de fin cada vez que se cambie la hora de inicio
-            $('#startTime').on('change', function() {
-                recalcEndTime();
-            });
+        // Convierte "YYYY-MM-DD" en Date LOCAL a las 12:00  (evita desfases por huso horario)
+        function getLocalDate(isoDate){const [y,m,d]=isoDate.split('-').map(Number);return new Date(y,m-1,d,12,0,0,0);}        
+
+        /*************************************************
+         *  INICIALIZAR TIMEPICKER                      *
+         *************************************************/
+        $(document).ready(function(){
+            $('#startTime').mdtimepicker({is24hour:true,format:'hh:mm',theme:'blue',hourPadding:true,readOnly:true})
+                .on('change',recalcEndTime);
         });
 
-        // ============================================
-        // CONFIGURACIÓN DE SUPABASE – Reemplaza con tus credenciales reales
-        // ============================================
-        const SUPABASE_URL = 'https://idlvxinjfbsujpvxncbr.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig';
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        /*************************************************
+         *  SUPABASE INIT                               *
+         *************************************************/
+        const SUPABASE_URL='https://idlvxinjfbsujpvxncbr.supabase.co';
+        const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig';
+        const supabaseClient=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
 
-        // Variables globales
-        let currentMatchId = null;
-        let joinedPlayers = [];
-        let loggedUser = null;
+        let currentMatchId=null;
+        let loggedUser=null;
 
-        // Función para generar un ID único de 5 dígitos
-        function generatePartyId() {
-            return Math.floor(10000 + Math.random() * 90000).toString();
-        }
-
-        // Cargar datos del organizador
-        async function loadOrganizer() {
-            const { data: { session }, error } = await supabaseClient.auth.getSession();
-            if (error) {
-                console.error('Error al obtener la sesión:', error.message);
-            } else if (session && session.user) {
-                const { data: profileData, error: profileError } = await supabaseClient
-                    .from('profiles')
-                    .select('full_name')
-                    .eq('id', session.user.id)
-                    .single();
-                let organizerName = session.user.email;
-                if (!profileError && profileData && profileData.full_name) {
-                    organizerName = profileData.full_name;
-                }
-                document.getElementById('organizer').value = organizerName;
-                loggedUser = { id: session.user.id, name: organizerName };
+        /*************************************************
+         *  CARGAR ORGANIZADOR                          *
+         *************************************************/
+        async function loadOrganizer(){
+            const{data:{session}}=await supabaseClient.auth.getSession();
+            if(session&&session.user){
+                const{data:profile}=await supabaseClient.from('profiles').select('full_name').eq('id',session.user.id).single();
+                const organizerName=profile?.full_name||session.user.email;
+                document.getElementById('organizer').value=organizerName;
+                loggedUser={id:session.user.id,name:organizerName};
             }
-        }
-        loadOrganizer();
+        }loadOrganizer();
 
-        // Cargar las canchas en el selector
-        async function loadCanchas() {
-            const { data, error } = await supabaseClient
-                .from('establishments')
-                .select('id, name');
-            if (error) {
-                console.error('Error al cargar canchas:', error.message);
-            } else {
-                const canchaSelect = document.getElementById('canchaSelect');
-                data.forEach(est => {
-                    const option = document.createElement('option');
-                    option.value = est.id;
-                    option.textContent = est.name;
-                    canchaSelect.appendChild(option);
-                });
-            }
-        }
-        loadCanchas();
+        /*************************************************
+         *  CARGAR CANCHAS Y PISTAS                     *
+         *************************************************/
+        async function loadCanchas(){
+            const{data,error}=await supabaseClient.from('establishments').select('id,name');
+            if(!error){const sel=document.getElementById('canchaSelect');data.forEach(c=>{const o=document.createElement('option');o.value=c.id;o.textContent=c.name;sel.appendChild(o);});}
+        }loadCanchas();
 
-        // Al cambiar la cancha, cargar las pistas correspondientes
-        document.getElementById('canchaSelect').addEventListener('change', async function() {
-            const canchaId = this.value;
-            const pistaSelect = document.getElementById('pistaSelect');
-            pistaSelect.innerHTML = '<option value="">Seleccione una pista</option>';
-            if (canchaId) {
-                const { data, error } = await supabaseClient
-                    .from('pistas')
-                    .select('id, court_name')
-                    .eq('establishment_id', canchaId);
-                if (error) {
-                    console.error('Error al cargar pistas:', error.message);
-                } else {
-                    data.forEach(pista => {
-                        const option = document.createElement('option');
-                        option.value = pista.id;
-                        option.textContent = pista.court_name;
-                        pistaSelect.appendChild(option);
-                    });
-                }
-            }
+        document.getElementById('canchaSelect').addEventListener('change',async function(){
+            const pistaSel=document.getElementById('pistaSelect');pistaSel.innerHTML='<option value="">Seleccione una pista</option>';
+            if(this.value){const{data}=await supabaseClient.from('pistas').select('id,court_name').eq('establishment_id',this.value);
+                data.forEach(p=>{const o=document.createElement('option');o.value=p.id;o.textContent=p.court_name;pistaSel.appendChild(o);});}
         });
 
-        // Cargar partido existente del usuario logueado (si lo hay)
-        async function loadMatch() {
-            const { data: { session }, error } = await supabaseClient.auth.getSession();
-            if (session && session.user) {
-                const organizerEmail = session.user.email;
-                const { data, error: matchError } = await supabaseClient
-                    .from('partidos')
-                    .select('*')
-                    .eq('organizer', organizerEmail)
-                    .maybeSingle();
-                if (matchError) {
-                    console.error('Error al cargar el partido:', matchError.message);
-                } else if (data) {
-                    currentMatchId = data.id;
-                    document.getElementById('matchName').value = data.match_name;
-                    document.getElementById('matchDate').value = data.match_date;
-                    $('#startTime').val(data.start_time);
-                    $('#endTime').val(data.end_time);
-
-                    const radio = document.querySelector(`input[name="playerCount"][value="${data.player_count}"]`);
-                    if (radio) radio.checked = true;
-
-                    document.getElementById('canchaSelect').value = data.cancha_id;
-                    const event = new Event('change');
-                    document.getElementById('canchaSelect').dispatchEvent(event);
-
-                    setTimeout(() => {
-                        document.getElementById('pistaSelect').value = data.pista_id;
-                    }, 500);
-
-                    document.getElementById('matchLevel').value = data.match_level;
-                    document.getElementById('teamType').value = data.team_type;
-                    document.getElementById('completitud').value = data.completitud;
-                    document.getElementById('btn-create').textContent = "Modificar Partido";
+        /*************************************************
+         *  CARGAR PARTIDO EXISTENTE (si lo hay)       *
+         *************************************************/
+        async function loadMatch(){
+            const{data:{session}}=await supabaseClient.auth.getSession();
+            if(session&&session.user){
+                const{data:match}=await supabaseClient.from('partidos').select('*').eq('organizer',session.user.email).maybeSingle();
+                if(match){
+                    currentMatchId=match.id;
+                    document.getElementById('matchName').value=match.match_name;
+                    document.getElementById('matchDate').value=match.match_date;
+                    $('#startTime').val(match.start_time);
+                    $('#endTime').val(match.end_time);
+                    document.querySelector(`input[name="playerCount"][value="${match.player_count}"]`).checked=true;
+                    document.getElementById('canchaSelect').value=match.cancha_id;
+                    document.getElementById('canchaSelect').dispatchEvent(new Event('change'));
+                    setTimeout(()=>{document.getElementById('pistaSelect').value=match.pista_id;},500);
+                    document.getElementById('matchLevel').value=match.match_level;
+                    document.getElementById('teamType').value=match.team_type;
+                    document.getElementById('completitud').value=match.completitud;
+                    document.getElementById('btn-create').textContent='Modificar Partido';
                     document.querySelector('.schedule-section').classList.remove('schedule-section-disabled');
-                    document.getElementById('btn-schedule').disabled = false; // Habilitar al cargar un partido existente
-                } else {
-                    document.querySelector('.schedule-section').classList.add('schedule-section-disabled');
-                    document.getElementById('btn-schedule').disabled = true; // Deshabilitar si no hay partido cargado
+                    document.getElementById('btn-schedule').disabled=false;
                 }
-            } else {
-                document.querySelector('.schedule-section').classList.add('schedule-section-disabled');
-                document.getElementById('btn-schedule').disabled = true; // Deshabilitar si no hay sesión
             }
-            updateJoinUI();
-        }
-        loadMatch();
+        }loadMatch();
 
-        // Envío del formulario para crear/modificar el partido
-        document.getElementById('match-form').addEventListener('submit', async function(e) {
+        /*************************************************
+         *  CREAR / MODIFICAR PARTIDO                   *
+         *************************************************/
+        document.getElementById('match-form').addEventListener('submit',async function(e){
             e.preventDefault();
-            let matchId = currentMatchId;
-            if (!matchId) {
-                matchId = generatePartyId();
-            }
-
-            const matchName = document.getElementById('matchName').value.trim();
-            const matchDate = document.getElementById('matchDate').value;
-            const startTime = document.getElementById('startTime').value;  // Ej: "18:30"
-            const endTime = document.getElementById('endTime').value;      // Ej: "19:30"
-            const organizer = document.getElementById('organizer').value;
-            const playerCount = parseInt(document.querySelector('input[name="playerCount"]:checked')?.value, 10);
-            const cancha = document.getElementById('canchaSelect').value;
-            const pista = document.getElementById('pistaSelect').value;
-            const matchLevel = document.getElementById('matchLevel').value;
-            const teamType = document.getElementById('teamType').value;
-
-            if (!matchName || !matchDate || !startTime || !endTime || !organizer ||
-                !playerCount || !cancha || !pista || !matchLevel || !teamType) {
-                alert('Por favor, completa todos los campos.');
-                return;
-            }
-
-            const partidoData = {
-                id: matchId,
-                match_name: matchName,
-                match_date: matchDate,
-                start_time: startTime,  // Se guarda en formato "HH:mm"
-                end_time: endTime,      // También en "HH:mm"
-                organizer: organizer,
-                player_count: playerCount,
-                cancha_id: cancha,
-                pista_id: pista,
-                match_level: matchLevel,
-                team_type: teamType,
-                completitud: "Parcial"
-            };
-
-            let { data, error } = { data: null, error: null };
-            if (currentMatchId) {
-                ({ data, error } = await supabaseClient
-                    .from('partidos')
-                    .update(partidoData)
-                    .eq('id', currentMatchId));
-                if (error) {
-                    alert("Error al modificar partido: " + error.message);
-                    console.error("Update error:", error);
-                } else {
-                    alert("Partido modificado exitosamente con ID: " + matchId);
-                    document.querySelector('.schedule-section').classList.remove('schedule-section-disabled');
-                    document.getElementById('btn-schedule').disabled = false; // Habilitar tras modificación
-                }
-            } else {
-                ({ data, error } = await supabaseClient
-                    .from('partidos')
-                    .insert([partidoData]));
-                if (error) {
-                    alert("Error al crear partido: " + error.message);
-                    console.error("Insert error:", error);
-                } else {
-                    currentMatchId = matchId;
-                    document.getElementById('btn-create').textContent = "Modificar Partido";
-                    alert("Partido creado exitosamente con ID: " + matchId);
-                    document.querySelector('.schedule-section').classList.remove('schedule-section-disabled');
-                    document.getElementById('btn-schedule').disabled = false; // Habilitar tras creación
-                }
-            }
-            updateJoinUI();
+            let matchId=currentMatchId||generatePartyId();
+            const matchName=document.getElementById('matchName').value.trim();
+            const matchDate=document.getElementById('matchDate').value;
+            const startTime=document.getElementById('startTime').value;
+            const endTime=document.getElementById('endTime').value;
+            const organizer=document.getElementById('organizer').value;
+            const playerCount=parseInt(document.querySelector('input[name="playerCount"]:checked')?.value,10);
+            const cancha=document.getElementById('canchaSelect').value;
+            const pista=document.getElementById('pistaSelect').value;
+            const matchLevel=document.getElementById('matchLevel').value;
+            const teamType=document.getElementById('teamType').value;
+            if(!matchName||!matchDate||!startTime||!endTime||!organizer||!playerCount||!cancha||!pista||!matchLevel||!teamType){alert('Por favor, completa todos los campos.');return;}
+            const dataObj={id:matchId,match_name:matchName,match_date:matchDate,start_time:startTime,end_time:endTime,organizer,player_count:playerCount,cancha_id:cancha,pista_id:pista,match_level:matchLevel,team_type:teamType,completitud:'Parcial'};
+            let res;
+            if(currentMatchId){res=await supabaseClient.from('partidos').update(dataObj).eq('id',currentMatchId);}else{res=await supabaseClient.from('partidos').insert([dataObj]);}
+            if(res.error){alert('Error: '+res.error.message);console.error(res.error);}else{
+                currentMatchId=matchId;document.getElementById('btn-create').textContent='Modificar Partido';document.querySelector('.schedule-section').classList.remove('schedule-section-disabled');document.getElementById('btn-schedule').disabled=false;alert(currentMatchId?'Partido modificado correctamente.':'Partido creado correctamente.');}
         });
 
-        // Programar partidos repetidos semanalmente
-        document.getElementById('btn-schedule').addEventListener('click', function() {
-            const repeatWeeks = parseInt(document.getElementById('repeatWeeks').value, 10);
-            const matchDateInput = document.getElementById('matchDate').value;
-            const matchNameInput = document.getElementById('matchName').value.trim();
-            const startTimeInput = document.getElementById('startTime').value;
-            const endTimeInput = document.getElementById('endTime').value;
-            const durationMinutesInput = document.getElementById('durationMinutes').value;
-            const canchaSelect = document.getElementById('canchaSelect').value;
-            const pistaSelect = document.getElementById('pistaSelect').value;
-            const matchLevelSelect = document.getElementById('matchLevel').value;
-            const teamTypeSelect = document.getElementById('teamType').value;
-            const organizerInput = document.getElementById('organizer').value;
-            const playerCount = parseInt(document.querySelector('input[name="playerCount"]:checked')?.value, 10);
+        /*************************************************
+         *  PROGRAMAR PARTIDOS REPETIDOS                *
+         *************************************************/
+        document.getElementById('btn-schedule').addEventListener('click',function(){
+            const weeks=parseInt(document.getElementById('repeatWeeks').value,10);
+            const matchDateInput=document.getElementById('matchDate').value;
+            if(!matchDateInput){alert('Primero ingresa la fecha del partido.');return;}
+            const baseDate=getLocalDate(matchDateInput);
+            const matchName=document.getElementById('matchName').value.trim();
+            const startTime=document.getElementById('startTime').value;
+            const endTime=document.getElementById('endTime').value;
+            const durationMinutes=document.getElementById('durationMinutes').value;
+            const cancha=document.getElementById('canchaSelect').value;
+            const pista=document.getElementById('pistaSelect').value;
+            const matchLevel=document.getElementById('matchLevel').value;
+            const teamType=document.getElementById('teamType').value;
+            const organizer=document.getElementById('organizer').value;
+            const playerCount=parseInt(document.querySelector('input[name="playerCount"]:checked')?.value,10);
 
-            const scheduledList = document.getElementById('scheduledList');
-            scheduledList.innerHTML = '';
-            const saveScheduledButton = document.getElementById('btn-save-scheduled');
-            const scheduledMatches = [];
-
-            if (!matchDateInput) {
-                alert('Primero ingresa la fecha del partido.');
-                return;
-            }
-
-            const baseDate = new Date(matchDateInput);
-            const ul = document.createElement('ul');
-
-            // Calculate and add subsequent dates if repeatWeeks > 0
-            for (let i = 0; i < repeatWeeks; i++) {
-                const scheduledDate = new Date(baseDate);
-                scheduledDate.setDate(baseDate.getDate() + (i + 1) * 7);
-                const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
-                const formattedDate = scheduledDate.toLocaleDateString('es-ES', options);
-                const li = document.createElement('li');
-                li.textContent = `Partido: ${matchNameInput} - Fecha: ${formattedDate}`;
-                ul.appendChild(li);
+            const scheduledList=document.getElementById('scheduledList');
+            scheduledList.innerHTML='';
+            const ul=document.createElement('ul');
+            const scheduledMatches=[];
+            for(let i=0;i<weeks;i++){
+                const d=new Date(baseDate.getTime()+(i+1)*7*24*60*60*1000);
+                const iso=d.toISOString().split('T')[0];
+                const formatted=d.toLocaleDateString('es-ES',{year:'numeric',month:'long',day:'numeric',weekday:'long'});
+                const li=document.createElement('li');li.textContent=`Partido: ${matchName} - Fecha: ${formatted}`;ul.appendChild(li);
                 scheduledMatches.push({
-                    match_name: matchNameInput,
-                    match_date: scheduledDate.toISOString().split('T')[0],
-                    start_time: startTimeInput,
-                    end_time: endTimeInput,
-                    organizer: organizerInput,
-                    player_count: playerCount,
-                    cancha_id: canchaSelect,
-                    pista_id: pistaSelect,
-                    match_level: matchLevelSelect,
-                    team_type: teamTypeSelect,
-                    completitud: "Pendiente"
+                    id:generatePartyId(),
+                    match_name:matchName,
+                    match_date:iso,
+                    start_time:startTime,
+                    end_time:endTime,
+                    organizer,
+                    player_count:playerCount,
+                    cancha_id:cancha,
+                    pista_id:pista,
+                    match_level:matchLevel,
+                    team_type:teamType,
+                    completitud:'Pendiente'
                 });
             }
-
             scheduledList.appendChild(ul);
-            if (scheduledMatches.length > 0) {
-                saveScheduledButton.style.display = 'block';
-                saveScheduledButton.onclick = async () => {
-                    saveScheduledButton.disabled = true;
-                    for (const matchData of scheduledMatches) {
-                        const { match_name, match_date, start_time, end_time, organizer, player_count, cancha_id, pista_id, match_level, team_type, completitud } = matchData;
-                        const { data, error } = await supabaseClient
-                            .from('partidos')
-                            .insert([{ match_name, match_date, start_time, end_time, organizer, player_count, cancha_id, pista_id, match_level, team_type, completitud }]);
-                        if (error) {
-                            console.error('Error al guardar partido programado:', error);
-                            alert('Error al guardar los partidos programados.');
-                            saveScheduledButton.disabled = false;
-                            return;
-                        }
-                    }
-                    alert('Partidos programados guardados exitosamente.');
-                    saveScheduledButton.disabled = false;
-                    saveScheduledButton.style.display = 'none';
-                    scheduledList.innerHTML = '';
-                };
-            } else {
-                saveScheduledButton.style.display = 'none';
-            }
+            const btnSave=document.getElementById('btn-save-scheduled');
+            if(scheduledMatches.length){btnSave.style.display='block';btnSave.disabled=false;btnSave.onclick=async()=>{
+                btnSave.disabled=true;
+                const {error}=await supabaseClient.from('partidos').insert(scheduledMatches);
+                if(error){console.error('Error Supabase:',error);alert('Error al guardar los partidos programados:\n'+error.message);btnSave.disabled=false;}
+                else{alert('Partidos programados guardados exitosamente.');btnSave.style.display='none';scheduledList.innerHTML='';}
+            };}else{btnSave.style.display='none';}
         });
 
-        // Botón "Unirse al Partido"
-        document.getElementById('btn-join').addEventListener('click', async function() {
-            // ... (Código sin cambios)
-        });
+        /*************************************************
+         *  UNIRSE AL PARTIDO  (placeholder)            *
+         *************************************************/
+        document.getElementById('btn-join').addEventListener('click',function(){alert('Funcionalidad próxima a implementarse');});
 
-        // Función para actualizar la interfaz de unirse (sin cambios)
-        function updateJoinUI() {
-            // ... (Código sin cambios)
+        /*************************************************
+         *  UTILIDADES DE HORA                          *
+         *************************************************/
+        function recalcEndTime(){
+            const startVal=$('#startTime').val();const dur=parseInt(document.getElementById('durationMinutes').value,10)||0;if(!startVal||dur<=0)return;
+            const[hh,mm]=startVal.split(':').map(Number);let total=hh*60+mm+dur;const endHour=Math.floor(total/60)%24;const endMin=total%60;$('#endTime').val(String(endHour).padStart(2,'0')+':'+String(endMin).padStart(2,'0'));
         }
+        document.getElementById('durationMinutes').addEventListener('input',function(){let v=parseInt(this.value,10)||0;if(v>180){v=180;this.value=v;}document.getElementById('durationDisplay').textContent=v+' minutos';recalcEndTime();});
 
-        // Función para recalcular la Hora de Fin
-        function recalcEndTime() {
-            const startVal = $('#startTime').val();  // Ej: "18:30"
-            const dur = parseInt(document.getElementById('durationMinutes').value, 10) || 0;
-            if (!startVal || dur <= 0) return;
-
-            // Parsear la hora de inicio "HH:mm"
-            const [hourStr, minuteStr] = startVal.split(':');
-            let hour = parseInt(hourStr, 10);
-            let minute = parseInt(minuteStr, 10);
-
-            let totalMinutes = hour * 60 + minute + dur;
-            let endHour = Math.floor(totalMinutes / 60) % 24;
-            let endMinute = totalMinutes % 60;
-
-            // Formatear resultado en "HH:mm"
-            const endTime = String(endHour).padStart(2, '0') + ':' + String(endMinute).padStart(2, '0');
-            $('#endTime').val(endTime);
-        }
-
-        // Listener para el cambio de hora de inicio, recalcular hora de fin
-        $('#startTime').on('change', function() {
-            recalcEndTime();
-        });
-
-        // Listener para el cambio de duración, recalcular hora de fin
-        document.getElementById('durationMinutes').addEventListener('input', function() {
-            let dur = parseInt(this.value, 10) || 0;
-            if (dur > 180) {
-                dur = 180;
-                this.value = dur;
-            }
-            document.getElementById('durationDisplay').textContent = dur + " minutos";
-            recalcEndTime();
-        });
-
-        // Deshabilitar la sección de programar partidos al cargar la página
-        document.addEventListener('DOMContentLoaded', function() {
-            const scheduleSection = document.querySelector('.schedule-section');
-            if (scheduleSection) {
-                scheduleSection.classList.add('schedule-section-disabled');
-            }
-            document.getElementById('btn-schedule').disabled = true;
-        });
+        // Deshabilitar programación al cargar
+        document.addEventListener('DOMContentLoaded',()=>{document.querySelector('.schedule-section').classList.add('schedule-section-disabled');document.getElementById('btn-schedule').disabled=true;});
     </script>
 </body>
 </html>
