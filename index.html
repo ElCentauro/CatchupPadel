@@ -17,8 +17,10 @@
         }
         video {
             display: block;
-            width: 70%; /* El video ocupará el 70% del ancho del contenedor */
-            height: 70%; /* El video ocupará el 70% del alto del contenedor */
+            max-width: 70%; /* El video no excederá el 70% del ancho del contenedor */
+            max-height: 70%; /* El video no excederá el 70% del alto del contenedor */
+            width: auto; /* Permite que el ancho se ajuste dentro del max-width */
+            height: auto; /* Permite que la altura se ajuste dentro del max-height manteniendo la proporción */
             object-fit: contain; /* Ajusta el video dentro del contenedor sin recortar, manteniendo su relación de aspecto */
         }
     </style>
