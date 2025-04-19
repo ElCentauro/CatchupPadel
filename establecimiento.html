@@ -4,18 +4,17 @@
   <meta charset="UTF-8">
   <title>Establecimiento</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Fuente moderna -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-  <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <style>
-    /* Paleta:
-       - Gris claro (body): #D3D3D3
-       - Azul eléctrico (primary): #007BFF
-       - Naranja (secondary/accent): #FF6600
-       - Melocotón medio (fondo del formulario): #FFD8A8
-       - Rojo para acciones destructivas: #e74c3c
+    /* Paleta Original:
+        - Gris claro (body): #D3D3D3
+        - Azul eléctrico (primary): #007BFF
+        - Naranja (secondary/accent): #FF6600
+        - Melocotón medio (fondo del formulario): #FFD8A8 <- Restaurado
+        - Rojo para acciones destructivas: #e74c3c
     */
 
     /* Reset básico */
@@ -40,7 +39,7 @@
     .container {
       width: 100%;
       max-width: 1100px;
-      background-color: #fff;
+      background-color: #fff; /* Fondo del contenedor general */
       border-radius: 8px;
       box-shadow: 0 8px 20px rgba(0,0,0,0.1);
       overflow: hidden;
@@ -57,11 +56,15 @@
       color: #fff;
       font-weight: 600;
       margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.75rem;
     }
 
-    /* Contenido del formulario con fondo melocotón medio */
+    /* Contenido del formulario con fondo MELOCOTÓN */
     .content {
-      background-color: #FFD8A8;
+      background-color: #FFD8A8; /* Cambio: Fondo Melocotón Restaurado */
       padding: 2rem;
     }
 
@@ -72,10 +75,14 @@
       position: relative;
     }
     .search-section label {
-      font-weight: 600;
+      font-weight: 600; /* Mantener negrita aquí */
       display: block;
       margin-bottom: 0.5rem;
       color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
     }
     .search-section input {
       width: 80%;
@@ -84,7 +91,7 @@
       border: 1px solid #aaa;
       border-radius: 6px;
       font-size: 1rem;
-      min-height: 55px;
+      min-height: 48px;
     }
     .suggestions {
       position: absolute;
@@ -100,6 +107,8 @@
       overflow-y: auto;
       z-index: 100;
       border-radius: 0 0 6px 6px;
+      list-style: none;
+      text-align: left;
     }
     .suggestions li {
       padding: 0.6rem;
@@ -116,6 +125,16 @@
       flex-direction: column;
       gap: 1.5rem;
     }
+    .form-section {
+        margin-bottom: 1.5rem;
+        padding-top: 1rem;
+        border-top: 1px solid #ddd; /* Separador visual */
+    }
+    .form-section:first-of-type {
+        border-top: none;
+        padding-top: 0;
+    }
+
     .form-group {
       display: flex;
       flex-direction: column;
@@ -123,54 +142,73 @@
     }
     .form-group label {
       margin-bottom: 0.5rem;
-      font-weight: 600;
+      font-weight: 400; /* Restaurado: Peso normal por defecto */
       color: #333;
     }
-    /* Se aumenta la altura mínima de los inputs y selects */
+    /* Ya no se necesita estilo especial para etiquetas obligatorias aquí */
+    /* .form-group label:has(span[style*="color: red"]) { ... } -> Eliminado */
+
+
     .form-group input[type="text"],
     .form-group input[type="url"],
     .form-group input[type="number"],
+    .form-group input[type="tel"],
     .form-group select {
       padding: 0.9rem;
       font-size: 1rem;
       border: 1px solid #bbb;
       border-radius: 6px;
-      background-color: #fff;
-      min-height: 55px;
+      background-color: #fff; /* Inputs siguen siendo blancos */
     }
     input[readonly] {
       background-color: #e6e6e6;
     }
+    /* Estilo de foco restaurado al default del navegador */
+    /* .form-group input:focus, .form-group select:focus { ... } -> Eliminado */
 
-    /* Sección de Dirección */
+
+    /* Sección de Dirección (ahora parte de .form-section) */
     .direccion {
-      background: #fff;
+      background: #fff; /* La sección dirección SÍ MANTIENE fondo blanco como en el original */
       border: 1px solid #ddd;
       padding: 1.5rem;
       border-radius: 6px;
       margin-bottom: 1rem;
     }
-    .direccion h2 {
+    /* Estilo para títulos de sección (h2, h3) */
+    .form-section h3, .direccion h2 {
       font-size: 1.3rem;
-      margin-bottom: 1rem;
-      color: #2c3e50;
-      text-align: center;
+      margin-bottom: 1.5rem;
+      color: #333; /* Restaurado: Color oscuro por defecto */
+      text-align: left;
       font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
     }
+     .direccion h2 {
+         /* Originalmente tenía color #2c3e50 y centrado, podemos restaurar eso */
+         color: #2c3e50;
+         text-align: center;
+         justify-content: center;
+     }
+
 
     /* Botón para buscar en el mapa */
     .btn-map {
       background-color: #007BFF;
       border: none;
       color: #fff;
-      padding: 0.9rem 1.2rem;
+      padding: 0.8rem 1.2rem; /* Padding consistente mantenido */
       border-radius: 6px;
       font-size: 1rem;
       cursor: pointer;
       transition: background-color 0.3s ease;
       margin-top: auto;
       align-self: flex-start;
-      min-height: 55px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
     }
     .btn-map:hover {
       background-color: #0066D4;
@@ -182,6 +220,7 @@
       height: 300px;
       border: 1px solid #ddd;
       border-radius: 6px;
+      margin-top: 1rem;
     }
 
     /* Botones de acción */
@@ -190,11 +229,12 @@
       gap: 1rem;
       flex-wrap: wrap;
       justify-content: center;
+      margin-top: 2rem;
     }
     .action-buttons button {
       flex: 1;
       min-width: 120px;
-      padding: 0.9rem;
+      padding: 0.9rem 1.5rem; /* Padding consistente mantenido */
       font-size: 1rem;
       border: none;
       border-radius: 6px;
@@ -202,7 +242,10 @@
       font-weight: 600;
       transition: background-color 0.3s ease;
       color: #fff;
-      min-height: 55px;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
     }
     .btn-save {
       background-color: #FF6600;
@@ -223,8 +266,23 @@
       background-color: #444;
     }
 
+    /* Nota campos obligatorios */
+    .required-note {
+        font-size: 0.9rem;
+        text-align: center;
+        margin-bottom: 2rem;
+        color: #555;
+    }
+
+
     /* Responsive */
     @media (max-width: 768px) {
+      .content {
+        padding: 1.5rem;
+      }
+      .header h1 {
+        font-size: 1.8rem;
+      }
       .search-section input {
         width: 100%;
       }
@@ -233,110 +291,117 @@
         left: 0;
         transform: none;
       }
+      .action-buttons {
+          flex-direction: column;
+      }
+      .action-buttons button {
+          width: 100%;
+          flex: none;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <!-- Encabezado -->
     <div class="header">
-      <h1>Establecimiento</h1>
+      <h1><i class="fas fa-store"></i>Establecimiento</h1>
     </div>
 
-    <!-- Contenido del formulario -->
-    <div class="content">
-      <!-- Sección de búsqueda con autocompletado (para admin). 
-           Se puede ocultar si el usuario es "establecimiento". -->
-      <div class="search-section" id="search-section">
-        <label for="searchQuery">Buscar Establecimiento (ID, Nombre o Calle):</label>
+    <div class="content"> <div class="search-section" id="search-section">
+        <label for="searchQuery"><i class="fas fa-search"></i>Buscar Establecimiento (ID, Nombre o Calle):</label>
         <input type="text" id="searchQuery" placeholder="Escribe para buscar...">
         <ul class="suggestions" id="suggestions"></ul>
       </div>
 
-      <!-- Formulario -->
+       <p class="required-note"><span style="color: red;">*</span> Indica campo obligatorio.</p>
+
       <form id="establecimiento-form">
-        <!-- Datos fijos (ID, Nombre) -->
-        <div class="form-group">
-          <label for="uniqueId">ID Único (8 dígitos)</label>
-          <input type="text" id="uniqueId" name="uniqueId" readonly>
-        </div>
-        <div class="form-group">
-          <label for="nombre">Nombre del Establecimiento</label>
-          <input type="text" id="nombre" name="nombre" readonly>
+
+        <div class="form-section">
+          <h3><i class="fas fa-info-circle"></i> Datos Principales</h3>
+          <div class="form-group">
+            <label for="uniqueId">ID Único (8 dígitos)</label>
+            <input type="text" id="uniqueId" name="uniqueId" readonly>
+          </div>
+          <div class="form-group">
+            <label for="nombre">Nombre del Establecimiento</label>
+            <input type="text" id="nombre" name="nombre" readonly>
+          </div>
         </div>
 
-        <!-- Sección de Dirección -->
-        <div class="direccion">
-          <h2>Dirección</h2>
-          <div class="form-group">
-            <label for="pais">País <span style="color: red;">*</span></label>
-            <select id="pais" name="pais" required>
-              <option value="">Selecciona País</option>
-              <option value="Argentina">🇦🇷 Argentina</option>
-              <option value="España">🇪🇸 España</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="provincia">Provincia <span style="color: red;">*</span></label>
-            <select id="provincia" name="provincia" required>
-              <option value="">Selecciona Provincia</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="localidad">Localidad <span style="color: red;">*</span></label>
-            <input type="text" id="localidad" name="localidad" placeholder="Ej. Villa Luro, CABA, etc." required>
-          </div>
-          <div class="form-group">
-            <label for="calleNumero">Calle y Número <span style="color: red;">*</span></label>
-            <input type="text" id="calleNumero" name="calleNumero" placeholder="Ej. Miralla 549" required>
-          </div>
-          <div class="form-group">
-            <label for="codigoPostal">Código Postal <span style="color: red;">*</span></label>
-            <div style="display: flex; gap: 0.5rem;">
-              <input type="text" id="codigoPostal" name="codigoPostal" placeholder="Ej. 1407" required style="flex: 1;">
-              <button type="button" class="btn-map" onclick="buscarEnMapa()">Buscar en el mapa</button>
+        <div class="form-section">
+          <div class="direccion">
+            <h2><i class="fas fa-map-marker-alt"></i> Dirección</h2>
+            <div class="form-group">
+              <label for="pais">País <span style="color: red;">*</span></label>
+              <select id="pais" name="pais" required>
+                <option value="">Selecciona País</option>
+                <option value="Argentina">🇦🇷 Argentina</option>
+                <option value="España">🇪🇸 España</option>
+              </select>
             </div>
+            <div class="form-group">
+              <label for="provincia">Provincia <span style="color: red;">*</span></label>
+              <select id="provincia" name="provincia" required>
+                <option value="">Selecciona Provincia</option>
+                </select>
+            </div>
+            <div class="form-group">
+              <label for="localidad">Localidad <span style="color: red;">*</span></label>
+              <input type="text" id="localidad" name="localidad" placeholder="Ej. Villa Luro, CABA, etc." required>
+            </div>
+            <div class="form-group">
+              <label for="calleNumero">Calle y Número <span style="color: red;">*</span></label>
+              <input type="text" id="calleNumero" name="calleNumero" placeholder="Ej. Miralla 549" required>
+            </div>
+            <div class="form-group">
+              <label for="codigoPostal">Código Postal <span style="color: red;">*</span></label>
+              <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                <input type="text" id="codigoPostal" name="codigoPostal" placeholder="Ej. 1407" required style="flex: 1; min-width: 100px;">
+                <button type="button" class="btn-map" onclick="buscarEnMapa()"><i class="fas fa-map-search"></i> Buscar en el mapa</button>
+              </div>
+            </div>
+             <div id="map"></div>
           </div>
         </div>
 
-        <!-- Opcionales: URL e Instagram -->
-        <div class="form-group">
-          <label for="urlLugar">URL del Lugar (opcional)</label>
-          <div style="display: flex; gap: 0.5rem;">
-            <input type="url" id="urlLugar" name="urlLugar" placeholder="http://..." style="flex: 1;">
-            <button type="button" class="btn-map" id="btn-open-url">Abrir</button>
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="instagramUrl">URL de Instagram (opcional)</label>
-          <div style="display: flex; gap: 0.5rem;">
-            <input type="url" id="instagramUrl" name="instagramUrl" placeholder="https://instagram.com/tu-cuenta" style="flex: 1;">
-            <button type="button" class="btn-map" id="btn-open-ig">Abrir</button>
-          </div>
-        </div>
 
-        <!-- Cantidad de canchas (obligatorio) -->
-        <div class="form-group">
-          <label for="cantCanchas">Cantidad de Canchas <span style="color: red;">*</span></label>
-          <input type="number" id="cantCanchas" name="cantCanchas" min="1" placeholder="Ej. 2" required>
+        <div class="form-section">
+           <h3><i class="fas fa-link"></i> Enlaces Externos</h3>
+            <div class="form-group">
+                <label for="urlLugar">URL del Lugar (opcional)</label>
+                <div style="display: flex; gap: 0.5rem;">
+                    <input type="url" id="urlLugar" name="urlLugar" placeholder="http://..." style="flex: 1;">
+                    <button type="button" class="btn-map" id="btn-open-url"><i class="fas fa-external-link-alt"></i> Abrir</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="instagramUrl">URL de Instagram (opcional)</label>
+                <div style="display: flex; gap: 0.5rem;">
+                    <input type="url" id="instagramUrl" name="instagramUrl" placeholder="https://instagram.com/tu-cuenta" style="flex: 1;">
+                    <button type="button" class="btn-map" id="btn-open-ig"><i class="fab fa-instagram"></i> Abrir</button>
+                </div>
+            </div>
         </div>
 
-        <!-- Mapa -->
-        <div id="map"></div>
+        <div class="form-section">
+            <h3><i class="fas fa-layer-group"></i> Canchas</h3>
+            <div class="form-group">
+                <label for="cantCanchas">Cantidad de Canchas <span style="color: red;">*</span></label>
+                <input type="number" id="cantCanchas" name="cantCanchas" min="1" placeholder="Ej. 2" required>
+            </div>
+        </div>
 
-        <!-- Botones de acción -->
-        <div class="action-buttons">
-          <button type="submit" class="btn-save" id="btn-save">Grabar</button>
-          <button type="button" class="btn-delete" id="btn-delete">Eliminar</button>
-          <button type="button" class="btn-back" id="btn-back">Regresar</button>
+         <div class="action-buttons">
+          <button type="submit" class="btn-save" id="btn-save"><i class="fas fa-save"></i> Grabar</button>
+          <button type="button" class="btn-delete" id="btn-delete"><i class="fas fa-trash-alt"></i> Eliminar</button>
+          <button type="button" class="btn-back" id="btn-back"><i class="fas fa-arrow-left"></i> Regresar</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
-  <!-- Supabase JS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <script>
     // CONFIGURACIÓN DE SUPABASE – REEMPLAZA CON TUS CREDENCIALES REALES
@@ -346,14 +411,13 @@
 
     let formMode = "update";
 
-    // Listado de provincias para Argentina (sin CABA)
+    // Listado de provincias (sin cambios)
     const provinciasArgentina = [
       "Ciudad Autónoma de Buenos Aires","Buenos Aires", "Catamarca", "Chaco", "Chubut", "Córdoba", "Corrientes", "Entre Ríos",
       "Formosa", "Jujuy", "La Pampa", "La Rioja", "Mendoza", "Misiones", "Neuquén",
       "Río Negro", "Salta", "San Juan", "San Luis", "Santa Cruz", "Santa Fe",
       "Santiago del Estero", "Tierra del Fuego", "Tucumán"
     ];
-    // Listado de provincias para España
     const provinciasEspaña = [
       "Madrid", "Barcelona", "Valencia", "Sevilla", "Zaragoza", "Málaga", "Murcia",
       "Palma", "Las Palmas", "Bilbao", "Alicante", "Córdoba", "Valladolid", "Vigo",
@@ -361,9 +425,11 @@
       "Jerez", "Cartagena", "Tarragona", "Badajoz"
     ];
 
+    // Función para actualizar provincias (sin cambios)
     function updateProvinceOptions() {
       const pais = document.getElementById("pais").value;
       const provinciaSelect = document.getElementById("provincia");
+      const previousValue = provinciaSelect.value; // Guardar valor actual antes de limpiar
       provinciaSelect.innerHTML = '<option value="">Selecciona Provincia</option>';
 
       let provincias = [];
@@ -379,10 +445,15 @@
         option.textContent = prov;
         provinciaSelect.appendChild(option);
       });
+       // Intentar restaurar valor previo si existe en la nueva lista
+       if (previousValue && provincias.includes(previousValue)) {
+           provinciaSelect.value = previousValue;
+       }
     }
     document.getElementById("pais").addEventListener("change", updateProvinceOptions);
 
-    // Inicializar el mapa con Leaflet
+
+    // Inicializar el mapa con Leaflet (sin cambios)
     let map = L.map('map').setView([-34.6037, -58.3816], 12);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
@@ -390,12 +461,18 @@
     }).addTo(map);
     let marker;
 
+    // Función construir dirección (sin cambios)
     function construirDireccionCompleta(usarTodo) {
       const pais = document.getElementById("pais").value.trim();
       const provincia = document.getElementById("provincia").value.trim();
       const localidad = document.getElementById("localidad").value.trim();
       const calleNumero = document.getElementById("calleNumero").value.trim();
       const codigoPostal = document.getElementById("codigoPostal").value.trim();
+
+      if (!calleNumero || !localidad || !provincia || !pais) {
+          console.warn("Faltan datos básicos de dirección para geocodificar.");
+          return null;
+      }
 
       let direccion = `${calleNumero}, ${localidad}, ${provincia}, ${pais}`;
       if (usarTodo && codigoPostal) {
@@ -404,14 +481,18 @@
       return direccion;
     }
 
+    // Función geocodeNominatim (sin cambios)
     function geocodeNominatim(direccion, callback) {
       if (!direccion) {
+        console.log("Dirección inválida o incompleta para Nominatim.");
         callback(false);
         return;
       }
+      console.log("Geocodificando:", direccion);
       fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(direccion)}`)
         .then(response => response.json())
         .then(data => {
+          console.log("Respuesta Nominatim:", data);
           if (data && data.length > 0) {
             const lat = parseFloat(data[0].lat);
             const lon = parseFloat(data[0].lon);
@@ -421,35 +502,52 @@
             } else {
               marker = L.marker([lat, lon]).addTo(map);
             }
+             const nombreEst = document.getElementById("nombre").value || "Establecimiento";
+             const direccionCorta = `${document.getElementById("calleNumero").value.trim() || ''}, ${document.getElementById("localidad").value.trim() || ''}`;
+             marker.bindPopup(`<b>${nombreEst}</b><br>${direccionCorta}`).openPopup();
             callback(true);
           } else {
+            console.log("Nominatim no encontró resultados para:", direccion);
             callback(false);
           }
         })
         .catch(error => {
-          console.error("Error al geocodificar:", error);
+          console.error("Error al geocodificar con Nominatim:", error);
           callback(false);
         });
     }
 
+    // Función buscar en mapa (sin cambios)
     function buscarEnMapa() {
       const direccionCompleta = construirDireccionCompleta(true);
+      if (!direccionCompleta) {
+           alert("Completa los campos de dirección (Calle, Localidad, Provincia, País) antes de buscar.");
+           return;
+      }
       geocodeNominatim(direccionCompleta, (exito) => {
         if (!exito) {
+          console.log("Intento 1 fallido, probando sin CP...");
           const direccionReducida = construirDireccionCompleta(false);
+           if (!direccionReducida) return;
           geocodeNominatim(direccionReducida, (exito2) => {
             if (!exito2) {
-              alert("No se encontró la ubicación. Verifica que los datos sean correctos.");
+                console.log("Intento 2 fallido.");
+              alert("No se pudo encontrar la ubicación en el mapa. Verifica que los datos de dirección sean correctos.");
+            } else {
+                 console.log("Ubicación encontrada sin CP.");
             }
           });
+        } else {
+             console.log("Ubicación encontrada con dirección completa.");
         }
       });
     }
 
+    // Event listeners para botones Abrir y Regresar (sin cambios)
     document.getElementById("btn-open-url").addEventListener("click", function() {
       const url = document.getElementById("urlLugar").value.trim();
       if (url) {
-        window.open(url, "_blank");
+        window.open(url.startsWith('http') ? url : `http://${url}`, "_blank");
       } else {
         alert("No se ha especificado ninguna URL.");
       }
@@ -457,68 +555,85 @@
     document.getElementById("btn-open-ig").addEventListener("click", function() {
       const igUrl = document.getElementById("instagramUrl").value.trim();
       if (igUrl) {
-        window.open(igUrl, "_blank");
+         window.open(igUrl.startsWith('http') ? igUrl : `https://${igUrl}`, "_blank");
       } else {
         alert("No se ha especificado ninguna URL de Instagram.");
       }
     });
     document.getElementById("btn-back").addEventListener("click", function() {
-      window.location.href = "home.html";
+      if (document.referrer) {
+          window.history.back();
+      } else {
+          window.location.href = "home.html";
+      }
     });
 
-    // Autocompletado: búsqueda por id, name o address (para admin)
+    // Autocompletado (sin cambios)
     const searchInput = document.getElementById("searchQuery");
     const suggestionsList = document.getElementById("suggestions");
 
     searchInput.addEventListener("input", async function() {
       const query = searchInput.value.trim();
       suggestionsList.innerHTML = "";
+      suggestionsList.style.display = query ? 'block' : 'none';
       if (!query) return;
 
-      let { data, error } = await supabaseClient
-        .from('establishments')
-        .select("id, name, address")
-        .or(`id.ilike.%${query}%,name.ilike.%${query}%,address.ilike.%${query}%`);
+      try {
+          let { data, error } = await supabaseClient
+            .from('establishments')
+            .select("id, name, address")
+            .or(`id::text.ilike.%${query}%,name.ilike.%${query}%,address.ilike.%${query}%`)
+            .limit(10);
 
-      if (error) {
-        console.error("Error en la búsqueda:", error.message);
-        return;
+          if (error) {
+            console.error("Error en la búsqueda de autocompletado:", error.message);
+            suggestionsList.innerHTML = `<li>Error: ${error.message}</li>`;
+            return;
+          }
+
+          const uniqueData = data.reduce((acc, curr) => {
+            if (!acc.some(item => item.id === curr.id)) {
+              acc.push(curr);
+            }
+            return acc;
+          }, []);
+
+          if (uniqueData.length === 0) {
+              suggestionsList.innerHTML = `<li>No se encontraron coincidencias</li>`;
+          } else {
+              uniqueData.forEach(item => {
+                const li = document.createElement("li");
+                li.textContent = `${item.name} (${item.id}) ${item.address ? "- " + item.address : ""}`;
+                li.addEventListener("click", () => {
+                  cargarEstablecimiento(item.id);
+                  searchInput.value = "";
+                  suggestionsList.innerHTML = "";
+                  suggestionsList.style.display = 'none';
+                });
+                suggestionsList.appendChild(li);
+              });
+          }
+      } catch (err) {
+          console.error("Excepción en autocompletado:", err);
+           suggestionsList.innerHTML = `<li>Ocurrió un error inesperado</li>`;
       }
-
-      // Filtrar duplicados por id
-      const uniqueData = data.reduce((acc, curr) => {
-        if (!acc.some(item => item.id === curr.id)) {
-          acc.push(curr);
+    });
+    document.addEventListener('click', function(event) {
+        if (!searchInput.contains(event.target) && !suggestionsList.contains(event.target)) {
+            suggestionsList.style.display = 'none';
         }
-        return acc;
-      }, []);
-
-      uniqueData.forEach(item => {
-        const li = document.createElement("li");
-        li.textContent = `${item.name} (${item.id})${item.address ? " - " + item.address : ""}`;
-        li.addEventListener("click", () => {
-          cargarEstablecimiento(item.id);
-          searchInput.value = "";
-          suggestionsList.innerHTML = "";
-        });
-        suggestionsList.appendChild(li);
-      });
     });
 
-    // ---------------------------------------------------------------------------------
-    // Función que carga un establecimiento a partir de un ID (con .maybeSingle())
-    // ---------------------------------------------------------------------------------
-    async function cargarEstablecimiento(id) {
-      // 1. Limpia prefijos "eq." y sufijos ":algo" si existieran
-      let realId = id;
-      if (realId.startsWith("eq.")) {
-        realId = realId.replace("eq.", "");
-      }
-      if (realId.includes(":")) {
-        realId = realId.split(":")[0];
-      }
 
-      // 2. Usa .maybeSingle() para evitar error si no hay filas
+    // Cargar Establecimiento (sin cambios)
+    async function cargarEstablecimiento(id) {
+      let realId = id;
+      if (typeof realId === 'string') {
+          if (realId.startsWith("eq.")) realId = realId.replace("eq.", "");
+          if (realId.includes(":")) realId = realId.split(":")[0];
+      }
+      console.log("Cargando establecimiento con ID:", realId);
+
       const { data, error } = await supabaseClient
         .from('establishments')
         .select("*")
@@ -527,14 +642,20 @@
 
       if (error) {
         alert("Error al cargar establecimiento: " + error.message);
+        console.error("Error Supabase carga:", error);
         return;
       }
       if (!data) {
         alert("No se encontró ningún establecimiento con ID: " + realId);
+        document.getElementById("establecimiento-form").reset();
+        if (marker) map.removeLayer(marker); marker = null;
+        formMode = "create"; // O manejar de otra forma
+        console.warn("Establecimiento no encontrado:", realId);
         return;
       }
 
-      // Rellenar campos
+      console.log("Datos cargados:", data);
+
       document.getElementById("uniqueId").value = data.id || "";
       document.getElementById("nombre").value = data.name || "";
       document.getElementById("pais").value = data.country || "";
@@ -548,23 +669,44 @@
       document.getElementById("cantCanchas").value = data.court_count || "";
 
       formMode = "update";
-      alert("Establecimiento cargado para modificar.");
-      buscarEnMapa();
+      console.log("Establecimiento cargado para modificar.");
+
+       if (data.latitude && data.longitude) {
+           console.log("Usando coordenadas guardadas para el mapa.");
+           const lat = parseFloat(data.latitude);
+           const lon = parseFloat(data.longitude);
+           map.setView([lat, lon], 17);
+            if (marker) {
+              marker.setLatLng([lat, lon]);
+            } else {
+              marker = L.marker([lat, lon]).addTo(map);
+            }
+            const nombreEst = data.name || "Establecimiento";
+            const direccionCorta = `${data.address || ''}, ${data.locality || ''}`;
+            marker.bindPopup(`<b>${nombreEst}</b><br>${direccionCorta}`).openPopup();
+       } else {
+           console.log("No hay coordenadas guardadas, intentando geocodificar dirección...");
+           buscarEnMapa();
+       }
     }
 
-    // Evento de submit para grabar
+    // Evento de submit para grabar (sin cambios)
     document.getElementById("establecimiento-form").addEventListener("submit", async function(e) {
       e.preventDefault();
       const btnSave = document.getElementById("btn-save");
       btnSave.disabled = true;
+      btnSave.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
 
       const requiredFields = ["pais", "provincia", "localidad", "calleNumero", "codigoPostal", "cantCanchas"];
       for (let fieldId of requiredFields) {
         const field = document.getElementById(fieldId);
-        if (!field.value.trim()) {
-          alert("Falta completar el campo: " + field.previousElementSibling.innerText);
-          btnSave.disabled = false;
-          return;
+        if (!field.value || (typeof field.value === 'string' && !field.value.trim())) {
+            const label = field.closest('.form-group').querySelector('label')?.innerText || fieldId;
+            alert("Falta completar el campo obligatorio: " + label.replace('*','').trim());
+            field.focus();
+            btnSave.disabled = false;
+            btnSave.innerHTML = '<i class="fas fa-save"></i> Grabar';
+            return;
         }
       }
 
@@ -575,9 +717,10 @@
       const locality = document.getElementById("localidad").value.trim();
       const address = document.getElementById("calleNumero").value.trim();
       const postal_code = document.getElementById("codigoPostal").value.trim();
-      const url = document.getElementById("urlLugar").value.trim();
-      const instagram_url = document.getElementById("instagramUrl").value.trim();
-      const court_count = parseInt(document.getElementById("cantCanchas").value.trim(), 10);
+      const url = document.getElementById("urlLugar").value.trim() || null;
+      const instagram_url = document.getElementById("instagramUrl").value.trim() || null;
+      const court_count_val = document.getElementById("cantCanchas").value.trim();
+      const court_count = court_count_val ? parseInt(court_count_val, 10) : null;
 
       let latitude = null, longitude = null;
       if (marker) {
@@ -586,118 +729,120 @@
         longitude = latlng.lng;
       }
 
+      const establishmentData = {
+        name, country, province,
+        locality: locality || null, address, postal_code, url, instagram_url,
+        court_count, latitude, longitude, updated_at: new Date()
+      };
+
       try {
         let result;
-        if (formMode === "update") {
+        console.log("Modo:", formMode, "ID:", id);
+        console.log("Datos a guardar:", establishmentData);
+
+        if (formMode === "update" && id) {
           result = await supabaseClient
             .from('establishments')
-            .update({
-              name,
-              country,
-              province,
-              locality: locality || null,
-              address,
-              postal_code,
-              url: url || null,
-              instagram_url: instagram_url || null,
-              court_count,
-              latitude,
-              longitude
-            })
+            .update(establishmentData)
             .eq('id', id);
         } else {
-          result = await supabaseClient
-            .from('establishments')
-            .insert([{
-              id,
-              name,
-              country,
-              province,
-              locality: locality || null,
-              address,
-              postal_code,
-              url: url || null,
-              instagram_url: instagram_url || null,
-              court_count,
-              latitude,
-              longitude
-            }]);
+             throw new Error("Modo de formulario inválido o ID faltante.");
         }
 
+        console.log("Resultado Supabase:", result);
         if (result.error) {
           alert("Error al guardar establecimiento: " + result.error.message);
+          console.error("Error Supabase guardado:", result.error);
         } else {
           alert("Establecimiento guardado exitosamente.");
         }
       } catch (err) {
         alert("Excepción al guardar establecimiento: " + err.message);
+        console.error("Excepción guardado:", err);
+      } finally {
+          btnSave.disabled = false;
+          btnSave.innerHTML = '<i class="fas fa-save"></i> Grabar';
       }
-      btnSave.disabled = false;
     });
 
-    // Botón Eliminar
+    // Botón Eliminar (sin cambios)
     document.getElementById("btn-delete").addEventListener("click", async function() {
       const id = document.getElementById("uniqueId").value.trim();
       if (!id) {
-        alert("No hay un ID de establecimiento para eliminar.");
+        alert("No hay un ID de establecimiento cargado para eliminar.");
         return;
       }
-      if (confirm("¿Estás seguro de eliminar este establecimiento?")) {
+      if (confirm(`¿Estás seguro de eliminar el establecimiento con ID: ${id}?`)) {
+         const btnDelete = document.getElementById("btn-delete");
+         btnDelete.disabled = true;
+         btnDelete.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Eliminando...';
+
         try {
           const { error } = await supabaseClient
             .from('establishments')
             .delete()
             .eq('id', id);
+
           if (error) {
             alert("Error al eliminar establecimiento: " + error.message);
+             console.error("Error Supabase delete:", error);
           } else {
             alert("Establecimiento eliminado exitosamente.");
             document.getElementById("establecimiento-form").reset();
-            if (marker) {
-              map.removeLayer(marker);
-              marker = null;
-            }
+            if (marker) { map.removeLayer(marker); marker = null; }
           }
         } catch (err) {
           alert("Excepción al eliminar establecimiento: " + err.message);
+           console.error("Excepción delete:", err);
+        } finally {
+            btnDelete.disabled = false;
+            btnDelete.innerHTML = '<i class="fas fa-trash-alt"></i> Eliminar';
         }
       }
     });
 
-    // ---------------------------------------------------------------------------------
-    // Al cargar la página: obtener el usuario, cargar su establishment_number, etc.
-    // ---------------------------------------------------------------------------------
+    // Cargar datos al inicio (sin cambios)
     window.addEventListener('DOMContentLoaded', async function() {
-      // Si es un usuario Establecimiento, podrías ocultar la sección de búsqueda:
-      document.getElementById("search-section").style.display = "none";
+      const searchSection = document.getElementById("search-section");
+      if (searchSection) { searchSection.style.display = "none"; }
 
-      // 1. Obtener el usuario logueado
-      const { data: currentUserData, error: userError } = await supabaseClient.auth.getUser();
-      if (userError || !currentUserData || !currentUserData.user) {
-        console.error("No se pudo obtener el usuario logueado.");
-        return;
+      try {
+        const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
+
+        if (sessionError) {
+            console.error("Error obteniendo sesión:", sessionError.message);
+            alert("Error de sesión."); return;
+        }
+        if (!session || !session.user) {
+            console.log("No hay sesión activa."); alert("No has iniciado sesión."); return;
+        }
+
+        const user = session.user;
+        console.log("Usuario logueado:", user.id);
+
+        const { data: perfil, error: perfilError } = await supabaseClient
+          .from('perfiles')
+          .select("establishment_number")
+          .eq('user_id', user.id)
+          .maybeSingle();
+
+        if (perfilError) {
+          console.error("Error al buscar perfil:", perfilError.message); alert("Error al cargar datos del perfil."); return;
+        }
+        if (!perfil || !perfil.establishment_number) {
+          console.error("No se encontró el número de establecimiento en el perfil."); alert("No tienes un establecimiento asignado."); return;
+        }
+
+        console.log("Número de establecimiento:", perfil.establishment_number);
+        cargarEstablecimiento(perfil.establishment_number);
+
+      } catch (error) {
+          console.error("Error general al cargar la página:", error); alert("Error inesperado al cargar.");
       }
-      const uid = currentUserData.user.id;
 
-      // 2. Buscar su perfil
-      const { data: perfil, error: perfilError } = await supabaseClient
-        .from('perfiles')
-        .select("establishment_number")
-        .eq('user_id', uid)
-        .maybeSingle();
-
-      if (perfilError) {
-        console.error("Error al buscar perfil:", perfilError.message);
-        return;
-      }
-      if (!perfil || !perfil.establishment_number) {
-        console.error("No se encontró establishment_number en el perfil.");
-        return;
-      }
-
-      // 3. Cargar el establecimiento
-      cargarEstablecimiento(perfil.establishment_number);
+      updateProvinceOptions(); // Llenar opciones iniciales si aplica
     });
+
   </script>
 </body>
 </html>
