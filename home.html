@@ -110,17 +110,9 @@
         #matchModal h3 { margin-top: 1.2rem; font-size: 1.1rem; color: #2c3e50; margin-bottom: 0.6rem; border-bottom: 1px solid #eee; padding-bottom: 5px; }
         #matchModal .missing-players { font-weight: 600; color: #e74c3c; text-align: center; margin-top: 0.5rem; display: block; }
         /* Estilo para participantes cancelados */
-        #matchModal li.cancelled span { /* Aplicar estilo al span dentro del LI cancelado */
-            text-decoration: line-through;
-            color: #999;
-            /* font-style: italic; */ /* Quitado para que el motivo no sea italica necesariamente */
-        }
-        #matchModal li.cancelled i { /* Mantener el motivo visible */
-             text-decoration: none !important; /* Asegurar que el motivo no se tache */
-             font-style: italic;
-             color: #a0a0a0;
-        }
-         #matchModal li.cancelled img { opacity: 0.6; border-color: #ccc; }
+        #matchModal li.cancelled span { text-decoration: line-through; color: #999; }
+        #matchModal li.cancelled i { text-decoration: none !important; font-style: italic; color: #a0a0a0; }
+        #matchModal li.cancelled img { opacity: 0.6; border-color: #ccc; }
         #matchModal .btn-join, #matchModal .btn-leave { margin: 0.5rem; background-color: #3498db; color: #fff; border: none; padding: 0.6rem 1.2rem; border-radius: 6px; cursor: pointer; font-size: 0.9rem; transition: background-color 0.3s; }
         #matchModal .btn-join:hover, #matchModal .btn-leave:hover { background-color: #2980b9; }
         #matchModal .btn-leave { background-color: #e74c3c; }
@@ -275,149 +267,140 @@
         function closePlayerModal() { document.getElementById("playerModal").style.display="none";document.getElementById("playerModalContent").innerHTML="";}
 
         // --- Match Data Loading & Display ---
-        async function loadOpenPartidos(canchaFilter = "", localityFilter = "", dateFilter = "this_week") { const pr=document.getElementById("partidosResults");pr.innerHTML='<div class="loader"></div>';const{start:sISO,end:eISO}=getWeekDates(dateFilter);let q=supabaseClient.from("partidos").select(`*,establishments(name,locality),participants(user_id,cancelled,leave_reason)`).neq("completitud","Completo").order('match_date',{ascending:true}).order('start_time',{ascending:true});if(dateFilter==='today'){q=q.eq('match_date',sISO);}else{q=q.gte('match_date',sISO);if(eISO){q=q.lte('match_date',eISO);}} if(canchaFilter||localityFilter){let eq=supabaseClient.from('establishments').select('id');if(canchaFilter)eq=eq.ilike('name',`%${canchaFilter}%`);if(localityFilter)eq=eq.ilike('locality',`%${localityFilter}%`);const{data:ed,error:ee}=await eq;if(ee||!ed||ed.length===0){pr.innerHTML="<p>Filtro c/l NF.</p>";if(ee)console.error("EstFilt Err:",ee.message);return;}const eIds=ed.map(e=>e.id);q=q.in('establishment_id',eIds);}const{data,error}=await q;if(error){console.error("Part Err:",error.message);pr.innerHTML=`<p style="color:red;">Error: ${error.message}</p>`;return;}if(!data||data.length===0){pr.innerHTML="<p>No hay partidos.</p>";return;}pr.innerHTML="";const allPIds=new Set(data.flatMap(p=>p.participants?p.participants.filter(pt=>!pt.cancelled).map(pt=>pt.user_id):[]));let profMap=new Map();if(allPIds.size>0){const{data:profData,error:profErr}=await supabaseClient.from("profiles").select("id,profile_pic").in("id",Array.from(allPIds));if(!profErr&&profData){profData.forEach(p=>profMap.set(p.id,p.profile_pic||"https://via.placeholder.com/32"));}else if(profErr){console.error("Av Err:",profErr.message);}}data.forEach(partido=>{const actP=partido.participants?partido.participants.filter(p=>!p.cancelled):[];const jC=actP.length;const tP=partido.total_players||4;const miss=tP-jC;if(miss<=0&&partido.completitud!=="Completo")return;if(miss>0&&partido.completitud==="Completo")return;let avHTML="";const maxAv=5;let shC=0;actP.forEach(p=>{if(shC<maxAv){const pic=profMap.get(p.user_id)||"https://via.placeholder.com/32";avHTML+=`<img src="${pic}" alt="Avatar" title="Jugador"/>`;shC++;}});if(actP.length>maxAv){avHTML+=`<span style="font-size:0.8rem;color:#666;">+${actP.length-maxAv}</span>`;}const card=document.createElement("div");card.className="partido-card";const tClass=miss>0?"blinking-title":"";card.innerHTML=`<h3 class="${tClass}">${partido.match_name||'Partido'}</h3><p><i class="fas fa-calendar-alt fa-fw"></i> ${partido.match_date}</p><p><i class="fas fa-clock fa-fw"></i> ${partido.start_time} - ${partido.end_time}</p><p><i class="fas fa-map-marker-alt fa-fw"></i> ${partido.establishments?.name||'N/E'}</p><p><i class="fas fa-location-dot fa-fw"></i> ${partido.establishments?.locality||'N/E'}</p><p><i class="fas fa-layer-group fa-fw"></i> Nivel: ${partido.match_level||'N/E'}</p><p><i class="fas fa-user-friends fa-fw"></i> Tipo: ${partido.team_type||'N/E'}</p><p style="font-weight:bold;color:${miss>0?'#e74c3c':'#2ecc71'};"><i class="fas fa-users fa-fw"></i> ${miss>0?`Faltan ${miss}`:'Completo'}</p><div class="participants-avatars">${avHTML||'<span style="font-size:0.8rem;color:#888;">Sé el primero.</span>'}</div><button class="btn-view-partido" data-match-id="${partido.id}">Ver Detalles</button>`;card.querySelector(".btn-view-partido").addEventListener("click",()=>showModal(partido));pr.appendChild(card);});}
-        async function refreshMatch(matchId) { if(!matchId){return null;}const{data,error}=await supabaseClient.from("partidos").select(`*,establishments(name,locality),participants(user_id,cancelled,leave_reason)`).eq("id",matchId).single();if(error){console.error("Ref Err:",error.message);return null;}return data;}
+        async function loadOpenPartidos(canchaFilter="",localityFilter="",dateFilter="this_week") { const pr=document.getElementById("partidosResults");pr.innerHTML='<div class="loader"></div>';const{start:sISO,end:eISO}=getWeekDates(dateFilter);let q=supabaseClient.from("partidos").select(`*,establishments(name,locality),participants(user_id,cancelled,leave_reason)`).neq("completitud","Completo").order('match_date',{ascending:true}).order('start_time',{ascending:true});if(dateFilter==='today'){q=q.eq('match_date',sISO);}else{q=q.gte('match_date',sISO);if(eISO){q=q.lte('match_date',eISO);}} if(canchaFilter||localityFilter){let eq=supabaseClient.from('establishments').select('id');if(canchaFilter)eq=eq.ilike('name',`%${canchaFilter}%`);if(localityFilter)eq=eq.ilike('locality',`%${localityFilter}%`);const{data:ed,error:ee}=await eq;if(ee||!ed||ed.length===0){pr.innerHTML="<p>Filtro c/l NF.</p>";if(ee)console.error("EstFilt Err:",ee.message);return;}const eIds=ed.map(e=>e.id);q=q.in('establishment_id',eIds);}const{data,error}=await q;if(error){console.error("Part Err:",error.message);pr.innerHTML=`<p style="color:red;">Error: ${error.message}</p>`;return;}if(!data||data.length===0){pr.innerHTML="<p>No hay partidos.</p>";return;}pr.innerHTML="";const allPIds=new Set(data.flatMap(p=>p.participants?p.participants.filter(pt=>!pt.cancelled).map(pt=>pt.user_id):[]));let profMap=new Map();if(allPIds.size>0){const{data:profData,error:profErr}=await supabaseClient.from("profiles").select("id,profile_pic").in("id",Array.from(allPIds));if(!profErr&&profData){profData.forEach(p=>profMap.set(p.id,p.profile_pic||"https://via.placeholder.com/32"));}else if(profErr){console.error("Av Err:",profErr.message);}}data.forEach(partido=>{const actP=partido.participants?partido.participants.filter(p=>!p.cancelled):[];const jC=actP.length;const tP=partido.total_players||4;const miss=tP-jC;if(miss<=0&&partido.completitud!=="Completo")return;if(miss>0&&partido.completitud==="Completo")return;let avHTML="";const maxAv=5;let shC=0;actP.forEach(p=>{if(shC<maxAv){const pic=profMap.get(p.user_id)||"https://via.placeholder.com/32";avHTML+=`<img src="${pic}" alt="Avatar" title="Jugador"/>`;shC++;}});if(actP.length>maxAv){avHTML+=`<span style="font-size:0.8rem;color:#666;">+${actP.length-maxAv}</span>`;}const card=document.createElement("div");card.className="partido-card";const tClass=miss>0?"blinking-title":"";card.innerHTML=`<h3 class="${tClass}">${partido.match_name||'Partido'}</h3><p><i class="fas fa-calendar-alt fa-fw"></i> ${partido.match_date}</p><p><i class="fas fa-clock fa-fw"></i> ${partido.start_time} - ${partido.end_time}</p><p><i class="fas fa-map-marker-alt fa-fw"></i> ${partido.establishments?.name||'N/E'}</p><p><i class="fas fa-location-dot fa-fw"></i> ${partido.establishments?.locality||'N/E'}</p><p><i class="fas fa-layer-group fa-fw"></i> Nivel: ${partido.match_level||'N/E'}</p><p><i class="fas fa-user-friends fa-fw"></i> Tipo: ${partido.team_type||'N/E'}</p><p style="font-weight:bold;color:${miss>0?'#e74c3c':'#2ecc71'};"><i class="fas fa-users fa-fw"></i> ${miss>0?`Faltan ${miss}`:'Completo'}</p><div class="participants-avatars">${avHTML||'<span style="font-size:0.8rem;color:#888;">Sé el primero.</span>'}</div><button class="btn-view-partido" data-match-id="${partido.id}">Ver Detalles</button>`;card.querySelector(".btn-view-partido").addEventListener("click",()=>showModal(partido));pr.appendChild(card);});}
+        async function refreshMatch(matchId) { if(!matchId){return null;} const {data, error} = await supabaseClient.from("partidos").select(`*, establishments(name, locality), participants(user_id, cancelled, leave_reason)`).eq("id", matchId).single(); if (error) { console.error("Error refrescando partido:", error.message, `(ID: ${matchId})`); return null; } /*console.log("Refreshed match data:", data);*/ return data; }
         async function refreshModal() { const mc=document.getElementById("modalContent");const id=mc.getAttribute("data-match-id");if(!id){return;}mc.innerHTML='<div class="loader"></div>';const data=await refreshMatch(id);if(data)showModal(data);else{closeModal();alert("Error recarga.");}}
 
-        // ***** JS FUNCIONES DE ACCIÓN (leaveMatch, joinMatch, rejoinMatch) REVISADAS *****
+        // ***** JS leaveMatch - REVISADO *****
         async function leaveMatch(matchId, explanation) {
              if (!loggedUser) { alert("Inicia sesión."); return; }
-             const { error: updateError } = await supabaseClient
+             console.log(`Intentando dar de baja a ${loggedUser.id} del partido ${matchId}`);
+
+             // 1. Actualizar participante
+             const { data: updateData, error: updateError } = await supabaseClient
                  .from("participants")
                  .update({ cancelled: true, leave_reason: explanation || null })
-                 .match({ match_id: matchId, user_id: loggedUser.id, cancelled: false });
+                 .match({ match_id: matchId, user_id: loggedUser.id, cancelled: false }) // Solo si está activo
+                 .select(); // Pedir que devuelva el registro actualizado (o vacío si no coincidió)
 
              if (updateError) {
-                 console.error("Error al darse de baja:", updateError);
+                 console.error("Error Supabase al darse de baja:", updateError);
                  alert("Error al darse de baja: " + updateError.message);
                  return;
              }
+
+             console.log("Resultado Update:", updateData); // Ver si actualizó algo
+
+             // 2. Actualizar estado del partido (si es necesario)
+             // Es importante que esta función NO cause efectos secundarios inesperados
+             // y que use datos frescos si llama a refreshMatch internamente.
              await checkAndUpdateMatchCompletitud(matchId);
+             console.log(`Completitud chequeada para partido ${matchId}`);
+
+             // 3. Obtener el estado MÁS RECIENTE del partido después de las actualizaciones
              const finalMatchState = await refreshMatch(matchId);
+             console.log("Estado final del partido obtenido:", finalMatchState);
+
+             // 4. Renderizar el modal con la información fresca
              if (finalMatchState) {
-                 showModal(finalMatchState); // Re-renderizar con datos frescos
+                 console.log("Renderizando modal con estado final...");
+                 showModal(finalMatchState);
              } else {
-                 console.error("Fallo al refrescar tras baja.");
-                 alert("Baja registrada, pero error al actualizar vista.");
-                 closeModal();
+                 console.error("Fallo al refrescar el partido después de la baja.");
+                 alert("Baja registrada, pero hubo un problema al actualizar la vista.");
+                 closeModal(); // Cerrar como fallback
              }
         }
-        async function joinMatch(matchId) {
-             if(!loggedUser){alert("Login.");return;}
-             const p=await refreshMatch(matchId); if(!p){alert("Err Check.");return;}
-             const act=p.participants?p.participants.filter(p=>!p.cancelled):[]; const tot=p.total_players||4; if(act.length>=tot){alert("Completo.");return;}
-             const{data:ex,error:ce}=await supabaseClient.from("participants").select('*').eq('match_id',matchId).eq('user_id',loggedUser.id).maybeSingle(); if(ce){alert("Err: "+ce.message);return;}
-             if(ex){if(!ex.cancelled){return;}else{const{error:ue}=await supabaseClient.from("participants").update({cancelled:false,leave_reason:null}).match({match_id:matchId,user_id:loggedUser.id});if(ue)alert("Err: "+ue.message);else await checkAndUpdateMatchCompletitud(matchId);}}
-             else{const{error:ie}=await supabaseClient.from("participants").insert([{match_id:matchId,user_id:loggedUser.id}]);if(ie)alert("Err: "+ie.message);else await checkAndUpdateMatchCompletitud(matchId);}
-             const final=await refreshMatch(matchId); if(final)showModal(final);else closeModal(); // Refrescar después de la acción
-        }
-        async function rejoinMatch(matchId) {
-            if(!loggedUser){alert("Login.");return;}
-            const p=await refreshMatch(matchId); if(!p){alert("Err Check.");return;}
-            const act=p.participants?p.participants.filter(p=>!p.cancelled):[]; const tot=p.total_players||4; if(act.length>=tot){alert("Completo.");return;}
-            const{error}=await supabaseClient.from("participants").update({cancelled:false,leave_reason:null}).match({match_id:matchId,user_id:loggedUser.id}); if(error)alert("Err: "+error.message);else await checkAndUpdateMatchCompletitud(matchId);
-            const final=await refreshMatch(matchId); if(final)showModal(final);else closeModal(); // Refrescar después de la acción
-        }
-        async function checkAndUpdateMatchCompletitud(matchId) { const p=await refreshMatch(matchId);if(!p)return;const act=p.participants?p.participants.filter(p=>!p.cancelled):[];const tot=p.total_players||4;const comp=act.length>=tot;const stat=comp?"Completo":"Incompleto";if(p.completitud!==stat){const{error}=await supabaseClient.from("partidos").update({completitud:stat}).eq("id",matchId);if(error)console.error(`Err Upd Stat ${stat}:`,error.message);}}
 
-        // ***** JS showModal REVISADO para asegurar botones *****
+        // (joinMatch y rejoinMatch deberían seguir funcionando y llaman a showModal al final)
+         async function joinMatch(matchId) { if(!loggedUser){alert("Login.");return;} const p=await refreshMatch(matchId);if(!p){alert("Err Check.");return;} const act=p.participants?p.participants.filter(p=>!p.cancelled):[];const tot=p.total_players||4;if(act.length>=tot){alert("Completo.");return;} const{data:ex,error:ce}=await supabaseClient.from("participants").select('*').eq('match_id',matchId).eq('user_id',loggedUser.id).maybeSingle();if(ce){alert("Err: "+ce.message);return;} if(ex){if(!ex.cancelled){return;}else{const{error:ue}=await supabaseClient.from("participants").update({cancelled:false,leave_reason:null}).match({match_id:matchId,user_id:loggedUser.id});if(ue)alert("Err: "+ue.message);else await checkAndUpdateMatchCompletitud(matchId);}}else{const{error:ie}=await supabaseClient.from("participants").insert([{match_id:matchId,user_id:loggedUser.id}]);if(ie)alert("Err: "+ie.message);else await checkAndUpdateMatchCompletitud(matchId);} const final=await refreshMatch(matchId);if(final)showModal(final);else closeModal();}
+         async function rejoinMatch(matchId) { if(!loggedUser){alert("Login.");return;} const p=await refreshMatch(matchId);if(!p){alert("Err Check.");return;} const act=p.participants?p.participants.filter(p=>!p.cancelled):[];const tot=p.total_players||4;if(act.length>=tot){alert("Completo.");return;} const{error}=await supabaseClient.from("participants").update({cancelled:false,leave_reason:null}).match({match_id:matchId,user_id:loggedUser.id});if(error)alert("Err: "+error.message);else await checkAndUpdateMatchCompletitud(matchId); const final=await refreshMatch(matchId);if(final)showModal(final);else closeModal();}
+         async function checkAndUpdateMatchCompletitud(matchId) { const p=await refreshMatch(matchId);if(!p)return;const act=p.participants?p.participants.filter(p=>!p.cancelled):[];const tot=p.total_players||4;const comp=act.length>=tot;const stat=comp?"Completo":"Incompleto";if(p.completitud!==stat){const{error}=await supabaseClient.from("partidos").update({completitud:stat}).eq("id",matchId);if(error)console.error(`Err Upd Stat ${stat}:`,error.message);}}
+
+        // ***** JS showModal REVISADO para botones y renderizado *****
         async function showModal(partido) {
-            const modal = document.getElementById("matchModal"); const modalContent = document.getElementById("modalContent"); if (!partido || !partido.id) { return; }
-            modalContent.setAttribute("data-match-id", partido.id); modalContent.innerHTML = '<div class="loader"></div>'; modal.style.display = "flex";
+             const modal = document.getElementById("matchModal"); const modalContent = document.getElementById("modalContent"); if (!partido || !partido.id) {console.error("showModal: datos inválidos", partido); return;}
+             console.log(`Mostrando modal para partido ID: ${partido.id}`);
+             modalContent.setAttribute("data-match-id", partido.id); modalContent.innerHTML = '<div class="loader"></div>'; modal.style.display = "flex";
 
-            // Usar los datos pasados (que deberían ser frescos si vienen de join/leave/rejoin)
-            // O refrescar si viene de la tarjeta inicial (refreshMatch se llama al inicio de showModal si fuera necesario,
-            // pero ahora las funciones de acción ya refrescan antes de llamar a showModal)
-            const updatedPartido = partido; // Usar los datos que llegan
+             // USAR LOS DATOS RECIBIDOS (ya deberían ser frescos si vienen de leave/join)
+             const updatedPartido = partido;
 
-            const activeParticipants = updatedPartido.participants ? updatedPartido.participants.filter(p => !p.cancelled) : [];
-            const joinedCount = activeParticipants.length;
-            const totalPlayers = updatedPartido.total_players || 4;
-            const missing = totalPlayers - joinedCount;
+             const activeParticipants = updatedPartido.participants ? updatedPartido.participants.filter(p => !p.cancelled) : [];
+             const joinedCount = activeParticipants.length;
+             const totalPlayers = updatedPartido.total_players || 4;
+             const missing = totalPlayers - joinedCount;
 
-            let userIds = updatedPartido.participants ? updatedPartido.participants.map(p => p.user_id) : [];
-            let participantListHTML = `<div class="participants-list-container"><ul>`;
+             let userIds = updatedPartido.participants ? updatedPartido.participants.map(p => p.user_id) : [];
+             let participantListHTML = `<div class="participants-list-container"><ul>`;
 
-            if (userIds.length > 0) {
-                const { data: userProfiles, error: profileError } = await supabaseClient.from("profiles").select("id, full_name, profile_pic").in("id", userIds);
-                if (profileError) { participantListHTML += "<li>Error al cargar lista.</li>"; console.error("Err profiles:", profileError); }
-                else if (userProfiles && userProfiles.length > 0) {
-                    const profilesMap = new Map(userProfiles.map(usr => [usr.id, usr]));
-                    updatedPartido.participants.forEach(p => {
-                        const usr = profilesMap.get(p.user_id);
-                        if (usr) {
-                            const liClass = p.cancelled ? 'class="cancelled"' : ''; // Clase en LI
-                            const reasonText = p.cancelled && p.leave_reason ? ` - <i>(${p.leave_reason.substring(0, 30)}${p.leave_reason.length > 30 ? '...' : ''})</i>` : "";
-                            const pic = usr.profile_pic || "https://via.placeholder.com/40";
-                            // Span contiene el nombre, LI tiene clase para estilo general (tachado, etc.)
-                            participantListHTML += `<li ${liClass}><img src="${pic}" alt="Foto"/> <span>${usr.full_name}</span>${reasonText}</li>`;
-                        } else { participantListHTML += `<li>Jugador ID ${p.user_id} (NF) ${p.cancelled ? '(Baja)' : ''}</li>`; }
-                    });
-                } else { participantListHTML += "<li>Sin jugadores.</li>"; }
-            } else { participantListHTML += "<li>Sin jugadores.</li>"; }
-            participantListHTML += "</ul></div>";
+             if (userIds.length > 0) {
+                 const { data: userProfiles, error: profileError } = await supabaseClient.from("profiles").select("id, full_name, profile_pic").in("id", userIds);
+                 if (profileError) { participantListHTML += "<li>Error al cargar lista.</li>"; console.error("Err profiles:", profileError); }
+                 else if (userProfiles && userProfiles.length > 0) {
+                     const profilesMap = new Map(userProfiles.map(usr => [usr.id, usr]));
+                     updatedPartido.participants.forEach(p => {
+                         const usr = profilesMap.get(p.user_id);
+                         // LOGGING: Verificar estado del participante actual antes de renderizar
+                         if(loggedUser && p.user_id === loggedUser.id) {
+                             console.log(`Renderizando participante logueado (${usr?.full_name}): cancelled=${p.cancelled}, reason=${p.leave_reason}`);
+                         }
+                         if (usr) {
+                             const liClass = p.cancelled ? 'class="cancelled"' : '';
+                             const reasonText = p.cancelled && p.leave_reason ? ` - <i>(${p.leave_reason.substring(0, 30)}${p.leave_reason.length > 30 ? '...' : ''})</i>` : "";
+                             const pic = usr.profile_pic || "https://via.placeholder.com/40";
+                             participantListHTML += `<li ${liClass}><img src="${pic}" alt="Foto"/> <span>${usr.full_name}</span>${reasonText}</li>`;
+                         } else { participantListHTML += `<li>Jugador ID ${p.user_id} (NF) ${p.cancelled ? '(Baja)' : ''}</li>`; }
+                     });
+                 } else { participantListHTML += "<li>Sin jugadores.</li>"; }
+             } else { participantListHTML += "<li>Sin jugadores.</li>"; }
+             participantListHTML += "</ul></div>";
 
-            // Renderizar HTML principal del modal (ASEGURARSE de que #modal-action-buttons está)
-            modalContent.innerHTML = `
-                 <h2>${updatedPartido.match_name || 'Detalles'}</h2>
-                 <p><i class="fas fa-calendar-alt fa-fw"></i> ${updatedPartido.match_date}</p>
-                 <p><i class="fas fa-clock fa-fw"></i> ${updatedPartido.start_time} - ${updatedPartido.end_time}</p>
-                 <p><i class="fas fa-map-marker-alt fa-fw"></i> ${updatedPartido.establishments?.name || 'N/E'}</p>
-                 <p><i class="fas fa-location-dot fa-fw"></i> ${updatedPartido.establishments?.locality || 'N/E'}</p>
-                 <p><strong><i class="fas fa-layer-group fa-fw"></i> Nivel:</strong> ${updatedPartido.match_level || 'N/E'}</p>
-                 <p><strong><i class="fas fa-user-friends fa-fw"></i> Tipo Pareja:</strong> ${updatedPartido.team_type || 'N/E'}</p>
-                 <h3>Jugadores (${joinedCount}/${totalPlayers}):</h3>
-                 ${participantListHTML}
-                 <p class="missing-players">${missing > 0 ? `Faltan ${missing} jugador(es)` : '¡Equipo completo!'}</p>
-                 <div id="modal-action-buttons"></div> `;
+             modalContent.innerHTML = `
+                  <h2>${updatedPartido.match_name || 'Detalles'}</h2>
+                  <p><i class="fas fa-calendar-alt fa-fw"></i> ${updatedPartido.match_date}</p>
+                  <p><i class="fas fa-clock fa-fw"></i> ${updatedPartido.start_time} - ${updatedPartido.end_time}</p>
+                  <p><i class="fas fa-map-marker-alt fa-fw"></i> ${updatedPartido.establishments?.name || 'N/E'}</p>
+                  <p><i class="fas fa-location-dot fa-fw"></i> ${updatedPartido.establishments?.locality || 'N/E'}</p>
+                  <p><strong><i class="fas fa-layer-group fa-fw"></i> Nivel:</strong> ${updatedPartido.match_level || 'N/E'}</p>
+                  <p><strong><i class="fas fa-user-friends fa-fw"></i> Tipo Pareja:</strong> ${updatedPartido.team_type || 'N/E'}</p>
+                  <h3>Jugadores (${joinedCount}/${totalPlayers}):</h3>
+                  ${participantListHTML}
+                  <p class="missing-players">${missing > 0 ? `Faltan ${missing} jugador(es)` : '¡Equipo completo!'}</p>
+                  <div id="modal-action-buttons"></div>`; // Asegurar que el div existe
 
-            // ***** LÓGICA PARA AÑADIR BOTONES *****
-            const actionButtonsContainer = modalContent.querySelector("#modal-action-buttons");
-            // Verificar si el contenedor existe antes de intentar añadir botones
-            if (actionButtonsContainer) {
-                 if (!loggedUser) {
-                      actionButtonsContainer.innerHTML = "<p><em>Inicia sesión para unirte o darte de baja.</em></p>";
-                 } else {
-                      const userRecord = updatedPartido.participants ? updatedPartido.participants.find(p => p.user_id === loggedUser.id) : null;
-                      actionButtonsContainer.innerHTML = ''; // Limpiar botones previos antes de añadir nuevos
+             // ***** LÓGICA BOTONES ASEGURADA *****
+             const actionButtonsContainer = modalContent.querySelector("#modal-action-buttons");
+             if (actionButtonsContainer) { // Solo si el contenedor existe
+                  console.log("Intentando añadir botones. Usuario logueado:", loggedUser);
+                  if (!loggedUser) {
+                       actionButtonsContainer.innerHTML = "<p><em>Inicia sesión para unirte o darte de baja.</em></p>";
+                  } else {
+                       const userRecord = updatedPartido.participants ? updatedPartido.participants.find(p => p.user_id === loggedUser.id) : null;
+                       console.log("Registro del usuario encontrado:", userRecord);
+                       actionButtonsContainer.innerHTML = ''; // Limpiar SIEMPRE antes de añadir
 
-                      if (!userRecord) { // Usuario no está en la lista
-                           if (missing > 0) { // Hay cupo?
-                                const joinButton = document.createElement("button");
-                                joinButton.className = "btn-join";
-                                joinButton.textContent = "Unirme";
-                                joinButton.onclick = () => joinMatch(updatedPartido.id);
-                                actionButtonsContainer.appendChild(joinButton);
-                           } else {
-                                actionButtonsContainer.innerHTML = "<p>Partido completo.</p>";
-                           }
-                      } else if (!userRecord.cancelled) { // Usuario está apuntado y activo
+                       if (!userRecord) { // No unido
+                            if (missing > 0) {
+                                console.log("Añadiendo botón Unirme");
+                                const joinButton = document.createElement("button"); joinButton.className = "btn-join"; joinButton.textContent = "Unirme"; joinButton.onclick = () => joinMatch(updatedPartido.id); actionButtonsContainer.appendChild(joinButton);
+                            } else { actionButtonsContainer.innerHTML = "<p>Partido completo.</p>"; }
+                       } else if (!userRecord.cancelled) { // Unido y activo
+                           console.log("Añadiendo botón Baja");
                            actionButtonsContainer.innerHTML = "<p style='color:green; font-weight:bold;'>¡Estás apuntado!</p>";
-                           const leaveButton = document.createElement("button");
-                           leaveButton.className = "btn-leave";
-                           leaveButton.textContent = "Darme de baja";
-                           leaveButton.onclick = () => {
-                                let reason = prompt("Motivo de la baja (opcional, máx 50 car.):");
-                                if (reason !== null) { // Si no presiona cancelar
-                                    leaveMatch(updatedPartido.id, reason.slice(0, 50));
-                                }
-                           };
-                           actionButtonsContainer.appendChild(leaveButton);
-                      } else { // Usuario estuvo apuntado pero se dio de baja
+                           const leaveButton = document.createElement("button"); leaveButton.className = "btn-leave"; leaveButton.textContent = "Darme de baja"; leaveButton.onclick = () => { let reason = prompt("Motivo de la baja (opcional, máx 50 car.):"); if (reason !== null) { leaveMatch(updatedPartido.id, reason.slice(0, 50)); } }; actionButtonsContainer.appendChild(leaveButton);
+                       } else { // Cancelado previamente
+                           console.log("Añadiendo botón Re-Unirme (si hay cupo)");
                            actionButtonsContainer.innerHTML = `<p>Te diste de baja ${userRecord.leave_reason ? `(Motivo: ${userRecord.leave_reason})` : ''}.</p>`;
-                           if (missing > 0) { // Hay cupo para volver?
-                                const rejoinButton = document.createElement("button");
-                                rejoinButton.className = "btn-join"; // Reutilizar estilo
-                                rejoinButton.textContent = "Volver a Unirme";
-                                rejoinButton.onclick = () => rejoinMatch(updatedPartido.id);
-                                actionButtonsContainer.appendChild(rejoinButton);
+                           if (missing > 0) {
+                                const rejoinButton = document.createElement("button"); rejoinButton.className = "btn-join"; rejoinButton.textContent = "Volver a Unirme"; rejoinButton.onclick = () => rejoinMatch(updatedPartido.id); actionButtonsContainer.appendChild(rejoinButton);
                            }
-                      }
-                 }
-            } else {
-                console.error("Error: No se encontró el div #modal-action-buttons");
-            }
-        }
+                       }
+                  }
+             } else {
+                 console.error("¡ERROR CRÍTICO! No se encontró #modal-action-buttons para añadir botones.");
+             }
+         }
 
 
         // --- Canchas ---
