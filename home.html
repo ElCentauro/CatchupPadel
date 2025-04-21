@@ -7,7 +7,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <style>
-        /* RESET Y ESTILOS GLOBALES */
+        /* ... (Estilos CSS sin cambios respecto a la versión anterior) ... */
+         /* RESET Y ESTILOS GLOBALES */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Poppins', sans-serif; background-color: #f8f8f8; color: #333; }
 
@@ -45,15 +46,8 @@
         .search-partidos, .search-canchas, .search-players { display: none; max-width: 1200px; margin: 2rem auto; padding: 1.5rem 2rem; background-color: #fff; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); position: relative; }
         .search-partidos h2, .search-canchas h2, .search-players h2 { font-size: 1.8rem; margin-bottom: 1rem; color: #2c3e50; text-align: center; }
         .filter-container { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 0.8rem; margin-bottom: 1.5rem; }
-        .filter-container input, .filter-container select { padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px; font-size: 0.95rem; width: auto; flex-grow: 1; min-width: 150px; font-family: 'Poppins', sans-serif; background-color: #fff; appearance: none; /* Para mejor estilo en algunos navegadores */}
-        /* Estilo específico para el select para que parezca input */
-         .filter-container select {
-             background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
-             background-repeat: no-repeat;
-             background-position: right 0.75rem center;
-             background-size: 16px 12px;
-             padding-right: 2.5rem; /* Espacio para la flecha */
-         }
+        .filter-container input, .filter-container select { padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px; font-size: 0.95rem; width: auto; flex-grow: 1; min-width: 150px; font-family: 'Poppins', sans-serif; background-color: #fff; appearance: none; }
+         .filter-container select { background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 0.75rem center; background-size: 16px 12px; padding-right: 2.5rem; }
         .filter-container button { padding: 0.75rem 1.5rem; background-color: #ff9500; color: #fff; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; transition: background-color 0.3s ease; flex-shrink: 0; }
         .filter-container button:hover { background-color: #e07e00; }
         .close-btn, .close-btn-partidos, .close-btn-players { position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.4rem; color: #aaa; cursor: pointer; transition: color 0.3s; }
@@ -115,7 +109,17 @@
         #matchModal p strong { display: inline-flex; align-items: center; gap: 8px; }
         #matchModal h3 { margin-top: 1.2rem; font-size: 1.1rem; color: #2c3e50; margin-bottom: 0.6rem; border-bottom: 1px solid #eee; padding-bottom: 5px; }
         #matchModal .missing-players { font-weight: 600; color: #e74c3c; text-align: center; margin-top: 0.5rem; display: block; }
-        #matchModal .cancelled { text-decoration: line-through; color: #999; }
+        /* Estilo para participantes cancelados */
+        #matchModal .cancelled span {
+            text-decoration: line-through;
+            color: #999;
+            font-style: italic;
+        }
+         /* Opcional: atenuar un poco la imagen del cancelado */
+         #matchModal .cancelled img {
+             opacity: 0.6;
+             border-color: #ccc;
+         }
         #matchModal .btn-join, #matchModal .btn-leave { margin: 0.5rem; background-color: #3498db; color: #fff; border: none; padding: 0.6rem 1.2rem; border-radius: 6px; cursor: pointer; font-size: 0.9rem; transition: background-color 0.3s; }
         #matchModal .btn-join:hover, #matchModal .btn-leave:hover { background-color: #2980b9; }
         #matchModal .btn-leave { background-color: #e74c3c; }
@@ -232,6 +236,8 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
+        // ***** CÓDIGO JAVASCRIPT COMPLETO *****
+
         const SUPABASE_URL = "https://idlvxinjfbsujpvxncbr.supabase.co";
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbHZ4aW5qZmJzdWpwdnhuY2JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NTgxMTMsImV4cCI6MjA1NzEzNDExM30.kojYn4tEbQJvafypVnq2TjF5JYCpFC7cBaKKk3qTkig";
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -245,33 +251,7 @@
         function formatDateISO(date) { return date.toISOString().split('T')[0]; }
 
         // --- Date Range Logic ---
-        function getWeekDates(filterType) {
-            const today = new Date();
-            const todayISO = formatDateISO(today);
-            let startDateISO = todayISO;
-            let endDateISO = '';
-
-            const dayOfWeek = today.getDay(); // 0=Sun, 1=Mon,...
-            const diffToSunday = dayOfWeek === 0 ? 0 : 7 - dayOfWeek;
-            const endOfWeek = new Date(today);
-            endOfWeek.setDate(today.getDate() + diffToSunday);
-            endDateISO = formatDateISO(endOfWeek);
-
-            const startOfNextWeek = new Date(endOfWeek);
-            startOfNextWeek.setDate(endOfWeek.getDate() + 1);
-            const startOfNextWeekISO = formatDateISO(startOfNextWeek);
-
-            const endOfNextWeek = new Date(startOfNextWeek);
-            endOfNextWeek.setDate(startOfNextWeek.getDate() + 6);
-            const endOfNextWeekISO = formatDateISO(endOfNextWeek);
-
-            switch (filterType) {
-                case 'today': return { start: todayISO, end: todayISO };
-                case 'this_week': return { start: todayISO, end: endDateISO };
-                case 'next_week': return { start: startOfNextWeekISO, end: endOfNextWeekISO };
-                case 'all': default: return { start: todayISO, end: null }; // null end date for 'all'
-            }
-        }
+        function getWeekDates(filterType) { const today=new Date();const todayISO=formatDateISO(today);let startDateISO=todayISO;let endDateISO='';const dayOfWeek=today.getDay();const diffToSunday=dayOfWeek===0?0:7-dayOfWeek;const endOfWeek=new Date(today);endOfWeek.setDate(today.getDate()+diffToSunday);endDateISO=formatDateISO(endOfWeek);const startOfNextWeek=new Date(endOfWeek);startOfNextWeek.setDate(endOfWeek.getDate()+1);const startOfNextWeekISO=formatDateISO(startOfNextWeek);const endOfNextWeek=new Date(startOfNextWeek);endOfNextWeek.setDate(startOfNextWeek.getDate()+6);const endOfNextWeekISO=formatDateISO(endOfNextWeek);switch(filterType){case 'today':return{start:todayISO,end:todayISO};case 'this_week':return{start:todayISO,end:endDateISO};case 'next_week':return{start:startOfNextWeekISO,end:endOfNextWeekISO};case 'all':default:return{start:todayISO,end:null};}}
 
         // --- Session & UI Management ---
         async function checkProfile() { const pl=document.getElementById("profileLink");const lb=document.getElementById("logoutButton");const mi=document.querySelectorAll('.menu-item:not(#profileLink):not(#logoutButton)');const{data:{session},error:se}=await supabaseClient.auth.getSession();if(se){console.error("Sess Err:",se);loggedUser=null;pl.style.display='none';lb.style.display='none';mi.forEach(i=>i.style.display='none');return;}if(session&&session.user){lb.style.display='block';loggedUser={id:session.user.id,email:session.user.email};const{data:pd,error:pe}=await supabaseClient.from("profiles").select("id").eq("id",loggedUser.id).maybeSingle();if(pe){console.error("Prof Err:",pe);pl.textContent="Error";pl.style.display='block';mi.forEach(i=>i.style.display='none');return;}if(pd){pl.textContent="Mi Perfil";pl.href="perfil.html";pl.style.display='block';mi.forEach(i=>i.style.display='block');document.getElementById("canchasButton").style.display="none";document.getElementById("pistasButton").style.display="none";}else{pl.textContent="Crear Perfil";pl.href="perfil.html";pl.style.display='block';mi.forEach(i=>i.style.display='none');}}else{loggedUser=null;pl.style.display='none';lb.style.display='none';mi.forEach(i=>i.style.display='none');}}
@@ -281,18 +261,9 @@
 
         // --- Navigation & Modal Controls ---
         function hideAllSections() { document.getElementById("searchPartidosSection").style.display="none";document.getElementById("searchCanchasSection").style.display="none";document.getElementById("searchPlayersSection").style.display="none";}
-        function showPartidosSearch() { hideAllSections(); document.getElementById("searchPartidosSection").style.display = "block"; document.getElementById("filterDateRange").value = "this_week"; loadOpenPartidos( // Carga inicial con filtro 'this_week' por defecto
-            document.getElementById("filterCanchasPartido").value.trim(),
-            document.getElementById("filterLocality").value.trim(),
-            'this_week'
-         ); }
+        function showPartidosSearch() { hideAllSections(); document.getElementById("searchPartidosSection").style.display = "block"; document.getElementById("filterDateRange").value = "this_week"; loadOpenPartidos( document.getElementById("filterCanchasPartido").value.trim(), document.getElementById("filterLocality").value.trim(), 'this_week'); }
         function closePartidosSearch() { document.getElementById("searchPartidosSection").style.display = "none"; }
-        document.getElementById("btn-filter-partidos").addEventListener("click", () => {
-            const canchaFilter = document.getElementById("filterCanchasPartido").value.trim();
-            const localityFilter = document.getElementById("filterLocality").value.trim();
-            const dateFilter = document.getElementById("filterDateRange").value; // Leer valor del select
-            loadOpenPartidos(canchaFilter, localityFilter, dateFilter); // Pasar filtro
-        });
+        document.getElementById("btn-filter-partidos").addEventListener("click", () => { const canchaFilter = document.getElementById("filterCanchasPartido").value.trim(); const localityFilter = document.getElementById("filterLocality").value.trim(); const dateFilter = document.getElementById("filterDateRange").value; loadOpenPartidos(canchaFilter, localityFilter, dateFilter); });
         function showCanchaSearch() { hideAllSections(); document.getElementById("searchCanchasSection").style.display = "block"; loadCanchas(); }
         function closeCanchaSearch() { document.getElementById("searchCanchasSection").style.display = "none"; }
         document.getElementById("btn-filter-canchas").addEventListener("click", () => { loadCanchas(document.getElementById("filterCanchasName").value.trim(), document.getElementById("filterCanchasLocality").value.trim()); });
@@ -303,78 +274,137 @@
         function closePlayerModal() { document.getElementById("playerModal").style.display="none";document.getElementById("playerModalContent").innerHTML="";}
 
         // --- Match Data Loading & Display ---
-        // ***** JS MODIFICADO AQUÍ *****
-        async function loadOpenPartidos(canchaFilter = "", localityFilter = "", dateFilter = "this_week") {
-            const partidosResults = document.getElementById("partidosResults");
-            partidosResults.innerHTML = '<div class="loader"></div>';
-
-            const { start: startDateISO, end: endDateISO } = getWeekDates(dateFilter); // Obtener rango
-
-            let query = supabaseClient.from("partidos")
-                .select(`*, establishments(name, locality), participants(user_id, cancelled, leave_reason)`)
-                .neq("completitud", "Completo")
-                .order('match_date', { ascending: true })
-                .order('start_time', { ascending: true });
-
-            // Aplicar filtros de fecha a la consulta
-            if (dateFilter === 'today') {
-                query = query.eq('match_date', startDateISO);
-            } else {
-                query = query.gte('match_date', startDateISO); // Siempre desde fecha inicio
-                if (endDateISO) { // Si hay fecha fin (no es 'all'), aplicarla
-                    query = query.lte('match_date', endDateISO);
-                }
-            }
-
-            // Aplicar filtros de cancha/localidad (igual que antes)
-             if (canchaFilter || localityFilter) {
-                 let estQuery = supabaseClient.from('establishments').select('id');
-                 if (canchaFilter) estQuery = estQuery.ilike('name', `%${canchaFilter}%`);
-                 if (localityFilter) estQuery = estQuery.ilike('locality', `%${localityFilter}%`);
-                 const { data: estData, error: estError } = await estQuery;
-                 if (estError || !estData || estData.length === 0) { partidosResults.innerHTML = "<p>Filtro cancha/loc no encontrado.</p>"; if(estError) console.error("Est Filter Err:", estError.message); return; }
-                 const estIds = estData.map(e => e.id); query = query.in('establishment_id', estIds);
-             }
-
-            const { data, error } = await query; // Ejecutar consulta final
-
-            // --- Renderizado (igual que antes, ya incluía team_type) ---
-            if (error) { console.error("Partidos Err:", error.message); partidosResults.innerHTML = `<p style="color:red;">Error: ${error.message}</p>`; return; }
-            if (!data || data.length === 0) { partidosResults.innerHTML = "<p>No hay partidos para filtros.</p>"; return; }
-            partidosResults.innerHTML = "";
-            const allPIds = new Set(data.flatMap(p=>p.participants?p.participants.filter(pt=>!pt.cancelled).map(pt=>pt.user_id):[])); let profMap=new Map(); if(allPIds.size>0){const{data:profData,error:profErr}=await supabaseClient.from("profiles").select("id,profile_pic").in("id",Array.from(allPIds)); if(!profErr&&profData){profData.forEach(p=>profMap.set(p.id,p.profile_pic||"https://via.placeholder.com/32"));}else if(profErr){console.error("Avatar Err:",profErr.message);}}
-            data.forEach(partido=>{const actP=partido.participants?partido.participants.filter(p=>!p.cancelled):[];const jC=actP.length;const tP=partido.total_players||4;const miss=tP-jC;if(miss<=0&&partido.completitud!=="Completo")return;if(miss>0&&partido.completitud==="Completo")return;let avHTML="";const maxAv=5;let shC=0;actP.forEach(p=>{if(shC<maxAv){const pic=profMap.get(p.user_id)||"https://via.placeholder.com/32";avHTML+=`<img src="${pic}" alt="Avatar" title="Jugador"/>`;shC++;}});if(actP.length>maxAv){avHTML+=`<span style="font-size:0.8rem;color:#666;">+${actP.length-maxAv}</span>`;}
-            const card=document.createElement("div");card.className="partido-card";const tClass=miss>0?"blinking-title":"";
-            card.innerHTML=`<h3 class="${tClass}">${partido.match_name||'Partido'}</h3><p><i class="fas fa-calendar-alt fa-fw"></i> ${partido.match_date}</p><p><i class="fas fa-clock fa-fw"></i> ${partido.start_time} - ${partido.end_time}</p><p><i class="fas fa-map-marker-alt fa-fw"></i> ${partido.establishments?.name||'N/E'}</p><p><i class="fas fa-location-dot fa-fw"></i> ${partido.establishments?.locality||'N/E'}</p><p><i class="fas fa-layer-group fa-fw"></i> Nivel: ${partido.match_level||'N/E'}</p><p><i class="fas fa-user-friends fa-fw"></i> Tipo: ${partido.team_type||'N/E'}</p><p style="font-weight:bold;color:${miss>0?'#e74c3c':'#2ecc71'};"><i class="fas fa-users fa-fw"></i> ${miss>0?`Faltan ${miss}`:'Completo'}</p><div class="participants-avatars">${avHTML||'<span style="font-size:0.8rem;color:#888;">Sé el primero.</span>'}</div><button class="btn-view-partido" data-match-id="${partido.id}">Ver Detalles</button>`;card.querySelector(".btn-view-partido").addEventListener("click",()=>showModal(partido));partidosResults.appendChild(card);});
-        }
-
+        async function loadOpenPartidos(canchaFilter = "", localityFilter = "", dateFilter = "this_week") { const pr=document.getElementById("partidosResults");pr.innerHTML='<div class="loader"></div>';const{start:sISO,end:eISO}=getWeekDates(dateFilter);let q=supabaseClient.from("partidos").select(`*,establishments(name,locality),participants(user_id,cancelled,leave_reason)`).neq("completitud","Completo").order('match_date',{ascending:true}).order('start_time',{ascending:true});if(dateFilter==='today'){q=q.eq('match_date',sISO);}else{q=q.gte('match_date',sISO);if(eISO){q=q.lte('match_date',eISO);}} if(canchaFilter||localityFilter){let eq=supabaseClient.from('establishments').select('id');if(canchaFilter)eq=eq.ilike('name',`%${canchaFilter}%`);if(localityFilter)eq=eq.ilike('locality',`%${localityFilter}%`);const{data:ed,error:ee}=await eq;if(ee||!ed||ed.length===0){pr.innerHTML="<p>Filtro c/l NF.</p>";if(ee)console.error("EstFilt Err:",ee.message);return;}const eIds=ed.map(e=>e.id);q=q.in('establishment_id',eIds);}const{data,error}=await q;if(error){console.error("Part Err:",error.message);pr.innerHTML=`<p style="color:red;">Error: ${error.message}</p>`;return;}if(!data||data.length===0){pr.innerHTML="<p>No hay partidos.</p>";return;}pr.innerHTML="";const allPIds=new Set(data.flatMap(p=>p.participants?p.participants.filter(pt=>!pt.cancelled).map(pt=>pt.user_id):[]));let profMap=new Map();if(allPIds.size>0){const{data:profData,error:profErr}=await supabaseClient.from("profiles").select("id,profile_pic").in("id",Array.from(allPIds));if(!profErr&&profData){profData.forEach(p=>profMap.set(p.id,p.profile_pic||"https://via.placeholder.com/32"));}else if(profErr){console.error("Av Err:",profErr.message);}}data.forEach(partido=>{const actP=partido.participants?partido.participants.filter(p=>!p.cancelled):[];const jC=actP.length;const tP=partido.total_players||4;const miss=tP-jC;if(miss<=0&&partido.completitud!=="Completo")return;if(miss>0&&partido.completitud==="Completo")return;let avHTML="";const maxAv=5;let shC=0;actP.forEach(p=>{if(shC<maxAv){const pic=profMap.get(p.user_id)||"https://via.placeholder.com/32";avHTML+=`<img src="${pic}" alt="Avatar" title="Jugador"/>`;shC++;}});if(actP.length>maxAv){avHTML+=`<span style="font-size:0.8rem;color:#666;">+${actP.length-maxAv}</span>`;}const card=document.createElement("div");card.className="partido-card";const tClass=miss>0?"blinking-title":"";card.innerHTML=`<h3 class="${tClass}">${partido.match_name||'Partido'}</h3><p><i class="fas fa-calendar-alt fa-fw"></i> ${partido.match_date}</p><p><i class="fas fa-clock fa-fw"></i> ${partido.start_time} - ${partido.end_time}</p><p><i class="fas fa-map-marker-alt fa-fw"></i> ${partido.establishments?.name||'N/E'}</p><p><i class="fas fa-location-dot fa-fw"></i> ${partido.establishments?.locality||'N/E'}</p><p><i class="fas fa-layer-group fa-fw"></i> Nivel: ${partido.match_level||'N/E'}</p><p><i class="fas fa-user-friends fa-fw"></i> Tipo: ${partido.team_type||'N/E'}</p><p style="font-weight:bold;color:${miss>0?'#e74c3c':'#2ecc71'};"><i class="fas fa-users fa-fw"></i> ${miss>0?`Faltan ${miss}`:'Completo'}</p><div class="participants-avatars">${avHTML||'<span style="font-size:0.8rem;color:#888;">Sé el primero.</span>'}</div><button class="btn-view-partido" data-match-id="${partido.id}">Ver Detalles</button>`;card.querySelector(".btn-view-partido").addEventListener("click",()=>showModal(partido));pr.appendChild(card);});}
         async function refreshMatch(matchId) { if(!matchId){return null;}const{data,error}=await supabaseClient.from("partidos").select(`*,establishments(name,locality),participants(user_id,cancelled,leave_reason)`).eq("id",matchId).single();if(error){console.error("Ref Err:",error.message);return null;}return data;}
         async function refreshModal() { const mc=document.getElementById("modalContent");const id=mc.getAttribute("data-match-id");if(!id){return;}mc.innerHTML='<div class="loader"></div>';const data=await refreshMatch(id);if(data)showModal(data);else{closeModal();alert("Error recarga.");}}
-        async function joinMatch(matchId) { if(!loggedUser){alert("Login.");return;}const p=await refreshMatch(matchId);if(!p){alert("Err Check.");return;}const act=p.participants?p.participants.filter(p=>!p.cancelled):[];const tot=p.total_players||4;if(act.length>=tot){alert("Completo.");return;}const{data:ex,error:ce}=await supabaseClient.from("participants").select('*').eq('match_id',matchId).eq('user_id',loggedUser.id).maybeSingle();if(ce){alert("Err: "+ce.message);return;}if(ex){if(!ex.cancelled){return;}else{const{error:ue}=await supabaseClient.from("participants").update({cancelled:false,leave_reason:null}).match({match_id:matchId,user_id:loggedUser.id});if(ue)alert("Err: "+ue.message);else await checkAndUpdateMatchCompletitud(matchId);}}else{const{error:ie}=await supabaseClient.from("participants").insert([{match_id:matchId,user_id:loggedUser.id}]);if(ie)alert("Err: "+ie.message);else await checkAndUpdateMatchCompletitud(matchId);}const final=await refreshMatch(matchId);if(final)showModal(final);else closeModal();}
-        async function rejoinMatch(matchId) { if(!loggedUser){alert("Login.");return;}const p=await refreshMatch(matchId);if(!p){alert("Err Check.");return;}const act=p.participants?p.participants.filter(p=>!p.cancelled):[];const tot=p.total_players||4;if(act.length>=tot){alert("Completo.");return;}const{error}=await supabaseClient.from("participants").update({cancelled:false,leave_reason:null}).match({match_id:matchId,user_id:loggedUser.id});if(error)alert("Err: "+error.message);else await checkAndUpdateMatchCompletitud(matchId);const final=await refreshMatch(matchId);if(final)showModal(final);else closeModal();}
-        async function leaveMatch(matchId, explanation) { if(!loggedUser){alert("Login.");return;}const{error}=await supabaseClient.from("participants").update({cancelled:true,leave_reason:explanation||null}).match({match_id:matchId,user_id:loggedUser.id,cancelled:false});if(error)alert("Err: "+error.message);else await checkAndUpdateMatchCompletitud(matchId);const final=await refreshMatch(matchId);if(final)showModal(final);else closeModal();}
+
+        // ***** JS leaveMatch - Flujo Revisado *****
+        async function leaveMatch(matchId, explanation) {
+            if (!loggedUser) { alert("Inicia sesión."); return; }
+
+            // 1. Actualizar participante
+            const { error: updateError } = await supabaseClient
+                .from("participants")
+                .update({ cancelled: true, leave_reason: explanation || null })
+                .match({ match_id: matchId, user_id: loggedUser.id, cancelled: false }); // Solo si está activo
+
+            if (updateError) {
+                console.error("Error al darse de baja:", updateError);
+                alert("Error al darse de baja: " + updateError.message);
+                return; // Detener si falla la actualización
+            }
+
+            // 2. Actualizar estado del partido (si es necesario)
+            await checkAndUpdateMatchCompletitud(matchId);
+
+            // 3. Obtener el estado MÁS RECIENTE del partido después de las actualizaciones
+            const finalMatchState = await refreshMatch(matchId);
+
+            // 4. Renderizar el modal con la información fresca
+            if (finalMatchState) {
+                showModal(finalMatchState);
+            } else {
+                console.error("Fallo al refrescar el partido después de la baja.");
+                alert("Se registró tu baja, pero hubo un problema al actualizar la vista.");
+                closeModal(); // Cerrar como fallback
+            }
+        }
+
+        // (joinMatch y rejoinMatch ya llaman a refresh/showModal al final, deberían estar bien)
+        async function joinMatch(matchId) { if(!loggedUser){alert("Login.");return;} const p=await refreshMatch(matchId);if(!p){alert("Err Check.");return;} const act=p.participants?p.participants.filter(p=>!p.cancelled):[];const tot=p.total_players||4;if(act.length>=tot){alert("Completo.");return;} const{data:ex,error:ce}=await supabaseClient.from("participants").select('*').eq('match_id',matchId).eq('user_id',loggedUser.id).maybeSingle();if(ce){alert("Err: "+ce.message);return;} if(ex){if(!ex.cancelled){return;}else{const{error:ue}=await supabaseClient.from("participants").update({cancelled:false,leave_reason:null}).match({match_id:matchId,user_id:loggedUser.id});if(ue)alert("Err: "+ue.message);else await checkAndUpdateMatchCompletitud(matchId);}}else{const{error:ie}=await supabaseClient.from("participants").insert([{match_id:matchId,user_id:loggedUser.id}]);if(ie)alert("Err: "+ie.message);else await checkAndUpdateMatchCompletitud(matchId);} const final=await refreshMatch(matchId);if(final)showModal(final);else closeModal();}
+        async function rejoinMatch(matchId) { if(!loggedUser){alert("Login.");return;} const p=await refreshMatch(matchId);if(!p){alert("Err Check.");return;} const act=p.participants?p.participants.filter(p=>!p.cancelled):[];const tot=p.total_players||4;if(act.length>=tot){alert("Completo.");return;} const{error}=await supabaseClient.from("participants").update({cancelled:false,leave_reason:null}).match({match_id:matchId,user_id:loggedUser.id});if(error)alert("Err: "+error.message);else await checkAndUpdateMatchCompletitud(matchId); const final=await refreshMatch(matchId);if(final)showModal(final);else closeModal();}
         async function checkAndUpdateMatchCompletitud(matchId) { const p=await refreshMatch(matchId);if(!p)return;const act=p.participants?p.participants.filter(p=>!p.cancelled):[];const tot=p.total_players||4;const comp=act.length>=tot;const stat=comp?"Completo":"Incompleto";if(p.completitud!==stat){const{error}=await supabaseClient.from("partidos").update({completitud:stat}).eq("id",matchId);if(error)console.error(`Err Upd Stat ${stat}:`,error.message);}}
+
+        // ***** JS showModal - Renderizado Revisado *****
         async function showModal(partido) {
-            // Renderizado del modal ya incluye team_type
-            const m=document.getElementById("matchModal");const mc=document.getElementById("modalContent");if(!partido||!partido.id){return;}mc.setAttribute("data-match-id",partido.id);mc.innerHTML='<div class="loader"></div>';m.style.display="flex";const up=await refreshMatch(partido.id);if(!up){mc.innerHTML='<p style="color:red;">Error.</p>';setTimeout(closeModal,2500);return;}const actP=up.participants?up.participants.filter(p=>!p.cancelled):[];const jC=actP.length;const tP=up.total_players||4;const miss=tP-jC;let uIds=up.participants?up.participants.map(p=>p.user_id):[];let pListHTML=`<div class="participants-list-container"><ul>`;if(uIds.length>0){const{data:uProfs,error:pErr}=await supabaseClient.from("profiles").select("id,full_name,profile_pic").in("id",uIds);if(pErr){pListHTML+="<li>Error lista.</li>";}else if(uProfs&&uProfs.length>0){const pMap=new Map(uProfs.map(u=>[u.id,u]));up.participants.forEach(p=>{const u=pMap.get(p.user_id);if(u){const s=p.cancelled?"cancelled":"";const r=p.cancelled&&p.leave_reason?` - (${p.leave_reason.substring(0,30)}${p.leave_reason.length>30?'...':''})`:"";const pic=u.profile_pic||"https://via.placeholder.com/40";pListHTML+=`<li><img src="${pic}" alt="Foto"/> <span class="${s}">${u.full_name}${r}</span></li>`;}else{pListHTML+=`<li>Jugador ID ${p.user_id} (NF) ${p.cancelled?'(Baja)':''}</li>`;}}); }else{pListHTML+="<li>Sin jugadores.</li>";}}else{pListHTML+="<li>Sin jugadores.</li>";} pListHTML+="</ul></div>";
-            mc.innerHTML=`<h2>${up.match_name||'Detalles'}</h2><p><i class="fas fa-calendar-alt fa-fw"></i> ${up.match_date}</p><p><i class="fas fa-clock fa-fw"></i> ${up.start_time} - ${up.end_time}</p><p><i class="fas fa-map-marker-alt fa-fw"></i> ${up.establishments?.name||'N/E'}</p><p><i class="fas fa-location-dot fa-fw"></i> ${up.establishments?.locality||'N/E'}</p><p><strong><i class="fas fa-layer-group fa-fw"></i> Nivel:</strong> ${up.match_level||'N/E'}</p><p><strong><i class="fas fa-user-friends fa-fw"></i> Tipo Pareja:</strong> ${up.team_type||'N/E'}</p><h3>Jugadores (${jC}/${tP}):</h3>${pListHTML}<p class="missing-players">${miss>0?`Faltan ${miss}`:'Completo'}</p><div id="modal-action-buttons"></div>`;
-            const btns=mc.querySelector("#modal-action-buttons");if(!loggedUser){btns.innerHTML="<p><em>Login.</em></p>";}else{const ur=up.participants?up.participants.find(p=>p.user_id===loggedUser.id):null;if(!ur){if(miss>0){const b=document.createElement("button");b.className="btn-join";b.textContent="Unirme";b.onclick=()=>joinMatch(up.id);btns.appendChild(b);}else{btns.innerHTML="<p>Completo.</p>";}}else if(!ur.cancelled){btns.innerHTML="<p style='color:green;font-weight:bold;'>¡Apuntado!</p>";const b=document.createElement("button");b.className="btn-leave";b.textContent="Baja";b.onclick=()=>{let r=prompt("Motivo:");if(r!==null)leaveMatch(up.id,r.slice(0,50));};btns.appendChild(b);}else{btns.innerHTML=`<p>Baja ${ur.leave_reason?`(${ur.leave_reason})`:''}.</p>`;if(miss>0){const b=document.createElement("button");b.className="btn-join";b.textContent="Re-Unirme";b.onclick=()=>rejoinMatch(up.id);btns.appendChild(b);}}}
+            const modal = document.getElementById("matchModal"); const modalContent = document.getElementById("modalContent"); if (!partido || !partido.id) { return; }
+            modalContent.setAttribute("data-match-id", partido.id); modalContent.innerHTML = '<div class="loader"></div>'; modal.style.display = "flex";
+
+            // Usar los datos ya pasados o refrescados (updatedPartido viene de refreshMatch si se llamó desde ahí)
+            const updatedPartido = partido; // Asumimos que los datos pasados son suficientemente frescos
+
+            const activeParticipants = updatedPartido.participants ? updatedPartido.participants.filter(p => !p.cancelled) : [];
+            const joinedCount = activeParticipants.length;
+            const totalPlayers = updatedPartido.total_players || 4;
+            const missing = totalPlayers - joinedCount;
+
+            let userIds = updatedPartido.participants ? updatedPartido.participants.map(p => p.user_id) : [];
+            let participantListHTML = `<div class="participants-list-container"><ul>`;
+
+            if (userIds.length > 0) {
+                const { data: userProfiles, error: profileError } = await supabaseClient.from("profiles").select("id, full_name, profile_pic").in("id", userIds);
+                if (profileError) {
+                    participantListHTML += "<li>Error al cargar lista.</li>";
+                    console.error("Error fetching profiles for modal list:", profileError);
+                } else if (userProfiles && userProfiles.length > 0) {
+                    const profilesMap = new Map(userProfiles.map(usr => [usr.id, usr]));
+                    // Iterar por los participantes del partido para construir la lista
+                    updatedPartido.participants.forEach(p => {
+                        const usr = profilesMap.get(p.user_id);
+                        if (usr) {
+                            // Aplicar clase 'cancelled' al LI si el participante está cancelado
+                            const liClass = p.cancelled ? 'class="cancelled"' : '';
+                            const reasonText = p.cancelled && p.leave_reason ? ` - <i>(${p.leave_reason.substring(0, 30)}${p.leave_reason.length > 30 ? '...' : ''})</i>` : "";
+                            const pic = usr.profile_pic || "https://via.placeholder.com/40";
+                            // El span SÓLO contiene el nombre. El LI tiene la clase para estilo.
+                            participantListHTML += `<li ${liClass}><img src="${pic}" alt="Foto"/> <span>${usr.full_name}</span>${reasonText}</li>`;
+                        } else {
+                            participantListHTML += `<li>Jugador ID ${p.user_id} (Perfil no encontrado) ${p.cancelled ? '(Baja)' : ''}</li>`;
+                        }
+                    });
+                } else {
+                    participantListHTML += "<li>Aún no hay jugadores apuntados.</li>";
+                }
+            } else {
+                participantListHTML += "<li>Aún no hay jugadores apuntados.</li>";
+            }
+            participantListHTML += "</ul></div>";
+
+            // Renderizar el modal HTML
+            modalContent.innerHTML = `
+                 <h2>${updatedPartido.match_name || 'Detalles'}</h2>
+                 <p><i class="fas fa-calendar-alt fa-fw"></i> ${updatedPartido.match_date}</p>
+                 <p><i class="fas fa-clock fa-fw"></i> ${updatedPartido.start_time} - ${updatedPartido.end_time}</p>
+                 <p><i class="fas fa-map-marker-alt fa-fw"></i> ${updatedPartido.establishments?.name || 'N/E'}</p>
+                 <p><i class="fas fa-location-dot fa-fw"></i> ${updatedPartido.establishments?.locality || 'N/E'}</p>
+                 <p><strong><i class="fas fa-layer-group fa-fw"></i> Nivel:</strong> ${updatedPartido.match_level || 'N/E'}</p>
+                 <p><strong><i class="fas fa-user-friends fa-fw"></i> Tipo Pareja:</strong> ${updatedPartido.team_type || 'N/E'}</p>
+                 <h3>Jugadores (${joinedCount}/${totalPlayers}):</h3>
+                 ${participantListHTML}
+                 <p class="missing-players">${missing > 0 ? `Faltan ${missing} jugador(es)` : '¡Equipo completo!'}</p>
+                 <div id="modal-action-buttons"></div>`;
+
+            // Lógica de botones (sin cambios)
+            const btns=mc.querySelector("#modal-action-buttons");if(!loggedUser){btns.innerHTML="<p><em>Login.</em></p>";}else{const ur=updatedPartido.participants?updatedPartido.participants.find(p=>p.user_id===loggedUser.id):null;if(!ur){if(miss>0){const b=document.createElement("button");b.className="btn-join";b.textContent="Unirme";b.onclick=()=>joinMatch(updatedPartido.id);btns.appendChild(b);}else{btns.innerHTML="<p>Completo.</p>";}}else if(!ur.cancelled){btns.innerHTML="<p style='color:green;font-weight:bold;'>¡Apuntado!</p>";const b=document.createElement("button");b.className="btn-leave";b.textContent="Baja";b.onclick=()=>{let r=prompt("Motivo:");if(r!==null)leaveMatch(updatedPartido.id,r.slice(0,50));};btns.appendChild(b);}else{btns.innerHTML=`<p>Baja ${ur.leave_reason?`(${ur.leave_reason})`:''}.</p>`;if(miss>0){const b=document.createElement("button");b.className="btn-join";b.textContent="Re-Unirme";b.onclick=()=>rejoinMatch(updatedPartido.id);btns.appendChild(b);}}}
         }
 
         // --- Canchas ---
-         async function loadCanchas(nameFilter = "", localityFilter = "") { const cr=document.getElementById("canchasResults");const cf=document.getElementById("canchasFeedback");cr.innerHTML="";cf.innerHTML="";showCanchasLoader();let q=supabaseClient.from("establishments").select("*");if(nameFilter)q=q.ilike("name",`%${nameFilter}%`);if(localityFilter)q=q.ilike("locality",`%${localityFilter}%`);q=q.order('name');const{data,error}=await q;clearCanchasLoader();if(error){cf.innerHTML=`<p style="color:red;">Error: ${error.message}</p>`;return;}if(!data||data.length===0){cr.innerHTML='<p>No encontradas.</p>';return;}const cd=data;cd.forEach(c=>{const card=document.createElement("div");card.className="card";c.element=card;const link=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(c.address+', '+c.locality)}`;card.innerHTML=`<div class="card-header">${c.name}</div><div class="card-content"><p><strong>Localidad:</strong> ${c.locality||'N/D'}</p><p><strong>Dirección:</strong> ${c.address||'N/D'}</p><p><strong>Canchas:</strong> ${c.court_count||'N/D'}</p><p class="distance-info" id="distance-${c.id}">...</p></div><div class="map-container" id="map-container-${c.id}"><a href="${link}" class="map-link" target="_blank">Ver Mapa</a></div>`;cr.appendChild(card);});getUserLocationForDistance(cd);}
-         function showCanchasLoader(){document.getElementById("canchasFeedback").innerHTML='<div class="loader"></div>';}
-         function clearCanchasLoader(){document.getElementById("canchasFeedback").innerHTML="";}
-         function getUserLocationForDistance(canchasData) { if (!canchasData||!navigator.geolocation){(canchasData||[]).forEach(c=>{const d=document.getElementById(`distance-${c.id}`);if(d)d.textContent='Dist N/D';const m=document.getElementById(`map-container-${c.id}`);if(m&&!m.querySelector('.map-link')){const l=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(c.address+', '+c.locality)}`;m.innerHTML=`<a href="${l}" class="map-link">Ver Mapa</a>`;}});if(!navigator.geolocation)console.warn("No Geo.");return;} navigator.geolocation.getCurrentPosition(pos=>{const lat=pos.coords.latitude;const lon=pos.coords.longitude;canchasData.forEach(c=>{if(c.latitude!=null&&c.longitude!=null){const km=calculateDistance(lat,lon,c.latitude,c.longitude);const d=document.getElementById(`distance-${c.id}`);if(d)d.innerHTML=`<strong>Dist:</strong> ${km.toFixed(1)} km`;}else{const d=document.getElementById(`distance-${c.id}`);if(d)d.textContent='Dist N/C';} const m=document.getElementById(`map-container-${c.id}`);if(m){const dest=(c.latitude!=null&&c.longitude!=null)?`${c.latitude},${c.longitude}`:encodeURIComponent(c.address+', '+c.locality);const l=`https://www.google.com/maps/dir/?api=1&origin=${lat},${lon}&destination=${dest}&travelmode=driving`;m.innerHTML=`<a href="${l}" class="map-link">Cómo llegar</a>`;}});},error=>{console.warn("Geo Err:",error.message);canchasData.forEach(c=>{const d=document.getElementById(`distance-${c.id}`);if(d)d.textContent='Dist: Ubic N/D';const m=document.getElementById(`map-container-${c.id}`);if(m&&!m.querySelector('.map-link')){const l=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(c.address+', '+c.locality)}`;m.innerHTML=`<a href="${l}" class="map-link">Ver Mapa</a>`;}});},{enableHighAccuracy:false,timeout:10000,maximumAge:60000});}
-         function calculateDistance(lat1,lon1,lat2,lon2){if(lat1==null||lon1==null||lat2==null||lon2==null)return Infinity;const R=6371;const dLat=deg2rad(lat2-lat1);const dLon=deg2rad(lon2-lon1);const a=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(deg2rad(lat1))*Math.cos(deg2rad(lat2))*Math.sin(dLon/2)*Math.sin(dLon/2);const c=2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));return R*c;}
-         function deg2rad(deg){return deg*(Math.PI/180);}
+        async function loadCanchas(nameFilter="",localityFilter="") { const cr=document.getElementById("canchasResults");const cf=document.getElementById("canchasFeedback");cr.innerHTML="";cf.innerHTML="";showCanchasLoader();let q=supabaseClient.from("establishments").select("*");if(nameFilter)q=q.ilike("name",`%${nameFilter}%`);if(localityFilter)q=q.ilike("locality",`%${localityFilter}%`);q=q.order('name');const{data,error}=await q;clearCanchasLoader();if(error){cf.innerHTML=`<p style="color:red;">Err:${error.message}</p>`;return;}if(!data||data.length===0){cr.innerHTML='<p>No encontradas.</p>';return;}const cd=data;cd.forEach(c=>{const card=document.createElement("div");card.className="card";c.element=card;const link=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(c.address+', '+c.locality)}`;card.innerHTML=`<div class="card-header">${c.name}</div><div class="card-content"><p><strong>Loc:</strong> ${c.locality||'N/D'}</p><p><strong>Dir:</strong> ${c.address||'N/D'}</p><p><strong>Canchas:</strong> ${c.court_count||'N/D'}</p><p class="distance-info" id="distance-${c.id}">...</p></div><div class="map-container" id="map-container-${c.id}"><a href="${link}" class="map-link">Ver Mapa</a></div>`;cr.appendChild(card);});getUserLocationForDistance(cd);}
+        function showCanchasLoader(){document.getElementById("canchasFeedback").innerHTML='<div class="loader"></div>';}
+        function clearCanchasLoader(){document.getElementById("canchasFeedback").innerHTML="";}
+        function getUserLocationForDistance(canchasData) { if (!canchasData||!navigator.geolocation){(canchasData||[]).forEach(c=>{const d=document.getElementById(`distance-${c.id}`);if(d)d.textContent='Dist N/D';const m=document.getElementById(`map-container-${c.id}`);if(m&&!m.querySelector('.map-link')){const l=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(c.address+', '+c.locality)}`;m.innerHTML=`<a href="${l}" class="map-link">Ver Mapa</a>`;}});if(!navigator.geolocation)console.warn("No Geo.");return;} navigator.geolocation.getCurrentPosition(pos=>{const lat=pos.coords.latitude;const lon=pos.coords.longitude;canchasData.forEach(c=>{if(c.latitude!=null&&c.longitude!=null){const km=calculateDistance(lat,lon,c.latitude,c.longitude);const d=document.getElementById(`distance-${c.id}`);if(d)d.innerHTML=`<strong>Dist:</strong> ${km.toFixed(1)} km`;}else{const d=document.getElementById(`distance-${c.id}`);if(d)d.textContent='Dist N/C';} const m=document.getElementById(`map-container-${c.id}`);if(m){const dest=(c.latitude!=null&&c.longitude!=null)?`${c.latitude},${c.longitude}`:encodeURIComponent(c.address+', '+c.locality);const l=`https://www.google.com/maps/dir/?api=1&origin=${lat},${lon}&destination=${dest}&travelmode=driving`;m.innerHTML=`<a href="${l}" class="map-link">Cómo llegar</a>`;}});},error=>{console.warn("Geo Err:",error.message);canchasData.forEach(c=>{const d=document.getElementById(`distance-${c.id}`);if(d)d.textContent='Dist: Ubic N/D';const m=document.getElementById(`map-container-${c.id}`);if(m&&!m.querySelector('.map-link')){const l=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(c.address+', '+c.locality)}`;m.innerHTML=`<a href="${l}" class="map-link">Ver Mapa</a>`;}});},{enableHighAccuracy:false,timeout:10000,maximumAge:60000});}
+        function calculateDistance(lat1,lon1,lat2,lon2){if(lat1==null||lon1==null||lat2==null||lon2==null)return Infinity;const R=6371;const dLat=deg2rad(lat2-lat1);const dLon=deg2rad(lon2-lon1);const a=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(deg2rad(lat1))*Math.cos(deg2rad(lat2))*Math.sin(dLon/2)*Math.sin(dLon/2);const c=2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));return R*c;}
+        function deg2rad(deg){return deg*(Math.PI/180);}
 
         // --- Jugadores ---
-        async function loadPlayers(nameFilter = "", gameLevelFilter = "", localityFilter = "") { const pr=document.getElementById("playersResults");const pf=document.getElementById("playersFeedback");pr.innerHTML='<div class="loader"></div>';pf.innerHTML="";playersDataMap.clear();let q=supabaseClient.from("profiles").select("id,full_name,profile_pic,birth_date,gender,game_level,locality,phone");if(nameFilter)q=q.ilike("full_name",`%${nameFilter}%`);if(gameLevelFilter)q=q.ilike("game_level",`%${gameLevelFilter}%`);if(localityFilter)q=q.ilike("locality",`%${localityFilter}%`);if(loggedUser)q=q.neq('id',loggedUser.id);q=q.order('full_name');const{data,error}=await q;pr.innerHTML="";if(error){pf.innerHTML=`<p style="color:red;">Error: ${error.message}</p>`;console.error("Player Err:",error);return;}if(!data||data.length===0){pr.innerHTML='<p>No encontrados.</p>';return;}data.forEach(p=>{playersDataMap.set(p.id,p);const c=document.createElement("div");c.className="player-card";c.setAttribute("onclick",`showPlayerModal('${p.id}')`);c.innerHTML=`<img src="${p.profile_pic||"https://via.placeholder.com/80"}" alt="Foto"/><h3>${p.full_name||'Jugador'}</h3><p><i class="fas fa-layer-group"></i> ${p.game_level||'N/D'}</p><p><i class="fas fa-location-dot"></i> ${p.locality||'N/D'}</p>`;pr.appendChild(c);});}
+        async function loadPlayers(nameFilter="",gameLevelFilter="",localityFilter="") { const pr=document.getElementById("playersResults");const pf=document.getElementById("playersFeedback");pr.innerHTML='<div class="loader"></div>';pf.innerHTML="";playersDataMap.clear();let q=supabaseClient.from("profiles").select("id,full_name,profile_pic,birth_date,gender,game_level,locality,phone");if(nameFilter)q=q.ilike("full_name",`%${nameFilter}%`);if(gameLevelFilter)q=q.ilike("game_level",`%${gameLevelFilter}%`);if(localityFilter)q=q.ilike("locality",`%${localityFilter}%`);if(loggedUser)q=q.neq('id',loggedUser.id);q=q.order('full_name');const{data,error}=await q;pr.innerHTML="";if(error){pf.innerHTML=`<p style="color:red;">Error: ${error.message}</p>`;console.error("Player Err:",error);return;}if(!data||data.length===0){pr.innerHTML='<p>No encontrados.</p>';return;}data.forEach(p=>{playersDataMap.set(p.id,p);const c=document.createElement("div");c.className="player-card";c.setAttribute("onclick",`showPlayerModal('${p.id}')`);c.innerHTML=`<img src="${p.profile_pic||"https://via.placeholder.com/80"}" alt="Foto"/><h3>${p.full_name||'Jugador'}</h3><p><i class="fas fa-layer-group"></i> ${p.game_level||'N/D'}</p><p><i class="fas fa-location-dot"></i> ${p.locality||'N/D'}</p>`;pr.appendChild(c);});}
         function showPlayerModal(playerId) { const p=playersDataMap.get(playerId);if(!p){alert("Err detalles.");return;}const m=document.getElementById("playerModal");const mc=document.getElementById("playerModalContent");mc.innerHTML="";const age=calculateAge(p.birth_date);const pic=p.profile_pic||"https://via.placeholder.com/180";let wHtml='';if(p.phone){const num=p.phone.replace(/\D/g,'');let wNum=num;if(num.length>8&&num.length<12&&!num.startsWith('54')){wNum='549'+num;}else if(num.length===8&&p.locality&&p.locality.toLowerCase().includes('capital federal')){wNum='5411'+num;} wHtml=`<p class="whatsapp-link"><i class="fab fa-whatsapp fa-fw"></i> <a href="https://wa.me/${wNum}" target="_blank">Enviar Mensaje</a></p>`;}else{wHtml='<p><i class="fab fa-whatsapp fa-fw"></i> N/P</p>';} mc.innerHTML=`<button class="close-modal" onclick="closePlayerModal()"><i class="fas fa-times"></i></button><div class="player-image-column"><img src="${pic}" alt="Foto"/></div><div class="player-details-column"><h2>${p.full_name||'Jugador'}</h2><p><i class="fas fa-cake-candles fa-fw"></i> ${age} a</p><p><i class="fas fa-venus-mars fa-fw"></i> ${p.gender||"N/D"}</p><p><i class="fas fa-layer-group fa-fw"></i> Nvl: ${p.game_level||"N/D"}</p><p><i class="fas fa-location-dot fa-fw"></i> ${p.locality||"N/D"}</p><p><i class="fas fa-phone fa-fw"></i> ${p.phone||"N/P"}</p>${wHtml}<div class="placeholder-section"><h4><i class="fas fa-user fa-fw"></i> Sobre mí</h4><p>${p.bio||"Sin desc."}</p></div><div class="placeholder-section"><h4><i class="fas fa-calendar-check fa-fw"></i> Disponib.</h4><p>${p.availability||"N/E"}</p></div><div class="placeholder-section"><h4><i class="fas fa-arrows-left-right fa-fw"></i> Posición</h4><p>${p.preferred_position||"N/E"}</p></div></div>`; m.style.display="flex";}
 
         // --- Inicialización ---
-        document.addEventListener("DOMContentLoaded", async () => { await checkProfile();await preloadEstablishments();await preloadPlayersData();if(loggedUser&&document.getElementById("profileLink").textContent==="Mi Perfil"){showPartidosSearch();}else{hideAllSections();}});
+        document.addEventListener("DOMContentLoaded", async () => {
+             await checkProfile(); // Verifica login y perfil
+             await preloadEstablishments(); // Carga datos para filtros cancha
+             await preloadPlayersData(); // Carga datos para filtros jugador
+
+             // Decide qué sección mostrar inicialmente
+             if (loggedUser && document.getElementById("profileLink").textContent === "Mi Perfil") {
+                 // Usuario logueado CON perfil: Muestra partidos de esta semana por defecto
+                 showPartidosSearch(); // Esta función ahora carga 'this_week' por defecto y muestra la sección
+             } else {
+                 // Usuario no logueado o SIN perfil: Oculta todas las secciones de búsqueda
+                 hideAllSections();
+             }
+         });
 
     </script>
 </body>
