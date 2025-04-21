@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <style>
-        /* ... (Estilos CSS sin cambios respecto a la versión anterior) ... */
+        /* ... (Estilos CSS sin cambios) ... */
          /* RESET Y ESTILOS GLOBALES */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Poppins', sans-serif; background-color: #f8f8f8; color: #333; }
@@ -110,16 +110,17 @@
         #matchModal h3 { margin-top: 1.2rem; font-size: 1.1rem; color: #2c3e50; margin-bottom: 0.6rem; border-bottom: 1px solid #eee; padding-bottom: 5px; }
         #matchModal .missing-players { font-weight: 600; color: #e74c3c; text-align: center; margin-top: 0.5rem; display: block; }
         /* Estilo para participantes cancelados */
-        #matchModal .cancelled span {
+        #matchModal li.cancelled span { /* Aplicar estilo al span dentro del LI cancelado */
             text-decoration: line-through;
             color: #999;
-            font-style: italic;
+            /* font-style: italic; */ /* Quitado para que el motivo no sea italica necesariamente */
         }
-         /* Opcional: atenuar un poco la imagen del cancelado */
-         #matchModal .cancelled img {
-             opacity: 0.6;
-             border-color: #ccc;
-         }
+        #matchModal li.cancelled i { /* Mantener el motivo visible */
+             text-decoration: none !important; /* Asegurar que el motivo no se tache */
+             font-style: italic;
+             color: #a0a0a0;
+        }
+         #matchModal li.cancelled img { opacity: 0.6; border-color: #ccc; }
         #matchModal .btn-join, #matchModal .btn-leave { margin: 0.5rem; background-color: #3498db; color: #fff; border: none; padding: 0.6rem 1.2rem; border-radius: 6px; cursor: pointer; font-size: 0.9rem; transition: background-color 0.3s; }
         #matchModal .btn-join:hover, #matchModal .btn-leave:hover { background-color: #2980b9; }
         #matchModal .btn-leave { background-color: #e74c3c; }
@@ -278,50 +279,56 @@
         async function refreshMatch(matchId) { if(!matchId){return null;}const{data,error}=await supabaseClient.from("partidos").select(`*,establishments(name,locality),participants(user_id,cancelled,leave_reason)`).eq("id",matchId).single();if(error){console.error("Ref Err:",error.message);return null;}return data;}
         async function refreshModal() { const mc=document.getElementById("modalContent");const id=mc.getAttribute("data-match-id");if(!id){return;}mc.innerHTML='<div class="loader"></div>';const data=await refreshMatch(id);if(data)showModal(data);else{closeModal();alert("Error recarga.");}}
 
-        // ***** JS leaveMatch - Flujo Revisado *****
+        // ***** JS FUNCIONES DE ACCIÓN (leaveMatch, joinMatch, rejoinMatch) REVISADAS *****
         async function leaveMatch(matchId, explanation) {
-            if (!loggedUser) { alert("Inicia sesión."); return; }
+             if (!loggedUser) { alert("Inicia sesión."); return; }
+             const { error: updateError } = await supabaseClient
+                 .from("participants")
+                 .update({ cancelled: true, leave_reason: explanation || null })
+                 .match({ match_id: matchId, user_id: loggedUser.id, cancelled: false });
 
-            // 1. Actualizar participante
-            const { error: updateError } = await supabaseClient
-                .from("participants")
-                .update({ cancelled: true, leave_reason: explanation || null })
-                .match({ match_id: matchId, user_id: loggedUser.id, cancelled: false }); // Solo si está activo
-
-            if (updateError) {
-                console.error("Error al darse de baja:", updateError);
-                alert("Error al darse de baja: " + updateError.message);
-                return; // Detener si falla la actualización
-            }
-
-            // 2. Actualizar estado del partido (si es necesario)
-            await checkAndUpdateMatchCompletitud(matchId);
-
-            // 3. Obtener el estado MÁS RECIENTE del partido después de las actualizaciones
-            const finalMatchState = await refreshMatch(matchId);
-
-            // 4. Renderizar el modal con la información fresca
-            if (finalMatchState) {
-                showModal(finalMatchState);
-            } else {
-                console.error("Fallo al refrescar el partido después de la baja.");
-                alert("Se registró tu baja, pero hubo un problema al actualizar la vista.");
-                closeModal(); // Cerrar como fallback
-            }
+             if (updateError) {
+                 console.error("Error al darse de baja:", updateError);
+                 alert("Error al darse de baja: " + updateError.message);
+                 return;
+             }
+             await checkAndUpdateMatchCompletitud(matchId);
+             const finalMatchState = await refreshMatch(matchId);
+             if (finalMatchState) {
+                 showModal(finalMatchState); // Re-renderizar con datos frescos
+             } else {
+                 console.error("Fallo al refrescar tras baja.");
+                 alert("Baja registrada, pero error al actualizar vista.");
+                 closeModal();
+             }
         }
-
-        // (joinMatch y rejoinMatch ya llaman a refresh/showModal al final, deberían estar bien)
-        async function joinMatch(matchId) { if(!loggedUser){alert("Login.");return;} const p=await refreshMatch(matchId);if(!p){alert("Err Check.");return;} const act=p.participants?p.participants.filter(p=>!p.cancelled):[];const tot=p.total_players||4;if(act.length>=tot){alert("Completo.");return;} const{data:ex,error:ce}=await supabaseClient.from("participants").select('*').eq('match_id',matchId).eq('user_id',loggedUser.id).maybeSingle();if(ce){alert("Err: "+ce.message);return;} if(ex){if(!ex.cancelled){return;}else{const{error:ue}=await supabaseClient.from("participants").update({cancelled:false,leave_reason:null}).match({match_id:matchId,user_id:loggedUser.id});if(ue)alert("Err: "+ue.message);else await checkAndUpdateMatchCompletitud(matchId);}}else{const{error:ie}=await supabaseClient.from("participants").insert([{match_id:matchId,user_id:loggedUser.id}]);if(ie)alert("Err: "+ie.message);else await checkAndUpdateMatchCompletitud(matchId);} const final=await refreshMatch(matchId);if(final)showModal(final);else closeModal();}
-        async function rejoinMatch(matchId) { if(!loggedUser){alert("Login.");return;} const p=await refreshMatch(matchId);if(!p){alert("Err Check.");return;} const act=p.participants?p.participants.filter(p=>!p.cancelled):[];const tot=p.total_players||4;if(act.length>=tot){alert("Completo.");return;} const{error}=await supabaseClient.from("participants").update({cancelled:false,leave_reason:null}).match({match_id:matchId,user_id:loggedUser.id});if(error)alert("Err: "+error.message);else await checkAndUpdateMatchCompletitud(matchId); const final=await refreshMatch(matchId);if(final)showModal(final);else closeModal();}
+        async function joinMatch(matchId) {
+             if(!loggedUser){alert("Login.");return;}
+             const p=await refreshMatch(matchId); if(!p){alert("Err Check.");return;}
+             const act=p.participants?p.participants.filter(p=>!p.cancelled):[]; const tot=p.total_players||4; if(act.length>=tot){alert("Completo.");return;}
+             const{data:ex,error:ce}=await supabaseClient.from("participants").select('*').eq('match_id',matchId).eq('user_id',loggedUser.id).maybeSingle(); if(ce){alert("Err: "+ce.message);return;}
+             if(ex){if(!ex.cancelled){return;}else{const{error:ue}=await supabaseClient.from("participants").update({cancelled:false,leave_reason:null}).match({match_id:matchId,user_id:loggedUser.id});if(ue)alert("Err: "+ue.message);else await checkAndUpdateMatchCompletitud(matchId);}}
+             else{const{error:ie}=await supabaseClient.from("participants").insert([{match_id:matchId,user_id:loggedUser.id}]);if(ie)alert("Err: "+ie.message);else await checkAndUpdateMatchCompletitud(matchId);}
+             const final=await refreshMatch(matchId); if(final)showModal(final);else closeModal(); // Refrescar después de la acción
+        }
+        async function rejoinMatch(matchId) {
+            if(!loggedUser){alert("Login.");return;}
+            const p=await refreshMatch(matchId); if(!p){alert("Err Check.");return;}
+            const act=p.participants?p.participants.filter(p=>!p.cancelled):[]; const tot=p.total_players||4; if(act.length>=tot){alert("Completo.");return;}
+            const{error}=await supabaseClient.from("participants").update({cancelled:false,leave_reason:null}).match({match_id:matchId,user_id:loggedUser.id}); if(error)alert("Err: "+error.message);else await checkAndUpdateMatchCompletitud(matchId);
+            const final=await refreshMatch(matchId); if(final)showModal(final);else closeModal(); // Refrescar después de la acción
+        }
         async function checkAndUpdateMatchCompletitud(matchId) { const p=await refreshMatch(matchId);if(!p)return;const act=p.participants?p.participants.filter(p=>!p.cancelled):[];const tot=p.total_players||4;const comp=act.length>=tot;const stat=comp?"Completo":"Incompleto";if(p.completitud!==stat){const{error}=await supabaseClient.from("partidos").update({completitud:stat}).eq("id",matchId);if(error)console.error(`Err Upd Stat ${stat}:`,error.message);}}
 
-        // ***** JS showModal - Renderizado Revisado *****
+        // ***** JS showModal REVISADO para asegurar botones *****
         async function showModal(partido) {
             const modal = document.getElementById("matchModal"); const modalContent = document.getElementById("modalContent"); if (!partido || !partido.id) { return; }
             modalContent.setAttribute("data-match-id", partido.id); modalContent.innerHTML = '<div class="loader"></div>'; modal.style.display = "flex";
 
-            // Usar los datos ya pasados o refrescados (updatedPartido viene de refreshMatch si se llamó desde ahí)
-            const updatedPartido = partido; // Asumimos que los datos pasados son suficientemente frescos
+            // Usar los datos pasados (que deberían ser frescos si vienen de join/leave/rejoin)
+            // O refrescar si viene de la tarjeta inicial (refreshMatch se llama al inicio de showModal si fuera necesario,
+            // pero ahora las funciones de acción ya refrescan antes de llamar a showModal)
+            const updatedPartido = partido; // Usar los datos que llegan
 
             const activeParticipants = updatedPartido.participants ? updatedPartido.participants.filter(p => !p.cancelled) : [];
             const joinedCount = activeParticipants.length;
@@ -333,34 +340,24 @@
 
             if (userIds.length > 0) {
                 const { data: userProfiles, error: profileError } = await supabaseClient.from("profiles").select("id, full_name, profile_pic").in("id", userIds);
-                if (profileError) {
-                    participantListHTML += "<li>Error al cargar lista.</li>";
-                    console.error("Error fetching profiles for modal list:", profileError);
-                } else if (userProfiles && userProfiles.length > 0) {
+                if (profileError) { participantListHTML += "<li>Error al cargar lista.</li>"; console.error("Err profiles:", profileError); }
+                else if (userProfiles && userProfiles.length > 0) {
                     const profilesMap = new Map(userProfiles.map(usr => [usr.id, usr]));
-                    // Iterar por los participantes del partido para construir la lista
                     updatedPartido.participants.forEach(p => {
                         const usr = profilesMap.get(p.user_id);
                         if (usr) {
-                            // Aplicar clase 'cancelled' al LI si el participante está cancelado
-                            const liClass = p.cancelled ? 'class="cancelled"' : '';
+                            const liClass = p.cancelled ? 'class="cancelled"' : ''; // Clase en LI
                             const reasonText = p.cancelled && p.leave_reason ? ` - <i>(${p.leave_reason.substring(0, 30)}${p.leave_reason.length > 30 ? '...' : ''})</i>` : "";
                             const pic = usr.profile_pic || "https://via.placeholder.com/40";
-                            // El span SÓLO contiene el nombre. El LI tiene la clase para estilo.
+                            // Span contiene el nombre, LI tiene clase para estilo general (tachado, etc.)
                             participantListHTML += `<li ${liClass}><img src="${pic}" alt="Foto"/> <span>${usr.full_name}</span>${reasonText}</li>`;
-                        } else {
-                            participantListHTML += `<li>Jugador ID ${p.user_id} (Perfil no encontrado) ${p.cancelled ? '(Baja)' : ''}</li>`;
-                        }
+                        } else { participantListHTML += `<li>Jugador ID ${p.user_id} (NF) ${p.cancelled ? '(Baja)' : ''}</li>`; }
                     });
-                } else {
-                    participantListHTML += "<li>Aún no hay jugadores apuntados.</li>";
-                }
-            } else {
-                participantListHTML += "<li>Aún no hay jugadores apuntados.</li>";
-            }
+                } else { participantListHTML += "<li>Sin jugadores.</li>"; }
+            } else { participantListHTML += "<li>Sin jugadores.</li>"; }
             participantListHTML += "</ul></div>";
 
-            // Renderizar el modal HTML
+            // Renderizar HTML principal del modal (ASEGURARSE de que #modal-action-buttons está)
             modalContent.innerHTML = `
                  <h2>${updatedPartido.match_name || 'Detalles'}</h2>
                  <p><i class="fas fa-calendar-alt fa-fw"></i> ${updatedPartido.match_date}</p>
@@ -372,11 +369,56 @@
                  <h3>Jugadores (${joinedCount}/${totalPlayers}):</h3>
                  ${participantListHTML}
                  <p class="missing-players">${missing > 0 ? `Faltan ${missing} jugador(es)` : '¡Equipo completo!'}</p>
-                 <div id="modal-action-buttons"></div>`;
+                 <div id="modal-action-buttons"></div> `;
 
-            // Lógica de botones (sin cambios)
-            const btns=mc.querySelector("#modal-action-buttons");if(!loggedUser){btns.innerHTML="<p><em>Login.</em></p>";}else{const ur=updatedPartido.participants?updatedPartido.participants.find(p=>p.user_id===loggedUser.id):null;if(!ur){if(miss>0){const b=document.createElement("button");b.className="btn-join";b.textContent="Unirme";b.onclick=()=>joinMatch(updatedPartido.id);btns.appendChild(b);}else{btns.innerHTML="<p>Completo.</p>";}}else if(!ur.cancelled){btns.innerHTML="<p style='color:green;font-weight:bold;'>¡Apuntado!</p>";const b=document.createElement("button");b.className="btn-leave";b.textContent="Baja";b.onclick=()=>{let r=prompt("Motivo:");if(r!==null)leaveMatch(updatedPartido.id,r.slice(0,50));};btns.appendChild(b);}else{btns.innerHTML=`<p>Baja ${ur.leave_reason?`(${ur.leave_reason})`:''}.</p>`;if(miss>0){const b=document.createElement("button");b.className="btn-join";b.textContent="Re-Unirme";b.onclick=()=>rejoinMatch(updatedPartido.id);btns.appendChild(b);}}}
+            // ***** LÓGICA PARA AÑADIR BOTONES *****
+            const actionButtonsContainer = modalContent.querySelector("#modal-action-buttons");
+            // Verificar si el contenedor existe antes de intentar añadir botones
+            if (actionButtonsContainer) {
+                 if (!loggedUser) {
+                      actionButtonsContainer.innerHTML = "<p><em>Inicia sesión para unirte o darte de baja.</em></p>";
+                 } else {
+                      const userRecord = updatedPartido.participants ? updatedPartido.participants.find(p => p.user_id === loggedUser.id) : null;
+                      actionButtonsContainer.innerHTML = ''; // Limpiar botones previos antes de añadir nuevos
+
+                      if (!userRecord) { // Usuario no está en la lista
+                           if (missing > 0) { // Hay cupo?
+                                const joinButton = document.createElement("button");
+                                joinButton.className = "btn-join";
+                                joinButton.textContent = "Unirme";
+                                joinButton.onclick = () => joinMatch(updatedPartido.id);
+                                actionButtonsContainer.appendChild(joinButton);
+                           } else {
+                                actionButtonsContainer.innerHTML = "<p>Partido completo.</p>";
+                           }
+                      } else if (!userRecord.cancelled) { // Usuario está apuntado y activo
+                           actionButtonsContainer.innerHTML = "<p style='color:green; font-weight:bold;'>¡Estás apuntado!</p>";
+                           const leaveButton = document.createElement("button");
+                           leaveButton.className = "btn-leave";
+                           leaveButton.textContent = "Darme de baja";
+                           leaveButton.onclick = () => {
+                                let reason = prompt("Motivo de la baja (opcional, máx 50 car.):");
+                                if (reason !== null) { // Si no presiona cancelar
+                                    leaveMatch(updatedPartido.id, reason.slice(0, 50));
+                                }
+                           };
+                           actionButtonsContainer.appendChild(leaveButton);
+                      } else { // Usuario estuvo apuntado pero se dio de baja
+                           actionButtonsContainer.innerHTML = `<p>Te diste de baja ${userRecord.leave_reason ? `(Motivo: ${userRecord.leave_reason})` : ''}.</p>`;
+                           if (missing > 0) { // Hay cupo para volver?
+                                const rejoinButton = document.createElement("button");
+                                rejoinButton.className = "btn-join"; // Reutilizar estilo
+                                rejoinButton.textContent = "Volver a Unirme";
+                                rejoinButton.onclick = () => rejoinMatch(updatedPartido.id);
+                                actionButtonsContainer.appendChild(rejoinButton);
+                           }
+                      }
+                 }
+            } else {
+                console.error("Error: No se encontró el div #modal-action-buttons");
+            }
         }
+
 
         // --- Canchas ---
         async function loadCanchas(nameFilter="",localityFilter="") { const cr=document.getElementById("canchasResults");const cf=document.getElementById("canchasFeedback");cr.innerHTML="";cf.innerHTML="";showCanchasLoader();let q=supabaseClient.from("establishments").select("*");if(nameFilter)q=q.ilike("name",`%${nameFilter}%`);if(localityFilter)q=q.ilike("locality",`%${localityFilter}%`);q=q.order('name');const{data,error}=await q;clearCanchasLoader();if(error){cf.innerHTML=`<p style="color:red;">Err:${error.message}</p>`;return;}if(!data||data.length===0){cr.innerHTML='<p>No encontradas.</p>';return;}const cd=data;cd.forEach(c=>{const card=document.createElement("div");card.className="card";c.element=card;const link=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(c.address+', '+c.locality)}`;card.innerHTML=`<div class="card-header">${c.name}</div><div class="card-content"><p><strong>Loc:</strong> ${c.locality||'N/D'}</p><p><strong>Dir:</strong> ${c.address||'N/D'}</p><p><strong>Canchas:</strong> ${c.court_count||'N/D'}</p><p class="distance-info" id="distance-${c.id}">...</p></div><div class="map-container" id="map-container-${c.id}"><a href="${link}" class="map-link">Ver Mapa</a></div>`;cr.appendChild(card);});getUserLocationForDistance(cd);}
@@ -391,20 +433,7 @@
         function showPlayerModal(playerId) { const p=playersDataMap.get(playerId);if(!p){alert("Err detalles.");return;}const m=document.getElementById("playerModal");const mc=document.getElementById("playerModalContent");mc.innerHTML="";const age=calculateAge(p.birth_date);const pic=p.profile_pic||"https://via.placeholder.com/180";let wHtml='';if(p.phone){const num=p.phone.replace(/\D/g,'');let wNum=num;if(num.length>8&&num.length<12&&!num.startsWith('54')){wNum='549'+num;}else if(num.length===8&&p.locality&&p.locality.toLowerCase().includes('capital federal')){wNum='5411'+num;} wHtml=`<p class="whatsapp-link"><i class="fab fa-whatsapp fa-fw"></i> <a href="https://wa.me/${wNum}" target="_blank">Enviar Mensaje</a></p>`;}else{wHtml='<p><i class="fab fa-whatsapp fa-fw"></i> N/P</p>';} mc.innerHTML=`<button class="close-modal" onclick="closePlayerModal()"><i class="fas fa-times"></i></button><div class="player-image-column"><img src="${pic}" alt="Foto"/></div><div class="player-details-column"><h2>${p.full_name||'Jugador'}</h2><p><i class="fas fa-cake-candles fa-fw"></i> ${age} a</p><p><i class="fas fa-venus-mars fa-fw"></i> ${p.gender||"N/D"}</p><p><i class="fas fa-layer-group fa-fw"></i> Nvl: ${p.game_level||"N/D"}</p><p><i class="fas fa-location-dot fa-fw"></i> ${p.locality||"N/D"}</p><p><i class="fas fa-phone fa-fw"></i> ${p.phone||"N/P"}</p>${wHtml}<div class="placeholder-section"><h4><i class="fas fa-user fa-fw"></i> Sobre mí</h4><p>${p.bio||"Sin desc."}</p></div><div class="placeholder-section"><h4><i class="fas fa-calendar-check fa-fw"></i> Disponib.</h4><p>${p.availability||"N/E"}</p></div><div class="placeholder-section"><h4><i class="fas fa-arrows-left-right fa-fw"></i> Posición</h4><p>${p.preferred_position||"N/E"}</p></div></div>`; m.style.display="flex";}
 
         // --- Inicialización ---
-        document.addEventListener("DOMContentLoaded", async () => {
-             await checkProfile(); // Verifica login y perfil
-             await preloadEstablishments(); // Carga datos para filtros cancha
-             await preloadPlayersData(); // Carga datos para filtros jugador
-
-             // Decide qué sección mostrar inicialmente
-             if (loggedUser && document.getElementById("profileLink").textContent === "Mi Perfil") {
-                 // Usuario logueado CON perfil: Muestra partidos de esta semana por defecto
-                 showPartidosSearch(); // Esta función ahora carga 'this_week' por defecto y muestra la sección
-             } else {
-                 // Usuario no logueado o SIN perfil: Oculta todas las secciones de búsqueda
-                 hideAllSections();
-             }
-         });
+        document.addEventListener("DOMContentLoaded", async () => { await checkProfile();await preloadEstablishments();await preloadPlayersData();if(loggedUser&&document.getElementById("profileLink").textContent==="Mi Perfil"){showPartidosSearch();}else{hideAllSections();}});
 
     </script>
 </body>
